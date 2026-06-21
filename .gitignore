@@ -1,0 +1,4 @@
+# Zona de drop LOCAL de la rutina cuaderno-ui-refs (se drena en local; NO se versiona)
+UI_REFS_INBOX.txt
+# Temporales de las rutinas (p.ej. backup de index.html de cuaderno-feedback)
+*.bak
