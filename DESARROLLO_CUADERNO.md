@@ -26,6 +26,14 @@ llamativas, MUY explicativas, easter-eggs y recompensa por explorar — **sin ro
 - **Contador real de visitas**: localStorage NO sirve (solo cuenta tu navegador). Hecho con Supabase: tabla `public.counters(key,n)` + RPC `bump_counter(k)` **SECURITY DEFINER** (incrementa atómico, sortea RLS), `grant execute … to anon`. Bump 1×/sesión con `sessionStorage` (un refresco no infla). Empieza en 0 a propósito (ética MADRE: "mide el mundo").
 - **RLS y métricas públicas**: `feedback` es PRIVADA (anon no la lee) → un `count` sobre ella siempre da 0 en la web. Para stats públicos usar `comments`/`drawings` (sí legibles), p.ej. "respuestas de MADRE" = `comments` con `ai_replied=true`.
 - **Caos en móvil**: detectar `(max-width:640px)` y `prefers-reduced-motion` → factor `K` que recorta ~70% partículas y alarga intervalos. Limpiar SIEMPRE con una clase común (`.chaos-el`) al apagar.
+- **Scripts `type=module` son DIFERIDOS**: corren DESPUÉS de los `<script>` clásicos inline. Si un widget clásico (p.ej. el **HUB de FAB**) depende de algo creado en el módulo (el FAB de comentarios `#cmtFab`), inicialízalo en `DOMContentLoaded` (cuando los módulos ya corrieron), no en línea. Si no, "desaparece" ese FAB. *(Bug real cazado por la review adversarial.)*
+- **HUB de FAB seguro**: el hub oculta los FAB sueltos con `body.fabhub`; **añade esa clase SOLO al final**, tras construir el menú con éxito (dentro del try). Así, si el hub peta, los FAB sueltos siguen visibles (no se pierde acceso). El menú **proxya** `real.click()` (no recrea listeners) y refleja `.on` leyendo el FAB real.
+- **`getBoundingClientRect()` y `translate3d`**: con elementos movidos por `transform:translate3d` en capa compuesta, el rect puede leerse 0,0 en algún motor (p.ej. el preview headless). Para verificar posición, leer `style.transform`, no el rect (pasó con el gato `#gxg-cat-root`).
+- **Gato en móvil**: no hay `mousemove` (solo se registra en no-touch). El `touchstart` debe ser **passive y SIN `preventDefault`** (si no, atrapa el scroll = "se atasca"). Y `edgePos` debe **evitar las esquinas inferiores** (donde viven los FAB) para no quedarse encima.
+- **Chips de cabecera**: calcular del estado real (`refreshHeaderChips`: cuenta `.dec` no respondidas + `desvios.length` + sev `r`→salud "atención"). OJO: `desvios` se declara DESPUÉS del primer `refreshDecScore()` → guardar con `typeof desvios!=='undefined'` y re-llamar tras `renderDesvios()`.
+- **Identidad anónima** (`window.__identity`, clave `cm_identity_v1`): alias persistente que pre-rellena nombre de dibujos/comentarios (vía `focusin` para formularios creados dinámicamente) + badge "· tú" (guarda ids de dibujos subidos; el insert usa `.select('id').single()`). Dueño verificable-para-todos = backend (diferido).
+- **ASMR sin ficheros**: Web Audio sintetizado (oscilador + ruido filtrado) para pop/click/creak. `AudioContext` perezoso (autoplay necesita gesto), `suspend` en `visibilitychange`, hover solo si `(hover:hover)` y no `reduced-motion`. Control en el HUB (`window.__asmr`).
+- **Validación de imagen (cliente)**: `shrinkImg` (canvas → JPEG ≤1600px, q .82) + rechazo de no-imagen/>8MB en `uploadImg`. NO es seguridad (bypasseable) → el control real es backend (parking lot).
 
 ## 🎨 Fuentes de inspiración (para sacar ideas de UI viva)
 Galerías de COMPONENTES ya hechos (lo más útil, copiar HTML/CSS):
@@ -75,10 +83,28 @@ capacidad de mejorar). Persistido aquí para construirla más adelante.
 13. **Gato: barriguita completa** ("me he cansado de huir, acaríciame" → enseña barriga, ronronea) y que se siente sobre paneles.
 14. La **rutina buscadora de ideas** de UI (sección 🔭 de arriba).
 
-**Hecho en esta tanda (2026-06-21):** contador de visitas 👁️ + panel "El cuaderno por dentro" (lo más
+**Hecho (tanda 1, 2026-06-21):** contador de visitas 👁️ + panel "El cuaderno por dentro" (lo más
 querido + actividad + "lo que opina MADRE" = mapa-de-exploración y máquina-de-pensamientos en versión
 lite) · modo caótico narrativo (flechas/notas/avisos absurdos + recorte móvil) · arreglado gato tapado ·
 deshacer (↩️/Ctrl+Z) en dibujos. Favoritos de Uiverse guardados en `MADRE_UI_REFERENCIAS.md`.
+
+**Hecho (tanda 2, 2026-06-21):** **HUB de FAB** (los 6 botones flotantes en un menú ✦ + nudge "toca aquí") ·
+**ASMR** (sonidos sintetizados en hover/click, toggle en el hub) · botones **"🤔 no entiendo"** por tarjeta y
+en la ruta guiada (con aburre/me gusta/desarrollar) · gato **cambia de pose** + arreglo móvil (no atasca) ·
+**modo caótico x2** (flechas que apuntan a elementos reales, círculos, citas de comentarios reales, megaFlip,
+travesuras contextuales) · chat abre **en lo último + foco** · comentarios in-page con **scroll interno** ·
+post-it **más claro** (chincheta/borde) · dato **"MADRE = carpeta con identidad"** · **dibujos con dueño**
+(identidad anónima + badge "tú") · **modos exclusivos** (no se solapan barras) · **bugs**: chips reales
+(5 decisiones), aviso de estado **desfasado >48h**, `.limit()` en queries, validación/resize de imagen,
+tema **por día**, metas **Open Graph**, `aria-live` en toasts. Nuevo doc **`DISEÑO_HEURISTICAS.md`** (cómo
+diseñar: "de la abuela al borracho", checklist, patrones, reutilizar para webs personalizadas).
+
+**PARKING LOT (persistido, no hecho aún — detalle en `DISEÑO_HEURISTICAS.md` §7):** subir VÍDEOS;
+seguridad real (rate-limit/RLS por IP/honeypot/contraseña fuera de texto plano); split de `index.html`
+(.css/.js + TSV→JSON + objeto CONFIG de widgets); `og:image` 1200×630; localStorage namespaced+versionado;
+validación de imagen también en feedback; modal custom para sustituir `confirm`/`prompt`; gestor único de
+timers + `window.__toast()` global. **Pregunta abierta de Tony:** usar los **laterales/fondo** en escritorio
+(en móvil no se ven; en desktop hay márgenes vacíos → notas/ilustraciones laterales posibles).
 
 ## Estado actual (resumen)
 Backend Supabase (proyecto kopegamcjozrvmxruwdn): tablas `comments`, `feedback`, `drawings` (RLS; moderación `hidden`; bloqueo cliente de pedofilia). Widgets vivos: gato, dibujos, tour, nota-secreta, lápiz, corazón, modo-caótico, paneles interactivos. La rutina `cuaderno-feedback` (Claude Code, cada hora) procesa feedback (Drive+PC+Supabase), responde/modera comentarios, refresca números, mantiene vivo Supabase y guarda gustos en `GUSTOS_TONY.md`.

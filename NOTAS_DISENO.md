@@ -25,8 +25,10 @@ para descubrir qué gusta — PERO sin dañar la comprensión.
 4. ¿Cómo genera valor externo? (<2min) → tarjeta 3 (dinero/peluquería) + builds
 5. ¿Hipótesis vivas vs muertas? → tarjeta 12 (Evolución)
 
+> Para principios de **usabilidad** (no de variedad) y cómo **clonar webs personalizadas** → ver `DISEÑO_HEURISTICAS.md`.
+
 ## Ya implementado (base de la variedad)
-- Tema de color + fondo **aleatorios en cada visita** (IIFE cosmético en index.html: arrays `temas`/`fondos`).
+- Tema de color + fondo **fijados por DÍA** (cambian 1 vez/día, no en cada refresco — así se mantiene la huella visual; semilla por fecha en el IIFE cosmético de index.html: arrays `temas`/`fondos`).
 - Animación "respira"/`pulse`/`funbtn`, tooltips, emojis por sección.
 - Para AÑADIR variedad: amplía los arrays `temas`/`fondos`, añade keyframes, varía hover/botones — sin mover layout.
 

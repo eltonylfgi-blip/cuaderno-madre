@@ -4,6 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cuaderno MADRE</title>
+<meta name="description" content="El cuaderno vivo de MADRE: un sistema que intenta decidir mejor, aprender de la realidad y generar valor real. Léelo, márcalo y opina — MADRE lo recoge y actúa.">
+<meta name="theme-color" content="#3b6ef5">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cuaderno MADRE">
+<meta property="og:title" content="Cuaderno MADRE 🤱🏻">
+<meta property="og:description" content="Un sistema que intenta lograr cosas reales por su cuenta. Un cuaderno vivo: léelo, dibuja, opina y mira lo que opina MADRE.">
+<meta property="og:url" content="https://eltonylfgi-blip.github.io/cuaderno-madre/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cuaderno MADRE 🤱🏻">
+<meta name="twitter:description" content="Un cuaderno vivo y explorable. Léelo, dibuja, opina y mira lo que opina MADRE.">
+<!-- TODO(og:image): falta una imagen 1200x630 para tarjeta de enlace; añadir cuando exista (ver DESARROLLO_CUADERNO.md). -->
 <style>
   :root{
     color-scheme: light;
@@ -169,6 +180,11 @@
   .miniprog>i,.bar>i{animation:fillGrow 1.1s ease both}
   .postit{position:relative;border-bottom-right-radius:2px}
   .postit::after{content:"";position:absolute;right:-1px;bottom:-1px;border-width:11px;border-style:solid;border-color:transparent transparent rgba(0,0,0,.07) #fdfbe9;box-shadow:-1px -1px 2px rgba(0,0,0,.06);border-bottom-right-radius:7px}
+  /* nota adhesiva clara (con chincheta + esquina doblada) — que se entienda que es un post-it */
+  .notecard{position:relative;display:inline-block;background:#fff8c4;border:1.5px solid #e6d36b;border-radius:6px;padding:10px 14px 9px;margin:10px 0 18px;font-size:13px;color:#5b4e16;box-shadow:2px 3px 9px rgba(0,0,0,.14);transform:rotate(-1.4deg)}
+  .notecard::before{content:"📌";position:absolute;top:-13px;left:9px;font-size:16px;transform:rotate(-12deg);filter:drop-shadow(0 1px 1px rgba(0,0,0,.2))}
+  /* comentarios in-page: no ocupan toda la página; lista con scroll interno */
+  .cmtScroll{max-height:54vh;overflow:auto;border-radius:12px;margin-top:6px}
   .gradtext{background:linear-gradient(90deg,var(--accent),#8a5bdb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   #likeFab{position:fixed;right:16px;bottom:74px;width:48px;height:48px;border-radius:50%;border:none;background:#fff;color:#e0568a;font-size:20px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.22);z-index:60;transition:transform .15s}
   #likeFab:hover{transform:scale(1.12) rotate(-6deg)} #likeFab.on{background:#e0568a;color:#fff}
@@ -194,7 +210,7 @@
     <div class="ttbub" id="madreTip">🤱🏻 <b>MADRE</b> es un sistema que intenta <b>decidir mejor</b>, <b>aprender de la realidad</b> y <b>generar valor en el mundo real</b> — no es un bot de dinero ni un almacén de notas. (Mantén pulsado / pasa el ratón para esto.)</div>
   </div>
   <p class="sub">Lo importante de MADRE, en simple. Tú lo lees, lo marcas y opinas; MADRE lo recoge y actúa.</p>
-  <div class="postit" style="display:inline-block;background:#fff7c0;border:1px solid #ece28a;border-radius:8px;padding:6px 10px;margin:2px 0 12px;font-size:13px;transform:rotate(-1deg);box-shadow:0 1px 3px rgba(0,0,0,.08)">📝 ¿“feedback”? = dar tu opinión, sin más 😄</div>
+  <div class="postit notecard">📝 <b>¿“feedback”?</b> = dar tu opinión, sin más 😄</div>
   <div id="gateBar"></div>
   <div id="novBanner"></div>
 
@@ -210,9 +226,9 @@
       <details class="def"><summary>¿por qué tan bajo?</summary><span class="d">MADRE se mide por su <b>contacto con fuera</b>. Tiene mucho criterio y muchos sistemas, pero aún no ha cobrado ni tiene audiencia. En cuanto entre el primer euro o las primeras estrellas, sube rápido.</span></details>
     </p>
     <div class="chips">
-      <span class="chip" data-goto="6">🟢 Salud: <b>estable</b> ›</span>
-      <span class="chip" data-goto="4">🗳️ <b>4</b> decisiones te esperan ›</span>
-      <span class="chip" data-goto="6">⚠️ <b>3</b> desviaciones ›</span>
+      <span class="chip" id="chipHealth" data-goto="6">🟢 Salud: <b>estable</b> ›</span>
+      <span class="chip" id="chipDecs" data-goto="4">🗳️ <b>4</b> decisiones te esperan ›</span>
+      <span class="chip" id="chipDesv" data-goto="6">⚠️ <b>3</b> desviaciones ›</span>
       <span class="chip" id="chipSteps" data-goto="2">✅ Tu parte: <b>0/3</b> ›</span>
     </div>
     <div class="small" style="margin-top:5px">Toca cualquiera para ir a su sección.</div>
@@ -643,7 +659,7 @@
     <p class="small" id="fbHint" style="margin:10px 0 0">Se etiqueta con la tarjeta y el punto exacto, para que MADRE sepa a qué respondes.</p>
   </div>
 </div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- Snapshot horneado de CUADERNO_ESTADO.tsv: lo refresca la rutina cuaderno-feedback en cada pasada para que la web (sin Drive) muestre numeros actuales. NO editar a mano. -->
 <script id="estadoBaked" type="text/plain">
@@ -850,6 +866,23 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     decs.forEach(function(d){ if(state.decisions[d.getAttribute("data-dec")]) done++; });
     var el=document.getElementById("decScore"); if(el) el.textContent=done+"/"+decs.length;
     var bar=document.getElementById("decBar"); if(bar) bar.style.width=(decs.length?(done/decs.length*100):0)+"%";
+    refreshHeaderChips();
+  }
+  // Chips de cabecera SIEMPRE calculados del estado real (no hardcodeados) — arregla "4 vs 5".
+  function refreshHeaderChips(){
+    try{
+      var decs=document.querySelectorAll(".dec"), answered=0;
+      decs.forEach(function(d){ if(state.decisions && state.decisions[d.getAttribute("data-dec")]) answered++; });
+      var pending=decs.length-answered;
+      var cd=document.getElementById("chipDecs");
+      if(cd && decs.length) cd.innerHTML='🗳️ <b>'+pending+'</b> decisi'+(pending===1?'ón':'ones')+' te esperan ›';
+      var nd=(typeof desvios!=='undefined' && desvios) ? desvios.length : 0;
+      var cv=document.getElementById("chipDesv");
+      if(cv) cv.innerHTML='⚠️ <b>'+nd+'</b> desviaci'+(nd===1?'ón':'ones')+' ›';
+      var hasRed=(typeof desvios!=='undefined' && desvios) && desvios.some(function(x){ return x.sev==='r'; });
+      var ch=document.getElementById("chipHealth");
+      if(ch) ch.innerHTML=(hasRed?'🟠':'🟢')+' Salud: <b>'+(hasRed?'atención':'estable')+'</b> ›';
+    }catch(e){}
   }
   document.querySelectorAll(".dec").forEach(function(dec){
     var name=dec.getAttribute("data-dec"), stEl=dec.querySelector(".decstate"), prev=state.decisions[name];
@@ -928,6 +961,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
         (d.paso?('<div class="step2">'+badge+'<b>Paso:</b> '+esc(d.paso)+'</div>'):'')+'</div>';
       el.appendChild(div);
     });
+    refreshHeaderChips();
   }
   function setGlobal(v){
     var bs=document.getElementById("bigScore"); if(bs) bs.innerHTML=v+'<small>/10</small>';
@@ -944,6 +978,22 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     });
   }
   function setActualizado(s){ var el=document.getElementById("actualizado"); if(el) el.textContent=s; }
+  // Anti-falso-verde: si el estado lleva >48h sin actualizarse, avisar (el motor podría estar caído).
+  function hoursSince(iso){ try{ var t=Date.parse(iso); if(isNaN(t)) return null; return (Date.now()-t)/3600000; }catch(e){ return null; } }
+  function checkStale(iso){
+    try{
+      var h=hoursSince(iso); if(h==null) return;
+      var st=document.getElementById("staleBanner");
+      if(h>48){
+        var days=Math.max(2,Math.round(h/24));
+        var actEl=document.getElementById("actualizado");
+        if(actEl && !/desfasado/.test(actEl.innerHTML)) actEl.innerHTML+=' <b style="color:#a85b00">⚠️ posiblemente desfasado</b>';
+        if(!st){ st=document.createElement("div"); st.id="staleBanner"; st.setAttribute("role","status"); st.className="alert a"; st.style.cssText="margin:8px 0";
+          var nb=document.getElementById("novBanner"); if(nb&&nb.parentNode) nb.parentNode.insertBefore(st, nb); }
+        st.innerHTML='<span class="ic">🟠</span><div class="at"><div class="h">Estado posiblemente desfasado</div><div>El motor de MADRE no refresca este cuaderno desde hace ~'+days+' día'+(days!==1?'s':'')+'. El semáforo de arriba puede no reflejar la realidad de ahora mismo.</div></div>';
+      } else if(st){ st.remove(); }
+    }catch(e){}
+  }
 
   // ---- v2: Señales del mundo + qué hizo + qué necesita + hipótesis vivas/muertas ----
   var senales=[
@@ -1071,6 +1121,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(HP.length){ hipotesis=HP; renderHipotesis(); changed=true; }
     Object.keys(cs).forEach(function(n){ setCardScore(n,cs[n]); changed=true; });
     if(upd) setActualizado(fmtDate(upd)+" (auto)"); else if(changed) setActualizado("recién (auto)");
+    if(upd) checkStale(upd);
     return changed;
   }
   function bakedEstado(){ var el=document.getElementById("estadoBaked"); return el?el.textContent:""; }
@@ -1088,6 +1139,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-21",titulo:"🎛️ Botones en 1 menú, sonidos, '¿no entiendo?' y caos x2",detalle:"Los botones flotantes ahora viven en UN menú ✦ (menos lío). Zonas con SONIDO (ASMR, actívalo en el menú). Botón 🤔 'no entiendo' en cada tarjeta y en la ruta guiada (para saber qué cuesta más). El gato cambia de cara y ya no se atasca en el móvil. El chat abre en lo último escrito. Los comentarios ya no ocupan toda la pantalla. El modo caótico tiene flechas que señalan cosas, círculos, citas y travesuras. Los dibujos llevan tu nombre. Y arreglos: los contadores de arriba ahora son reales, aviso si el estado está viejo, y no se solapan los modos."},
     {fecha:"2026-06-21",titulo:"👁️ Visitas + 'El cuaderno por dentro' + caos con chicha",detalle:"Nuevo contador de visitas (abajo a la izq.): al tocarlo se abre un panel con lo más querido (comentarios y dibujo más votados), la actividad y 'lo que opina MADRE' (cambia cada vez). El modo caótico ahora tiene flechas que señalan, notas y avisos absurdos (no solo confeti) y se modera solo en móvil. Arreglos: el gato ya no se tapa con la barra de arriba, y en los dibujos puedes deshacer (botón ↩️ Atrás o Ctrl+Z)."},
     {fecha:"2026-06-21",titulo:"🤪 Modo caótico, gato troll y arreglos finos",detalle:"Modo caótico (confeti y locuras, con permiso), gato con frases troll y barriguita, contraseña que se ríe, paneles que reaccionan al ratón. Arreglados: la nota ya no sale rara, el tour ya no deja borrosa la zona, y el lápiz/corazón ya dejan señalar cualquier zona (también cabecera y bordes)."},
     {fecha:"2026-06-21",titulo:"🐱 ¡Cuaderno vivo! gato, dibujos, tour y más",detalle:"Un gato que huye si lo tocas, una zona para hacer DIBUJOS (con likes), un tour guiado para entenderlo en 1 min, una nota secreta 📌, modo lápiz ✏️ para opinar sobre cualquier zona, chat tipo conversación, y la curiosidad de por qué se llama MADRE. Menos manual, más criatura."},
@@ -1270,10 +1322,14 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
       {a:"#7c3aed",s:"#efe7fe",b:"#f8f5ff"},{a:"#0891b2",s:"#def5fb",b:"#f2fafd"},
       {a:"#db2777",s:"#fde7f1",b:"#fdf5f9"},{a:"#ca8a04",s:"#fbf3d6",b:"#faf8ef"}
     ];
-    var t=temas[Math.floor(Math.random()*temas.length)], rs=document.documentElement.style;
+    // Semilla por DÍA: la "cara" del cuaderno (color/fondo) es la misma todo el día y cambia
+    // una vez al día — así se mantiene la huella visual (no marea cambiando en cada refresco).
+    var _seed; try{ var dt=new Date(); _seed=(dt.getFullYear()*10000+(dt.getMonth()+1)*100+dt.getDate())>>>0; }catch(e){ _seed=20260621; }
+    function srand(){ _seed=(_seed*1103515245+12345)&0x7fffffff; return _seed/0x7fffffff; }
+    var t=temas[Math.floor(srand()*temas.length)], rs=document.documentElement.style;
     rs.setProperty("--accent",t.a); rs.setProperty("--accent-soft",t.s); rs.setProperty("--bg",t.b);
-    var fondos=["bgGrid","bgStars","bgGlow","bgGrid","bgGlow",""]; var f=fondos[Math.floor(Math.random()*fondos.length)]; if(f) document.body.classList.add(f);
-    if(Math.random()<0.65){ var bs=document.getElementById("bigScore"); if(bs) bs.classList.add("gradtext"); }
+    var fondos=["bgGrid","bgStars","bgGlow","bgGrid","bgGlow",""]; var f=fondos[Math.floor(srand()*fondos.length)]; if(f) document.body.classList.add(f);
+    if(srand()<0.65){ var bs=document.getElementById("bigScore"); if(bs) bs.classList.add("gradtext"); }
   }catch(e){}
 
   var emo={"1":"🧠","2":"🧭","3":"💰","4":"🗳️","5":"⚠️","6":"🩺","7":"⚙️","8":"🏗️","9":"📚","10":"📖","11":"🧩","12":"📈"};
@@ -1313,10 +1369,12 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
 
   // ---- corazón: modo "me gusta" (resalta y captura lo que te gusta) ----
   var fab=document.createElement("button"); fab.id="likeFab"; fab.textContent="♥"; fab.title="Marca lo que te gusta";
-  var hint=document.createElement("div"); hint.id="likeHint"; hint.textContent="💗 Toca lo que te guste · (corazón otra vez para salir)";
+  var hint=document.createElement("div"); hint.id="likeHint"; hint.textContent="💗 Toca lo que te guste · (pulsa Esc o el menú ✦ para salir)";
   document.body.appendChild(fab); document.body.appendChild(hint);
   var likeMode=false;
-  function setLike(v){ likeMode=v; document.body.classList.toggle("likeMode",v); fab.classList.toggle("on",v); }
+  function setLike(v){ if(v){ try{ if(window.__exitLapiz) window.__exitLapiz(); }catch(_){ } } likeMode=v; document.body.classList.toggle("likeMode",v); fab.classList.toggle("on",v); }
+  try{ window.__exitLike=function(){ setLike(false); }; }catch(_){}
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape" && likeMode) setLike(false); });
   fab.addEventListener("click",function(e){ e.stopPropagation(); setLike(!likeMode); });
   document.addEventListener("click",function(e){
     if(!likeMode || e.target.closest("#likeFab")) return;
@@ -1431,8 +1489,29 @@ let all=[];
 function norm(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/0/g,"o").replace(/1/g,"i").replace(/3/g,"e").replace(/4/g,"a").replace(/5/g,"s").replace(/7/g,"t").replace(/[^a-z]/g,""); }
 function blocked(text){ return /pedofil|pederast|pedophil/.test(norm(text)); }
 
+// Redimensiona/comprime una imagen antes de subir (cliente). El control de seguridad real es backend (ver DESARROLLO_CUADERNO.md, Q9).
+function shrinkImg(file, maxSide, q){
+  return new Promise(function(resolve){
+    try{
+      if(/gif/i.test(file.type||"")) return resolve(file); // no re-encodear GIF (preserva animación)
+      var url=URL.createObjectURL(file); var img=new Image();
+      img.onload=function(){ try{
+        var w=img.naturalWidth, h=img.naturalHeight, scale=Math.min(1, maxSide/Math.max(w,h));
+        if(scale>=1){ URL.revokeObjectURL(url); return resolve(file); }
+        var c=document.createElement("canvas"); c.width=Math.round(w*scale); c.height=Math.round(h*scale);
+        c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+        c.toBlob(function(b){ URL.revokeObjectURL(url); resolve(b||file); }, "image/jpeg", q||0.82);
+      }catch(e){ resolve(file); } };
+      img.onerror=function(){ try{URL.revokeObjectURL(url);}catch(_){ } resolve(file); };
+      img.src=url;
+    }catch(e){ resolve(file); }
+  });
+}
 async function uploadImg(file){
   if(!file) return null;
+  if(!/^image\//.test(file.type||"")){ alert("Solo se pueden subir imágenes 🙂"); return null; }
+  if(file.size > 8*1024*1024){ alert("Esa imagen pesa demasiado (máx 8 MB). Prueba con una más ligera 🙏"); return null; }
+  try{ file = await shrinkImg(file, 1600, 0.82); }catch(e){}
   try{
     const ext=((file.type||"").split("/")[1]||"png").replace("jpeg","jpg");
     const path="c/"+Date.now()+"_"+Math.random().toString(36).slice(2,8)+"."+ext;
@@ -1442,8 +1521,9 @@ async function uploadImg(file){
   }catch(e){ console.warn("upload ex", e); return null; }
 }
 async function load(){
-  const { data, error }=await sb.from("comments").select("*").eq("hidden",false).order("created_at",{ascending:true});
-  if(error){ console.warn("comments load:", error.message); } else { all=data||[]; }
+  // Solo los 200 comentarios más recientes (escala): pedimos DESC+limit y restauramos orden ascendente.
+  const { data, error }=await sb.from("comments").select("*").eq("hidden",false).order("created_at",{ascending:false}).limit(200);
+  if(error){ console.warn("comments load:", error.message); } else { all=(data||[]).slice().reverse(); }
   renderAll();
 }
 async function post(parentId, name, body, file){
@@ -1517,13 +1597,13 @@ function build(){
   root.innerHTML="";
   stripEl=document.createElement("div"); stripEl.className="cmtStrip"; root.appendChild(stripEl);
   root.appendChild(makeForm(null));
-  listEl=document.createElement("div"); root.appendChild(listEl);
+  var scroller=document.createElement("div"); scroller.className="cmtScroll"; listEl=document.createElement("div"); scroller.appendChild(listEl); root.appendChild(scroller);
   const fab=document.createElement("button"); fab.id="cmtFab"; fab.textContent="💬"; fab.title="Comentarios";
   const panel=document.createElement("div"); panel.id="cmtPanel";
   const h=document.createElement("div"); h.style.cssText="font-weight:700;margin-bottom:6px;background:rgba(255,255,255,.7);display:inline-block;padding:3px 9px;border-radius:99px"; h.textContent="💬 Comentarios"; panel.appendChild(h);
   panelListEl=document.createElement("div"); panel.appendChild(panelListEl);   // la conversación PRIMERO (se ve antes de comentar)
   const pf=makeForm(null); pf.style.cssText="background:rgba(255,255,255,.75);border-radius:12px;padding:8px;margin-top:8px"; panel.appendChild(pf);
-  fab.onclick=()=>panel.classList.toggle("on");
+  fab.onclick=()=>{ const open=panel.classList.toggle("on"); if(open){ try{ const p=document.getElementById("cmtPanel"); requestAnimationFrame(function(){ p.scrollTop=p.scrollHeight; requestAnimationFrame(function(){ p.scrollTop=p.scrollHeight; }); }); if(window.innerWidth>640){ const inp=pf.querySelector("textarea, input[type=text]"); if(inp) inp.focus(); } }catch(e){} } };
   document.body.appendChild(fab); document.body.appendChild(panel);
 }
 function renderAll(){
@@ -1838,7 +1918,7 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
 #dbjsStage{display:flex;flex-direction:column;align-items:center;gap:10px}
 #dbjsCanvasWrap{position:relative;border-radius:14px;padding:6px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.1);border:2px dashed #c9c0f0}
 #dbjsCanvas{display:block;background:#fff;border-radius:8px;touch-action:none;cursor:crosshair;max-width:100%}
-#dbjsTools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;width:100%}
+.dbjsTools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;width:100%}
 .dbjsColor{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.15);cursor:pointer;padding:0;transition:transform .12s}
 .dbjsColor:hover{transform:scale(1.18)}
 .dbjsColor.dbjsOn{transform:scale(1.25);box-shadow:0 0 0 3px #6a5acd}
@@ -1980,6 +2060,10 @@ try{
 }catch(e){}
 var phrases = ['¡ay!','no me toques 😼','miau de error 404','estoy ocupado','shhh','¿y mi siesta?','prrr…','déjame en paz 🐾','no, gracias','*bufido*','buen aim 🎯','¿practicando el aim?','casi me pillas','te he visto más lento 😹','los hay más rápidos','GG','skill issue 😹','solo me dejo acariciar si eres una chica 😼 (es broma)','me he cansado de huir… acaríciame la barriguita 🐱','no en mi guardia ⚔️'];
 var pIdx = 0;
+// poses del gato: cambia de "cara" según lo que hace (idle / asustado / dormido)
+var POSE_IDLE=['🐈','🐈‍⬛','😺','😸','🐱'], POSE_SCARED=['🙀','😿','😼'], POSE_SLEEP='😴';
+function setPose(p){ try{ emoji.textContent=p; }catch(e){} }
+function idlePose(){ setPose(POSE_IDLE[Math.floor(Math.random()*POSE_IDLE.length)]); }
 
 var x = 20, y = TOPSAFE;   // posición actual
 var lastDir = 1;
@@ -2013,6 +2097,8 @@ function edgePos(ax, ay){
       var ddx = nx-x, ddy = ny-y;
       score = ddx*ddx + ddy*ddy;        // lejos de donde estaba = mejor
     }
+    // evita las esquinas inferiores, donde viven los botones flotantes (no se "atasca" encima)
+    if ((ny > maxY-104) && (nx > maxX-104 || nx < MARGIN+104)) score *= 0.12;
     if (score > bestScore){ bestScore = score; best = {x:nx,y:ny}; }
   }
   return best || {x:x,y:y};
@@ -2045,6 +2131,7 @@ function wake(){
     asleep = false;
     cat.classList.remove('gxg-sleep');
     bubble.textContent = '';
+    idlePose();
   }
   lastInteract = Date.now();
 }
@@ -2056,11 +2143,13 @@ function flee(ax, ay){
   cat.classList.add('gxg-flee');
   if (!reduce) cat.classList.add('gxg-run');
   place(dest.x, dest.y, false);
+  setPose(POSE_SCARED[Math.floor(Math.random()*POSE_SCARED.length)]);
   say(phrases[pIdx % phrases.length]); pIdx++;
   if (runTimer) clearTimeout(runTimer);
   runTimer = setTimeout(function(){
     cat.classList.remove('gxg-run');
     cat.classList.remove('gxg-flee');
+    idlePose();
   }, reduce ? 260 : 460);
 }
 
@@ -2092,7 +2181,8 @@ function onPoke(ev){
 }
 
 cat.addEventListener('click', onPoke);
-cat.addEventListener('touchstart', onPoke, {passive:false});
+// MÓVIL: huye al tocarlo PERO sin bloquear el scroll (passive, sin preventDefault) — antes "se atascaba".
+cat.addEventListener('touchstart', function(ev){ var t=(ev.touches&&ev.touches[0])?ev.touches[0]:null; flee(t?t.clientX:(x+SIZE/2), t?t.clientY:(y+SIZE/2)); }, {passive:true});
 cat.addEventListener('keydown', function(ev){
   if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); flee(x+SIZE/2, y+SIZE/2); }
 });
@@ -2119,6 +2209,7 @@ function checkSleep(){
   if (!asleep && !cat.classList.contains('gxg-hidden') && Date.now()-lastInteract > 11000){
     asleep = true;
     cat.classList.add('gxg-sleep');
+    setPose(POSE_SLEEP);
     bubble.textContent = '💤';
   }
 }
@@ -2137,9 +2228,12 @@ setTimeout(function(){
   requestAnimationFrame(function(){ cat.classList.remove('gxg-hidden'); say('miau 🐾'); });
 }, 2200);
 
-// Bucles de vida (lentos, no molestan)
-setInterval(wander, 9000);
-setInterval(checkSleep, 3000);
+// Bucles de vida (lentos, no molestan) — se PAUSAN si la pestaña no se ve (batería en móvil)
+var ivWander=setInterval(wander, 9000), ivSleep=setInterval(checkSleep, 3000);
+try{ D.addEventListener('visibilitychange', function(){
+  if(D.hidden){ if(ivWander) clearInterval(ivWander); if(ivSleep) clearInterval(ivSleep); ivWander=ivSleep=null; }
+  else if(!ivWander){ lastInteract=Date.now(); ivWander=setInterval(wander,9000); ivSleep=setInterval(checkSleep,3000); }
+}); }catch(e){}
 }catch(e){console.warn('widget gato',e);}})();
 </script>
 <script>
@@ -2362,8 +2456,8 @@ sec.innerHTML='<h3>🎨 Enhorabuena, si has llegado hasta aquí… ¡haz un dibu
 '<p id="dbjsSub">Dibuja con el dedo o el ratón y deja tu huella en el cuaderno vivo ✨</p>'+
 '<div id="dbjsStage">'+
 '<div id="dbjsCanvasWrap"><canvas id="dbjsCanvas"></canvas></div>'+
-'<div id="dbjsTools" id="dbjsColors"></div>'+
-'<div id="dbjsTools">'+
+'<div id="dbjsColors" class="dbjsTools"></div>'+
+'<div id="dbjsToolsRow" class="dbjsTools">'+
 '<input id="dbjsName" type="text" maxlength="40" placeholder="Tu nombre (opcional)">'+
 '<button id="dbjsUndo" type="button" title="Deshacer (Ctrl+Z)" disabled>↩️ Atrás</button>'+
 '<button id="dbjsClear" type="button">🧽 Borrar</button>'+
@@ -2391,7 +2485,7 @@ ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=4;
 
 var colors=['#222222','#e23b3b','#2d7ff0','#22a06b','#f5a623'];
 var current=colors[0];
-var toolsRow=sec.querySelectorAll('#dbjsTools')[0];
+var toolsRow=sec.querySelector('#dbjsColors');
 colors.forEach(function(c,i){
   var b=document.createElement('button');
   b.type='button';b.className='dbjsColor'+(i===0?' dbjsOn':'');
@@ -2464,9 +2558,10 @@ sendBtn.addEventListener('click',function(){
           var pub=sb.storage.from('comment-images').getPublicUrl(path);
           var url=pub&&pub.data?pub.data.publicUrl:null;
           if(!url)throw new Error('sin url');
-          return sb.from('drawings').insert({name:nameVal||null,image_url:url});
+          return sb.from('drawings').insert({name:nameVal||null,image_url:url}).select('id').single();
         }).then(function(ins){
           if(ins&&ins.error)throw ins.error;
+          try{ if(ins&&ins.data&&window.__identity) window.__identity.addDrawing(ins.data.id); }catch(e){}
           clearCanvas();
           sec.querySelector('#dbjsName').value='';
           say('¡Enviado! Gracias por dibujar 💜');
@@ -2489,7 +2584,8 @@ function renderGallery(rows){
     var img=document.createElement('img');img.loading='lazy';img.alt='dibujo';img.src=r.image_url||'';
     img.onerror=function(){img.style.display='none';};
     card.appendChild(img);
-    if(r.name){var nm=document.createElement('div');nm.className='dbjsCardName';nm.textContent=r.name;card.appendChild(nm);}
+    var own=false; try{ own=!!(window.__identity&&window.__identity.ownsDrawing&&window.__identity.ownsDrawing(r.id)); }catch(e){}
+    if(r.name||own){var nm=document.createElement('div');nm.className='dbjsCardName';nm.textContent=(r.name||'anónimo')+(own?' · tú':'');if(own)nm.style.color='#6a5acd';card.appendChild(nm);}
     var lk=document.createElement('button');lk.type='button';lk.className='dbjsLike';
     var n=r.likes||0;var done=liked.indexOf(r.id)>=0;
     if(done)lk.classList.add('dbjsLiked');
@@ -2514,7 +2610,7 @@ function reorder(){
 }
 function loadGallery(){
   waitSb(function(sb){
-    sb.from('drawings').select('id,name,image_url,likes').eq('hidden',false).order('likes',{ascending:false}).order('created_at',{ascending:false}).then(function(res){
+    sb.from('drawings').select('id,name,image_url,likes').eq('hidden',false).order('likes',{ascending:false}).order('created_at',{ascending:false}).limit(60).then(function(res){
       if(res&&res.error){console.warn('dibujos galeria',res.error);renderGallery([]);return;}
       renderGallery((res&&res.data)||[]);
     }).catch(function(e){console.warn('dibujos galeria',e);renderGallery([]);});
@@ -2539,7 +2635,7 @@ document.body.appendChild(fab);
 
 var bar=document.createElement('div');
 bar.id='lapizBar';
-bar.textContent='✏️ Toca la zona sobre la que quieres opinar (otra vez el lápiz para salir)';
+bar.textContent='✏️ Toca la zona sobre la que quieres opinar (pulsa Esc o el menú ✦ para salir)';
 document.body.appendChild(bar);
 
 function closeBub(){
@@ -2650,6 +2746,7 @@ function onClick(e){
 }
 
 function activate(){
+  try{ if(window.__exitLike) window.__exitLike(); }catch(_){}   // modos mutuamente exclusivos (no solapar barras)
   active=true;
   fab.classList.add('on');
   fab.title='Salir del modo comentario';
@@ -2665,6 +2762,7 @@ function deactivate(){
   clearHot();
   closeBub();
 }
+try{ window.__exitLapiz=deactivate; }catch(_){}
 
 fab.addEventListener('click', function(e){
   e.preventDefault(); e.stopPropagation();
@@ -2699,7 +2797,15 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
 @keyframes chNote{0%{opacity:0;transform:translateY(14px) rotate(var(--r,-4deg)) scale(.7)}14%{opacity:1;transform:translateY(0) rotate(var(--r,-4deg)) scale(1.06)}22%,74%{opacity:1;transform:translateY(0) rotate(var(--r,-4deg)) scale(1)}100%{opacity:0;transform:translateY(-22px) rotate(var(--r,-4deg)) scale(.95)}}
 @keyframes chAlert{0%{opacity:0;transform:translateX(120%)}12%,80%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(120%)}}
 @keyframes chShout{0%,100%{transform:scale(1) rotate(0)}25%{transform:scale(1.06) rotate(-1.6deg)}60%{transform:scale(1.04) rotate(1.6deg)}}
-@media(prefers-reduced-motion:reduce){body.chaos .card,.card>details:not([open])>summary .caret,#chaosFab.on,.chaosArrow,.chaosNote,.chaosAlert,.chaosShout{animation:none}}
+.chaosCircle{position:fixed;z-index:9996;pointer-events:none;border-radius:50%;mix-blend-mode:multiply;animation:chCircle 2.3s ease-out forwards}
+@keyframes chCircle{0%{transform:scale(.1);opacity:0}30%{opacity:.5}100%{transform:scale(1);opacity:0}}
+.chaosQuote{position:fixed;z-index:9997;pointer-events:none;max-width:230px;background:#fff;color:#222;border-left:4px solid var(--accent,#7c3aed);border-radius:10px;padding:8px 11px;font:500 12.5px/1.35 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.25);animation:chQuote 5s ease forwards}
+.chaosQuote b{display:block;font-size:11px;color:var(--accent,#7c3aed);margin-top:3px;font-weight:700}
+@keyframes chQuote{0%{opacity:0;transform:translateY(10px) scale(.92)}10%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0;transform:translateY(-12px)}}
+.chaosTip{position:fixed;z-index:9999;pointer-events:none;background:#111;color:#fff;font:800 13px/1.15 system-ui,-apple-system,Segoe UI,sans-serif;padding:6px 10px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.4);max-width:210px;animation:chArrow 3s ease forwards}
+.megaFlip{animation:chMegaFlip 1.1s ease !important}
+@keyframes chMegaFlip{0%{transform:rotateY(0)}50%{transform:rotateY(180deg) scale(1.05)}100%{transform:rotateY(360deg)}}
+@media(prefers-reduced-motion:reduce){body.chaos .card,.card>details:not([open])>summary .caret,#chaosFab.on,.chaosArrow,.chaosNote,.chaosAlert,.chaosShout,.chaosCircle,.chaosQuote,.chaosTip,.megaFlip{animation:none}}
 </style>
 <script>
 (function(){ try{
@@ -2714,27 +2820,62 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
   var ARROWS=["⬅ MIRA ESTO","⬆ IMPORTANTE","➡ O NO","⬇ aquí abajo 👀","↙ esto seguro que sí","↗ ¿o era esto?","⬅ click aquí (no)","➡ tú sí me caes bien","⬆ ni idea la verdad"];
   var NOTES=["esto parecía buena idea","no estoy seguro","¿sirve para algo?","lo arreglo luego","nota encontrada hoy","creo que funciona","¿y si lo borro todo?","tú puedes 💪","MADRE estuvo aquí","idea random nº 47","shhh, es un secreto","esto no estaba ayer"];
   var ALERTS=["⚠ gato detectado","⚠ demasiadas ideas","⚠ alguien dejó un dibujo","⚠ caos al 100%","⚠ pensamiento no autorizado","⚠ exceso de creatividad","⚠ se ha caído una nota","⚠ MADRE está pensando"];
+  var COLORS=["#7c3aed","#e0568a","#2d7ff0","#22a06b","#f5a623","#e23b3b","#0891b2"];
+  var TSEL=".card, .chip, .senalItem, #cmtFab, #cmvFab, #gxg-cat-root, .postit, #bigScore, footer, h1, .alert, .step";
+  var TARROWS=["MIRA ESTO","¿y esto qué?","IMPORTANTE (o no)","toca esto 👀","sospechoso","aquí hay algo","esto mola","esto NO lo toques 😏","¿lo pillas?","jefe, mira"];
+  var MISCHIEF=["dile algo al de arriba 👆","critica algo, venga 😈","deja un comentario polémico","reta a MADRE a algo","escribe en MAYÚSCULAS, sé valiente","comenta un secreto tuyo","ponle un mote cariñoso a MADRE","di la verdad incómoda"];
+  var FAKEQ=[{name:"alguien",body:"esto está muy loco jaja"},{name:"anónimo",body:"me encanta este sitio"},{name:"visitante",body:"¿esto lo hizo una IA sola?"},{name:"random",body:"no entiendo nada pero mola"}];
   function rnd(a){ return a[Math.floor(Math.random()*a.length)]; }
   function vw(){ return window.innerWidth||360; } function vh(){ return window.innerHeight||640; }
+  function panelOpen(){ try{ var p=document.getElementById("cmtPanel"); return !!(p&&p.classList.contains("on")); }catch(e){ return false; } }
   function burst(n){ for(var i=0;i<n;i++){ (function(){ var p=document.createElement("div"); p.className="chaosParticle chaos-el"; p.textContent=rnd(EM); p.style.left=(Math.random()*100)+"vw"; var dur=2+Math.random()*2.6; p.style.transition="transform "+dur+"s linear, opacity "+dur+"s linear"; document.body.appendChild(p); requestAnimationFrame(function(){ p.style.transform="translateY("+(105+Math.random()*15)+"vh) rotate("+(Math.random()*720-360)+"deg)"; p.style.opacity=".15"; }); setTimeout(function(){ try{p.remove();}catch(e){} }, dur*1000+250); })(); } }
-  function spawnArrow(){ var a=document.createElement("div"); a.className="chaosArrow chaos-el"; a.textContent=rnd(ARROWS); a.style.left=Math.round(10+Math.random()*Math.max(40,vw()-180))+"px"; a.style.top=Math.round(80+Math.random()*Math.max(60,vh()-200))+"px"; document.body.appendChild(a); setTimeout(function(){ try{a.remove();}catch(e){} },2700); }
   function spawnNote(){ var n=document.createElement("div"); n.className="chaosNote chaos-el"; n.textContent=rnd(NOTES); n.style.left=Math.round(8+Math.random()*Math.max(40,vw()-180))+"px"; n.style.top=Math.round(80+Math.random()*Math.max(60,vh()-200))+"px"; n.style.setProperty("--r",(Math.random()*10-5)+"deg"); document.body.appendChild(n); setTimeout(function(){ try{n.remove();}catch(e){} },4300); }
   function spawnAlert(){ var d=document.createElement("div"); d.className="chaosAlert chaos-el"; d.textContent=rnd(ALERTS); d.style.top=Math.round(70+Math.random()*Math.max(60,vh()*0.5))+"px"; document.body.appendChild(d); setTimeout(function(){ try{d.remove();}catch(e){} },3500); }
   function shout(){ var els=document.querySelectorAll(".card"); if(!els.length) return; var el=els[Math.floor(Math.random()*els.length)]; el.classList.add("chaosShout"); setTimeout(function(){ try{el.classList.remove("chaosShout");}catch(e){} },1200); }
-  function stop(){ on=false; document.body.classList.remove("chaos"); cfab.classList.remove("on"); timers.forEach(function(t){ clearInterval(t); }); timers=[]; document.querySelectorAll(".chaos-el").forEach(function(p){ try{p.remove();}catch(e){} }); document.querySelectorAll(".chaosShout").forEach(function(p){ try{p.classList.remove("chaosShout");}catch(e){} }); }
+  // T6-1: flechas que apuntan a un elemento REAL en pantalla (calcula su posición)
+  function visibleTargets(){ var out=[]; try{ document.querySelectorAll(TSEL).forEach(function(el){ if(el.offsetParent===null && el.id!=='gxg-cat-root') return; var r=el.getBoundingClientRect(); if(r.width>22&&r.height>12&&r.bottom>44&&r.top<vh()-16&&r.left<vw()-16&&r.right>16) out.push({el:el,r:r}); }); }catch(e){} return out; }
+  function spawnTargetArrow(){
+    var t=visibleTargets(); if(!t.length) return;
+    var r=t[Math.floor(Math.random()*t.length)].r, label=rnd(TARROWS);
+    var a=document.createElement("div"); a.className="chaosTip chaos-el"; var dir,lx,ty;
+    if(r.left>140 && Math.random()<0.5){ dir='▶'; lx=Math.max(6,r.left-160); ty=Math.max(44,r.top+Math.min(20,r.height/2-10)); }
+    else if(r.top>70){ dir='▼'; lx=Math.max(6,Math.min(vw()-200,r.left)); ty=Math.max(44,r.top-46); }
+    else { dir='▲'; lx=Math.max(6,Math.min(vw()-200,r.left)); ty=Math.min(vh()-40,r.bottom+8); }
+    a.textContent=dir+' '+label; a.style.left=Math.round(lx)+"px"; a.style.top=Math.round(ty)+"px";
+    document.body.appendChild(a); setTimeout(function(){ try{a.remove();}catch(e){} },3000);
+  }
+  // T6-2: travesuras contextuales solo si el panel de comentarios está abierto
+  function spawnMischief(){ if(!panelOpen()){ if(Math.random()<0.5) spawnNote(); return; } var n=document.createElement("div"); n.className="chaosNote chaos-el"; n.style.background="#ffe1ef"; n.textContent="😈 "+rnd(MISCHIEF); var p=document.getElementById("cmtPanel"); var r=p?p.getBoundingClientRect():null; n.style.left=Math.round(r?Math.max(8,r.left-150):20)+"px"; n.style.top=Math.round(r?Math.max(70,r.top+20):120)+"px"; n.style.setProperty("--r",(Math.random()*8-4)+"deg"); document.body.appendChild(n); setTimeout(function(){ try{n.remove();}catch(e){} },4600); }
+  // T6-3: comentarios CITADOS reales flotando (anti-XSS textContent)
+  var quotes=[], quotesLoaded=false;
+  function loadQuotes(){ if(quotesLoaded) return; quotesLoaded=true; try{ if(window.__sb){ window.__sb.from("comments").select("name,body").eq("hidden",false).order("created_at",{ascending:false}).limit(30).then(function(r){ if(r&&r.data) quotes=r.data.filter(function(c){ return c.body && c.body.length<160; }); }); } }catch(e){} }
+  function spawnQuote(){ var src=quotes.length?quotes:FAKEQ, c=src[Math.floor(Math.random()*src.length)]; var d=document.createElement("div"); d.className="chaosQuote chaos-el"; var t=document.createElement("span"); t.textContent="“"+((c.body||"").slice(0,140))+"”"; d.appendChild(t); var b=document.createElement("b"); b.textContent="— "+(c.name||"anónimo"); d.appendChild(b); d.style.left=Math.round(10+Math.random()*Math.max(40,vw()-250))+"px"; d.style.top=Math.round(80+Math.random()*Math.max(60,vh()-220))+"px"; document.body.appendChild(d); setTimeout(function(){ try{d.remove();}catch(e){} },5000); }
+  // T6-4: círculos de colores + volteo loco de tarjetas
+  function spawnCircle(){ var c=document.createElement("div"); c.className="chaosCircle chaos-el"; var s=40+Math.random()*120; c.style.width=c.style.height=Math.round(s)+"px"; c.style.left=Math.round(Math.random()*Math.max(0,vw()-s))+"px"; c.style.top=Math.round(Math.random()*Math.max(0,vh()-s))+"px"; c.style.background=rnd(COLORS); document.body.appendChild(c); setTimeout(function(){ try{c.remove();}catch(e){} },2300); }
+  function megaFlip(){ if(MOBILE) return; var els=document.querySelectorAll(".card"); if(!els.length) return; var el=els[Math.floor(Math.random()*els.length)]; el.classList.add("megaFlip"); setTimeout(function(){ try{el.classList.remove("megaFlip");}catch(e){} },1100); }
+  function startTimers(){
+    timers.push(setInterval(function(){ burst(Math.max(2,Math.round(11*K))); }, MOBILE?2000:1200));
+    timers.push(setInterval(spawnTargetArrow, MOBILE?2400:1300));
+    timers.push(setInterval(spawnNote,  MOBILE?3000:1800));
+    timers.push(setInterval(spawnAlert, MOBILE?3800:2300));
+    timers.push(setInterval(shout,      MOBILE?3400:2000));
+    timers.push(setInterval(spawnMischief, MOBILE?4200:2600));
+    timers.push(setInterval(spawnQuote, MOBILE?5400:3200));
+    timers.push(setInterval(spawnCircle, MOBILE?1600:850));
+    if(!MOBILE) timers.push(setInterval(megaFlip, 15000));
+  }
+  function clearTimers(){ timers.forEach(function(t){ clearInterval(t); }); timers=[]; }
+  function stop(){ on=false; document.body.classList.remove("chaos"); cfab.classList.remove("on"); clearTimers(); document.querySelectorAll(".chaos-el").forEach(function(p){ try{p.remove();}catch(e){} }); document.querySelectorAll(".chaosShout,.megaFlip").forEach(function(p){ try{p.classList.remove("chaosShout"); p.classList.remove("megaFlip");}catch(e){} }); }
   cfab.onclick=function(){
     if(!on){
-      if(!window.confirm("¿Activar MODO CAÓTICO? 🤪\nFlechas, notas y avisos absurdos por toda la pantalla (lo puedes apagar).")) return;
-      on=true; document.body.classList.add("chaos"); cfab.classList.add("on");
-      burst(Math.round(45*K));
-      timers.push(setInterval(function(){ burst(Math.max(2,Math.round(9*K))); }, MOBILE?2200:1400));
-      timers.push(setInterval(spawnArrow, MOBILE?2600:1500));
-      timers.push(setInterval(spawnNote,  MOBILE?3000:1800));
-      timers.push(setInterval(spawnAlert, MOBILE?3800:2300));
-      timers.push(setInterval(shout,      MOBILE?3400:2000));
-      setTimeout(spawnArrow,300); setTimeout(spawnNote,700); setTimeout(spawnAlert,1100);
+      if(!window.confirm("¿Activar MODO CAÓTICO? 🤪\nFlechas que señalan, círculos, notas, citas y travesuras por toda la pantalla (lo puedes apagar).")) return;
+      on=true; document.body.classList.add("chaos"); cfab.classList.add("on"); loadQuotes();
+      burst(Math.round(55*K)); startTimers();
+      setTimeout(spawnTargetArrow,300); setTimeout(spawnNote,700); setTimeout(spawnAlert,1100); setTimeout(spawnCircle,200);
     } else { stop(); }
   };
+  // Q3: pausa el caos si la pestaña no se ve (batería); al volver, lo reanuda si seguía activo
+  try{ document.addEventListener("visibilitychange", function(){ if(!on) return; if(document.hidden){ clearTimers(); document.querySelectorAll(".chaos-el").forEach(function(p){ try{p.remove();}catch(e){} }); } else { clearTimers(); startTimers(); } }); }catch(e){}
 }catch(e){ console.warn("chaos/paneles", e); } })();
 </script>
 
@@ -2744,7 +2885,7 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
   document.querySelectorAll(".card").forEach(function(c){ var n=c.querySelector(".num"); if(!n||n.textContent.trim()!=="1") return;
     var body=c.querySelector(".body"); if(!body) return;
     var d=document.createElement("details"); d.className="x"; d.style.marginTop="8px";
-    d.innerHTML='<summary><span class="plus">+</span> 🌳 ¿Por qué se llama MADRE?</summary><div class="xb"><p>Cuando se habla de muchos temas, a veces se dice <b>"la raíz madre"</b>: la raíz de la que salen las demás, el <b>origen</b>. Por eso <b>MADRE</b> — representa el punto del que brotan las ideas y desde donde crece todo lo demás. (Curiosidad de Tony 🙂)</p></div>';
+    d.innerHTML='<summary><span class="plus">+</span> 🌳 ¿Por qué se llama MADRE?</summary><div class="xb"><p>Cuando se habla de muchos temas, a veces se dice <b>"la raíz madre"</b>: la raíz de la que salen las demás, el <b>origen</b>. Por eso <b>MADRE</b> — representa el punto del que brotan las ideas y desde donde crece todo lo demás. (Curiosidad de Tony 🙂)</p><p>📁 Y un secreto: MADRE es, literalmente, <b>una simple carpeta</b> en el ordenador de Tony… pero con <b>identidad propia</b>. Piensa, decide y actúa sola (con sus tareas y rutinas). Una carpeta que se comporta como un ser vivo.</p></div>';
     body.appendChild(d);
   });
   // ℹ️ De dónde salen los números (provenance)
@@ -2879,6 +3020,202 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
   fab.addEventListener("click",open);
   D.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
 }catch(e){ console.warn("cmv", e); } })();
+</script>
+
+<!-- ===== Identidad anónima (dueño de dibujos/comentarios), ASMR, "no entiendo", y HUB de botones ===== -->
+<style>
+/* C1: botón "no entiendo" por tarjeta */
+.nieBtn{flex:none;border:none;background:transparent;cursor:pointer;font-size:16px;line-height:1;padding:2px 4px;margin:0 2px;opacity:.5;transition:opacity .15s,transform .15s;-webkit-tap-highlight-color:transparent}
+.nieBtn:hover{opacity:1;transform:scale(1.2)}
+.nieBtn.nieOk{opacity:1;color:#16a34a}
+.niePop{position:fixed;z-index:9300;display:flex;gap:6px;flex-wrap:wrap;max-width:250px;background:#fff;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.28);padding:8px;animation:niePop .15s ease}
+@keyframes niePop{from{opacity:0;transform:translateY(-6px)}to{opacity:1}}
+.nieChip{border:none;border-radius:999px;background:#f1f1f7;color:#333;font:600 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;padding:8px 11px;cursor:pointer;transition:transform .1s,background .12s}
+.nieChip:hover{background:#e6e6f0;transform:scale(1.04)}
+/* C2: "no entiendo" en la ruta guiada */
+.tcNie{flex:0 0 auto;margin-right:auto;border:none;background:transparent;color:#7c3aed;font:600 12.5px/1 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer;padding:8px 6px;border-radius:8px}
+.tcNie:hover{background:rgba(124,58,237,.1)}
+@media(max-width:360px){.tcNie{font-size:0}.tcNie::after{content:"🤔";font-size:15px}}
+/* C3: HUB de botones flotantes */
+/* los FAB sueltos se ocultan por JS (solo los que SÍ entran al hub) — así nunca ocultamos uno que aún no existió (carrera con el módulo remoto de comentarios) */
+#fabHubBtn{position:fixed;right:16px;bottom:16px;z-index:72;width:54px;height:54px;border-radius:50%;border:none;background:var(--accent,#3b5bdb);color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.3);transition:transform .25s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
+#fabHubBtn:hover{box-shadow:0 7px 22px rgba(0,0,0,.38)}
+#fabHubBtn .fhIco{display:inline-block;transition:transform .25s}
+#fabHubBtn.on{transform:rotate(135deg)}
+#fabHubBtn.nudge{animation:fhNudge 1s ease-in-out infinite}
+@keyframes fhNudge{0%,100%{transform:scale(1)}50%{transform:scale(1.16)}}
+#fabHubMenu{position:fixed;right:16px;bottom:80px;z-index:72;display:flex;flex-direction:column;gap:8px;align-items:flex-end;opacity:0;transform:translateY(10px) scale(.96);pointer-events:none;transition:opacity .18s,transform .18s;max-height:78vh;overflow:auto}
+#fabHubMenu.on{opacity:1;transform:none;pointer-events:auto}
+.fabHubItem{display:inline-flex;align-items:center;gap:9px;border:none;border-radius:999px;background:#fff;color:#23233a;font:600 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;padding:9px 14px 9px 10px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.22);transition:transform .12s;white-space:nowrap}
+.fabHubItem:hover{transform:translateX(-3px) scale(1.03)}
+.fabHubItem .fhItemIco{font-size:18px;width:22px;text-align:center}
+.fabHubItem.on{background:var(--accent,#3b5bdb);color:#fff}
+#fabHubTip{position:fixed;right:80px;bottom:30px;z-index:72;background:#111;color:#fff;font:700 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;padding:7px 11px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.35);pointer-events:none;animation:fhTip .3s ease}
+@keyframes fhTip{from{opacity:0;transform:translateX(8px)}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){#fabHubBtn.nudge{animation:none}}
+</style>
+
+<script>
+/* Identidad anónima persistente (T1): "dueño" de dibujos/comentarios */
+(function(){ try{
+  var KEY="cm_identity_v1";
+  var ADJ=["Curioso","Risueño","Veloz","Sabio","Travieso","Valiente","Tranquilo","Misterioso","Soñador","Pícaro","Sereno","Chispeante"];
+  var ANIM=["Zorro","Búho","Gato","Lince","Erizo","Delfín","Tejón","Mapache","Colibrí","Pulpo","Nutria","Topo"];
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ return null; } }
+  function save(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  var id=load();
+  if(!id || !id.name){ id={ name: ADJ[Math.floor(Math.random()*ADJ.length)]+" "+ANIM[Math.floor(Math.random()*ANIM.length)]+" "+(10+Math.floor(Math.random()*89)), drawings:[] }; save(id); }
+  if(!id.drawings) id.drawings=[];
+  window.__identity={
+    name:function(){ return id.name; },
+    setName:function(n){ id.name=(n||"").slice(0,40); save(id); },
+    addDrawing:function(did){ if(did && id.drawings.indexOf(did)<0){ id.drawings.push(did); save(id); } },
+    ownsDrawing:function(did){ return id.drawings.indexOf(did)>=0; }
+  };
+  function prefill(){ try{
+    var dn=document.getElementById("dbjsName"); if(dn && !dn.value) dn.value=id.name;
+    document.querySelectorAll(".cmtForm input").forEach(function(inp){ if(inp && !inp.value && /nombre/i.test(inp.placeholder||"")) inp.value=id.name; });
+  }catch(e){} }
+  prefill(); setTimeout(prefill,800); setTimeout(prefill,2200);
+  document.addEventListener("focusin",function(e){ var t=e.target; if(t && t.matches && t.matches(".cmtForm input") && !t.value && /nombre/i.test(t.placeholder||"")) t.value=id.name; });
+}catch(e){ console.warn("identity", e); } })();
+</script>
+
+<script>
+/* Zonas ASMR (T3): sonidos sintetizados con Web Audio (sin ficheros). Control en el HUB. */
+(function(){ try{
+  var KEY="cm_asmr_v1", enabled=false;
+  try{ enabled = localStorage.getItem(KEY)==="1"; }catch(e){}
+  var ctx=null, master=null;
+  function ensure(){ if(ctx) return ctx; try{ var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null; ctx=new AC(); master=ctx.createGain(); master.gain.value=0.16; master.connect(ctx.destination); }catch(e){ ctx=null; } return ctx; }
+  function noiseBuf(dur){ var n=Math.floor(ctx.sampleRate*dur), b=ctx.createBuffer(1,n,ctx.sampleRate), d=b.getChannelData(0); for(var i=0;i<n;i++) d[i]=Math.random()*2-1; return b; }
+  function env(g,t,a,dd,peak){ g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(peak,t+a); g.gain.exponentialRampToValueAtTime(0.0001,t+a+dd); }
+  function play(type){ if(!enabled) return; if(!ensure()) return; if(ctx.state==="suspended"){ try{ctx.resume();}catch(e){} } var t=ctx.currentTime;
+    if(type==="pop"){ var o=ctx.createOscillator(),g=ctx.createGain(); o.type="sine"; o.frequency.setValueAtTime(420,t); o.frequency.exponentialRampToValueAtTime(170,t+0.12); env(g,t,0.005,0.13,0.9); o.connect(g); g.connect(master); o.start(t); o.stop(t+0.18); }
+    else if(type==="click"){ var s=ctx.createBufferSource(); s.buffer=noiseBuf(0.05); var g2=ctx.createGain(), f=ctx.createBiquadFilter(); f.type="highpass"; f.frequency.value=1500; env(g2,t,0.001,0.05,0.6); s.connect(f); f.connect(g2); g2.connect(master); s.start(t); s.stop(t+0.06); }
+    else{ var s2=ctx.createBufferSource(); s2.buffer=noiseBuf(0.22); var bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.frequency.setValueAtTime(300,t); bp.frequency.linearRampToValueAtTime(140,t+0.2); bp.Q.value=6; var g3=ctx.createGain(); env(g3,t,0.01,0.22,0.45); s2.connect(bp); bp.connect(g3); g3.connect(master); s2.start(t); s2.stop(t+0.24); }
+  }
+  var canHover=false, reduce=false;
+  try{ canHover=window.matchMedia("(hover:hover)").matches; reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
+  var hoverThrottle=0;
+  if(canHover && !reduce){ document.addEventListener("mouseover",function(e){ if(!enabled) return; var now=Date.now(); if(now-hoverThrottle<90) return; var el=e.target.closest&&e.target.closest(".card, .chip, .senalItem, .dec, .step, .notecard"); if(el){ hoverThrottle=now; play("creak"); } }, true); }
+  document.addEventListener("click",function(e){ if(!enabled) return; var t=e.target; if(t.closest && t.closest("#gxg-cat-root, .chip, button, summary, [data-choice]")){ play(t.closest("summary")?"click":"pop"); } }, true);
+  window.__asmr={ isOn:function(){ return enabled; }, toggle:function(){ enabled=!enabled; try{ localStorage.setItem(KEY, enabled?"1":"0"); }catch(e){} if(enabled){ ensure(); if(ctx&&ctx.state==="suspended"){try{ctx.resume();}catch(e){}} play("pop"); } return enabled; } };
+  try{ document.addEventListener("visibilitychange",function(){ if(document.hidden&&ctx){ try{ctx.suspend();}catch(e){} } else if(ctx&&enabled){ try{ctx.resume();}catch(e){} } }); }catch(e){}
+}catch(e){ console.warn("asmr", e); } })();
+</script>
+
+<script>
+/* C1: botón "🤔 no entiendo" en cada tarjeta -> feedback de dónde se entiende menos */
+(function(){ try{
+  var D=document;
+  function cardTitle(card){ try{ var t=card.querySelector(".ctitle .t"); return t?("📄 "+t.textContent.trim().slice(0,60)):"Tarjeta"; }catch(e){ return "Tarjeta"; } }
+  function sendNie(card, tipo){ try{ if(window.__fb) window.__fb({card:cardTitle(card), section:"", tipo:tipo, texto:""}); }catch(e){} }
+  function closePop(){ var p=D.getElementById("niePopOpen"); if(p){ try{p.remove();}catch(e){} } }
+  function ok(btn){ btn.classList.add("nieOk"); btn.textContent="✓"; setTimeout(function(){ btn.classList.remove("nieOk"); btn.textContent="🤔"; },1300); }
+  function popFor(btn, card){
+    closePop();
+    var pop=D.createElement("div"); pop.className="niePop"; pop.id="niePopOpen";
+    function mk(txt,fn){ var c=D.createElement("button"); c.type="button"; c.className="nieChip"; c.textContent=txt; c.addEventListener("click",function(e){ e.stopPropagation(); fn(); }); return c; }
+    pop.appendChild(mk("🤔 no lo entiendo", function(){ sendNie(card,"no-entiendo"); ok(btn); closePop(); }));
+    pop.appendChild(mk("😴 aburre", function(){ sendNie(card,"aburre"); ok(btn); closePop(); }));
+    pop.appendChild(mk("😍 me gusta", function(){ sendNie(card,"gusto"); ok(btn); closePop(); }));
+    pop.appendChild(mk("✍️ desarrollar", function(){ closePop(); try{ if(window.__openFb) window.__openFb(cardTitle(card),"","mas-claridad"); }catch(e){} }));
+    D.body.appendChild(pop);
+    var r=btn.getBoundingClientRect(), h=pop.offsetHeight||90, w=pop.offsetWidth||220;
+    var top=r.bottom+6; if(top+h>window.innerHeight-8) top=Math.max(8, r.top-6-h);  // si no cabe abajo, arriba
+    pop.style.top=top+"px";
+    pop.style.left=Math.max(8, Math.min(window.innerWidth-w-8, r.left-60))+"px";
+  }
+  D.addEventListener("click",function(e){ var p=D.getElementById("niePopOpen"); if(p && !p.contains(e.target) && !(e.target.classList&&e.target.classList.contains("nieBtn"))) closePop(); });
+  D.querySelectorAll(".card > details > summary").forEach(function(sm){
+    var card=sm.closest(".card"); if(!card || card.dataset.nie) return; card.dataset.nie="1";
+    var btn=D.createElement("button"); btn.type="button"; btn.className="nieBtn"; btn.textContent="🤔"; btn.title="¿No se entiende? Dímelo";
+    btn.setAttribute("aria-label","No entiendo esta tarjeta");
+    var caret=sm.querySelector(".caret");
+    if(caret) sm.insertBefore(btn, caret); else sm.appendChild(btn);
+    btn.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); popFor(btn, card); });
+  });
+}catch(e){ console.warn("nie-cards", e); } })();
+</script>
+
+<script>
+/* C2: "🤔 no entiendo" en cada paso de la ruta guiada */
+(function(){ try{
+  var D=document, card=D.getElementById("tourCard"); if(!card) return;
+  var btns=card.querySelector(".tcBtns"); if(!btns) return;
+  var nie=D.createElement("button"); nie.type="button"; nie.className="tcNie"; nie.textContent="🤔 no entiendo";
+  btns.insertBefore(nie, btns.firstChild);
+  nie.addEventListener("click",function(e){ e.stopPropagation();
+    var step=(card.querySelector(".tcStep")||{}).textContent||"", title=(card.querySelector(".tcTitle")||{}).textContent||"";
+    try{ if(window.__fb) window.__fb({card:"🧭 Ruta guiada", section:((step?step+" — ":"")+title).trim()||"paso", tipo:"no-entiendo", texto:""}); }catch(err){}
+    var prev=nie.textContent; nie.textContent="recibido ✓"; setTimeout(function(){ nie.textContent="🤔 no entiendo"; },1300);
+  });
+}catch(e){ console.warn("tour-nie", e); } })();
+</script>
+
+<script>
+/* C3 + T14: consolida los FAB sueltos en un HUB "✦" con menú y nudge "toca aquí" */
+(function(){
+ function boot(){ try{
+  var D=document;
+  var defs=[
+    {id:"cmvFab", icon:"👁️", label:"El cuaderno por dentro", views:true},
+    {id:"cmtFab", icon:"💬", label:"Comentarios"},
+    {id:"tourLaunch", icon:"🧭", label:"Ruta guiada"},
+    {id:"lapizFab", icon:"✏️", label:"Comentar una zona", mode:true},
+    {id:"likeFab", icon:"💗", label:"Marcar lo que te gusta", mode:true},
+    {id:"chaosFab", icon:"🤪", label:"Modo caótico", mode:true},
+    {asmr:true, icon:"🔇", label:"Sonidos ASMR", mode:true}
+  ];
+  var present=defs.filter(function(d){ return d.asmr || D.getElementById(d.id); });
+  if(present.length<3) return;
+  var btn=D.createElement("button"); btn.id="fabHubBtn"; btn.type="button"; btn.setAttribute("aria-label","Menú de herramientas"); btn.innerHTML='<span class="fhIco">✦</span>';
+  var menu=D.createElement("div"); menu.id="fabHubMenu"; menu.setAttribute("role","menu");
+  var items=[];
+  present.forEach(function(d){
+    var it=D.createElement("button"); it.type="button"; it.className="fabHubItem"; it.setAttribute("role","menuitem");
+    var ic=D.createElement("span"); ic.className="fhItemIco"; ic.textContent=d.icon;
+    var lb=D.createElement("span"); lb.className="fhItemLbl"; lb.textContent=d.label;
+    it.appendChild(ic); it.appendChild(lb); menu.appendChild(it);
+    it.addEventListener("click",function(e){ e.stopPropagation();
+      try{
+        if(d.asmr){ if(window.__asmr){ var on=window.__asmr.toggle(); it.classList.toggle("on",on); ic.textContent=on?"🔊":"🔇"; lb.textContent=on?"Sonidos ASMR (on)":"Sonidos ASMR"; } }
+        else{ var real=D.getElementById(d.id); if(real) real.click(); }
+      }catch(err){}
+      if(!d.mode) closeMenu(); else setTimeout(refreshStates,30);
+    });
+    if(d.id){ var realEl=D.getElementById(d.id); if(realEl) realEl.style.display="none"; }  // ocultar SOLO los que entran al hub
+    items.push({d:d,it:it,ic:ic,lb:lb});
+  });
+  D.body.appendChild(menu); D.body.appendChild(btn);
+  refreshStates();  // sincroniza iconos de estado (p.ej. ASMR si venía activado de antes)
+  function refreshStates(){ items.forEach(function(o){ try{
+    if(o.d.asmr){ var aon=window.__asmr&&window.__asmr.isOn&&window.__asmr.isOn(); o.it.classList.toggle("on",!!aon); o.ic.textContent=aon?"🔊":"🔇"; }
+    else if(o.d.mode){ var r=D.getElementById(o.d.id); o.it.classList.toggle("on",!!(r&&r.classList.contains("on"))); }
+    else if(o.d.views){ var c=D.querySelector("#cmvFab .cmv-n"); if(c) o.lb.textContent="El cuaderno por dentro · "+c.textContent; }
+  }catch(e){} }); }
+  var open=false;
+  function openMenu(){ open=true; menu.classList.add("on"); btn.classList.add("on"); refreshStates(); clearNudge(); try{localStorage.setItem("cm_hub_seen","1");}catch(e){} }
+  function closeMenu(){ open=false; menu.classList.remove("on"); btn.classList.remove("on"); }
+  function toggleMenu(){ if(open) closeMenu(); else openMenu(); }
+  btn.addEventListener("click",function(e){ e.stopPropagation(); toggleMenu(); });
+  D.addEventListener("click",function(e){ if(open && !menu.contains(e.target) && e.target!==btn) closeMenu(); });
+  D.addEventListener("keydown",function(e){ if(e.key==="Escape"&&open) closeMenu(); });
+  // T14: nudge tras inactividad
+  var nudgeT=null, tip=null;
+  function clearNudge(){ if(nudgeT){ clearTimeout(nudgeT); nudgeT=null; } btn.classList.remove("nudge"); if(tip){ try{tip.remove();}catch(e){} tip=null; } }
+  function scheduleNudge(){ try{ if(localStorage.getItem("cm_hub_seen")) return; }catch(e){}  // solo guía a quien aún no ha abierto el menú
+    if(nudgeT){ clearTimeout(nudgeT); nudgeT=null; } if(tip){ try{tip.remove();}catch(e){} tip=null; } btn.classList.remove("nudge"); if(D.hidden) return; nudgeT=setTimeout(function(){ if(open||D.hidden) return; btn.classList.add("nudge"); tip=D.createElement("div"); tip.id="fabHubTip"; tip.textContent="toca aquí 👆"; D.body.appendChild(tip); },25000); }
+  ["click","keydown","scroll","touchstart"].forEach(function(ev){ D.addEventListener(ev,function(){ scheduleNudge(); },{passive:true}); });
+  D.addEventListener("visibilitychange",function(){ if(D.hidden) clearNudge(); else scheduleNudge(); });
+  scheduleNudge();
+ }catch(e){ console.warn("fabhub", e); } }
+ // #cmtFab vive en un <script type=module> con import REMOTO (puede crearse DESPUÉS de DOMContentLoaded):
+ // esperamos a que exista (máx ~5s) antes de montar el hub, para no ocultarlo nunca por una carrera.
+ function start(){ var tries=0; (function poll(){ if(document.getElementById("cmtFab")||tries>25){ boot(); } else { tries++; setTimeout(poll,200); } })(); }
+ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", start); else start();
+})();
 </script>
 </body>
 </html>
