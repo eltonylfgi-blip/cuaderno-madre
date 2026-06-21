@@ -172,7 +172,7 @@
   .gradtext{background:linear-gradient(90deg,var(--accent),#8a5bdb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   #likeFab{position:fixed;right:16px;bottom:74px;width:48px;height:48px;border-radius:50%;border:none;background:#fff;color:#e0568a;font-size:20px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.22);z-index:60;transition:transform .15s}
   #likeFab:hover{transform:scale(1.12) rotate(-6deg)} #likeFab.on{background:#e0568a;color:#fff}
-  body.likeMode .card:hover,body.likeMode .hero:hover,body.likeMode .senalItem:hover,body.likeMode .body p:hover,body.likeMode .body li:hover,body.likeMode .ctitle .t:hover,body.likeMode summary:hover{outline:3px solid #e0568a;outline-offset:2px;cursor:pointer;border-radius:10px}
+  body.likeMode .card:hover,body.likeMode .hero:hover,body.likeMode .senalItem:hover,body.likeMode .body p:hover,body.likeMode .body li:hover,body.likeMode .ctitle .t:hover,body.likeMode summary:hover,body.likeMode h1:hover,body.likeMode .sub:hover,body.likeMode .postit:hover,body.likeMode #gateBar:hover,body.likeMode footer:hover,body.likeMode .heronote:hover,body.likeMode .dec:hover,body.likeMode .alert:hover,body.likeMode .step:hover,body.likeMode .chip:hover{outline:3px solid #e0568a;outline-offset:2px;cursor:pointer;border-radius:10px}
   #likeHint{position:fixed;left:50%;top:10px;transform:translateX(-50%);background:#e0568a;color:#fff;padding:8px 14px;border-radius:99px;font-size:13px;z-index:61;box-shadow:0 4px 16px rgba(0,0,0,.25);display:none}
   body.likeMode #likeHint{display:block}
   .inlineArrow{border:none;background:transparent;cursor:pointer;padding:0 5px;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;transition:transform .18s;transform-origin:left center}
@@ -1088,6 +1088,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-21",titulo:"🤪 Modo caótico, gato troll y arreglos finos",detalle:"Modo caótico (confeti y locuras, con permiso), gato con frases troll y barriguita, contraseña que se ríe, paneles que reaccionan al ratón. Arreglados: la nota ya no sale rara, el tour ya no deja borrosa la zona, y el lápiz/corazón ya dejan señalar cualquier zona (también cabecera y bordes)."},
     {fecha:"2026-06-21",titulo:"🐱 ¡Cuaderno vivo! gato, dibujos, tour y más",detalle:"Un gato que huye si lo tocas, una zona para hacer DIBUJOS (con likes), un tour guiado para entenderlo en 1 min, una nota secreta 📌, modo lápiz ✏️ para opinar sobre cualquier zona, chat tipo conversación, y la curiosidad de por qué se llama MADRE. Menos manual, más criatura."},
     {fecha:"2026-06-21",titulo:"📲 Opinar con foto desde el móvil + flechas que crecen",detalle:"Desde el móvil ya puedes opinar con imagen y llega solo a MADRE (sin pegar nada). Las flechas de ayuda ahora van pegadas a su sitio y crecen al pasar por encima."},
     {fecha:"2026-06-21",titulo:"💗 Más interactivo + fotos + seguro",detalle:"Botón corazón para marcar lo que te gusta, flechas en los márgenes, imágenes en comentarios, ruta de avance con slider, glosario '¿pa qué sirve?', degradados y fondos que cambian. Y un filtro que bloquea acusaciones graves; MADRE oculta amenazas fuertes."},
@@ -1227,7 +1228,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
       if(isTony()){ try{localStorage.removeItem(GATE_KEY);}catch(e){} toast("Bloqueado 🔒"); applyGate(); }
       else{ var p=window.prompt("Contraseña de Tony:"); if(p===null) return;
         if(p==="Jabado"){ try{localStorage.setItem(GATE_KEY,"1");}catch(e){} toast("Desbloqueado 🔓 — modo Tony"); applyGate(); }
-        else toast("Contraseña incorrecta"); }
+        else { var L=document.createElement("div"); L.textContent="🤣"; L.style.cssText="position:fixed;left:50%;top:40%;transform:translate(-50%,-50%) scale(.3);font-size:90px;z-index:9999;pointer-events:none;transition:transform 1s cubic-bezier(.2,1.4,.4,1),opacity 1s;opacity:1"; document.body.appendChild(L); requestAnimationFrame(function(){ L.style.transform="translate(-50%,-50%) scale(2.4) rotate(12deg)"; L.style.opacity="0"; }); setTimeout(function(){ try{L.remove();}catch(e){} },1100); toast("buen intento 😏"); } }
     };
   }
   applyGate();
@@ -1318,7 +1319,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   fab.addEventListener("click",function(e){ e.stopPropagation(); setLike(!likeMode); });
   document.addEventListener("click",function(e){
     if(!likeMode || e.target.closest("#likeFab")) return;
-    var el=e.target.closest(".senalItem,.card,.hero,.body p,.body li,.ctitle .t,summary"); if(!el){ return; }
+    var el=e.target.closest(".senalItem,.card,.hero,.body p,.body li,.ctitle .t,summary,h1,.sub,.postit,#gateBar,footer,.heronote,.dec,.alert,.step,.chip,#senalesCard,#comentarios"); if(!el){ return; }
     e.preventDefault(); e.stopPropagation();
     var label="(zona)", t=el.querySelector?el.querySelector(".ctitle .t"):null;
     if(t) label=t.textContent.trim();
@@ -1556,14 +1557,6 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
   font-family: "Comic Sans MS", "Segoe Print", "Bradley Hand", cursive, system-ui, sans-serif;
   overflow: visible;
   isolation: isolate;
-  -webkit-mask-image:
-    radial-gradient(circle at 6px 6px, transparent 0 5px, #000 6px),
-    radial-gradient(circle at calc(100% - 9px) calc(100% - 7px), transparent 0 7px, #000 8px);
-  -webkit-mask-composite: source-in;
-          mask-image:
-    radial-gradient(circle at 6px 6px, transparent 0 5px, #000 6px),
-    radial-gradient(circle at calc(100% - 9px) calc(100% - 7px), transparent 0 7px, #000 8px);
-          mask-composite: intersect;
 }
 .postit.ns-paper:hover{ transform: rotate(-1deg) scale(1.015); }
 
@@ -1746,8 +1739,7 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
 /* dim backdrop with a "hole" feel (we use box-shadow on highlight ring) */
 #tourBackdrop{
   position:fixed; inset:0; z-index:9000;
-  background:rgba(8,6,24,.55);
-  backdrop-filter:blur(1.5px);
+  background:transparent;
   opacity:0; pointer-events:none;
   transition:opacity .3s ease;
 }
@@ -1882,7 +1874,7 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
 body.lapiz-mode{cursor:crosshair}
 body.lapiz-mode .card,body.lapiz-mode .hero,body.lapiz-mode .senalItem,body.lapiz-mode .body p,body.lapiz-mode .body li,body.lapiz-mode .ctitle .t,body.lapiz-mode summary{cursor:crosshair}
 .lapiz-hot{outline:2px dashed #d85a30 !important;outline-offset:3px;background:rgba(216,90,48,.08) !important;border-radius:6px;transition:outline-color .1s ease}
-#lapizBar{position:fixed;top:0;left:0;right:0;z-index:62;background:#1d9e75;color:#fff;font-size:13px;line-height:1.35;padding:10px 14px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.25);transform:translateY(-110%);transition:transform .25s ease;font-family:inherit}
+#lapizBar{position:fixed;top:0;left:0;right:0;z-index:62;background:rgba(29,158,117,.94);color:#fff;font-size:12.5px;line-height:1.3;padding:7px 14px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.18);transform:translateY(-110%);transition:transform .25s ease;font-family:inherit;pointer-events:none}
 #lapizBar.show{transform:translateY(0)}
 #lapizBub{position:fixed;z-index:63;width:240px;max-width:calc(100vw - 24px);background:#fff;color:#222;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.3);border:1px solid rgba(0,0,0,.1);padding:12px;font-family:inherit;animation:lapizPop .16s ease}
 @keyframes lapizPop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
@@ -1973,7 +1965,7 @@ D.body.appendChild(cat);
 var SIZE = 44;
 var MARGIN = 14;          // separación a los bordes
 var EDGE_BAND = 92;       // grosor de la "zona borde" donde puede vivir
-var phrases = ['¡ay!','no me toques 😼','miau de error 404','estoy ocupado','shhh','¿y mi siesta?','prrr…','déjame en paz 🐾','no, gracias','*bufido*'];
+var phrases = ['¡ay!','no me toques 😼','miau de error 404','estoy ocupado','shhh','¿y mi siesta?','prrr…','déjame en paz 🐾','no, gracias','*bufido*','buen aim 🎯','¿practicando el aim?','casi me pillas','te he visto más lento 😹','los hay más rápidos','GG','skill issue 😹','solo me dejo acariciar si eres una chica 😼 (es broma)','me he cansado de huir… acaríciame la barriguita 🐱','no en mi guardia ⚔️'];
 var pIdx = 0;
 
 var x = 20, y = 20;       // posición actual
@@ -2502,7 +2494,7 @@ loadGallery();
 <script>
 /* widget: lapiz */
 (function(){try{
-var SEL='.card, .hero, .senalItem, .body p, .body li, .ctitle .t, summary';
+var SEL='.card, .hero, .senalItem, .body p, .body li, .ctitle .t, summary, h1, .sub, .postit, #gateBar, footer, .heronote, .dec, .alert, .step, .chip, #senalesCard, #comentarios';
 var active=false, curHot=null, bub=null;
 
 var fab=document.createElement('button');
@@ -2654,6 +2646,34 @@ document.addEventListener('keydown', function(e){
 }, true);
 }catch(e){console.warn('widget lapiz',e);}})();
 </script>
+<style>
+/* paneles interactivos + sugerencia de abrir + modo caótico */
+.card{transition:transform .15s ease, box-shadow .2s ease}
+.card:hover{transform:translateY(-2px); box-shadow:0 6px 24px rgba(0,0,0,.13), 0 0 0 1px var(--accent-soft)}
+.senalItem{transition:transform .14s ease, box-shadow .2s ease}
+.senalItem:hover{box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.card > details:not([open]) > summary .caret{color:var(--accent); animation:breathe 2.2s ease-in-out infinite}
+#chaosFab{position:fixed;left:16px;bottom:66px;z-index:58;width:42px;height:42px;border-radius:50%;border:none;background:#fff;color:#7c3aed;font-size:20px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:transform .15s}
+#chaosFab:hover{transform:scale(1.12) rotate(-8deg)} #chaosFab.on{background:#7c3aed;color:#fff;animation:breathe 1.1s ease-in-out infinite}
+.chaosParticle{position:fixed;z-index:9998;pointer-events:none;font-size:22px;top:-30px;will-change:transform}
+body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
+@keyframes chaosWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(.7deg)}75%{transform:rotate(-.7deg)}}
+@media(prefers-reduced-motion:reduce){body.chaos .card,.card>details:not([open])>summary .caret,#chaosFab.on{animation:none}}
+</style>
+<script>
+(function(){ try{
+  // ---- modo caótico 🤪 ----
+  var cfab=document.createElement("button"); cfab.id="chaosFab"; cfab.textContent="🤪"; cfab.title="Modo caótico"; document.body.appendChild(cfab);
+  var on=false, timer=null, EM=["🎉","✨","🎊","💥","⭐","🌈","🍕","👾","💫","🐱","🛸","🔥"];
+  function burst(n){ for(var i=0;i<n;i++){ (function(){ var p=document.createElement("div"); p.className="chaosParticle"; p.textContent=EM[Math.floor(Math.random()*EM.length)]; p.style.left=(Math.random()*100)+"vw"; var dur=2+Math.random()*2.6; p.style.transition="transform "+dur+"s linear, opacity "+dur+"s linear"; document.body.appendChild(p); requestAnimationFrame(function(){ p.style.transform="translateY("+(105+Math.random()*15)+"vh) rotate("+(Math.random()*720-360)+"deg)"; p.style.opacity=".15"; }); setTimeout(function(){ try{p.remove();}catch(e){} }, dur*1000+250); })(); } }
+  cfab.onclick=function(){
+    if(!on){ if(!window.confirm("¿Activar MODO CAÓTICO? 🤪\nCosas absurdas por toda la pantalla (lo puedes apagar).")) return;
+      on=true; document.body.classList.add("chaos"); cfab.classList.add("on"); burst(45); timer=setInterval(function(){ burst(9); },1400); }
+    else { on=false; document.body.classList.remove("chaos"); cfab.classList.remove("on"); clearInterval(timer); document.querySelectorAll(".chaosParticle").forEach(function(p){ try{p.remove();}catch(e){} }); }
+  };
+}catch(e){ console.warn("chaos/paneles", e); } })();
+</script>
+
 <script>
 (function(){ try{
   // 🌳 ¿Por qué se llama MADRE? (curiosidad) en la tarjeta 1
