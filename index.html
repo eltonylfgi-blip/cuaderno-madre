@@ -133,12 +133,45 @@
   .dot{display:inline-block;width:8px;height:8px;border-radius:99px;vertical-align:middle;margin-right:6px}
   .dot.g{background:var(--green)} .dot.a{background:var(--amber)}
   footer{color:var(--muted);font-size:12px;text-align:center;margin-top:18px;line-height:1.6}
+
+  /* ===== v2: variedad visual + señales + animaciones ===== */
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+  @keyframes softpulse{0%,100%{box-shadow:0 0 0 0 rgba(59,110,245,0)}50%{box-shadow:0 0 0 7px var(--accent-soft)}}
+  @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  .breathe{animation:breathe 2.8s ease-in-out infinite}
+  .pulse{animation:softpulse 2.4s ease-in-out infinite}
+  @media(prefers-reduced-motion:reduce){.breathe,.pulse{animation:none}}
+  .ttwrap{position:relative;display:inline-flex;align-items:center;gap:7px}
+  .ttbub{position:absolute;left:0;top:124%;z-index:45;background:#13203b;color:#fff;padding:9px 12px;border-radius:11px;font-size:12.5px;font-weight:400;width:min(290px,82vw);box-shadow:0 8px 26px rgba(0,0,0,.28);opacity:0;visibility:hidden;transition:opacity .16s;line-height:1.45}
+  .ttwrap:hover .ttbub,.ttbub.show{opacity:1;visibility:visible}
+  .quees{font-size:11.5px;color:var(--accent);border:1px solid var(--accent);background:var(--accent-soft);border-radius:99px;padding:2px 9px;cursor:pointer;font-weight:700;white-space:nowrap}
+  .quees:hover{transform:scale(1.07)}
+  .senalGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px;margin:10px 0 2px}
+  .senalItem{background:#fcfdff;border:1px solid var(--line);border-radius:12px;padding:9px 11px;transition:transform .14s}
+  .senalItem:hover{transform:translateY(-2px)}
+  .senalItem .v{font-size:18px;font-weight:800;letter-spacing:-.4px;line-height:1.1}
+  .senalItem .k{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .senalItem.r .v{color:var(--red)} .senalItem.a .v{color:var(--amber)} .senalItem.g .v{color:var(--green)}
+  .miniprog{height:7px;background:var(--chip);border-radius:99px;overflow:hidden;margin:5px 0 3px}
+  .miniprog>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#8a5bdb);border-radius:99px;transition:width .6s}
+  .hyp{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin:6px 0;padding:7px 9px;border-radius:9px;border:1px solid var(--line)}
+  .hyp.viva{background:var(--green-soft);border-color:#bfe6d2}
+  .hyp.muerta{background:#f4f5f7;color:var(--muted)} .hyp.muerta .ht{text-decoration:line-through}
+  .funbtn{transition:transform .14s}
+  .funbtn:hover{transform:rotate(-2deg) scale(1.04)}
+  body.bgGrid{background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:22px 22px}
+  body.bgStars{background-image:radial-gradient(var(--accent-soft) 1.4px,transparent 1.4px);background-size:30px 30px}
+  body.bgGlow{background-image:radial-gradient(900px 380px at 80% -8%,var(--accent-soft),transparent)}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <h1>🧠 Cuaderno MADRE</h1>
+  <div class="ttwrap" style="flex-wrap:wrap;margin-bottom:2px">
+    <h1 id="madreTitle" style="margin:0;cursor:help">🤱🏻 Cuaderno MADRE</h1>
+    <span class="quees breathe" id="queesBtn" title="Ir a la explicación">¿qué es?</span>
+    <div class="ttbub" id="madreTip">🤱🏻 <b>MADRE</b> es un sistema que intenta <b>decidir mejor</b>, <b>aprender de la realidad</b> y <b>generar valor en el mundo real</b> — no es un bot de dinero ni un almacén de notas. (Mantén pulsado / pasa el ratón para esto.)</div>
+  </div>
   <p class="sub">Lo importante de MADRE, en simple. Tú lo lees, lo marcas y opinas; MADRE lo recoge y actúa.</p>
   <div class="postit" style="display:inline-block;background:#fff7c0;border:1px solid #ece28a;border-radius:8px;padding:6px 10px;margin:2px 0 12px;font-size:13px;transform:rotate(-1deg);box-shadow:0 1px 3px rgba(0,0,0,.08)">📝 ¿“feedback”? = dar tu opinión, sin más 😄</div>
   <div id="gateBar"></div>
@@ -169,6 +202,22 @@
     <div id="statusWrap"></div>
     <p class="small" style="margin:12px 0 0">Estado: <b id="actualizado">21-jun-2026 (congelado)</b> · MADRE se actualiza solo cada ~30 min · tu feedback le llega en la siguiente pasada.</p>
   </div>
+
+  <div class="card" id="senalesCard"><details open>
+    <summary>
+      <span class="num">🌍</span>
+      <span class="ctitle"><span class="t">Señales del mundo</span>
+        <span class="s">Lo que de verdad cuenta: evidencia real, no explicación.</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <div id="senales"><div class="small">Cargando señales…</div></div>
+      <div id="queHizo" style="margin-top:12px"></div>
+      <div id="queNecesita" style="margin-top:12px"></div>
+      <p class="small" id="senalNota" style="margin:10px 0 0"></p>
+      <div class="fb"><button class="btn sm funbtn" data-fb data-card="🌍 Señales del mundo" data-section="">😬 ¿poca evidencia? cánta</button></div>
+    </div>
+  </details></div>
 
   <div class="card"><details open>
     <summary>
@@ -210,6 +259,7 @@
         <input type="checkbox" id="s1">
         <div class="st">
           <div class="h">Paso 1 · Elegir el frente de la peluquería <span class="tag">1 min</span></div>
+          <p class="small" style="margin:5px 0;background:var(--accent-soft);border:1px solid var(--line);border-radius:9px;padding:8px 10px">💇 <b>¿Qué es esto de la peluquería?</b> Es una <b>demo</b> de un asistente de <b>IA por WhatsApp</b> que coge solo las <b>reservas/citas</b> de un salón (responde, agenda, recuerda la cita). Es el ejemplo concreto con el que MADRE persigue su <b>primer euro</b>; el salón es el "banco de pruebas" del producto, no el negocio en sí.</p>
           <p class="small" style="margin:5px 0">Responde una de dos:</p>
           <details class="x"><summary><span class="plus">+</span> Opción A: "tengo una"</summary>
             <div class="xb"><p>Tienes un salón en mente. Mini-pasos: dime <b>nombre del salón</b> + <b>3–4 servicios con precio</b>. MADRE prepara la demo a medida.</p></div></details>
@@ -418,6 +468,8 @@
       <span class="caret">▶</span>
     </summary>
     <div class="body">
+      <p class="small" style="margin:8px 0 6px"><b>📊 Progreso de lo que se está construyendo</b> (se va actualizando):</p>
+      <div id="builds"></div>
       <details class="x"><summary><span class="plus">+</span> Meta-palancas</summary>
         <div class="xb"><p>No resolver un problema suelto, sino mejorar la <b>fábrica de soluciones</b>.
           <details class="def"><summary>metapalanca</summary><span class="d">Una palanca que mejora tu capacidad de encontrar y usar <b>otras</b> palancas. Multiplica, no suma.</span></details>
@@ -517,7 +569,9 @@
       <div id="changelog"><div class="small">Cargando…</div></div>
       <p class="small" style="margin:16px 0 4px"><b>🔬 En qué investiga y cómo evolucionan sus conclusiones:</b></p>
       <div id="investig"><div class="small">Cargando…</div></div>
-      <div class="fb" style="margin-top:12px"><button class="btn sm" data-fb data-card="12. Evolución" data-section="">💬 Feedback de esta tarjeta</button></div>
+      <p class="small" style="margin:16px 0 4px"><b>🧪 Hipótesis vivas vs muertas:</b></p>
+      <div id="hipotesis"><div class="small">Cargando…</div></div>
+      <div class="fb" style="margin-top:12px"><button class="btn sm funbtn" data-fb data-card="12. Evolución" data-section="">🤔 ¿te falta una hipótesis? dila</button></div>
     </div>
   </details></div>
 
@@ -854,6 +908,83 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   }
   function setActualizado(s){ var el=document.getElementById("actualizado"); if(el) el.textContent=s; }
 
+  // ---- v2: Señales del mundo + qué hizo + qué necesita + hipótesis vivas/muertas ----
+  var senales=[
+    {k:"Euros ganados",v:"0 €",sev:"r"},
+    {k:"Clientes reales",v:"0",sev:"r"},
+    {k:"Estrellas GitHub (semana)",v:"0",sev:"a"},
+    {k:"Activos publicados",v:"2",sev:"a"},
+    {k:"Experimentos (semana)",v:"—",sev:"a"},
+    {k:"Última señal real",v:"ninguna aún",sev:"r"}
+  ];
+  var senalNota="";
+  function renderSenales(){
+    var el=document.getElementById("senales"); if(!el) return; el.innerHTML="";
+    var g=document.createElement("div"); g.className="senalGrid";
+    senales.forEach(function(s){
+      var d=document.createElement("div"); d.className="senalItem "+(s.sev||"a");
+      var v=document.createElement("div"); v.className="v"; v.textContent=s.v;
+      var k=document.createElement("div"); k.className="k"; k.textContent=s.k;
+      d.appendChild(v); d.appendChild(k); g.appendChild(d);
+    });
+    el.appendChild(g);
+    var nota=document.getElementById("senalNota");
+    if(nota) nota.textContent = senalNota || "El 3/10 de arriba mide justo esto: cuánto ha tocado MADRE el mundo real. Es bajo a propósito — sube cuando entre el 1er euro o las 1as estrellas.";
+  }
+  function renderQueHizo(){
+    var el=document.getElementById("queHizo"); if(!el) return;
+    var top=(typeof cambios!=="undefined"?cambios:[]).slice(0,3);
+    var h='<div style="font-weight:700;font-size:13px;margin-bottom:4px">🛠️ Qué hizo últimamente</div>';
+    top.forEach(function(c){ h+='<div class="small" style="margin:2px 0">✓ '+esc(c.titulo)+'</div>'; });
+    el.innerHTML=h;
+  }
+  function renderQueNecesita(){
+    var el=document.getElementById("queNecesita"); if(!el) return;
+    var mios=(desvios||[]).filter(function(d){ var q=(d.quien==="tony"||d.quien==="madre")?d.quien:inferQuien(d); return q==="tony"; });
+    var h='<div style="font-weight:700;font-size:13px;margin-bottom:4px">👤 Qué necesita de ti</div>';
+    if(!mios.length) h+='<div class="small">Nada urgente ahora mismo 🟢</div>';
+    else mios.slice(0,3).forEach(function(d){ h+='<div class="small" style="margin:2px 0">• '+esc(d.paso||d.h)+'</div>'; });
+    el.innerHTML=h;
+  }
+  var hipotesis=[
+    {estado:"viva",t:"Publicar 1 skill de Claude Code da más señal externa que tikslide solo"},
+    {estado:"viva",t:"El 1er euro sale de montar+atender un asistente IA de citas (peluquería), no del bot en sí"},
+    {estado:"viva",t:"El cuello de MADRE es la captura de valor (que no lo copien), no la utilidad"},
+    {estado:"muerta",t:"tikslide gana tracción solo, sin distribución — no pasó"},
+    {estado:"muerta",t:"El auditor de config Claude-Code se apropia el valor — era copiable"}
+  ];
+  function renderHipotesis(){
+    var el=document.getElementById("hipotesis"); if(!el) return; el.innerHTML="";
+    function row(h){ var d=document.createElement("div"); d.className="hyp "+h.estado;
+      var i=document.createElement("span"); i.textContent=(h.estado==="viva"?"🌱":"🪦");
+      var t=document.createElement("span"); t.className="ht"; t.textContent=h.t;
+      d.appendChild(i); d.appendChild(t); return d; }
+    var t1=document.createElement("div"); t1.style.cssText="font-weight:700;font-size:13px;margin:4px 0"; t1.textContent="🌱 Hipótesis vivas"; el.appendChild(t1);
+    hipotesis.filter(function(h){return h.estado==="viva";}).forEach(function(h){ el.appendChild(row(h)); });
+    var t2=document.createElement("div"); t2.style.cssText="font-weight:700;font-size:13px;margin:10px 0 4px"; t2.textContent="🪦 Hipótesis muertas (aprendidas)"; el.appendChild(t2);
+    hipotesis.filter(function(h){return h.estado==="muerta";}).forEach(function(h){ el.appendChild(row(h)); });
+  }
+  var builds=[
+    {n:"Cuaderno público (web)",p:100,u:"hoy"},
+    {n:"Comentarios públicos (Supabase)",p:100,u:"hoy"},
+    {n:"Rutina de feedback + guardarraíles",p:90,u:"hoy"},
+    {n:"Pipeline de absorción de vídeos",p:80,u:"esta semana"},
+    {n:"Activo publicable en GitHub (aprende-github)",p:30,u:"en curso"},
+    {n:"Meta-palancas (nivel alto)",p:20,u:"latente"}
+  ];
+  function renderBuilds(){
+    var el=document.getElementById("builds"); if(!el) return; el.innerHTML="";
+    builds.forEach(function(b){
+      var w=document.createElement("div"); w.style.margin="9px 0";
+      var top=document.createElement("div"); top.style.cssText="display:flex;justify-content:space-between;font-size:13px;gap:8px";
+      var nm=document.createElement("span"); nm.textContent=b.n;
+      var pc=document.createElement("b"); pc.textContent=b.p+"%"; top.appendChild(nm); top.appendChild(pc);
+      var bar=document.createElement("div"); bar.className="miniprog"; var i=document.createElement("i"); i.style.width=b.p+"%"; bar.appendChild(i);
+      var u=document.createElement("div"); u.className="small"; u.textContent="último cambio: "+b.u;
+      w.appendChild(top); w.appendChild(bar); w.appendChild(u); el.appendChild(w);
+    });
+  }
+
   function renderInvestig(list){
     var el=document.getElementById("investig"); if(!el) return; el.innerHTML="";
     list.forEach(function(it){
@@ -878,7 +1009,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
 
   var investigLoaded=false;
   function parseEstado(txt){
-    var A=[],D=[],IV=[],cs={},g=null,upd=null,changed=false;
+    var A=[],D=[],IV=[],SN=[],HP=[],cs={},g=null,upd=null,snota=null,changed=false;
     txt.split(/\r?\n/).forEach(function(ln){
       if(!ln || ln.charAt(0)==="#") return;
       var p=ln.split("\t"); for(var i=0;i<p.length;i++) p[i]=(p[i]||"").trim();
@@ -889,11 +1020,18 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
       else if(k==="card_score" && p[1] && p[2]) cs[p[1]]=clamp(p[2]);
       else if(k==="desvio" && p.length>=3) D.push({sev:(p[1]==="r"?"r":"a"),h:p[2]||"",detalle:p[3]||"",paso:p[4]||"",quien:(p[5]||"")});
       else if(k==="investig" && p[1]) IV.push({tema:p[1],concl:p[2]||"",fecha:p[3]||""});
+      else if(k==="senal" && p[1] && p[2]) SN.push({k:p[1],v:p[2],sev:(p[3]==="r"||p[3]==="g")?p[3]:"a"});
+      else if(k==="senal_nota" && p[1]) snota=p[1];
+      else if(k==="hipotesis" && p[1] && p[2]) HP.push({estado:(p[1]==="viva"?"viva":"muerta"),t:p[2]});
     });
     if(g!=null){ setGlobal(g); changed=true; }
     if(A.length){ areas=A; renderAreas(); changed=true; }
-    if(D.length){ desvios=D; renderDesvios(); changed=true; }
+    if(D.length){ desvios=D; renderDesvios(); renderQueNecesita(); changed=true; }
     if(IV.length){ renderInvestig(IV); investigLoaded=true; changed=true; }
+    if(SN.length){ senales=SN; changed=true; }
+    if(snota!=null){ senalNota=snota; }
+    if(SN.length||snota!=null) renderSenales();
+    if(HP.length){ hipotesis=HP; renderHipotesis(); changed=true; }
     Object.keys(cs).forEach(function(n){ setCardScore(n,cs[n]); changed=true; });
     if(upd) setActualizado(fmtDate(upd)+" (auto)"); else if(changed) setActualizado("recién (auto)");
     return changed;
@@ -913,6 +1051,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-21",titulo:"🌍 Evidencia primero + cara nueva cada visita",detalle:"Arriba sale 'Señales del mundo' (€, clientes, estrellas… la prueba real). Hipótesis vivas vs muertas, progreso de lo que se construye, emojis en secciones, MADRE con 🤱🏻 y tooltip, y la web cambia de color/fondo en cada visita (variedad, sin mover nada de sitio)."},
     {fecha:"2026-06-21",titulo:"💬 Comentarios públicos (en vivo)",detalle:"Cualquiera puede comentar (nombre opcional), dar 👍 y responder en hilo; aparecen al instante. Hay un botón flotante con panel. Son públicos y van aparte del feedback privado a MADRE."},
     {fecha:"2026-06-21",titulo:"Opinar abierto · decisiones solo Tony · números al día",detalle:"Cualquiera puede opinar con 💬; solo las decisiones importantes las desbloquea Tony. El tipo de feedback ahora son botones (y 🪄 'que elija MADRE'). La salud/áreas/desviaciones se refrescan solas con el estado real."},
     {fecha:"2026-06-21",titulo:"Pegar imágenes + etiquetas de Paso",detalle:"En el feedback se pega imagen con Ctrl/Cmd+V; en Desviaciones se marca 👤 lo haces tú / 🤖 lo hace MADRE."},
@@ -1054,6 +1193,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   applyGate();
 
   renderAreas(); renderDesvios();
+  renderSenales(); renderQueHizo(); renderQueNecesita(); renderHipotesis(); renderBuilds();
   document.querySelectorAll('.chip[data-goto]').forEach(function(ch){
     ch.addEventListener("click",function(){
       var n=ch.getAttribute("data-goto");
@@ -1072,6 +1212,39 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   });
   loadCambios();
 
+})();
+</script>
+
+<script>
+(function(){
+  // ===== v2 cosmético: variedad visual sin tocar el orden =====
+  try{
+    var temas=[{a:"#3b6ef5",s:"#eaf0ff"},{a:"#15a36a",s:"#e5f6ee"},{a:"#8a5bdb",s:"#efe9fb"},{a:"#c9881a",s:"#fbf1da"},{a:"#d3493b",s:"#fdecea"},{a:"#0d9488",s:"#dcf5f1"},{a:"#e0568a",s:"#fce8f0"}];
+    var t=temas[Math.floor(Math.random()*temas.length)];
+    document.documentElement.style.setProperty("--accent",t.a);
+    document.documentElement.style.setProperty("--accent-soft",t.s);
+    var fondos=["bgGrid","bgStars","bgGlow",""]; var f=fondos[Math.floor(Math.random()*fondos.length)]; if(f) document.body.classList.add(f);
+  }catch(e){}
+
+  var emo={"1":"🧠","2":"🧭","3":"💰","4":"🗳️","5":"⚠️","6":"🩺","7":"⚙️","8":"🏗️","9":"📚","10":"📖","11":"🧩","12":"📈"};
+  document.querySelectorAll(".card > details > summary").forEach(function(sm){
+    var num=sm.querySelector(".num"), t=sm.querySelector(".ctitle .t");
+    if(num && t){ var n=num.textContent.trim(); if(emo[n] && t.textContent.indexOf(emo[n])!==0) t.textContent=emo[n]+" "+t.textContent; }
+  });
+
+  document.querySelectorAll("[data-fb]").forEach(function(b,i){ b.classList.add("funbtn"); });
+  var fbGen=document.querySelector('[data-card="General"]'); if(fbGen) fbGen.classList.add("breathe");
+  setTimeout(function(){ var nb=document.getElementById("novBanner"); if(nb && nb.firstElementChild) nb.firstElementChild.classList.add("pulse"); },1600);
+
+  var tip=document.getElementById("madreTip"), title=document.getElementById("madreTitle");
+  if(tip && title){
+    var tmr=null;
+    title.addEventListener("touchstart",function(){ tmr=setTimeout(function(){ tip.classList.add("show"); },350); },{passive:true});
+    ["touchend","touchcancel","touchmove"].forEach(function(ev){ title.addEventListener(ev,function(){ clearTimeout(tmr); }); });
+    document.addEventListener("click",function(e){ if(tip.classList.contains("show") && !title.contains(e.target)) tip.classList.remove("show"); });
+  }
+  var q=document.getElementById("queesBtn");
+  if(q) q.onclick=function(){ document.querySelectorAll(".card").forEach(function(c){ var n=c.querySelector(".num"); if(n && n.textContent.trim()==="1"){ var d=c.querySelector("details"); if(d) d.open=true; c.scrollIntoView({behavior:"smooth",block:"start"}); } }); };
 })();
 </script>
 <script type="module">
@@ -1095,8 +1268,11 @@ st.textContent=`
 .cmtStrip{font-size:12px;color:var(--muted,#667);margin:0 0 8px}
 @keyframes cmtIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 #cmtFab{position:fixed;right:16px;bottom:16px;width:52px;height:52px;border-radius:50%;border:none;background:var(--accent,#3b5bdb);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.25);z-index:60}
-#cmtPanel{position:fixed;right:16px;bottom:78px;width:min(360px,92vw);max-height:70vh;overflow:auto;background:#fff;border:1px solid var(--line,#ccc);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.28);padding:12px;z-index:60;display:none}
+#cmtPanel{position:fixed;right:16px;bottom:78px;width:min(360px,92vw);max-height:70vh;overflow:auto;background:rgba(255,255,255,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.5);border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.18);padding:12px;z-index:60;display:none}
 #cmtPanel.on{display:block}
+#cmtPanel .cmt{background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.06);border-radius:16px 16px 16px 5px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+#cmtPanel .replies .cmt{border-radius:16px 16px 5px 16px;background:var(--accent-soft,#eef)}
+#cmtPanel .cmtForm input,#cmtPanel .cmtForm textarea{background:rgba(255,255,255,.7)}
 `;
 document.head.appendChild(st);
 
@@ -1128,7 +1304,8 @@ async function like(id){
 function makeForm(parentId){
   const f=document.createElement("div"); f.className="cmtForm";
   const n=document.createElement("input"); n.placeholder="Tu nombre (opcional)"; n.maxLength=40;
-  const t=document.createElement("textarea"); t.placeholder=parentId?"Tu respuesta…":"Escribe un comentario…"; t.maxLength=2000;
+  const PH=["di lo horrible que es esta página 😅","¿se entiende algo o no?","dime qué le falta a MADRE","¿esto sirve para algo? sé sincero 👀","critícame bonito 💅","¿qué cambiarías?","suelta tu hot take 🔥","¿2/10? ¿9/10? dímelo"];
+  const t=document.createElement("textarea"); t.placeholder=parentId?"Tu respuesta…":PH[Math.floor(Math.random()*PH.length)]; t.maxLength=2000;
   const b=document.createElement("button"); b.className="btn sm primary"; b.textContent=parentId?"Responder":"Comentar";
   b.onclick=async()=>{ b.disabled=true; const r=await post(parentId,n.value,t.value); b.disabled=false; if(!r.error){ t.value=""; if(f.onsent)f.onsent(); load(); } else { b.textContent="Reintenta"; setTimeout(()=>b.textContent=parentId?"Responder":"Comentar",1500); } };
   f.appendChild(n); f.appendChild(t); f.appendChild(b); return f;
