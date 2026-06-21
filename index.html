@@ -521,6 +521,18 @@
     </div>
   </details></div>
 
+  <div class="card" id="comentariosCard"><details open>
+    <summary>
+      <span class="num">💬</span>
+      <span class="ctitle"><span class="t">Comentarios</span>
+        <span class="s">Deja el tuyo y lee los de otros. Es público (no es el feedback privado a MADRE).</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <div id="comentarios"><div class="small">Cargando comentarios…</div></div>
+    </div>
+  </details></div>
+
   <footer>
     Cuaderno MADRE · tu opinión (botones 💬) la recoge MADRE y actúa.<br>
     Hecho para leerse en 2 minutos y opinar sin tecnicismos.
@@ -901,6 +913,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-21",titulo:"💬 Comentarios públicos (en vivo)",detalle:"Cualquiera puede comentar (nombre opcional), dar 👍 y responder en hilo; aparecen al instante. Hay un botón flotante con panel. Son públicos y van aparte del feedback privado a MADRE."},
     {fecha:"2026-06-21",titulo:"Opinar abierto · decisiones solo Tony · números al día",detalle:"Cualquiera puede opinar con 💬; solo las decisiones importantes las desbloquea Tony. El tipo de feedback ahora son botones (y 🪄 'que elija MADRE'). La salud/áreas/desviaciones se refrescan solas con el estado real."},
     {fecha:"2026-06-21",titulo:"Pegar imágenes + etiquetas de Paso",detalle:"En el feedback se pega imagen con Ctrl/Cmd+V; en Desviaciones se marca 👤 lo haces tú / 🤖 lo hace MADRE."},
     {fecha:"2026-06-21",titulo:"Chips de arriba clicables",detalle:"Salud, decisiones, desviaciones y Tu parte llevan a su sección al tocarlos."},
@@ -1060,6 +1073,114 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   loadCambios();
 
 })();
+</script>
+<script type="module">
+// ===== Comentarios públicos (Supabase) — SEPARADOS del feedback privado a MADRE =====
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const SB_URL="https://kopegamcjozrvmxruwdn.supabase.co";
+const SB_KEY="sb_publishable_2NDyczKDwFCzNIWEMycRtw_yTnkUQAi";
+const sb=createClient(SB_URL, SB_KEY);
+
+const st=document.createElement("style");
+st.textContent=`
+#comentarios .cmt{border:1px solid var(--line,#e3e6ee);border-radius:10px;padding:9px 11px;margin:8px 0;background:#fff;animation:cmtIn .35s ease both}
+.cmt .meta{font-size:12px;color:var(--muted,#8a8f98);margin-bottom:3px}
+.cmt .ctext{font-size:14px;white-space:pre-wrap;word-break:break-word}
+.cmt .acts{margin-top:6px;display:flex;gap:14px}
+.cmt .acts button{background:none;border:none;color:var(--muted,#667);font-size:12.5px;cursor:pointer;padding:0}
+.cmt .acts button.on{color:var(--accent,#3b5bdb);font-weight:600}
+.cmt .replies{margin:6px 0 0 14px;border-left:2px solid var(--line,#e3e6ee);padding-left:10px}
+.cmtForm input,.cmtForm textarea{width:100%;box-sizing:border-box;margin:4px 0;padding:8px;border:1px solid var(--line,#ccc);border-radius:8px;font:inherit}
+.cmtForm textarea{min-height:56px;resize:vertical}
+.cmtStrip{font-size:12px;color:var(--muted,#667);margin:0 0 8px}
+@keyframes cmtIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#cmtFab{position:fixed;right:16px;bottom:16px;width:52px;height:52px;border-radius:50%;border:none;background:var(--accent,#3b5bdb);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.25);z-index:60}
+#cmtPanel{position:fixed;right:16px;bottom:78px;width:min(360px,92vw);max-height:70vh;overflow:auto;background:#fff;border:1px solid var(--line,#ccc);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.28);padding:12px;z-index:60;display:none}
+#cmtPanel.on{display:block}
+`;
+document.head.appendChild(st);
+
+function fmt(ts){ try{ const d=new Date(ts); return d.toLocaleDateString("es-ES",{day:"2-digit",month:"short"})+" "+d.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } }
+const LK="cmt_likes_v1";
+function likeSet(){ try{ return JSON.parse(localStorage.getItem(LK)||"{}"); }catch(e){ return {}; } }
+function isLiked(id){ return !!likeSet()[id]; }
+function markLiked(id){ const o=likeSet(); o[id]=1; try{ localStorage.setItem(LK,JSON.stringify(o)); }catch(e){} }
+
+let all=[];
+async function load(){
+  const { data, error }=await sb.from("comments").select("*").order("created_at",{ascending:true});
+  if(error){ console.warn("comments load:", error.message); } else { all=data||[]; }
+  renderAll();
+}
+async function post(parentId, name, body){
+  body=(body||"").trim(); if(!body) return {error:"vacio"};
+  name=(name||"").trim().slice(0,40);
+  const { error }=await sb.from("comments").insert({ body:body.slice(0,2000), name:name||null, parent_id:parentId||null });
+  if(error){ console.warn("insert:", error.message); return {error}; }
+  return {};
+}
+async function like(id){
+  if(isLiked(id)) return; markLiked(id);
+  const c=all.find(x=>x.id===id); if(c){ c.likes=(c.likes||0)+1; renderAll(); }
+  const { error }=await sb.rpc("like_comment",{ cid:id }); if(error) console.warn("like:", error.message);
+}
+
+function makeForm(parentId){
+  const f=document.createElement("div"); f.className="cmtForm";
+  const n=document.createElement("input"); n.placeholder="Tu nombre (opcional)"; n.maxLength=40;
+  const t=document.createElement("textarea"); t.placeholder=parentId?"Tu respuesta…":"Escribe un comentario…"; t.maxLength=2000;
+  const b=document.createElement("button"); b.className="btn sm primary"; b.textContent=parentId?"Responder":"Comentar";
+  b.onclick=async()=>{ b.disabled=true; const r=await post(parentId,n.value,t.value); b.disabled=false; if(!r.error){ t.value=""; if(f.onsent)f.onsent(); load(); } else { b.textContent="Reintenta"; setTimeout(()=>b.textContent=parentId?"Responder":"Comentar",1500); } };
+  f.appendChild(n); f.appendChild(t); f.appendChild(b); return f;
+}
+function makeComment(c, isReply){
+  const w=document.createElement("div"); w.className="cmt";
+  const m=document.createElement("div"); m.className="meta"; m.textContent=(c.name||"Anónimo")+" · "+fmt(c.created_at);
+  const tx=document.createElement("div"); tx.className="ctext"; tx.textContent=c.body;
+  const acts=document.createElement("div"); acts.className="acts";
+  const lb=document.createElement("button"); lb.textContent="👍 "+(c.likes||0); if(isLiked(c.id)) lb.classList.add("on"); lb.onclick=()=>like(c.id); acts.appendChild(lb);
+  w.appendChild(m); w.appendChild(tx); w.appendChild(acts);
+  if(!isReply){
+    const rb=document.createElement("button"); rb.textContent="Responder"; acts.appendChild(rb);
+    const box=document.createElement("div"); box.style.display="none"; box.style.marginTop="6px";
+    const rf=makeForm(c.id); rf.onsent=()=>{ box.style.display="none"; }; box.appendChild(rf);
+    rb.onclick=()=>{ box.style.display=box.style.display==="none"?"block":"none"; };
+    w.appendChild(box);
+    const kids=all.filter(x=>x.parent_id===c.id);
+    if(kids.length){ const rc=document.createElement("div"); rc.className="replies"; kids.forEach(k=>rc.appendChild(makeComment(k,true))); w.appendChild(rc); }
+  }
+  return w;
+}
+function renderListInto(el){
+  el.innerHTML="";
+  const tops=all.filter(x=>!x.parent_id).sort((a,b)=>(b.created_at||"").localeCompare(a.created_at||""));
+  if(!tops.length){ const d=document.createElement("div"); d.className="small"; d.textContent="Sé el primero en comentar 🙂"; el.appendChild(d); return; }
+  tops.forEach(c=>el.appendChild(makeComment(c,false)));
+}
+
+const root=document.getElementById("comentarios");
+let listEl, panelListEl, stripEl;
+function build(){
+  root.innerHTML="";
+  stripEl=document.createElement("div"); stripEl.className="cmtStrip"; root.appendChild(stripEl);
+  root.appendChild(makeForm(null));
+  listEl=document.createElement("div"); root.appendChild(listEl);
+  const fab=document.createElement("button"); fab.id="cmtFab"; fab.textContent="💬"; fab.title="Comentarios";
+  const panel=document.createElement("div"); panel.id="cmtPanel";
+  const h=document.createElement("div"); h.style.cssText="font-weight:700;margin-bottom:6px"; h.textContent="💬 Comentarios"; panel.appendChild(h);
+  panel.appendChild(makeForm(null));
+  panelListEl=document.createElement("div"); panel.appendChild(panelListEl);
+  fab.onclick=()=>panel.classList.toggle("on");
+  document.body.appendChild(fab); document.body.appendChild(panel);
+}
+function renderAll(){
+  const n=all.length;
+  if(stripEl) stripEl.textContent = n ? ("✨ "+n+" comentario"+(n!==1?"s":"")+" — los nuevos aparecen al instante") : "";
+  if(listEl) renderListInto(listEl);
+  if(panelListEl) renderListInto(panelListEl);
+}
+build(); load();
+sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", table:"comments" },()=>load()).subscribe();
 </script>
 </body>
 </html>
