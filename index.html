@@ -140,6 +140,8 @@
 
   <h1>🧠 Cuaderno MADRE</h1>
   <p class="sub">Lo importante de MADRE, en simple. Tú lo lees, lo marcas y opinas; MADRE lo recoge y actúa.</p>
+  <div class="postit" style="display:inline-block;background:#fff7c0;border:1px solid #ece28a;border-radius:8px;padding:6px 10px;margin:2px 0 12px;font-size:13px;transform:rotate(-1deg);box-shadow:0 1px 3px rgba(0,0,0,.08)">📝 ¿“feedback”? = dar tu opinión, sin más 😄</div>
+  <div id="gateBar"></div>
   <div id="novBanner"></div>
 
   <div class="hero">
@@ -479,7 +481,7 @@
         <div class="xb">
           <p><b>Qué hace:</b> le pegas un enlace (YouTube, TikTok, X) y MADRE lo "destila" en aprendizajes que se pueden usar — sin que tengas que ver el vídeo.</p>
           <p><b>Cómo lo usas tú:</b> suéltalo en el BUZÓN desde el móvil, o pégalo aquí mismo:</p>
-          <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <div id="linkBox" style="display:flex;gap:7px;flex-wrap:wrap">
             <input type="text" id="linkIn" placeholder="https://..." style="flex:1;min-width:160px">
             <button class="btn sm primary" id="linkSend">Enviar a MADRE</button>
           </div>
@@ -519,7 +521,7 @@
   </details></div>
 
   <footer>
-    Cuaderno MADRE · tu feedback entra en <b>BUZON_ENTRANTE</b> y el loop lo recoge en su siguiente pasada.<br>
+    Cuaderno MADRE · tu opinión (botones 💬) la recoge MADRE y actúa.<br>
     Hecho para leerse en 2 minutos y opinar sin tecnicismos.
   </footer>
 </div>
@@ -554,6 +556,32 @@
   </div>
 </div>
 <div class="toast" id="toast"></div>
+
+<!-- Snapshot horneado de CUADERNO_ESTADO.tsv: lo refresca la rutina cuaderno-feedback en cada pasada para que la web (sin Drive) muestre numeros actuales. NO editar a mano. -->
+<script id="estadoBaked" type="text/plain">
+# CUADERNO_ESTADO.tsv -- estado VIVO del Cuaderno MADRE (artefacto "cuaderno-madre").
+# ESCRITOR UNICO = el loop madre-mejora-continua (lo reescribe en su auditoria o cuando algo relevante cambia: score, area, desviacion).
+# El artefacto lo LEE por titulo via conector de Drive; si falta o no parsea -> usa su texto congelado (degradacion segura).
+# Formato tolerante: 1 dato por linea, campos separados por TAB. Lineas con # o vacias se ignoran.
+# ANTI-FALSO-VERDE: si 'actualizado' es de hace >48h, considera este estado POSIBLEMENTE DESFASADO (no te fies del verde).
+actualizado	2026-06-21T09:00Z
+global_score	3
+global_nota	Capacidad y orden altos, subsistemas vivos; pero el VALOR EXTERNO real (primer euro / 1a senal del mundo) sigue en 0 -- ese es el numero que de verdad importa.
+area	Valor externo logrado	1
+area	Criterio / claridad	8
+area	Subsistemas activos	8
+area	Frente de dinero	3
+area	Palancas en curso	4
+area	Salud / orden	7
+desvio	r	Valor externo = 0	MADRE construye pero aun no SACA nada al mundo (tikslide sin senal, 0 euros). El cuello es ACTIVAR/exponer, no construir mas.	Pendiente tuyo: responder SUELO-EXTERNO si/no y, cuando quieras, autorizar publicar 1 activo de forma autonoma.
+desvio	a	Colision multi-IA	Riesgo numero 1 (ya corrompio contenido antes): varias sesiones de IA sobre la misma carpeta a la vez.	No corras varias IAs a la vez sobre la carpeta MADRE; el loop ya se aparta solo si te detecta activo.
+desvio	a	Frente dinero esperando tu paso	El primer euro (peluqueria) necesita 1 paso tuyo; el resto esta preparado.	Cuando puedas, di "tengo una" o "monta demo". Encaje: montar y atender un asistente IA por WhatsApp (~150-250 euros/mes recurrente).
+# --- INVESTIGACION (hilos vivos; el loop reescribe la conclusion cuando evoluciona) ---
+investig	Frente dinero: peluqueria (1er euro)	El mercado paga ~150-250 euros/mes por un asistente IA de citas por WhatsApp; el valor real es montarlo+atenderlo (el bot solo se commoditiza). Falta el paso de Tony.	2026-06-21
+investig	Sacar cosas al mundo (activacion)	GitHub Skills virales (44k-7k estrellas en dias): publicar UNA skill util puede dar mas senal externa que tikslide solo (L4 cold-start). Pendiente: observar aprende-github lun-22/jue-25.	2026-06-21
+investig	Generar activos que renten	Nuevo filtro antes de construir: "captura defendible" -- no basta con ser util, hay que poder quedarse el valor (que no lo copien el usuario/plataforma).	2026-06-21
+investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR externo que lo califique (uso/pago); ese selector externo es justo lo que MADRE aun no tiene.	2026-06-21
+</script>
 
 <script>
 (function(){
@@ -847,17 +875,22 @@
     if(upd) setActualizado(fmtDate(upd)+" (auto)"); else if(changed) setActualizado("recién (auto)");
     return changed;
   }
+  function bakedEstado(){ var el=document.getElementById("estadoBaked"); return el?el.textContent:""; }
   async function loadEstado(){
+    var done=false;
     try{
       var s=await mcp(T_SEARCH,{query:"title = 'CUADERNO_ESTADO.tsv'",pageSize:5,excludeContentSnippets:true});
       var files=(s.data&&s.data.files)?s.data.files:[];
-      if(!files.length) return;
-      var r=await mcp(T_READ,{fileId:files[0].id});
-      var txt=(r.data&&r.data.fileContent)?r.data.fileContent:(r.text||"");
-      if(txt) parseEstado(txt);
+      if(files.length){
+        var r=await mcp(T_READ,{fileId:files[0].id});
+        var txt=(r.data&&r.data.fileContent)?r.data.fileContent:(r.text||"");
+        if(txt){ parseEstado(txt); done=true; }
+      }
     }catch(e){}
+    if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-21",titulo:"Modo lectura + números siempre al día",detalle:"La web pública entra en modo lectura (solo Tony desbloquea para opinar/decidir); y la salud, áreas y desviaciones se refrescan solas con el estado real de MADRE, sin quedarse con números viejos."},
     {fecha:"2026-06-21",titulo:"Pegar imágenes + etiquetas de Paso",detalle:"En el feedback se pega imagen con Ctrl/Cmd+V; en Desviaciones se marca 👤 lo haces tú / 🤖 lo hace MADRE."},
     {fecha:"2026-06-21",titulo:"Chips de arriba clicables",detalle:"Salud, decisiones, desviaciones y Tu parte llevan a su sección al tocarlos."},
     {fecha:"2026-06-21",titulo:"Arreglado el feedback",detalle:"Se guarda como FEEDBACK_TONY_ para que el loop de MADRE lo reconozca y lo procese."},
@@ -963,9 +996,35 @@
   if(!hasCowork()){
     var wb=document.createElement("div");
     wb.style.cssText="background:#fff7e6;border:1px solid #f0dcae;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:13px";
-    wb.innerHTML='📱 <b>Versión web.</b> Aquí ves el estado guardado de MADRE. Al opinar se <b>copia tu mensaje ya etiquetado</b>: pégalo en tu <b>BUZÓN</b> y MADRE lo recibe igual (no se pierde). El envío directo desde la web, sin pegar, es un paso futuro. La versión de escritorio (Cowork) lo envía sola.';
+    wb.innerHTML='📱 <b>Versión web.</b> Ves el estado de MADRE en simple, en <b>modo lectura</b>. Para opinar, pulsa <b>Desbloquear</b> arriba (solo Tony). En la versión de escritorio (Cowork) el feedback se envía solo.';
     var nb=document.getElementById("novBanner"); if(nb&&nb.parentNode) nb.parentNode.insertBefore(wb, nb);
   }
+
+  // ---- gateo: modo lectura (público) / modo Tony (contraseña) ----
+  // OJO: una contraseña en HTML del lado cliente NO es seguridad real (se ve en el código fuente).
+  // Es solo un disuasorio casual para que un visitante random no toque feedback/decisiones.
+  var GATE_KEY="cuaderno_madre_tony";
+  function isTony(){ try{ return localStorage.getItem(GATE_KEY)==="1"; }catch(e){ return false; } }
+  (function(){ var st=document.createElement("style");
+    st.textContent="#gateBar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#f3f6ff;border:1px solid #d9e3ff;border-radius:12px;padding:8px 12px;margin-bottom:12px;font-size:13px}"+
+      "body.lectura [data-fb],body.lectura #btnStatus,body.lectura #statusWrap,body.lectura .decbtns,body.lectura .reason,body.lectura #linkBox,body.lectura #linkMsg{display:none !important}";
+    document.head.appendChild(st);
+  })();
+  function applyGate(){
+    document.body.classList.toggle("lectura", !isTony());
+    var bar=document.getElementById("gateBar"); if(!bar) return;
+    bar.innerHTML = isTony()
+      ? '<span>🔓 <b>Modo Tony</b> · puedes opinar y decidir.</span><button class="btn sm" id="gateBtn">Bloquear</button>'
+      : '<span>🔒 <b>Modo lectura.</b> ¿Eres Tony? Desbloquea para opinar.</span><button class="btn sm primary" id="gateBtn">Desbloquear</button>';
+    document.getElementById("gateBtn").onclick=function(){
+      if(isTony()){ try{localStorage.removeItem(GATE_KEY);}catch(e){} toast("Bloqueado 🔒"); applyGate(); }
+      else{ var p=window.prompt("Contraseña de Tony:"); if(p===null) return;
+        if(p==="Jabado"){ try{localStorage.setItem(GATE_KEY,"1");}catch(e){} toast("Desbloqueado 🔓 — modo Tony"); applyGate(); }
+        else toast("Contraseña incorrecta"); }
+    };
+  }
+  applyGate();
+
   renderAreas(); renderDesvios();
   document.querySelectorAll('.chip[data-goto]').forEach(function(ch){
     ch.addEventListener("click",function(){
