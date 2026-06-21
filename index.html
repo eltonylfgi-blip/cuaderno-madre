@@ -191,6 +191,23 @@
   body.likeMode .card:hover,body.likeMode .hero:hover,body.likeMode .senalItem:hover,body.likeMode .body p:hover,body.likeMode .body li:hover,body.likeMode .ctitle .t:hover,body.likeMode summary:hover,body.likeMode h1:hover,body.likeMode .sub:hover,body.likeMode .postit:hover,body.likeMode #gateBar:hover,body.likeMode footer:hover,body.likeMode .heronote:hover,body.likeMode .dec:hover,body.likeMode .alert:hover,body.likeMode .step:hover,body.likeMode .chip:hover{outline:3px solid #e0568a;outline-offset:2px;cursor:pointer;border-radius:10px}
   #likeHint{position:fixed;left:50%;top:10px;transform:translateX(-50%);background:#e0568a;color:#fff;padding:8px 14px;border-radius:99px;font-size:13px;z-index:61;box-shadow:0 4px 16px rgba(0,0,0,.25);display:none}
   body.likeMode #likeHint{display:block}
+  /* corazones FIJOS de "me gusta": pequeños, en la esquina de la zona; al pasar el ratón muestran tu nota */
+  #likeHearts{position:fixed;inset:0;z-index:57;pointer-events:none}
+  .lHeart{position:fixed;transform:translate(-50%,-50%);border:none;background:transparent;padding:0;font-size:15px;line-height:1;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));transition:transform .15s;-webkit-tap-highlight-color:transparent}
+  .lHeart:hover{transform:translate(-50%,-50%) scale(1.3)}
+  .lHeart .lhTip{position:absolute;left:50%;bottom:155%;transform:translateX(-50%);background:#c43b6e;color:#fff;font:600 12px/1.35 system-ui,-apple-system,Segoe UI,sans-serif;padding:7px 10px;border-radius:10px;width:max-content;max-width:210px;box-shadow:0 8px 22px rgba(0,0,0,.32);opacity:0;pointer-events:none;transition:opacity .15s;text-align:left}
+  .lHeart .lhTip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#c43b6e}
+  .lHeart:hover .lhTip,.lHeart.show .lhTip{opacity:1;pointer-events:auto}
+  .lhDel{display:block;margin-top:6px;font:700 11px/1 system-ui;color:#ffd9e6;text-decoration:underline;cursor:pointer}
+  #likeAsk{position:fixed;z-index:9300;background:#fff;border:1px solid #f0c3d6;border-radius:14px;padding:12px;box-shadow:0 16px 44px rgba(0,0,0,.3)}
+  #likeAsk .laTtl{font:800 14px/1.2 system-ui,-apple-system,Segoe UI,sans-serif;color:#c43b6e}
+  #likeAsk .laLbl{font:600 11px/1.3 system-ui;color:#8a8aa0;margin:3px 0 8px;max-height:28px;overflow:hidden}
+  #likeAsk .laInp{width:100%;box-sizing:border-box;border:1px solid #e3c0d2;border-radius:9px;padding:9px 10px;font-size:14px;color:#222}
+  #likeAsk .laInp:focus{outline:2px solid #e0568a;border-color:#e0568a}
+  #likeAsk .laRow{display:flex;gap:8px;margin-top:10px}
+  #likeAsk .laOk{flex:1;border:none;border-radius:10px;padding:10px;font:700 14px/1 system-ui;background:linear-gradient(135deg,#e0568a,#c43b6e);color:#fff;cursor:pointer}
+  #likeAsk .laNo{border:none;border-radius:10px;padding:10px 12px;font:700 14px/1 system-ui;background:#f1f1f4;color:#555;cursor:pointer}
+  @media(prefers-reduced-motion:reduce){.lHeart{transition:none}}
   .inlineArrow{border:none;background:transparent;cursor:pointer;padding:0 5px;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;transition:transform .18s;transform-origin:left center}
   .inlineArrow .ar{animation:nudgeX 1s ease-in-out infinite;display:inline-block;font-size:15px}
   .inlineArrow .lbl{max-width:0;overflow:hidden;white-space:nowrap;opacity:0;font-size:11px;font-weight:700;color:var(--accent);transition:max-width .28s,opacity .2s}
@@ -1139,6 +1156,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-22",titulo:"🤲 Texturas ASMR, corazones que se quedan y ruta guiada que te llama",detalle:"Sonidos ASMR de verdad: entre los paneles hay TEXTURAS — rózalas con el ratón y suenan según vas más rápido o más lento — y cositas que REVIENTAN (burbujas) o CRUJEN al hacer click (vienen puestas por defecto). Cuando marcas algo que te gusta, queda un 💗 fijo en esa zona y, al pasar el ratón por encima, sale tu nota. La 'Ruta guiada' y 'El cuaderno por dentro' ahora están siempre a la vista (abajo a la izq.), y al entrar la ruta guiada PALPITA para que la veas, hasta que tocas cualquier cosa. El modo caótico ya no suelta círculos de colores sueltos: ahora RODEA cosas reales de la pantalla con un círculo dibujado a mano."},
     {fecha:"2026-06-21",titulo:"🎛️ Botones en 1 menú, sonidos, '¿no entiendo?' y caos x2",detalle:"Los botones flotantes ahora viven en UN menú ✦ (menos lío). Zonas con SONIDO (ASMR, actívalo en el menú). Botón 🤔 'no entiendo' en cada tarjeta y en la ruta guiada (para saber qué cuesta más). El gato cambia de cara y ya no se atasca en el móvil. El chat abre en lo último escrito. Los comentarios ya no ocupan toda la pantalla. El modo caótico tiene flechas que señalan cosas, círculos, citas y travesuras. Los dibujos llevan tu nombre. Y arreglos: los contadores de arriba ahora son reales, aviso si el estado está viejo, y no se solapan los modos."},
     {fecha:"2026-06-21",titulo:"👁️ Visitas + 'El cuaderno por dentro' + caos con chicha",detalle:"Nuevo contador de visitas (abajo a la izq.): al tocarlo se abre un panel con lo más querido (comentarios y dibujo más votados), la actividad y 'lo que opina MADRE' (cambia cada vez). El modo caótico ahora tiene flechas que señalan, notas y avisos absurdos (no solo confeti) y se modera solo en móvil. Arreglos: el gato ya no se tapa con la barra de arriba, y en los dibujos puedes deshacer (botón ↩️ Atrás o Ctrl+Z)."},
     {fecha:"2026-06-21",titulo:"🤪 Modo caótico, gato troll y arreglos finos",detalle:"Modo caótico (confeti y locuras, con permiso), gato con frases troll y barriguita, contraseña que se ríe, paneles que reaccionan al ratón. Arreglados: la nota ya no sale rara, el tour ya no deja borrosa la zona, y el lápiz/corazón ya dejan señalar cualquier zona (también cabecera y bordes)."},
@@ -1367,17 +1385,78 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   function fb(o){ if(window.__fb) try{ return window.__fb(o); }catch(e){} }
   function openFb(c,s,t){ if(window.__openFb) try{ window.__openFb(c,s,t); }catch(e){} }
 
-  // ---- corazón: modo "me gusta" (resalta y captura lo que te gusta) ----
+  // ---- corazón: marca lo que te gusta -> queda un 💗 FIJO en la zona; al pasar el ratón sale tu nota ----
+  var LK="cm_likes_v1";
   var fab=document.createElement("button"); fab.id="likeFab"; fab.textContent="♥"; fab.title="Marca lo que te gusta";
   var hint=document.createElement("div"); hint.id="likeHint"; hint.textContent="💗 Toca lo que te guste · (pulsa Esc o el menú ✦ para salir)";
-  document.body.appendChild(fab); document.body.appendChild(hint);
-  var likeMode=false;
+  var layer=document.createElement("div"); layer.id="likeHearts";
+  document.body.appendChild(fab); document.body.appendChild(hint); document.body.appendChild(layer);
+  var likeMode=false, hearts=[];
   function setLike(v){ if(v){ try{ if(window.__exitLapiz) window.__exitLapiz(); }catch(_){ } } likeMode=v; document.body.classList.toggle("likeMode",v); fab.classList.toggle("on",v); }
   try{ window.__exitLike=function(){ setLike(false); }; }catch(_){}
   document.addEventListener("keydown",function(e){ if(e.key==="Escape" && likeMode) setLike(false); });
   fab.addEventListener("click",function(e){ e.stopPropagation(); setLike(!likeMode); });
+
+  function loadLikes(){ try{ return JSON.parse(localStorage.getItem(LK)||"[]"); }catch(e){ return []; } }
+  function saveLikes(a){ try{ localStorage.setItem(LK, JSON.stringify(a)); }catch(e){} }
+  // ruta CSS estable de un elemento (nth-of-type por TAG; insertar <aside> de texturas no la rompe)
+  function cssPath(el){ try{
+    if(!el || el.nodeType!==1 || el===document.body) return "body";
+    if(el.id){ return "#"+(window.CSS&&CSS.escape?CSS.escape(el.id):el.id); }
+    var p=el.parentNode; if(!p || p.nodeType!==1) return el.tagName.toLowerCase();
+    var same=[], c=p.firstElementChild; while(c){ if(c.tagName===el.tagName) same.push(c); c=c.nextElementSibling; }
+    var seg=el.tagName.toLowerCase()+":nth-of-type("+(same.indexOf(el)+1)+")";
+    var up=cssPath(p); return (up?up+">":"")+seg;
+  }catch(e){ return ""; } }
+
+  function placeHeart(h){ try{ var el=h._el; if(!el || !el.isConnected){ h.style.display="none"; return; } var r=el.getBoundingClientRect(); if(r.width<1 && r.height<1){ h.style.display="none"; return; } h.style.display=""; h.style.left=Math.min(window.innerWidth-12, r.right-12)+"px"; h.style.top=Math.max(12, r.top+12)+"px"; }catch(e){} }
+  function repositionHearts(){ for(var i=0;i<hearts.length;i++) placeHeart(hearts[i]); }
+  function removeHeart(h){ try{ var i=hearts.indexOf(h); if(i>=0) hearts.splice(i,1); h.remove(); var arr=loadLikes().filter(function(r){ return !(r.path===h._rec.path && r.note===h._rec.note); }); saveLikes(arr); }catch(e){} }
+  function addHeart(rec){ try{
+    var el=rec.path?document.querySelector(rec.path):null; if(!el) return null;
+    var h=document.createElement("button"); h.type="button"; h.className="lHeart"; h.textContent="💗"; h.setAttribute("aria-label","Te gustó: "+(rec.label||"esta zona"));
+    var tip=document.createElement("span"); tip.className="lhTip";
+    var txt=document.createElement("span"); txt.textContent="💗 dijiste que te gusta: "+(rec.note||"(me gusta)"); tip.appendChild(txt);
+    var del=document.createElement("span"); del.className="lhDel"; del.textContent="quitar 💔"; del.setAttribute("role","button"); del.setAttribute("tabindex","0"); tip.appendChild(del);
+    h.appendChild(tip); h._el=el; h._rec=rec; layer.appendChild(h); hearts.push(h);
+    h.addEventListener("click",function(e){ e.stopPropagation(); h.classList.toggle("show"); });   // móvil: toca para ver la nota
+    del.addEventListener("click",function(e){ e.stopPropagation(); removeHeart(h); });
+    placeHeart(h); return h;
+  }catch(e){ return null; } }
+
+  // mini-popover para escribir la nota (sin window.prompt nativo)
+  function askLike(el, label){
+    var old=document.getElementById("likeAsk"); if(old) try{ old.remove(); }catch(e){}
+    var box=document.createElement("div"); box.id="likeAsk";
+    var ttl=document.createElement("div"); ttl.className="laTtl"; ttl.textContent="💗 ¿Qué te gusta de esto?"; box.appendChild(ttl);
+    var lab=document.createElement("div"); lab.className="laLbl"; lab.textContent=label; box.appendChild(lab);
+    var inp=document.createElement("input"); inp.type="text"; inp.maxLength=120; inp.value="me gusta"; inp.className="laInp"; inp.setAttribute("aria-label","¿Qué te gusta?"); box.appendChild(inp);
+    var row=document.createElement("div"); row.className="laRow";
+    var no=document.createElement("button"); no.type="button"; no.className="laNo"; no.textContent="Cancelar";
+    var ok=document.createElement("button"); ok.type="button"; ok.className="laOk"; ok.textContent="💗 Guardar";
+    row.appendChild(no); row.appendChild(ok); box.appendChild(row);
+    document.body.appendChild(box);
+    var r=el.getBoundingClientRect(), bw=Math.min(280, window.innerWidth-20);
+    box.style.width=bw+"px";
+    box.style.left=Math.max(10, Math.min(window.innerWidth-bw-10, r.left))+"px";
+    var top=r.bottom+8; if(top+160>window.innerHeight) top=Math.max(10, r.top-160);
+    box.style.top=top+"px";
+    setTimeout(function(){ try{ inp.focus(); inp.select(); }catch(e){} },30);
+    function close(){ try{ box.remove(); }catch(e){} }
+    function confirm(){ var note=(inp.value||"").trim()||"(me gusta)"; var rec={path:cssPath(el), label:label, note:note, t:Date.now()};
+      var arr=loadLikes(); arr.push(rec); saveLikes(arr); addHeart(rec);
+      fb({card:"💗 Me gusta", section:label, tipo:"gusto", texto:note});
+      try{ el.animate([{transform:"scale(1)"},{transform:"scale(1.03)"},{transform:"scale(1)"}],{duration:320}); }catch(_){}
+      close(); setLike(false);
+    }
+    ok.addEventListener("click",function(e){ e.stopPropagation(); confirm(); });
+    no.addEventListener("click",function(e){ e.stopPropagation(); close(); setLike(false); });
+    inp.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); confirm(); } else if(e.key==="Escape"){ e.preventDefault(); close(); setLike(false); } });
+    box.addEventListener("click",function(e){ e.stopPropagation(); });
+  }
+
   document.addEventListener("click",function(e){
-    if(!likeMode || e.target.closest("#likeFab")) return;
+    if(!likeMode || e.target.closest("#likeFab") || e.target.closest("#likeAsk")) return;
     var el=e.target.closest(".senalItem,.card,.hero,.body p,.body li,.ctitle .t,summary,h1,.sub,.postit,#gateBar,footer,.heronote,.dec,.alert,.step,.chip,#senalesCard,#comentarios"); if(!el){ return; }
     e.preventDefault(); e.stopPropagation();
     var label="(zona)", t=el.querySelector?el.querySelector(".ctitle .t"):null;
@@ -1385,12 +1464,15 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     else if(el.classList&&el.classList.contains("senalItem")){ var k=el.querySelector(".k"); if(k) label="Señal: "+k.textContent; }
     else if(el.classList&&el.classList.contains("hero")) label="Cabecera / puntuación";
     else { label=(el.textContent||"").trim().slice(0,70)||"(zona)"; }
-    var nota=window.prompt("💗 ¿Qué te gusta de esto?\n("+label+")","me gusta");
-    if(nota!==null){ fb({card:"💗 Me gusta", section:label, tipo:"gusto", texto:nota||"(me gusta)"});
-      try{ el.animate([{transform:"scale(1)"},{transform:"scale(1.03)"},{transform:"scale(1)"}],{duration:320}); }catch(_){}
-    }
-    setLike(false);
+    askLike(el, label);
   }, true);
+
+  // pintar corazones guardados + mantenerlos pegados a su zona
+  loadLikes().forEach(function(rec){ addHeart(rec); });
+  window.addEventListener("scroll", repositionHearts, {passive:true});
+  window.addEventListener("resize", repositionHearts);
+  setTimeout(repositionHearts, 600); setTimeout(repositionHearts, 1600);
+  setInterval(function(){ if(!document.hidden) repositionHearts(); }, 1200);
 
   // ---- flechas pegadas a su sitio (solo la flecha; crece MUCHO al hover y revela el texto) ----
   function arrowBeside(target, txt, fn){
@@ -1816,6 +1898,21 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
   #tourLaunch .tlTxt{ display:none; }
   #tourLaunch{ left:14px; bottom:14px; }
 }
+/* al entrar: la ruta guiada PALPITA y llama la atención hasta que tocas cualquier cosa */
+#tourLaunch.callme{ animation:tlThrob 1.15s ease-in-out infinite; }
+@keyframes tlThrob{
+  0%,100%{ transform:translateY(0) scale(1); box-shadow:0 6px 20px rgba(80,40,180,.45); }
+  50%{ transform:translateY(-3px) scale(1.07); box-shadow:0 12px 32px rgba(124,58,237,.8), 0 0 0 7px rgba(124,58,237,.16); }
+}
+#tourNudge{
+  position:fixed; z-index:63; background:#111; color:#fff;
+  font:800 13px/1.15 system-ui,-apple-system,Segoe UI,sans-serif;
+  padding:8px 12px; border-radius:10px; box-shadow:0 8px 22px rgba(0,0,0,.45);
+  pointer-events:none; opacity:0; transform:translateY(4px); transition:opacity .25s, transform .25s;
+}
+#tourNudge.on{ opacity:1; transform:translateY(0); }
+#tourNudge::after{ content:""; position:absolute; left:-7px; top:50%; transform:translateY(-50%); border:7px solid transparent; border-right-color:#111; }
+@media (prefers-reduced-motion: reduce){ #tourLaunch.callme{ animation:none; box-shadow:0 0 0 4px rgba(124,58,237,.4); } }
 
 /* dim backdrop with a "hole" feel (we use box-shadow on highlight ring) */
 #tourBackdrop{
@@ -2359,6 +2456,7 @@ function showStep(){
 }
 
 function startTour(){
+  stopPulse();
   // resolve steps now (skip missing zones)
   steps = [];
   for(var i=0;i<STEP_DEFS.length;i++){
@@ -2410,6 +2508,29 @@ document.addEventListener("keydown", function(e){
   else if(e.key === "Enter" || e.key === "ArrowRight") nextStep();
 });
 
+// ---------- "palpita al entrar": llama la atención a la Ruta guiada hasta el primer toque ----------
+var nudge=null, pulsing=false;
+function startPulse(){
+  if(pulsing || tourActive) return; pulsing=true;
+  try{ launch.classList.add("callme"); }catch(e){}
+  try{
+    if(!nudge){ nudge=document.createElement("div"); nudge.id="tourNudge"; nudge.textContent="👈 empieza por aquí"; document.body.appendChild(nudge); }
+    var r=launch.getBoundingClientRect();
+    nudge.style.left=Math.round(r.right+12)+"px";
+    nudge.style.top=Math.round(r.top + r.height/2 - 16)+"px";
+    setTimeout(function(){ if(nudge) nudge.classList.add("on"); }, 30);   // setTimeout (no rAF: rAF se pausa si la pestaña no está visible)
+  }catch(e){}
+}
+function stopPulse(){
+  if(!pulsing) return; pulsing=false;
+  try{ launch.classList.remove("callme"); }catch(e){}
+  if(nudge){ nudge.classList.remove("on"); var n=nudge; nudge=null; setTimeout(function(){ try{ n.remove(); }catch(e){} },300); }
+}
+// cualquier interacción que NO sea la propia ruta apaga el reclamo
+["pointerdown","keydown","touchstart"].forEach(function(ev){
+  document.addEventListener(ev,function(e){ if(!pulsing) return; if(e.target && e.target.closest && e.target.closest("#tourLaunch")) return; stopPulse(); },{passive:true});
+});
+
 // ---------- first-visit welcome ----------
 function showWelcome(){
   var w = document.createElement("div");
@@ -2432,6 +2553,7 @@ function showWelcome(){
     w.classList.remove("on");
     setTimeout(function(){ try{ w.remove(); }catch(e){} }, 400);
     if(go) setTimeout(startTour, 420);
+    else setTimeout(startPulse, 500);   // si dice "ahora no", la ruta queda palpitando como reclamo
   }
   w.querySelector(".twGo").addEventListener("click", function(){ closeWelcome(true); });
   w.querySelector(".twNo").addEventListener("click", function(){ closeWelcome(false); });
@@ -2441,6 +2563,7 @@ function showWelcome(){
 var seen = null;
 try{ seen = localStorage.getItem(SEEN_KEY); }catch(e){}
 if(!seen){ setTimeout(showWelcome, 700); }
+else { setTimeout(startPulse, 900); }   // visitante que vuelve: la ruta guiada palpita al entrar
 }catch(e){console.warn('widget tour',e);}})();
 </script>
 <script>
@@ -2797,15 +2920,18 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
 @keyframes chNote{0%{opacity:0;transform:translateY(14px) rotate(var(--r,-4deg)) scale(.7)}14%{opacity:1;transform:translateY(0) rotate(var(--r,-4deg)) scale(1.06)}22%,74%{opacity:1;transform:translateY(0) rotate(var(--r,-4deg)) scale(1)}100%{opacity:0;transform:translateY(-22px) rotate(var(--r,-4deg)) scale(.95)}}
 @keyframes chAlert{0%{opacity:0;transform:translateX(120%)}12%,80%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(120%)}}
 @keyframes chShout{0%,100%{transform:scale(1) rotate(0)}25%{transform:scale(1.06) rotate(-1.6deg)}60%{transform:scale(1.04) rotate(1.6deg)}}
-.chaosCircle{position:fixed;z-index:9996;pointer-events:none;border-radius:50%;mix-blend-mode:multiply;animation:chCircle 2.3s ease-out forwards}
-@keyframes chCircle{0%{transform:scale(.1);opacity:0}30%{opacity:.5}100%{transform:scale(1);opacity:0}}
+/* lazo: rodea un elemento REAL de la pantalla con un círculo dibujado a mano (no círculos estáticos sueltos) */
+.chaosLasso{position:fixed;z-index:9996;pointer-events:none;overflow:visible;animation:chLassoFade 2.6s ease forwards}
+.chaosLasso ellipse{stroke-linecap:round;animation:chLassoDraw .7s ease forwards}
+@keyframes chLassoDraw{to{stroke-dashoffset:0}}
+@keyframes chLassoFade{0%{opacity:0}8%{opacity:1}78%{opacity:1}100%{opacity:0}}
 .chaosQuote{position:fixed;z-index:9997;pointer-events:none;max-width:230px;background:#fff;color:#222;border-left:4px solid var(--accent,#7c3aed);border-radius:10px;padding:8px 11px;font:500 12.5px/1.35 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.25);animation:chQuote 5s ease forwards}
 .chaosQuote b{display:block;font-size:11px;color:var(--accent,#7c3aed);margin-top:3px;font-weight:700}
 @keyframes chQuote{0%{opacity:0;transform:translateY(10px) scale(.92)}10%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0;transform:translateY(-12px)}}
 .chaosTip{position:fixed;z-index:9999;pointer-events:none;background:#111;color:#fff;font:800 13px/1.15 system-ui,-apple-system,Segoe UI,sans-serif;padding:6px 10px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.4);max-width:210px;animation:chArrow 3s ease forwards}
 .megaFlip{animation:chMegaFlip 1.1s ease !important}
 @keyframes chMegaFlip{0%{transform:rotateY(0)}50%{transform:rotateY(180deg) scale(1.05)}100%{transform:rotateY(360deg)}}
-@media(prefers-reduced-motion:reduce){body.chaos .card,.card>details:not([open])>summary .caret,#chaosFab.on,.chaosArrow,.chaosNote,.chaosAlert,.chaosShout,.chaosCircle,.chaosQuote,.chaosTip,.megaFlip{animation:none}}
+@media(prefers-reduced-motion:reduce){body.chaos .card,.card>details:not([open])>summary .caret,#chaosFab.on,.chaosArrow,.chaosNote,.chaosAlert,.chaosShout,.chaosLasso,.chaosLasso ellipse,.chaosQuote,.chaosTip,.megaFlip{animation:none}}
 </style>
 <script>
 (function(){ try{
@@ -2820,7 +2946,7 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
   var ARROWS=["⬅ MIRA ESTO","⬆ IMPORTANTE","➡ O NO","⬇ aquí abajo 👀","↙ esto seguro que sí","↗ ¿o era esto?","⬅ click aquí (no)","➡ tú sí me caes bien","⬆ ni idea la verdad"];
   var NOTES=["esto parecía buena idea","no estoy seguro","¿sirve para algo?","lo arreglo luego","nota encontrada hoy","creo que funciona","¿y si lo borro todo?","tú puedes 💪","MADRE estuvo aquí","idea random nº 47","shhh, es un secreto","esto no estaba ayer"];
   var ALERTS=["⚠ gato detectado","⚠ demasiadas ideas","⚠ alguien dejó un dibujo","⚠ caos al 100%","⚠ pensamiento no autorizado","⚠ exceso de creatividad","⚠ se ha caído una nota","⚠ MADRE está pensando"];
-  var COLORS=["#7c3aed","#e0568a","#2d7ff0","#22a06b","#f5a623","#e23b3b","#0891b2"];
+  var MARKERS=["#e23b3b","#7c3aed","#2d7ff0","#22a06b","#f5a623","#e0568a"];
   var TSEL=".card, .chip, .senalItem, #cmtFab, #cmvFab, #gxg-cat-root, .postit, #bigScore, footer, h1, .alert, .step";
   var TARROWS=["MIRA ESTO","¿y esto qué?","IMPORTANTE (o no)","toca esto 👀","sospechoso","aquí hay algo","esto mola","esto NO lo toques 😏","¿lo pillas?","jefe, mira"];
   var MISCHIEF=["dile algo al de arriba 👆","critica algo, venga 😈","deja un comentario polémico","reta a MADRE a algo","escribe en MAYÚSCULAS, sé valiente","comenta un secreto tuyo","ponle un mote cariñoso a MADRE","di la verdad incómoda"];
@@ -2850,8 +2976,29 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
   var quotes=[], quotesLoaded=false;
   function loadQuotes(){ if(quotesLoaded) return; quotesLoaded=true; try{ if(window.__sb){ window.__sb.from("comments").select("name,body").eq("hidden",false).order("created_at",{ascending:false}).limit(30).then(function(r){ if(r&&r.data) quotes=r.data.filter(function(c){ return c.body && c.body.length<160; }); }); } }catch(e){} }
   function spawnQuote(){ var src=quotes.length?quotes:FAKEQ, c=src[Math.floor(Math.random()*src.length)]; var d=document.createElement("div"); d.className="chaosQuote chaos-el"; var t=document.createElement("span"); t.textContent="“"+((c.body||"").slice(0,140))+"”"; d.appendChild(t); var b=document.createElement("b"); b.textContent="— "+(c.name||"anónimo"); d.appendChild(b); d.style.left=Math.round(10+Math.random()*Math.max(40,vw()-250))+"px"; d.style.top=Math.round(80+Math.random()*Math.max(60,vh()-220))+"px"; document.body.appendChild(d); setTimeout(function(){ try{d.remove();}catch(e){} },5000); }
-  // T6-4: círculos de colores + volteo loco de tarjetas
-  function spawnCircle(){ var c=document.createElement("div"); c.className="chaosCircle chaos-el"; var s=40+Math.random()*120; c.style.width=c.style.height=Math.round(s)+"px"; c.style.left=Math.round(Math.random()*Math.max(0,vw()-s))+"px"; c.style.top=Math.round(Math.random()*Math.max(0,vh()-s))+"px"; c.style.background=rnd(COLORS); document.body.appendChild(c); setTimeout(function(){ try{c.remove();}catch(e){} },2300); }
+  // T6-4: RODEA un elemento REAL con un círculo dibujado a mano (en vez de círculos de colores sueltos)
+  function circleReal(){
+    var t=visibleTargets(); if(!t.length) return;
+    var r=t[Math.floor(Math.random()*t.length)].r, pad=10;
+    var x=Math.max(2, r.left-pad), y=Math.max(2, r.top-pad);
+    var w=Math.min(vw()-x-2, r.width+pad*2), h=r.height+pad*2;
+    if(w<24||h<16) return;
+    var NS="http://www.w3.org/2000/svg";
+    var svg=document.createElementNS(NS,"svg"); svg.setAttribute("class","chaosLasso chaos-el");
+    svg.setAttribute("width",Math.round(w)); svg.setAttribute("height",Math.round(h));
+    svg.setAttribute("viewBox","0 0 "+Math.round(w)+" "+Math.round(h));
+    svg.style.left=Math.round(x)+"px"; svg.style.top=Math.round(y)+"px";
+    svg.style.transform="rotate("+(Math.random()*6-3).toFixed(1)+"deg)";
+    var rx=w/2-3, ry=h/2-3;
+    var ell=document.createElementNS(NS,"ellipse");
+    ell.setAttribute("cx",w/2); ell.setAttribute("cy",h/2); ell.setAttribute("rx",rx); ell.setAttribute("ry",ry);
+    ell.setAttribute("fill","none"); ell.setAttribute("stroke",rnd(MARKERS)); ell.setAttribute("stroke-width",3.5);
+    var per=Math.PI*(3*(rx+ry)-Math.sqrt((3*rx+ry)*(rx+3*ry)));   // perímetro aprox (Ramanujan)
+    var len=per*1.12;   // un pelín más para el trazo "que se pasa" tipo rotulador
+    ell.style.strokeDasharray=len; ell.style.strokeDashoffset=len;
+    svg.appendChild(ell); document.body.appendChild(svg);
+    setTimeout(function(){ try{svg.remove();}catch(e){} },2600);
+  }
   function megaFlip(){ if(MOBILE) return; var els=document.querySelectorAll(".card"); if(!els.length) return; var el=els[Math.floor(Math.random()*els.length)]; el.classList.add("megaFlip"); setTimeout(function(){ try{el.classList.remove("megaFlip");}catch(e){} },1100); }
   function startTimers(){
     timers.push(setInterval(function(){ burst(Math.max(2,Math.round(11*K))); }, MOBILE?2000:1200));
@@ -2861,17 +3008,17 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
     timers.push(setInterval(shout,      MOBILE?3400:2000));
     timers.push(setInterval(spawnMischief, MOBILE?4200:2600));
     timers.push(setInterval(spawnQuote, MOBILE?5400:3200));
-    timers.push(setInterval(spawnCircle, MOBILE?1600:850));
+    timers.push(setInterval(circleReal, MOBILE?3200:1900));
     if(!MOBILE) timers.push(setInterval(megaFlip, 15000));
   }
   function clearTimers(){ timers.forEach(function(t){ clearInterval(t); }); timers=[]; }
   function stop(){ on=false; document.body.classList.remove("chaos"); cfab.classList.remove("on"); clearTimers(); document.querySelectorAll(".chaos-el").forEach(function(p){ try{p.remove();}catch(e){} }); document.querySelectorAll(".chaosShout,.megaFlip").forEach(function(p){ try{p.classList.remove("chaosShout"); p.classList.remove("megaFlip");}catch(e){} }); }
   cfab.onclick=function(){
     if(!on){
-      if(!window.confirm("¿Activar MODO CAÓTICO? 🤪\nFlechas que señalan, círculos, notas, citas y travesuras por toda la pantalla (lo puedes apagar).")) return;
+      if(!window.confirm("¿Activar MODO CAÓTICO? 🤪\nFlechas que señalan, círculos dibujados rodeando cosas reales, notas, citas y travesuras por toda la pantalla (lo puedes apagar).")) return;
       on=true; document.body.classList.add("chaos"); cfab.classList.add("on"); loadQuotes();
       burst(Math.round(55*K)); startTimers();
-      setTimeout(spawnTargetArrow,300); setTimeout(spawnNote,700); setTimeout(spawnAlert,1100); setTimeout(spawnCircle,200);
+      setTimeout(spawnTargetArrow,300); setTimeout(spawnNote,700); setTimeout(spawnAlert,1100); setTimeout(circleReal,400);
     } else { stop(); }
   };
   // Q3: pausa el caos si la pestaña no se ve (batería); al volver, lo reanuda si seguía activo
@@ -2902,7 +3049,7 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
 
 <!-- ===== Contador de visitas + panel "El cuaderno por dentro" (prefijo cmv-) ===== -->
 <style>
-#cmvFab{position:fixed;left:16px;bottom:116px;z-index:58;display:inline-flex;align-items:center;gap:6px;padding:9px 13px;border:none;border-radius:999px;background:#fff;color:#3b3b52;font:700 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:transform .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+#cmvFab{position:fixed;left:16px;bottom:64px;z-index:58;display:inline-flex;align-items:center;gap:6px;padding:9px 13px;border:none;border-radius:999px;background:#fff;color:#3b3b52;font:700 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:transform .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
 #cmvFab:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 7px 18px rgba(0,0,0,.26)}
 #cmvFab .cmv-eye{font-size:16px}
 #cmvFab .cmv-n{font-variant-numeric:tabular-nums}
@@ -3082,26 +3229,112 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
 </script>
 
 <script>
-/* Zonas ASMR (T3): sonidos sintetizados con Web Audio (sin ficheros). Control en el HUB. */
+/* ASMR vivo: TEXTURAS entre paneles (rózalas con el ratón = fricción según velocidad) + cositas que
+   REVIENTAN/CRUJEN al click (satisfactorio). Sonido sintetizado (Web Audio, sin ficheros). ON por defecto.
+   Control en el HUB (window.__asmr). */
 (function(){ try{
-  var KEY="cm_asmr_v1", enabled=false;
-  try{ enabled = localStorage.getItem(KEY)==="1"; }catch(e){}
+  var KEY="cm_asmr_v1", enabled=true;
+  try{ var pref=localStorage.getItem(KEY); if(pref==="0") enabled=false; else if(pref==="1") enabled=true; }catch(e){}
+  var reduce=false, canHover=false, MOBILE=false;
+  try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; canHover=matchMedia("(hover:hover)").matches; MOBILE=matchMedia("(max-width:640px)").matches; }catch(e){}
+  function now(){ return (window.performance&&performance.now)?performance.now():Date.now(); }
+
+  /* ---------- motor de sonido ---------- */
   var ctx=null, master=null;
-  function ensure(){ if(ctx) return ctx; try{ var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null; ctx=new AC(); master=ctx.createGain(); master.gain.value=0.16; master.connect(ctx.destination); }catch(e){ ctx=null; } return ctx; }
-  function noiseBuf(dur){ var n=Math.floor(ctx.sampleRate*dur), b=ctx.createBuffer(1,n,ctx.sampleRate), d=b.getChannelData(0); for(var i=0;i<n;i++) d[i]=Math.random()*2-1; return b; }
-  function env(g,t,a,dd,peak){ g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(peak,t+a); g.gain.exponentialRampToValueAtTime(0.0001,t+a+dd); }
-  function play(type){ if(!enabled) return; if(!ensure()) return; if(ctx.state==="suspended"){ try{ctx.resume();}catch(e){} } var t=ctx.currentTime;
-    if(type==="pop"){ var o=ctx.createOscillator(),g=ctx.createGain(); o.type="sine"; o.frequency.setValueAtTime(420,t); o.frequency.exponentialRampToValueAtTime(170,t+0.12); env(g,t,0.005,0.13,0.9); o.connect(g); g.connect(master); o.start(t); o.stop(t+0.18); }
-    else if(type==="click"){ var s=ctx.createBufferSource(); s.buffer=noiseBuf(0.05); var g2=ctx.createGain(), f=ctx.createBiquadFilter(); f.type="highpass"; f.frequency.value=1500; env(g2,t,0.001,0.05,0.6); s.connect(f); f.connect(g2); g2.connect(master); s.start(t); s.stop(t+0.06); }
-    else{ var s2=ctx.createBufferSource(); s2.buffer=noiseBuf(0.22); var bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.frequency.setValueAtTime(300,t); bp.frequency.linearRampToValueAtTime(140,t+0.2); bp.Q.value=6; var g3=ctx.createGain(); env(g3,t,0.01,0.22,0.45); s2.connect(bp); bp.connect(g3); g3.connect(master); s2.start(t); s2.stop(t+0.24); }
+  function ensure(){ if(ctx) return ctx; try{ var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null; ctx=new AC(); master=ctx.createGain(); master.gain.value=0.18; master.connect(ctx.destination); }catch(e){ ctx=null; } return ctx; }
+  function resume(){ try{ if(ctx&&ctx.state==="suspended") ctx.resume(); }catch(e){} }
+  function noiseBuf(dur){ var n=Math.max(1,Math.floor(ctx.sampleRate*dur)), b=ctx.createBuffer(1,n,ctx.sampleRate), d=b.getChannelData(0); for(var i=0;i<n;i++) d[i]=Math.random()*2-1; return b; }
+  // fricción de roce: speed 0..1 modula brillo, volumen y duración (lento=grave/suave, rápido=brillante)
+  function brush(speed){ if(!enabled||!ensure()) return; resume(); speed=Math.max(0,Math.min(1,speed)); var t=ctx.currentTime;
+    var dur=0.05+0.05*(1-speed); var s=ctx.createBufferSource(); s.buffer=noiseBuf(dur);
+    var bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.frequency.value=600+speed*4200; bp.Q.value=0.7+speed*1.6;
+    var g=ctx.createGain(); var peak=0.05+speed*0.26; g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(peak,t+0.006); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    s.connect(bp); bp.connect(g); g.connect(master); s.start(t); s.stop(t+dur+0.02);
   }
-  var canHover=false, reduce=false;
-  try{ canHover=window.matchMedia("(hover:hover)").matches; reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
-  var hoverThrottle=0;
-  if(canHover && !reduce){ document.addEventListener("mouseover",function(e){ if(!enabled) return; var now=Date.now(); if(now-hoverThrottle<90) return; var el=e.target.closest&&e.target.closest(".card, .chip, .senalItem, .dec, .step, .notecard"); if(el){ hoverThrottle=now; play("creak"); } }, true); }
-  document.addEventListener("click",function(e){ if(!enabled) return; var t=e.target; if(t.closest && t.closest("#gxg-cat-root, .chip, button, summary, [data-choice]")){ play(t.closest("summary")?"click":"pop"); } }, true);
-  window.__asmr={ isOn:function(){ return enabled; }, toggle:function(){ enabled=!enabled; try{ localStorage.setItem(KEY, enabled?"1":"0"); }catch(e){} if(enabled){ ensure(); if(ctx&&ctx.state==="suspended"){try{ctx.resume();}catch(e){}} play("pop"); } return enabled; } };
-  try{ document.addEventListener("visibilitychange",function(){ if(document.hidden&&ctx){ try{ctx.suspend();}catch(e){} } else if(ctx&&enabled){ try{ctx.resume();}catch(e){} } }); }catch(e){}
+  function pop(){ if(!enabled||!ensure()) return; resume(); var t=ctx.currentTime;
+    var o=ctx.createOscillator(),g=ctx.createGain(); o.type="sine"; o.frequency.setValueAtTime(540+Math.random()*200,t); o.frequency.exponentialRampToValueAtTime(150,t+0.12); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.95,t+0.005); g.gain.exponentialRampToValueAtTime(0.0001,t+0.16); o.connect(g); g.connect(master); o.start(t); o.stop(t+0.2);
+    var s=ctx.createBufferSource(); s.buffer=noiseBuf(0.03); var hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=2200; var g2=ctx.createGain(); g2.gain.setValueAtTime(0.5,t); g2.gain.exponentialRampToValueAtTime(0.0001,t+0.04); s.connect(hp); hp.connect(g2); g2.connect(master); s.start(t); s.stop(t+0.05);
+  }
+  function crack(){ if(!enabled||!ensure()) return; resume(); var t=ctx.currentTime; var s=ctx.createBufferSource(); s.buffer=noiseBuf(0.12); var bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.frequency.setValueAtTime(2600,t); bp.frequency.exponentialRampToValueAtTime(700,t+0.1); bp.Q.value=3; var g=ctx.createGain(); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.9,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+0.12); s.connect(bp); bp.connect(g); g.connect(master); s.start(t); s.stop(t+0.14); }
+  function crunch(){ if(!enabled||!ensure()) return; resume(); var t0=ctx.currentTime; for(var i=0;i<6;i++){ var t=t0+i*0.025+Math.random()*0.012; var s=ctx.createBufferSource(); s.buffer=noiseBuf(0.03); var hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=1200+Math.random()*1800; var g=ctx.createGain(); var pk=0.22+Math.random()*0.35; g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(pk,t+0.003); g.gain.exponentialRampToValueAtTime(0.0001,t+0.04); s.connect(hp); hp.connect(g); g.connect(master); s.start(t); s.stop(t+0.05); } }
+  function softClick(){ if(!enabled||!ensure()) return; resume(); var t=ctx.currentTime; var o=ctx.createOscillator(),g=ctx.createGain(); o.type="triangle"; o.frequency.setValueAtTime(330,t); o.frequency.exponentialRampToValueAtTime(180,t+0.08); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.45,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+0.1); o.connect(g); g.connect(master); o.start(t); o.stop(t+0.12); }
+
+  // el navegador bloquea el audio hasta el primer gesto: lo desbloqueamos en el primer toque
+  function unlock(){ if(enabled){ ensure(); resume(); } }
+  ["pointerdown","keydown","touchstart"].forEach(function(ev){ document.addEventListener(ev,unlock,{once:true,passive:true}); });
+
+  /* ---------- estilos de las texturas (autocontenido) ---------- */
+  var css=document.createElement("style"); css.textContent=
+    ".cmTex{position:relative;margin:16px auto;max-width:640px;min-height:30px;border-radius:9px;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;gap:9px;padding:6px 12px;user-select:none;-webkit-user-select:none;touch-action:pan-y;background:repeating-linear-gradient(90deg,rgba(124,58,237,.13) 0 4px,rgba(124,58,237,.03) 4px 8px);box-shadow:inset 0 0 0 1px rgba(124,58,237,.10)}"+
+    ".cmTex::before{content:'';position:absolute;inset:0;background:radial-gradient(130px 44px at var(--mx,-200px) 50%,rgba(255,255,255,.6),transparent 70%);opacity:0;transition:opacity .2s;pointer-events:none}"+
+    ".cmTex.lit::before{opacity:1}"+
+    ".cmTex .cmTexLbl{font:600 10px/1 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(90,70,160,.55);white-space:nowrap;pointer-events:none;letter-spacing:.04em;text-transform:uppercase}"+
+    ".cmBub{width:17px;height:17px;border-radius:50%;border:none;flex:0 0 auto;cursor:pointer;padding:0;background:radial-gradient(circle at 35% 30%,#fff,rgba(124,58,237,.55) 68%,rgba(80,40,160,.7));box-shadow:0 1px 3px rgba(0,0,0,.25),inset 0 -2px 3px rgba(0,0,0,.18);transition:transform .08s}"+
+    ".cmBub:hover{transform:scale(1.18)}"+
+    ".cmBub.popped{background:radial-gradient(circle at 50% 50%,rgba(124,58,237,.14),rgba(124,58,237,.05));box-shadow:inset 0 1px 2px rgba(0,0,0,.3);cursor:default;transform:scale(.82)}"+
+    ".cmCrumb{flex:0 0 auto;border:none;background:transparent;cursor:pointer;font-size:16px;line-height:1;padding:0 1px;transition:transform .1s;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}"+
+    ".cmCrumb:hover{transform:scale(1.18) rotate(-6deg)}"+
+    "body.asmrOff .cmTex{opacity:.42;filter:grayscale(.55)}"+
+    "@media(max-width:640px){.cmTex{max-width:92vw;margin:12px auto}}"+
+    "@media(prefers-reduced-motion:reduce){.cmTex::before{transition:none}.cmBub,.cmCrumb{transition:none}}";
+  document.head.appendChild(css);
+
+  /* ---------- construir texturas ENTRE paneles ---------- */
+  var ribbons=[];
+  function mkBubble(){ var b=document.createElement("button"); b.type="button"; b.className="cmBub"; b.setAttribute("aria-label","burbuja para reventar");
+    b.addEventListener("click",function(e){ e.stopPropagation(); if(b.classList.contains("popped")) return; b.classList.add("popped"); pop();
+      setTimeout(function(){ try{ b.classList.remove("popped"); }catch(e){} }, 10000+Math.random()*6000); });   // se rellena sola
+    return b; }
+  function mkCrumb(emoji, fn){ var c=document.createElement("button"); c.type="button"; c.className="cmCrumb"; c.textContent=emoji; c.setAttribute("aria-label","cosa crujiente");
+    c.addEventListener("click",function(e){ e.stopPropagation(); if(c.dataset.busy) return; c.dataset.busy="1"; fn();
+      try{ c.animate([{transform:"scale(1) rotate(0)"},{transform:"scale(1.3) rotate(-10deg)"},{transform:"scale(.2) rotate(14deg)",opacity:.15}],{duration:260}); }catch(_){}
+      setTimeout(function(){ c.style.visibility="hidden"; },240);
+      setTimeout(function(){ try{ c.style.visibility=""; c.removeAttribute("data-busy"); }catch(e){} }, 9000+Math.random()*5000); });   // se rehace sola
+    return c; }
+  function mkLabel(txt){ var l=document.createElement("span"); l.className="cmTexLbl"; l.textContent=txt; return l; }
+  function buildRibbons(){
+    var cards=[].slice.call(document.querySelectorAll(".card")), made=0;
+    for(var i=1;i<cards.length;i++){
+      if(i%2===0) continue;                       // una textura sí, otra no -> "esparcidas"
+      var card=cards[i]; if(!card||!card.parentNode) continue;
+      var rib=document.createElement("aside"); rib.className="cmTex"; rib.setAttribute("aria-hidden","true");
+      var burbujas=(made%2===0);
+      rib.appendChild(mkLabel(burbujas?"✦ burbujas — rózame / revienta":"✦ rugoso — rózame / haz crujir"));
+      if(burbujas){ var nb=MOBILE?5:9; for(var k=0;k<nb;k++) rib.appendChild(mkBubble()); }
+      else{ var bits=MOBILE?3:6; for(var j=0;j<bits;j++){ var leaf=(j%2===0); rib.appendChild(mkCrumb(leaf?"🍂":"🥨", leaf?crunch:crack)); } }
+      try{ card.parentNode.insertBefore(rib, card); ribbons.push(rib); made++; }catch(e){}
+    }
+  }
+  buildRibbons();
+
+  /* ---------- rozar = fricción según velocidad ---------- */
+  var lastX=0,lastY=0,lastT=0,brushT=0,litRib=null;
+  function clearLit(){ if(litRib){ litRib.classList.remove("lit"); litRib=null; } }
+  function onMove(x,y,target){
+    var rib=target&&target.closest?target.closest(".cmTex"):null;
+    if(!rib){ clearLit(); return; }
+    var rr=rib.getBoundingClientRect(); rib.style.setProperty("--mx",(x-rr.left)+"px");
+    if(litRib!==rib){ clearLit(); litRib=rib; rib.classList.add("lit"); }
+    if(!enabled) return;
+    var t=now(); if(t-brushT<55){ lastX=x; lastY=y; lastT=t; return; }
+    var dt=Math.max(8,t-lastT), dx=x-lastX, dy=y-lastY, dist=Math.sqrt(dx*dx+dy*dy);
+    var speed=Math.max(0,Math.min(1,(dist/dt)/2.2));
+    brushT=t; lastX=x; lastY=y; lastT=t;
+    if(dist>3) brush(speed);
+  }
+  if(canHover) document.addEventListener("pointermove",function(e){ onMove(e.clientX,e.clientY,e.target); },{passive:true});
+  document.addEventListener("touchmove",function(e){ var tt=e.touches&&e.touches[0]; if(!tt) return; var el=document.elementFromPoint(tt.clientX,tt.clientY); if(el&&el.closest&&el.closest(".cmTex")) onMove(tt.clientX,tt.clientY,el); else clearLit(); },{passive:true});
+
+  /* ---------- click suave en botones (las burbujas/crumbs ya suenan y paran la propagación) ---------- */
+  document.addEventListener("click",function(e){ if(!enabled) return; var t=e.target; if(!t.closest) return;
+    if(t.closest(".cmBub")||t.closest(".cmCrumb")) return;
+    if(t.closest("#gxg-cat-root, .chip, button, summary, [data-choice]")) softClick();
+  }, false);
+
+  /* ---------- contrato del HUB + batería ---------- */
+  document.body.classList.toggle("asmrOff", !enabled);
+  window.__asmr={ isOn:function(){ return enabled; }, toggle:function(){ enabled=!enabled; try{ localStorage.setItem(KEY, enabled?"1":"0"); }catch(e){} document.body.classList.toggle("asmrOff",!enabled); if(enabled){ ensure(); resume(); pop(); } return enabled; } };
+  try{ document.addEventListener("visibilitychange",function(){ if(document.hidden){ if(ctx) try{ctx.suspend();}catch(e){} } else if(ctx&&enabled){ resume(); } }); }catch(e){}
 }catch(e){ console.warn("asmr", e); } })();
 </script>
 
@@ -3159,10 +3392,10 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
 (function(){
  function boot(){ try{
   var D=document;
+  // NOTA: "🧭 Ruta guiada" y "👁️ El cuaderno por dentro" NO entran al hub a propósito:
+  // Tony los quiere SIEMPRE fuera y a la izquierda, clicables de un toque (no escondidos en el menú).
   var defs=[
-    {id:"cmvFab", icon:"👁️", label:"El cuaderno por dentro", views:true},
     {id:"cmtFab", icon:"💬", label:"Comentarios"},
-    {id:"tourLaunch", icon:"🧭", label:"Ruta guiada"},
     {id:"lapizFab", icon:"✏️", label:"Comentar una zona", mode:true},
     {id:"likeFab", icon:"💗", label:"Marcar lo que te gusta", mode:true},
     {id:"chaosFab", icon:"🤪", label:"Modo caótico", mode:true},
