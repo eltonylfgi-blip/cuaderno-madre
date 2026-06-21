@@ -270,6 +270,7 @@
     </summary>
     <div class="body">
       <p class="lead">Pulsa <b>Aprobar</b>, <b>Rechazar</b> o <b>No lo entiendo</b> (puedes añadir el motivo o dejarlo en blanco). <b>Si no eliges, MADRE acaba aplicando lo reversible sola; lo irreversible se queda en espera de tu OK.</b></p>
+      <div class="soloTony">🔒 Estas decisiones las aprueba <b>Tony</b>. Si eres Tony, pulsa <b>“Soy Tony”</b> arriba para que aparezcan los botones.</div>
       <p class="small" style="background:var(--amber-soft);border:1px solid #f0dcae;border-radius:9px;padding:8px 10px">⏳ <b>¿Esto se hará de verdad?</b> "Lo que hará por defecto" es el <b>plan</b> de MADRE (tiene una regla para auto-aplicar lo reversible). No es solo una opinión — pero <b>aún no ha pasado</b>: el loop tiene que procesar estas propuestas primero (están en cola). O sea: real, pero no instantáneo.</p>
 
       <div class="dec" data-dec="Watchdog (vigía)">
@@ -530,16 +531,16 @@
   <div class="sheet">
     <h3>💬 Tu feedback</h3>
     <div class="ctx" id="fbCtx">—</div>
-    <label>¿De qué es?</label>
-    <select id="fbTipo" style="width:100%">
-      <option value="duda">Tengo una duda</option>
-      <option value="mas-claridad">Quiero que esto se explique más claro</option>
-      <option value="pedir-funcion">Pedir una función nueva en el cuaderno</option>
-      <option value="opinion">Mi opinión sobre la solución</option>
-      <option value="otro">Otro</option>
-    </select>
     <label>Tu mensaje</label>
     <textarea id="fbText" placeholder="Escribe aquí... (también vale dejarlo corto)"></textarea>
+    <label>¿De qué es? <span class="small" style="font-weight:400">(si no eliges, lo decide MADRE)</span></label>
+    <div id="fbTipoBtns" class="tipoBtns">
+      <button type="button" class="tbtn on" data-tipo="auto">🪄 Que elija MADRE</button>
+      <button type="button" class="tbtn" data-tipo="duda">Una duda</button>
+      <button type="button" class="tbtn" data-tipo="mas-claridad">Explícalo más claro</button>
+      <button type="button" class="tbtn" data-tipo="pedir-funcion">Pedir una función</button>
+      <button type="button" class="tbtn" data-tipo="opinion">Mi opinión</button>
+    </div>
     <label>Imagen (opcional) — pégala con Ctrl/Cmd+V, o súbela</label>
     <div id="fbPasteZone" tabindex="0" style="border:1px dashed var(--line);border-radius:9px;padding:12px;text-align:center;color:var(--muted);font-size:12.5px;background:#fcfdff;cursor:text">📋 Haz clic aquí y pega (Ctrl/Cmd+V)</div>
     <img id="fbPreview" alt="" style="display:none;max-width:100%;max-height:170px;margin-top:8px;border-radius:8px;border:1px solid var(--line)">
@@ -672,14 +673,24 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
 
   // ---- modal ----
   var ov=document.getElementById("ov"), fbCtx=document.getElementById("fbCtx"),
-      fbTipo=document.getElementById("fbTipo"), fbText=document.getElementById("fbText"), fbScope=document.getElementById("fbScope");
+      fbText=document.getElementById("fbText"), fbScope=document.getElementById("fbScope");
+  // categoría como botones pulsables (no desplegable); por defecto "auto" = que la clasifique MADRE
+  var fbTipoSel="auto";
+  function setTipo(t){
+    fbTipoSel=t||"auto";
+    var btns=document.querySelectorAll("#fbTipoBtns .tbtn");
+    for(var i=0;i<btns.length;i++) btns[i].classList.toggle("on", btns[i].getAttribute("data-tipo")===fbTipoSel);
+  }
+  (function(){ var box=document.getElementById("fbTipoBtns"); if(box){
+    box.addEventListener("click",function(e){ var b=e.target.closest(".tbtn"); if(!b) return; e.preventDefault(); setTipo(b.getAttribute("data-tipo")); });
+  }})();
   var cur={card:"General",section:""};
   function openModal(card,section,tipo){
     cur={card:card||"General",section:section||""};
     fbCtx.innerHTML="Sobre: <b>"+esc(card||"General")+"</b>"+(section?(" › "+esc(section)):"");
     fbText.value=""; clearAttached();
     fbScope.checked = !section && card==="General";
-    fbTipo.value = tipo || "duda";
+    setTipo(tipo || "auto");
     fbScope.dispatchEvent(new Event("change"));
     ov.classList.add("on"); setTimeout(function(){ fbText.focus(); },50);
   }
@@ -721,7 +732,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   var fbImgEl=document.getElementById("fbImg");
   if(fbImgEl) fbImgEl.addEventListener("change",function(){ if(this.files && this.files[0]) readImgFile(this.files[0],"subida"); });
   document.getElementById("fbSend").onclick=async function(){
-    var o={ card:cur.card, section:cur.section, tipo:fbTipo.value, texto:fbText.value, general:fbScope.checked };
+    var o={ card:cur.card, section:cur.section, tipo:fbTipoSel, texto:fbText.value, general:fbScope.checked };
     if(attachedImg){ o.imageDataUrl=attachedImg.dataUrl; o.imageType=attachedImg.type; }
     await sendFeedback(o); closeModal();
   };
@@ -890,7 +901,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
-    {fecha:"2026-06-21",titulo:"Modo lectura + números siempre al día",detalle:"La web pública entra en modo lectura (solo Tony desbloquea para opinar/decidir); y la salud, áreas y desviaciones se refrescan solas con el estado real de MADRE, sin quedarse con números viejos."},
+    {fecha:"2026-06-21",titulo:"Opinar abierto · decisiones solo Tony · números al día",detalle:"Cualquiera puede opinar con 💬; solo las decisiones importantes las desbloquea Tony. El tipo de feedback ahora son botones (y 🪄 'que elija MADRE'). La salud/áreas/desviaciones se refrescan solas con el estado real."},
     {fecha:"2026-06-21",titulo:"Pegar imágenes + etiquetas de Paso",detalle:"En el feedback se pega imagen con Ctrl/Cmd+V; en Desviaciones se marca 👤 lo haces tú / 🤖 lo hace MADRE."},
     {fecha:"2026-06-21",titulo:"Chips de arriba clicables",detalle:"Salud, decisiones, desviaciones y Tu parte llevan a su sección al tocarlos."},
     {fecha:"2026-06-21",titulo:"Arreglado el feedback",detalle:"Se guarda como FEEDBACK_TONY_ para que el loop de MADRE lo reconozca y lo procese."},
@@ -996,7 +1007,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   if(!hasCowork()){
     var wb=document.createElement("div");
     wb.style.cssText="background:#fff7e6;border:1px solid #f0dcae;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:13px";
-    wb.innerHTML='📱 <b>Versión web.</b> Ves el estado de MADRE en simple, en <b>modo lectura</b>. Para opinar, pulsa <b>Desbloquear</b> arriba (solo Tony). En la versión de escritorio (Cowork) el feedback se envía solo.';
+    wb.innerHTML='📱 <b>Versión web.</b> Ves el estado de MADRE y puedes opinar con 💬. Las <b>decisiones</b> importantes las aprueba Tony (botón “Soy Tony”). En la versión de escritorio (Cowork) el feedback se envía solo.';
     var nb=document.getElementById("novBanner"); if(nb&&nb.parentNode) nb.parentNode.insertBefore(wb, nb);
   }
 
@@ -1007,15 +1018,19 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   function isTony(){ try{ return localStorage.getItem(GATE_KEY)==="1"; }catch(e){ return false; } }
   (function(){ var st=document.createElement("style");
     st.textContent="#gateBar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#f3f6ff;border:1px solid #d9e3ff;border-radius:12px;padding:8px 12px;margin-bottom:12px;font-size:13px}"+
-      "body.lectura [data-fb],body.lectura #btnStatus,body.lectura #statusWrap,body.lectura .decbtns,body.lectura .reason,body.lectura #linkBox,body.lectura #linkMsg{display:none !important}";
+      "body.lectura .decbtns,body.lectura .reason{display:none !important}"+
+      ".soloTony{display:none;font-size:12.5px;color:var(--muted);background:#f3f6ff;border:1px solid #d9e3ff;border-radius:8px;padding:6px 9px;margin:6px 0}body.lectura .soloTony{display:block}"+
+      ".tipoBtns{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px}"+
+      ".tbtn{font-size:12.5px;padding:6px 10px;border-radius:999px;border:1px solid var(--line,#ccc);background:#fff;color:#333;cursor:pointer}"+
+      ".tbtn.on{background:var(--accent,#3b5bdb);border-color:var(--accent,#3b5bdb);color:#fff;font-weight:600}";
     document.head.appendChild(st);
   })();
   function applyGate(){
     document.body.classList.toggle("lectura", !isTony());
     var bar=document.getElementById("gateBar"); if(!bar) return;
     bar.innerHTML = isTony()
-      ? '<span>🔓 <b>Modo Tony</b> · puedes opinar y decidir.</span><button class="btn sm" id="gateBtn">Bloquear</button>'
-      : '<span>🔒 <b>Modo lectura.</b> ¿Eres Tony? Desbloquea para opinar.</span><button class="btn sm primary" id="gateBtn">Desbloquear</button>';
+      ? '<span>🔓 <b>Modo Tony</b> · puedes aprobar/rechazar decisiones.</span><button class="btn sm" id="gateBtn">Bloquear</button>'
+      : '<span>🔒 Las <b>decisiones</b> las aprueba Tony · cualquiera puede opinar con 💬.</span><button class="btn sm primary" id="gateBtn">Soy Tony</button>';
     document.getElementById("gateBtn").onclick=function(){
       if(isTony()){ try{localStorage.removeItem(GATE_KEY);}catch(e){} toast("Bloqueado 🔒"); applyGate(); }
       else{ var p=window.prompt("Contraseña de Tony:"); if(p===null) return;
