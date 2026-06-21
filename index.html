@@ -175,10 +175,11 @@
   body.likeMode .card:hover,body.likeMode .hero:hover,body.likeMode .senalItem:hover{outline:3px solid #e0568a;outline-offset:2px;cursor:pointer;border-radius:14px}
   #likeHint{position:fixed;left:50%;top:10px;transform:translateX(-50%);background:#e0568a;color:#fff;padding:8px 14px;border-radius:99px;font-size:13px;z-index:61;box-shadow:0 4px 16px rgba(0,0,0,.25);display:none}
   body.likeMode #likeHint{display:block}
-  .margNote{position:fixed;z-index:55;display:flex;align-items:center;gap:6px;background:var(--accent);color:#fff;font-size:11.5px;font-weight:700;padding:6px 10px;border-radius:99px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2);max-width:44vw;border:none}
-  .margNote .arr{animation:nudgeX 1s ease-in-out infinite;display:inline-block}
-  .margNote.left{left:6px} .margNote.right{right:6px;flex-direction:row-reverse}
-  .margNote:hover{transform:scale(1.05)}
+  .inlineArrow{border:none;background:transparent;cursor:pointer;padding:0 5px;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;transition:transform .18s;transform-origin:left center}
+  .inlineArrow .ar{animation:nudgeX 1s ease-in-out infinite;display:inline-block;font-size:15px}
+  .inlineArrow .lbl{max-width:0;overflow:hidden;white-space:nowrap;opacity:0;font-size:11px;font-weight:700;color:var(--accent);transition:max-width .28s,opacity .2s}
+  .inlineArrow:hover{transform:scale(1.7)}
+  .inlineArrow:hover .lbl{max-width:240px;opacity:1}
   .ruta input[type=range]{width:100%;accent-color:var(--accent)}
   .rutaStep{background:#fcfdff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin-top:8px;min-height:46px}
   .rutaStep .rf{font-size:11.5px;color:var(--muted);margin-top:3px}
@@ -739,12 +740,28 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
       ((o.texto&&o.texto.trim())?o.texto.trim():"(sin texto; el tipo de feedback ya es la señal)")+"\n";
     var rec={ card:o.card, section:o.section||"", tipo:o.tipo, general:!!o.general, title:title, at:now.toISOString(), ok:false };
     if(!hasCowork()){
-      // versión web/móvil: sin puente de Cowork -> copiar etiquetado para pegar en el BUZÓN
+      // versión web/móvil: enviar a Supabase (con imagen si hay); si falla -> portapapeles
+      var sent=false, imgUrl=null, SB=window.__sb;
+      try{
+        if(SB){
+          if(o.imageDataUrl){
+            try{
+              var bl=await (await fetch(o.imageDataUrl)).blob();
+              var ext=(o.imageType&&o.imageType.indexOf("jpeg")>-1)?"jpg":((o.imageType&&o.imageType.split("/")[1])||"png");
+              var path="f/"+Date.now()+"_"+Math.random().toString(36).slice(2,8)+"."+ext;
+              var up=await SB.storage.from("comment-images").upload(path, bl, {contentType:o.imageType||"image/png"});
+              if(!up.error) imgUrl=SB.storage.from("comment-images").getPublicUrl(path).data.publicUrl;
+            }catch(e){}
+          }
+          var ins=await SB.from("feedback").insert({ card:tarjeta, section:seccion, tipo:(o.tipo||"opinion"), texto:(o.texto||"").trim()||null, image_url:imgUrl, general:!!o.general });
+          if(!ins.error) sent=true; else console.warn("fb insert", ins.error.message);
+        }
+      }catch(e){}
+      rec.web=true; rec.ok=sent; state.sent.unshift(rec); save(state);
+      if(sent){ toast("Enviado ✓ — MADRE lo verá en su próxima pasada"); return true; }
       var copiado=false;
       try{ await navigator.clipboard.writeText(body); copiado=true; }catch(e){}
-      rec.web=true; state.sent.unshift(rec); save(state);
-      if(copiado) toast("Copiado ✓ — pégalo en tu BUZÓN y MADRE lo recoge");
-      else window.prompt("Copia este texto y pégalo en tu BUZÓN:", body);
+      if(copiado) toast("Copiado ✓ — pégalo en tu BUZÓN"); else window.prompt("Copia este texto y pégalo en tu BUZÓN:", body);
       return true;
     }
     try{
@@ -1071,6 +1088,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-21",titulo:"📲 Opinar con foto desde el móvil + flechas que crecen",detalle:"Desde el móvil ya puedes opinar con imagen y llega solo a MADRE (sin pegar nada). Las flechas de ayuda ahora van pegadas a su sitio y crecen al pasar por encima."},
     {fecha:"2026-06-21",titulo:"💗 Más interactivo + fotos + seguro",detalle:"Botón corazón para marcar lo que te gusta, flechas en los márgenes, imágenes en comentarios, ruta de avance con slider, glosario '¿pa qué sirve?', degradados y fondos que cambian. Y un filtro que bloquea acusaciones graves; MADRE oculta amenazas fuertes."},
     {fecha:"2026-06-21",titulo:"🌍 Evidencia primero + cara nueva cada visita",detalle:"Arriba sale 'Señales del mundo' (€, clientes, estrellas… la prueba real). Hipótesis vivas vs muertas, progreso de lo que se construye, emojis en secciones, MADRE con 🤱🏻 y tooltip, y la web cambia de color/fondo en cada visita (variedad, sin mover nada de sitio)."},
     {fecha:"2026-06-21",titulo:"💬 Comentarios públicos (en vivo)",detalle:"Cualquiera puede comentar (nombre opcional), dar 👍 y responder en hilo; aparecen al instante. Hay un botón flotante con panel. Son públicos y van aparte del feedback privado a MADRE."},
@@ -1312,18 +1330,22 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     setLike(false);
   }, true);
 
-  // ---- notas en los márgenes (flechas que se mueven) ----
-  function marg(side, top, txt, fn){
-    var b=document.createElement("button"); b.className="margNote "+side; b.style.top=top;
-    b.innerHTML='<span class="arr">'+(side==="left"?"→":"←")+'</span><span>'+txt+'</span>';
-    b.addEventListener("click",fn); document.body.appendChild(b);
+  // ---- flechas pegadas a su sitio (solo la flecha; crece MUCHO al hover y revela el texto) ----
+  function arrowBeside(target, txt, fn){
+    if(!target || !target.parentNode) return;
+    var a=document.createElement("button"); a.className="inlineArrow"; a.type="button"; a.title=txt;
+    a.innerHTML='<span class="ar">👉</span><span class="lbl">'+txt+'</span>';
+    a.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); fn(); });
+    target.parentNode.insertBefore(a, target);
   }
-  marg("left","160px","¿por qué 3/10? púlsame",function(){
-    var d=document.querySelector(".hero details.def"); if(d){ d.open=true; d.scrollIntoView({behavior:"smooth",block:"center"}); }
+  // 1) junto a "¿por qué tan bajo?" (en la cabecera)
+  arrowBeside(document.querySelector(".hero details.def"), "¿por qué 3/10?", function(){
+    var d=document.querySelector(".hero details.def"); if(d) d.open=true;
   });
-  marg("right","230px","¿qué es lo que menos entiendes?",function(){
-    openFb("¿Qué es lo que menos entiendes?","","mas-claridad");
-  });
+  // 2) junto al título del Glosario
+  (function(){ var g=null; document.querySelectorAll(".card").forEach(function(c){ var n=c.querySelector(".num"); if(n&&n.textContent.trim()==="10") g=c; });
+    arrowBeside(g?g.querySelector(".ctitle .t"):null, "¿qué es lo que menos entiendes?", function(){ openFb("¿Qué es lo que menos entiendes?","","mas-claridad"); });
+  })();
 
   // ---- glosario: botón "¿pa qué sirve?" ----
   document.querySelectorAll(".card").forEach(function(c){
@@ -1365,6 +1387,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const SB_URL="https://kopegamcjozrvmxruwdn.supabase.co";
 const SB_KEY="sb_publishable_2NDyczKDwFCzNIWEMycRtw_yTnkUQAi";
 const sb=createClient(SB_URL, SB_KEY);
+try{ window.__sb=sb; }catch(e){}
 
 const st=document.createElement("style");
 st.textContent=`
