@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuaderno MADRE</title>
+<style>
+  :root{
+    color-scheme: light;
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1d2430; --muted:#5b6473; --line:#e7eaef;
+    --accent:#3b6ef5; --accent-soft:#eaf0ff;
+    --green:#15a36a; --green-soft:#e5f6ee;
+    --amber:#c9881a; --amber-soft:#fdf3df;
+    --red:#d3493b; --red-soft:#fdecea;
+    --chip:#eef1f6;
+    --shadow:0 1px 2px rgba(20,30,50,.06),0 4px 16px rgba(20,30,50,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 14px 80px}
+  h1{font-size:20px;margin:0 0 2px;letter-spacing:-.2px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+
+  .hero{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px 16px 14px;box-shadow:var(--shadow);margin-bottom:14px}
+  .scoreRow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .bigscore{font-size:30px;font-weight:700;letter-spacing:-1px;line-height:1}
+  .bigscore small{font-size:15px;color:var(--muted);font-weight:600}
+  .bar{flex:1;min-width:140px;height:10px;background:var(--chip);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f0b429,#3b6ef5)}
+  .heronote{color:var(--muted);font-size:13px;margin:10px 0 0}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+  .chip{background:var(--chip);border-radius:99px;padding:5px 11px;font-size:12.5px;
+    color:var(--ink);white-space:nowrap;border:1px solid var(--line)}
+  .chip b{font-weight:700}
+  .chip[data-goto]{cursor:pointer}
+  .chip[data-goto]:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .heroBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+  button{font-family:inherit;cursor:pointer}
+  .btn{border:1px solid var(--line);background:#fff;color:var(--ink);
+    border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+  .btn:hover{border-color:#cdd4df;background:#fbfcfe}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:#2f60e4}
+  .btn.sm{padding:5px 9px;font-size:12px;border-radius:8px}
+  .btn.ok{color:var(--green);border-color:#bfe6d2}
+  .btn.no{color:var(--red);border-color:#f3c8c2}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    margin-bottom:11px;box-shadow:var(--shadow);overflow:hidden}
+  .card > details{margin:0}
+  .card > details > summary{list-style:none;cursor:pointer;padding:14px 15px;display:flex;align-items:flex-start;gap:11px}
+  .card > details > summary::-webkit-details-marker{display:none}
+  .num{flex:none;width:26px;height:26px;border-radius:8px;background:var(--accent-soft);
+    color:var(--accent);font-weight:700;font-size:13px;display:grid;place-items:center;margin-top:1px}
+  .ctitle{flex:1;min-width:0}
+  .ctitle .t{font-weight:650;font-size:15.5px}
+  .ctitle .s{color:var(--muted);font-size:13px;margin-top:2px}
+  .score{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:64px}
+  .score .v{font-size:12px;font-weight:700;color:var(--muted)}
+  .mini{width:60px;height:6px;background:var(--chip);border-radius:99px;overflow:hidden}
+  .mini > i{display:block;height:100%;border-radius:99px;background:var(--accent)}
+  .mini.g > i{background:var(--green)} .mini.a > i{background:var(--amber)} .mini.r > i{background:var(--red)}
+  .caret{flex:none;color:#9aa3b2;transition:transform .15s;margin-top:2px}
+  details[open] .caret{transform:rotate(90deg)}
+
+  .body{padding:2px 15px 15px;border-top:1px solid var(--line)}
+  .body p{margin:11px 0}
+  .lead{font-size:14.5px}
+
+  details.x{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#fcfdff}
+  details.x > summary{list-style:none;cursor:pointer;padding:10px 12px;font-weight:600;font-size:13.5px;display:flex;gap:8px;align-items:center}
+  details.x > summary::-webkit-details-marker{display:none}
+  details.x > summary .plus{color:var(--accent);font-weight:700}
+  details.x .xb{padding:0 12px 12px;font-size:13.5px;color:#39414f}
+  details.x .xb p{margin:8px 0}
+
+  details.def{display:inline}
+  details.def > summary{display:inline;list-style:none;cursor:help;color:var(--accent);border-bottom:1px dashed var(--accent);font-weight:600}
+  details.def > summary::-webkit-details-marker{display:none}
+  details.def .d{display:block;margin:6px 0;padding:9px 11px;background:var(--accent-soft);
+    border-radius:9px;font-size:12.5px;color:#27334a;font-weight:400;border:1px solid #d9e3ff}
+
+  ul.clean{margin:8px 0;padding-left:18px} ul.clean li{margin:5px 0}
+
+  .step{display:flex;gap:10px;align-items:flex-start;padding:11px;border:1px solid var(--line);border-radius:11px;margin:8px 0;background:#fcfdff}
+  .step input{margin-top:2px;width:17px;height:17px;flex:none}
+  .step .st{flex:1}
+  .step .st .h{font-weight:650}
+  .step.done{background:var(--green-soft);border-color:#bfe6d2}
+  .step.done .h{text-decoration:line-through;color:var(--muted)}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--chip);color:var(--muted);margin-left:6px}
+
+  .dec{border:1px solid var(--line);border-radius:12px;margin:10px 0;padding:12px;background:#fcfdff}
+  .dec h4{margin:0 0 4px;font-size:14.5px}
+  .dec .prop{font-size:13.5px;margin:6px 0}
+  .dflt{font-size:12.5px;background:var(--amber-soft);border:1px solid #f0dcae;color:#7a5a13;border-radius:9px;padding:8px 10px;margin:8px 0}
+  .dflt.hold{background:#eef1f6;border-color:var(--line);color:var(--muted)}
+  .decbtns{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+  .decstate{font-size:12.5px;color:var(--green);font-weight:600;margin-top:7px;display:none}
+  .reason{margin-top:8px;display:none}
+  .reason textarea{width:100%}
+
+  .alert{display:flex;gap:10px;padding:11px;border-radius:11px;margin:8px 0;border:1px solid}
+  .alert.r{background:var(--red-soft);border-color:#f3c8c2}
+  .alert.a{background:var(--amber-soft);border-color:#f0dcae}
+  .alert .ic{flex:none}
+  .alert .at{flex:1;font-size:13.5px}
+  .alert .at .h{font-weight:700}
+  .alert .at .step2{color:var(--muted);margin-top:3px}
+
+  .fb{margin-top:12px}
+  .small{font-size:12px;color:var(--muted)}
+  textarea,select,input[type=text]{font-family:inherit;font-size:13.5px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--ink)}
+  textarea{min-height:64px;resize:vertical}
+
+  .ov{position:fixed;inset:0;background:rgba(20,25,40,.42);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0}
+  .ov.on{display:flex}
+  .sheet{background:#fff;width:100%;max-width:560px;border-radius:16px 16px 0 0;padding:16px 16px 20px;box-shadow:0 -8px 40px rgba(20,30,50,.25)}
+  @media(min-width:620px){ .ov{align-items:center} .sheet{border-radius:16px} }
+  .sheet h3{margin:0 0 3px;font-size:16px}
+  .sheet .ctx{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+  .sheet label{font-size:12.5px;font-weight:600;display:block;margin:10px 0 4px}
+  .sheet .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
+  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#13203b;color:#fff;padding:10px 16px;border-radius:99px;font-size:13px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.on{opacity:1}
+  .statusbox{font-size:13px;background:#fbfcfe;border:1px dashed var(--line);border-radius:11px;padding:11px;margin-top:6px}
+  .statusbox .it{padding:6px 0;border-bottom:1px solid var(--line)}
+  .statusbox .it:last-child{border-bottom:none}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:99px;vertical-align:middle;margin-right:6px}
+  .dot.g{background:var(--green)} .dot.a{background:var(--amber)}
+  footer{color:var(--muted);font-size:12px;text-align:center;margin-top:18px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>🧠 Cuaderno MADRE</h1>
+  <p class="sub">Lo importante de MADRE, en simple. Tú lo lees, lo marcas y opinas; MADRE lo recoge y actúa.</p>
+  <div id="novBanner"></div>
+
+  <div class="hero">
+    <div class="scoreRow">
+      <div class="bigscore" id="bigScore">2<small>/10</small></div>
+      <div class="bar"><i style="width:20%"></i></div>
+    </div>
+    <p class="heronote">
+      <b id="heroNote2">MADRE hoy: 2/10.</b> Por dentro está muy maduro; el número mide lo único que de verdad cuenta:
+      <b>cuánto valor ha tocado el mundo real</b> (primer ingreso, primeras estrellas). Es bajo
+      <i>a propósito</i> — mide el mundo, no las ganas. Subirlo = el objetivo de todo.
+      <details class="def"><summary>¿por qué tan bajo?</summary><span class="d">MADRE se mide por su <b>contacto con fuera</b>. Tiene mucho criterio y muchos sistemas, pero aún no ha cobrado ni tiene audiencia. En cuanto entre el primer euro o las primeras estrellas, sube rápido.</span></details>
+    </p>
+    <div class="chips">
+      <span class="chip" data-goto="6">🟢 Salud: <b>estable</b> ›</span>
+      <span class="chip" data-goto="4">🗳️ <b>4</b> decisiones te esperan ›</span>
+      <span class="chip" data-goto="6">⚠️ <b>3</b> desviaciones ›</span>
+      <span class="chip" id="chipSteps" data-goto="2">✅ Tu parte: <b>0/3</b> ›</span>
+    </div>
+    <div class="small" style="margin-top:5px">Toca cualquiera para ir a su sección.</div>
+    <div class="heroBtns">
+      <button class="btn primary" data-fb data-card="General" data-section="">💬 Feedback general</button>
+      <button class="btn" id="btnStatus">📨 Mis mensajes a MADRE</button>
+    </div>
+    <div id="statusWrap"></div>
+    <p class="small" style="margin:12px 0 0">Estado: <b id="actualizado">21-jun-2026 (congelado)</b> · MADRE se actualiza solo cada ~30 min · tu feedback le llega en la siguiente pasada.</p>
+  </div>
+
+  <div class="card"><details open>
+    <summary>
+      <span class="num">1</span>
+      <span class="ctitle"><span class="t">Qué es MADRE (y cómo sé que va bien)</span>
+        <span class="s">No es un bot de dinero ni un almacén de notas: decide mejor y evita repetir errores.</span></span>
+      <span class="score"><span class="v">claridad 8</span><span class="mini g"><i style="width:80%"></i></span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="lead">MADRE es un sistema para <b>diagnosticar y decidir mejor que otros</b>, subiendo tu beneficio futuro con el <b>mínimo caos</b>. Lo valioso no es saber más, es equivocarse menos y corregir antes.</p>
+      <details class="x"><summary><span class="plus">+</span> Su única métrica</summary>
+        <div class="xb"><p>No cuenta documentos ni ideas. Cuenta
+          <b><details class="def"><summary>ciclos cerrados</summary><span class="d">Un ciclo cerrado = idea → acción → <b>señal de fuera</b> → corrección. Sacar algo al mundo y dejar que el mundo te diga si vale.</span></details></b>:
+          cuántas veces el mundo nos dice "vas bien / vas mal". El enemigo nº1 es la distancia entre la teoría y el
+          <details class="def"><summary>selector externo</summary><span class="d">Algo del mundo (un comprador, las estrellas de GitHub) que juzga tu trabajo y no puedes engañar desde dentro.</span></details>.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> Su regla de oro</summary>
+        <div class="xb"><p><b>NO-RUINA:</b> ninguna apuesta puede hundir el sistema, por buena que parezca. Pérdidas pequeñas, ganancias abiertas.
+          <details class="def"><summary>¿por qué tan estricto?</summary><span class="d">Una sola ruina lo borra todo. Aunque ganes 99 veces, la jugada 100 que te arruina cancela el resto.</span></details></p></div></details>
+      <details class="x"><summary><span class="plus">+</span> Qué le falta hoy (su cuello)</summary>
+        <div class="xb"><p>Un "actuador" que genere beneficio <b>sin un humano</b>. Hoy el que paga siempre es una persona. Por eso todo el foco es <b>tocar el mundo</b>.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> Quién manda (tú y el dinero)</summary>
+        <div class="xb"><p>El beneficio del propio MADRE va primero; tú y el dinero son <b>consecuencia</b>. <b>Excepción:</b> si algo beneficia a MADRE pero te perjudica, te avisa <i>antes</i>.</p></div></details>
+      <div class="fb"><button class="btn sm" data-fb data-card="1. Qué es MADRE" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">2</span>
+      <span class="ctitle"><span class="t">Tu parte</span>
+        <span class="s">Lo único que MADRE necesita de ti. Marca y aparecen los siguientes mini-pasos.</span></span>
+      <span class="score"><span class="v" id="stepScore">0/3</span><span class="mini a"><i id="stepBar" style="width:0%"></i></span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="lead">Nada de esto frena a MADRE: si no lo haces, sigue por otro lado y te lo recuerda una vez. Pero estos pasos <b>desbloquean</b> lo importante.</p>
+      <div class="step" data-step>
+        <input type="checkbox" id="s1">
+        <div class="st">
+          <div class="h">Paso 1 · Elegir el frente de la peluquería <span class="tag">1 min</span></div>
+          <p class="small" style="margin:5px 0">Responde una de dos:</p>
+          <details class="x"><summary><span class="plus">+</span> Opción A: "tengo una"</summary>
+            <div class="xb"><p>Tienes un salón en mente. Mini-pasos: dime <b>nombre del salón</b> + <b>3–4 servicios con precio</b>. MADRE prepara la demo a medida.</p></div></details>
+          <details class="x"><summary><span class="plus">+</span> Opción B: "monta demo"</summary>
+            <div class="xb"><p>No tienes una. No haces nada más: MADRE monta una <b>demo genérica</b>.</p></div></details>
+          <button class="btn sm" data-fb data-card="2. Tu parte" data-section="Paso 1 — frente peluquería">💬 Responder / feedback</button>
+        </div>
+      </div>
+      <div class="step" data-step>
+        <input type="checkbox" id="s2">
+        <div class="st">
+          <div class="h">Paso 2 · Borrar 2 archivos basura <span class="tag">2 min · opcional</span></div>
+          <p class="small" style="margin:5px 0">MADRE señaló 2 ficheros que sobran. Si los borras, deja el sistema más limpio.</p>
+          <button class="btn sm" data-fb data-card="2. Tu parte" data-section="Paso 2 — limpiar basura">💬 Feedback</button>
+        </div>
+      </div>
+      <div class="step" data-step>
+        <input type="checkbox" id="s3">
+        <div class="st">
+          <div class="h">Paso 3 · Mirar la decisión "TEMPERATURA" <span class="tag">cuando quieras</span></div>
+          <p class="small" style="margin:5px 0">Es una de las decisiones de la tarjeta 4. Si no la miras, MADRE elige la opción segura por defecto.</p>
+          <button class="btn sm" data-fb data-card="2. Tu parte" data-section="Paso 3 — temperatura">💬 Feedback</button>
+        </div>
+      </div>
+      <details class="x"><summary><span class="plus">+</span> Ingresos extra opcionales (plataformas)</summary>
+        <div class="xb"><p>Sin prisa, recuperables: <b>Outlier</b> (dijiste "no lo veo"), <b>TELUS</b> (arranca 1-jul), <b>Welocalize</b>. MADRE no los empuja.</p></div></details>
+      <div class="fb"><button class="btn sm" data-fb data-card="2. Tu parte" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">3</span>
+      <span class="ctitle"><span class="t">El foco ahora: dinero (peluquería IA)</span>
+        <span class="s">El primer ingreso saldría de asistentes de WhatsApp que cogen reservas para peluquerías.</span></span>
+      <span class="score"><span class="v">3/10</span><span class="mini a"><i style="width:30%"></i></span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="lead">La investigación está <b>hecha</b>. Falta lo que cuesta: <b>vender o demostrar</b> la primera.</p>
+      <details class="x"><summary><span class="plus">+</span> Por qué esto y no otra cosa</summary>
+        <div class="xb"><p>Demanda real, coste casi cero, se puede montar <b>sin programar</b>, y puedes <b>regalar una demo</b> para entrar sin riesgo.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> El cuello (lo que falta)</summary>
+        <div class="xb"><p>Vender la primera. Tu <b>Paso 1</b> lo desbloquea.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> El riesgo principal</summary>
+        <div class="xb"><p>Que se construya y <b>no se publique/venda</b>. Cobertura: el <b>watchdog</b> y "<b>demostrar o morir</b>".</p></div></details>
+      <div class="fb"><button class="btn sm" data-fb data-card="3. Foco dinero" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">4</span>
+      <span class="ctitle"><span class="t">Decisiones que esperan tu criterio</span>
+        <span class="s">MADRE ya pensó la solución. Tú revisas. Si callas, decide sola (lo reversible).</span></span>
+      <span class="score"><span class="v" id="decScore">0/5</span><span class="mini"><i id="decBar" style="width:0%"></i></span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="lead">Pulsa <b>Aprobar</b>, <b>Rechazar</b> o <b>No lo entiendo</b> (puedes añadir el motivo o dejarlo en blanco). <b>Si no eliges, MADRE acaba aplicando lo reversible sola; lo irreversible se queda en espera de tu OK.</b></p>
+
+      <div class="dec" data-dec="Watchdog (vigía)">
+        <h4>1 · Un vigía para que MADRE no se quede "viva pero parada"</h4>
+        <p class="prop"><b>MADRE propone:</b> un vigía mínimo que avise si una pieza se para en silencio (ya pasó: se perdieron ~40 enlaces sin avisar).
+          <details class="def"><summary>¿qué es un watchdog?</summary><span class="d">Un chequeo que comprueba que algo no solo "está encendido", sino que <b>de verdad avanzó y produjo algo</b>.</span></details></p>
+        <div class="dflt">Por defecto, si callas: <b>lo construye</b> (reversible y ya lo autorizaste).</div>
+        <div class="decbtns">
+          <button class="btn sm ok" data-choice="Aprobar">✓ Aprobar</button>
+          <button class="btn sm no" data-choice="Rechazar">✕ Rechazar</button>
+          <button class="btn sm" data-choice="No lo entiendo">? No lo entiendo</button>
+          <button class="btn sm" data-reason>✎ añadir motivo</button>
+        </div>
+        <div class="reason"><textarea placeholder="Motivo (opcional)"></textarea><div style="margin-top:6px"><button class="btn sm primary" data-sendreason>Enviar motivo</button></div></div>
+        <div class="decstate"></div>
+      </div>
+
+      <div class="dec" data-dec="Puente buzón→vídeo móvil">
+        <h4>2 · Soltar vídeos desde el móvil y que entren solos</h4>
+        <p class="prop"><b>MADRE propone:</b> que al pegar un link de vídeo en el buzón desde el móvil, entre solo al pipeline.</p>
+        <div class="dflt">Por defecto, si callas: <b>lo monta</b> (dijiste "móntalo").</div>
+        <div class="decbtns">
+          <button class="btn sm ok" data-choice="Aprobar">✓ Aprobar</button>
+          <button class="btn sm no" data-choice="Rechazar">✕ Rechazar</button>
+          <button class="btn sm" data-choice="No lo entiendo">? No lo entiendo</button>
+          <button class="btn sm" data-reason>✎ añadir motivo</button>
+        </div>
+        <div class="reason"><textarea placeholder="Motivo (opcional)"></textarea><div style="margin-top:6px"><button class="btn sm primary" data-sendreason>Enviar motivo</button></div></div>
+        <div class="decstate"></div>
+      </div>
+
+      <div class="dec" data-dec="Implementar-por-supervivencia">
+        <h4>3 · Que tu silencio NO descarte una buena idea</h4>
+        <p class="prop"><b>MADRE propone:</b> si una idea útil sobrevive 5 revisiones sin usarse, la implementa sola <b>si es reversible</b>; lo irreversible se queda en espera.</p>
+        <div class="dflt">Por defecto, si callas: <b>adopta la regla</b> (justo lo que pediste).</div>
+        <div class="decbtns">
+          <button class="btn sm ok" data-choice="Aprobar">✓ Aprobar</button>
+          <button class="btn sm no" data-choice="Rechazar">✕ Rechazar</button>
+          <button class="btn sm" data-choice="No lo entiendo">? No lo entiendo</button>
+          <button class="btn sm" data-reason>✎ añadir motivo</button>
+        </div>
+        <div class="reason"><textarea placeholder="Motivo (opcional)"></textarea><div style="margin-top:6px"><button class="btn sm primary" data-sendreason>Enviar motivo</button></div></div>
+        <div class="decstate"></div>
+      </div>
+
+      <div class="dec" data-dec="Overlay 1d (auto-ajuste)">
+        <h4>4 · Que MADRE se auto-ajuste sin ti (pequeño y seguro)</h4>
+        <p class="prop"><b>MADRE propone:</b> cambiar su propio comportamiento en cosas <b>pequeñas y reversibles</b>, con auto-reversión y <b>sin poder ampliarse a sí mismo</b>; tú vetas después.
+          <details class="def"><summary>¿qué es "overlay"?</summary><span class="d">Una capa fina que deja al sistema afinar su forma de trabajar sola, dentro de una lista corta de cambios seguros que se deshacen solos si no funcionan.</span></details></p>
+        <div class="dflt hold">Por defecto: <b>EN ESPERA</b>. Es estructural → pide tu OK una vez.</div>
+        <div class="decbtns">
+          <button class="btn sm ok" data-choice="Aprobar">✓ Aprobar</button>
+          <button class="btn sm no" data-choice="Rechazar">✕ Rechazar</button>
+          <button class="btn sm" data-choice="No lo entiendo">? No lo entiendo</button>
+          <button class="btn sm" data-reason>✎ añadir motivo</button>
+        </div>
+        <div class="reason"><textarea placeholder="Motivo (opcional)"></textarea><div style="margin-top:6px"><button class="btn sm primary" data-sendreason>Enviar motivo</button></div></div>
+        <div class="decstate"></div>
+      </div>
+
+      <div class="dec" data-dec="Temperatura / carga de contexto">
+        <h4>5 · "Temperatura": cuánto texto cargar de golpe</h4>
+        <p class="prop"><b>La tensión:</b> adelgazar las instrucciones (para que el modelo no se sature) vs escribir para el modelo más flojo (más a prueba de fallos). <b>MADRE propone:</b> probar a adelgazar de forma <b>reversible</b> y medir.</p>
+        <div class="dflt">Por defecto, si callas: <b>prueba reversible</b> (se deshace si empeora).</div>
+        <div class="decbtns">
+          <button class="btn sm ok" data-choice="Aprobar">✓ Aprobar</button>
+          <button class="btn sm no" data-choice="Rechazar">✕ Rechazar</button>
+          <button class="btn sm" data-choice="No lo entiendo">? No lo entiendo</button>
+          <button class="btn sm" data-reason>✎ añadir motivo</button>
+        </div>
+        <div class="reason"><textarea placeholder="Motivo (opcional)"></textarea><div style="margin-top:6px"><button class="btn sm primary" data-sendreason>Enviar motivo</button></div></div>
+        <div class="decstate"></div>
+      </div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">5</span>
+      <span class="ctitle"><span class="t">Riesgos y puntos ciegos</span>
+        <span class="s">Lo que puede salir mal y cómo MADRE se cubre.</span></span>
+      <span class="score"><span class="v">cobertura 6</span><span class="mini a"><i style="width:60%"></i></span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <details class="x"><summary><span class="plus">+</span> 🔴 Colisión de escritura <i>(riesgo nº1)</i></summary>
+        <div class="xb"><p>Dos procesos escriben el mismo archivo a la vez y lo corrompen (ya pasó). <b>Cobertura:</b> un solo "escritor" del núcleo, un guardia que aborta si algo se tocó hace &lt;5 min, y editar con herramientas.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> 🟠 Construir y no publicar</summary>
+        <div class="xb"><p>El fallo más típico: mucho hecho, nada sale al mundo. <b>Cobertura:</b> el watchdog, "demostrar o morir" y los selectores externos.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> 🟠 Sin actuador externo</summary>
+        <div class="xb"><p>El que paga siempre es un humano; MADRE aún no cierra valor sola. Es el cuello real.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> 🟠 Producto "commodity"</summary>
+        <div class="xb"><p>Lo que produce hoy (resúmenes) es demasiado genérico. Por eso se busca algo que la gente pague.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> ⚪ Puntos ciegos (lo que no ve que no ve)</summary>
+        <div class="xb"><p>Medir el éxito por dentro (<details class="def"><summary>Goodhart</summary><span class="d">Cuando una métrica se vuelve el objetivo, deja de medir bien.</span></details>), generar mucho y activar poco, y dar por permanentes sus límites. <b>Antídoto:</b> selectores externos.</p></div></details>
+      <div class="fb"><button class="btn sm" data-fb data-card="5. Riesgos" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">6</span>
+      <span class="ctitle"><span class="t">Salud, progreso y desviaciones</span>
+        <span class="s">El semáforo de MADRE y dónde se está saliendo del cauce — con el paso para volver.</span></span>
+      <span class="score"><span class="v">salud 7</span><span class="mini g"><i style="width:70%"></i></span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="lead">🟢 <b>Semáforo estable</b> (sin rojo de riesgo). Aquí está el progreso por áreas y lo que se está desviando ahora.</p>
+      <p class="small" style="margin:10px 0 4px"><b>Progreso por área (0–10, es una brújula, no una nota exacta):</b></p>
+      <div id="breakdown"></div>
+      <p class="small" style="margin:14px 0 4px"><b>Desviaciones detectadas ahora — y el paso para volver al cauce:</b></p>
+      <div id="desvios"></div>
+      <details class="x"><summary><span class="plus">+</span> ¿Cómo te guía MADRE cuando algo se desvía?</summary>
+        <div class="xb"><p>Cada pasada MADRE deja al menos <b>una señal de realidad</b>. Si una promesa no se cumple, o pasa demasiado tiempo sin contacto con el mundo, lo marca <b>aquí</b> y te propone el siguiente paso.</p></div></details>
+      <div class="fb"><button class="btn sm" data-fb data-card="6. Salud y desviaciones" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">7</span>
+      <span class="ctitle"><span class="t">Qué corre solo</span>
+        <span class="s">Las piezas que funcionan sin que nadie las toque.</span></span>
+      <span class="score"><span class="v">activo 8</span><span class="mini g"><i style="width:80%"></i></span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <details class="x"><summary><span class="plus">+</span> El loop (cada ~30 min)</summary>
+        <div class="xb"><p>La tarea <b>madre-mejora-continua</b>: revisa, integra lo nuevo, corrige y firma su registro. Es la <b>única</b> que escribe el núcleo.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> Pipeline de vídeo (cada 3 h)</summary>
+        <div class="xb"><p>Absorbe enlaces de YouTube/TikTok/X y los <b>destila</b>, sin intervención. Le puedes soltar links desde el móvil.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> Sensores de realidad</summary>
+        <div class="xb"><p><b>PULSO</b> (lecturas por pasada), <b>LEDGER</b> (qué decisiones cambian más) y <b>SEÑAL_PROPIA</b> (estrellas/forks de tus repos).</p></div></details>
+      <div class="fb"><button class="btn sm" data-fb data-card="7. Qué corre solo" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">8</span>
+      <span class="ctitle"><span class="t">Qué se está construyendo</span>
+        <span class="s">Las palancas y mejoras en curso.</span></span>
+      <span class="score"><span class="v">4/10</span><span class="mini a"><i style="width:40%"></i></span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <details class="x"><summary><span class="plus">+</span> Meta-palancas</summary>
+        <div class="xb"><p>No resolver un problema suelto, sino mejorar la <b>fábrica de soluciones</b>.
+          <details class="def"><summary>metapalanca</summary><span class="d">Una palanca que mejora tu capacidad de encontrar y usar <b>otras</b> palancas. Multiplica, no suma.</span></details>
+          El nivel alto (usar las mejores) está aún <b>latente</b>.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> Modo validación</summary>
+        <div class="xb"><p>Ahora se prioriza <b>demostrar</b> lo que ya hay sobre <b>añadir</b> conceptos nuevos.</p></div></details>
+      <div class="fb"><button class="btn sm" data-fb data-card="8. Qué se construye" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">9</span>
+      <span class="ctitle"><span class="t">Lo que MADRE va aprendiendo</span>
+        <span class="s">Destila vídeos y fuentes en aprendizajes que se pueden usar.</span></span>
+      <span class="score"><span class="v">5/10</span><span class="mini a"><i style="width:50%"></i></span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="lead">Más de <b>79 vídeos</b> procesados y destilados. El aprendizaje más honesto: el riesgo de <b>guardar mucho y aplicar poco</b> — por eso ahora el foco es activar.</p>
+      <div class="fb"><button class="btn sm" data-fb data-card="9. Aprendizajes" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">10</span>
+      <span class="ctitle"><span class="t">Glosario en simple</span>
+        <span class="s">Los conceptos raros de MADRE, explicados en una frase.</span></span>
+      <span class="score"><span class="v">📖</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <ul class="clean">
+        <li><b>Selector externo:</b> algo de fuera (un comprador, las estrellas) que juzga tu trabajo y no puedes engañar.</li>
+        <li><b>Ciclo cerrado:</b> idea → acción → señal de fuera → corrección. La unidad de valor real.</li>
+        <li><b>NO-RUINA:</b> nunca una apuesta que pueda hundirte, por buena que parezca.</li>
+        <li><b>Demostrar o morir:</b> lo que en ~90 días no cambia una decisión, fuera.</li>
+        <li><b>Cuello / restricción:</b> la única limitación que, si la quitas, sube casi todo lo demás.</li>
+        <li><b>Metapalanca:</b> palanca que mejora tu capacidad de encontrar otras palancas.</li>
+        <li><b>E·S·A·U:</b> Explorar → Seleccionar → Actuar → Actualizar; el ciclo que de verdad sube el valor.</li>
+        <li><b>Watchdog / liveness:</b> chequeo de que algo no solo "está encendido" sino que avanzó y produjo algo.</li>
+        <li><b>Overlay:</b> capa fina que deja al sistema afinarse solo, dentro de cambios seguros y reversibles.</li>
+        <li><b>Goodhart:</b> cuando una métrica se vuelve objetivo, deja de medir bien.</li>
+        <li><b>Suelo de realidad:</b> cada pasada debe dejar ≥1 señal verificable de fuera.</li>
+        <li><b>DEFER (anti-colisión):</b> si un archivo se tocó hace &lt;5 min, la pasada se aborta.</li>
+      </ul>
+      <div class="fb"><button class="btn sm" data-fb data-card="10. Glosario" data-section="">💬 Pedir que expliquen otra palabra</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">11</span>
+      <span class="ctitle"><span class="t">Mecanismos potentes (y cómo los usas tú)</span>
+        <span class="s">Las herramientas y reglas de MADRE que más mueven la aguja, en simple.</span></span>
+      <span class="score"><span class="v">🛠️</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <details class="x"><summary><span class="plus">+</span> Tragar enlaces de internet y devolver lo importante</summary>
+        <div class="xb">
+          <p><b>Qué hace:</b> le pegas un enlace (YouTube, TikTok, X) y MADRE lo "destila" en aprendizajes que se pueden usar — sin que tengas que ver el vídeo.</p>
+          <p><b>Cómo lo usas tú:</b> suéltalo en el BUZÓN desde el móvil, o pégalo aquí mismo:</p>
+          <div style="display:flex;gap:7px;flex-wrap:wrap">
+            <input type="text" id="linkIn" placeholder="https://..." style="flex:1;min-width:160px">
+            <button class="btn sm primary" id="linkSend">Enviar a MADRE</button>
+          </div>
+          <p class="small" id="linkMsg" style="margin:7px 0 0"></p>
+        </div></details>
+      <details class="x"><summary><span class="plus">+</span> El "filtro NO-RUINA" para decidir</summary>
+        <div class="xb"><p><b>Qué es:</b> antes de cualquier jugada, MADRE descarta lo que no se puede deshacer y, de lo que queda, elige el mayor beneficio.</p>
+        <p><b>Cómo lo usas tú:</b> ante una duda, pregúntate "si sale mal, ¿lo puedo recuperar?". Si no → no lo hagas. Si sí → ve a por el beneficio.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> El ciclo E·S·A·U (lo que de verdad sube el valor)</summary>
+        <div class="xb"><p><b>Qué es:</b> Explorar → Seleccionar → Actuar → Actualizar. El valor no está en pensar, está en <b>cerrar el ciclo</b> tocando el mundo y corrigiendo.</p>
+        <p><b>Cómo lo usas tú:</b> ante una idea, busca ya el paso que la pone delante de alguien real (un cliente, una prueba), en vez de seguir puliéndola.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> Los sensores (PULSO · LEDGER · SEÑAL_PROPIA)</summary>
+        <div class="xb"><p><b>Qué son:</b> los "termómetros" con los que MADRE se mide contra la realidad.</p>
+        <p><b>Cómo lo usas tú:</b> míralos cuando quieras saber si algo avanza de verdad o solo "se siente" que avanza.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> Este cuaderno (el carril de feedback)</summary>
+        <div class="xb"><p><b>Qué es:</b> tu canal para dirigir MADRE: opinas, apruebas o pides cosas, entra etiquetado a su bandeja, y MADRE responde.</p>
+        <p><b>Cómo lo usas tú:</b> cualquier botón 💬. Lo demás lo hace MADRE.</p></div></details>
+      <div class="fb"><button class="btn sm" data-fb data-card="11. Mecanismos" data-section="">💬 Feedback / pedir otro mecanismo</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">12</span>
+      <span class="ctitle"><span class="t">Evolución de MADRE</span>
+        <span class="s">Cómo mejora con el tiempo (changelog) y cómo cambian sus conclusiones.</span></span>
+      <span class="score"><span class="v">📈</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="small" style="margin:10px 0 4px"><b>📜 Cómo va mejorando MADRE (como las actualizaciones de una app):</b></p>
+      <div id="changelog"><div class="small">Cargando…</div></div>
+      <p class="small" style="margin:16px 0 4px"><b>🔬 En qué investiga y cómo evolucionan sus conclusiones:</b></p>
+      <div id="investig"><div class="small">Cargando…</div></div>
+      <div class="fb" style="margin-top:12px"><button class="btn sm" data-fb data-card="12. Evolución" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <footer>
+    Cuaderno MADRE · tu feedback entra en <b>BUZON_ENTRANTE</b> y el loop lo recoge en su siguiente pasada.<br>
+    Hecho para leerse en 2 minutos y opinar sin tecnicismos.
+  </footer>
+</div>
+
+<div class="ov" id="ov">
+  <div class="sheet">
+    <h3>💬 Tu feedback</h3>
+    <div class="ctx" id="fbCtx">—</div>
+    <label>¿De qué es?</label>
+    <select id="fbTipo" style="width:100%">
+      <option value="duda">Tengo una duda</option>
+      <option value="mas-claridad">Quiero que esto se explique más claro</option>
+      <option value="pedir-funcion">Pedir una función nueva en el cuaderno</option>
+      <option value="opinion">Mi opinión sobre la solución</option>
+      <option value="otro">Otro</option>
+    </select>
+    <label>Tu mensaje</label>
+    <textarea id="fbText" placeholder="Escribe aquí... (también vale dejarlo corto)"></textarea>
+    <label>Adjuntar imagen (opcional)</label>
+    <input type="file" id="fbImg" accept="image/*" style="width:100%">
+    <label style="display:flex;align-items:center;gap:8px;font-weight:500;margin-top:10px">
+      <input type="checkbox" id="fbScope"> Es un comentario <b>&nbsp;GENERAL sobre el cuaderno</b>&nbsp; (no de este punto)
+    </label>
+    <div class="row">
+      <button class="btn" id="fbCancel">Cancelar</button>
+      <button class="btn primary" id="fbSend">Enviar a MADRE</button>
+    </div>
+    <p class="small" id="fbHint" style="margin:10px 0 0">Se etiqueta con la tarjeta y el punto exacto, para que MADRE sepa a qué respondes.</p>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var DRIVE = "mcp__b8f46651-bbd8-4e65-85e0-325f4f4758ff__";
+  var T_CREATE = DRIVE+"create_file";
+  var T_SEARCH = DRIVE+"search_files";
+  var T_READ   = DRIVE+"read_file_content";
+  var BUZON_ENTRANTE_ID = "1eoKNo58gG7KtWXMfDbIELQI71zWXH4xA";
+  var BUZON_TXT_ID = "1osFWbjDPXUJTDBVALi0vahk6JuQOjIQP";
+  var LS = "cuaderno_madre_v1";
+
+  function load(){ try{ return JSON.parse(localStorage.getItem(LS)||"{}"); }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(LS, JSON.stringify(o)); }catch(e){} }
+  var state = load();
+  state.steps = state.steps||{}; state.decisions = state.decisions||{}; state.sent = state.sent||[];
+
+  function toast(msg){ var t=document.getElementById("toast"); t.textContent=msg; t.classList.add("on"); setTimeout(function(){ t.classList.remove("on"); }, 2600); }
+  function hasCowork(){ return !!(window.cowork && typeof window.cowork.callMcpTool==="function"); }
+  function esc(s){ return (s==null?"":String(s)).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}); }
+  function clamp(x){ var n=parseInt(x,10); if(isNaN(n)) n=0; return Math.max(0,Math.min(10,n)); }
+  function slug(s){ return (s||"").toString().toLowerCase()
+      .replace(/[áéíóúñ]/g,function(c){return {"á":"a","é":"e","í":"i","ó":"o","ú":"u","ñ":"n"}[c];})
+      .replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40)||"x"; }
+  function stamp(){ return new Date().toISOString().replace(/[:.]/g,"-"); }
+  function fmtDate(s){ try{ var d=new Date(s); if(!isNaN(d.getTime()))
+      return d.toLocaleDateString("es-ES",{day:"2-digit",month:"short"})+" "+d.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"}); }catch(e){} return s; }
+
+  async function mcp(name,args){
+    if(!hasCowork()) throw new Error("preview");
+    var r = await window.cowork.callMcpTool(name,args);
+    if(r && r.isError) throw new Error("mcp-error");
+    var text = (r && r.content && r.content[0] && r.content[0].text) ? r.content[0].text : null;
+    var data = (r && r.structuredContent) ? r.structuredContent : null;
+    if(data==null && text){ try{ data=JSON.parse(text); }catch(e){ data=null; } }
+    return { data:data, text:text };
+  }
+
+  async function sendFeedback(o){
+    var now = new Date(), tarjeta, seccion, scope, title;
+    if(o.general){
+      tarjeta="CUADERNO (artefacto) — comentario general"; seccion="(todo el cuaderno, no un punto concreto)";
+      scope="GENERAL sobre el artefacto (el cuaderno)"; title="FEEDBACK_TONY_"+stamp()+"__general-cuaderno.txt";
+    } else {
+      tarjeta=o.card||"General"; seccion=o.section||"(general de esta tarjeta)";
+      scope=o.section?"ESPECIFICO (este punto)":"TARJETA entera";
+      title="FEEDBACK_TONY_"+stamp()+"__"+slug(o.card)+(o.section?("__"+slug(o.section)):"")+".txt";
+    }
+    var imgLine="";
+    if(o.imageDataUrl && hasCowork()){
+      try{
+        var b64=o.imageDataUrl.split(",")[1]||"";
+        var ext=(o.imageType&&o.imageType.indexOf("jpeg")>-1)?"jpg":"png";
+        var imgTitle="IMG_"+stamp()+"."+ext;
+        await mcp(T_CREATE,{ title:imgTitle, parentId:BUZON_ENTRANTE_ID, base64Content:b64, contentMimeType:(o.imageType||"image/png"), disableConversionToGoogleType:true });
+        imgLine="IMAGEN ADJUNTA: "+imgTitle+"\n";
+      }catch(e){ imgLine="IMAGEN ADJUNTA: (no se pudo subir)\n"; }
+    }
+    var body=
+      "DE: Tony (cuaderno MADRE) | FECHA: "+now.toISOString()+"\n"+
+      "ARTEFACTO: Cuaderno MADRE\n"+
+      "TARJETA: "+tarjeta+"\n"+
+      "SECCION: "+seccion+"\n"+
+      "ALCANCE: "+scope+"\n"+
+      "TIPO: "+(o.tipo||"opinion")+"\n"+
+      imgLine+
+      "--- TEXTO DE TONY ---\n"+
+      ((o.texto&&o.texto.trim())?o.texto.trim():"(sin texto; el tipo de feedback ya es la señal)")+"\n";
+    var rec={ card:o.card, section:o.section||"", tipo:o.tipo, general:!!o.general, title:title, at:now.toISOString(), ok:false };
+    if(!hasCowork()){
+      // versión web/móvil: sin puente de Cowork -> copiar etiquetado para pegar en el BUZÓN
+      var copiado=false;
+      try{ await navigator.clipboard.writeText(body); copiado=true; }catch(e){}
+      rec.web=true; state.sent.unshift(rec); save(state);
+      if(copiado) toast("Copiado ✓ — pégalo en tu BUZÓN y MADRE lo recoge");
+      else window.prompt("Copia este texto y pégalo en tu BUZÓN:", body);
+      return true;
+    }
+    try{
+      await mcp(T_CREATE,{ title:title, parentId:BUZON_ENTRANTE_ID, textContent:body, contentMimeType:"text/plain", disableConversionToGoogleType:true });
+      rec.ok=true; state.sent.unshift(rec); save(state); toast("Enviado ✓ — MADRE lo verá en su próxima pasada"); return true;
+    }catch(e){
+      rec.ok=false; state.sent.unshift(rec); save(state);
+      toast(String(e.message)==="preview" ? "Vista previa: se enviará al abrirlo en Cowork" : "No se pudo enviar ahora — reintenta luego");
+      return false;
+    }
+  }
+
+  // ---- modal ----
+  var ov=document.getElementById("ov"), fbCtx=document.getElementById("fbCtx"),
+      fbTipo=document.getElementById("fbTipo"), fbText=document.getElementById("fbText"), fbScope=document.getElementById("fbScope");
+  var cur={card:"General",section:""};
+  function openModal(card,section,tipo){
+    cur={card:card||"General",section:section||""};
+    fbCtx.innerHTML="Sobre: <b>"+esc(card||"General")+"</b>"+(section?(" › "+esc(section)):"");
+    fbText.value=""; var fi=document.getElementById("fbImg"); if(fi) fi.value="";
+    fbScope.checked = !section && card==="General";
+    fbTipo.value = tipo || "duda";
+    fbScope.dispatchEvent(new Event("change"));
+    ov.classList.add("on"); setTimeout(function(){ fbText.focus(); },50);
+  }
+  function closeModal(){ ov.classList.remove("on"); }
+  document.getElementById("fbCancel").onclick=closeModal;
+  ov.addEventListener("click",function(e){ if(e.target===ov) closeModal(); });
+  fbScope.addEventListener("change",function(){
+    document.getElementById("fbHint").textContent = this.checked
+      ? "Se enviará como comentario GENERAL sobre el cuaderno (no de un punto concreto)."
+      : "Se etiqueta con la tarjeta y el punto exacto, para que MADRE sepa a qué respondes.";
+  });
+  document.getElementById("fbSend").onclick=async function(){
+    var o={ card:cur.card, section:cur.section, tipo:fbTipo.value, texto:fbText.value, general:fbScope.checked };
+    var fi=document.getElementById("fbImg");
+    if(fi && fi.files && fi.files[0]){
+      try{ var f=fi.files[0]; o.imageType=f.type||"image/png";
+        o.imageDataUrl=await new Promise(function(res,rej){ var rd=new FileReader(); rd.onload=function(){res(rd.result);}; rd.onerror=rej; rd.readAsDataURL(f); });
+      }catch(e){}
+    }
+    await sendFeedback(o); if(fi) fi.value=""; closeModal();
+  };
+  document.addEventListener("click",function(e){
+    var b=e.target.closest("[data-fb]"); if(!b) return;
+    openModal(b.getAttribute("data-card"), b.getAttribute("data-section"), null);
+  });
+
+  // ---- decisiones ----
+  function refreshDecScore(){
+    var decs=document.querySelectorAll(".dec"), done=0;
+    decs.forEach(function(d){ if(state.decisions[d.getAttribute("data-dec")]) done++; });
+    var el=document.getElementById("decScore"); if(el) el.textContent=done+"/"+decs.length;
+    var bar=document.getElementById("decBar"); if(bar) bar.style.width=(decs.length?(done/decs.length*100):0)+"%";
+  }
+  document.querySelectorAll(".dec").forEach(function(dec){
+    var name=dec.getAttribute("data-dec"), stEl=dec.querySelector(".decstate"), prev=state.decisions[name];
+    if(prev){ stEl.style.display="block"; stEl.textContent="Tu respuesta enviada: "+prev+" ✓"; }
+    dec.querySelectorAll("[data-choice]").forEach(function(btn){
+      btn.addEventListener("click",async function(){
+        var choice=btn.getAttribute("data-choice");
+        state.decisions[name]=choice; save(state); refreshDecScore();
+        stEl.style.display="block"; stEl.textContent="Tu respuesta enviada: "+choice+" ✓";
+        await sendFeedback({ card:"4. Decisiones", section:name, tipo:("decision-"+slug(choice)), texto:"" });
+        if(choice==="No lo entiendo"){ openModal("4. Decisiones", name, "mas-claridad"); }
+      });
+    });
+    var rbtn=dec.querySelector("[data-reason]"), rbox=dec.querySelector(".reason");
+    if(rbtn){ rbtn.addEventListener("click",function(){ rbox.style.display = rbox.style.display==="block"?"none":"block"; }); }
+    var sr=dec.querySelector("[data-sendreason]");
+    if(sr){ sr.addEventListener("click",async function(){
+      var ta=rbox.querySelector("textarea");
+      await sendFeedback({ card:"4. Decisiones", section:name, tipo:"motivo", texto:ta.value });
+      ta.value=""; rbox.style.display="none";
+    }); }
+  });
+  refreshDecScore();
+
+  // ---- pasos ----
+  function refreshSteps(){
+    var boxes=document.querySelectorAll('.step input[type=checkbox]'), done=0;
+    boxes.forEach(function(c){ if(c.checked) done++; c.closest(".step").classList.toggle("done",c.checked); });
+    var n=boxes.length;
+    var ss=document.getElementById("stepScore"); if(ss) ss.textContent=done+"/"+n;
+    var sb=document.getElementById("stepBar"); if(sb) sb.style.width=(n?(done/n*100):0)+"%";
+    var ch=document.getElementById("chipSteps"); if(ch) ch.innerHTML="✅ Tu parte: <b>"+done+"/"+n+"</b> ›";
+  }
+  document.querySelectorAll('.step input[type=checkbox]').forEach(function(c){
+    if(state.steps[c.id]) c.checked=true;
+    c.addEventListener("change",function(){ state.steps[c.id]=c.checked; save(state); refreshSteps(); });
+  });
+  refreshSteps();
+
+  // ---- áreas + desvíos (con auto-refresco desde CUADERNO_ESTADO.tsv) ----
+  var areas=[
+    ["Valor externo logrado",1,"r"],["Criterio / claridad",8,"g"],["Subsistemas activos",8,"g"],
+    ["Frente de dinero",3,"a"],["Palancas en curso",4,"a"],["Salud / orden",7,"g"]
+  ];
+  function renderAreas(){
+    var bd=document.getElementById("breakdown"); if(!bd) return; bd.innerHTML="";
+    areas.forEach(function(a){
+      var row=document.createElement("div");
+      row.style.cssText="display:flex;align-items:center;gap:10px;margin:6px 0";
+      row.innerHTML='<span style="flex:1;font-size:13px">'+esc(a[0])+'</span>'+
+        '<span class="mini '+a[2]+'" style="width:90px"><i style="width:'+(a[1]*10)+'%"></i></span>'+
+        '<b style="font-size:12px;color:var(--muted);width:30px;text-align:right">'+a[1]+'/10</b>';
+      bd.appendChild(row);
+    });
+  }
+  var desvios=[
+    {sev:"r",h:"Tu archivo CONSTITUCION_MADRE.txt está cortado a media frase",detalle:"Faltan 2 de los 3 guardianes — el archivo base quedó incompleto (típico de cuando OneDrive/Drive corta a mitad de guardado).",paso:"MADRE lo reescribe entero desde copia y verifica el tamaño tras guardar."},
+    {sev:"a",h:"Primer ingreso = 0 y va lento",detalle:"El cuello es vender la primera demo.",paso:"tu Paso 1 (elegir el frente de la peluquería)."},
+    {sev:"a",h:"El vigía (watchdog) está autorizado pero aún sin construir",detalle:"Hasta que esté, una pieza podría pararse en silencio.",paso:"decisión 1 de la tarjeta 4 (por defecto se construye sola)."}
+  ];
+  function renderDesvios(){
+    var el=document.getElementById("desvios"); if(!el) return; el.innerHTML="";
+    if(!desvios.length){ el.innerHTML='<div class="small">Sin desviaciones marcadas ahora. 🟢</div>'; return; }
+    desvios.forEach(function(d){
+      var div=document.createElement("div"); div.className="alert "+(d.sev==="r"?"r":"a");
+      div.innerHTML='<span class="ic">'+(d.sev==="r"?"🔴":"🟠")+'</span><div class="at"><div class="h">'+esc(d.h)+'</div>'+
+        (d.detalle?('<div>'+esc(d.detalle)+'</div>'):'')+
+        (d.paso?('<div class="step2"><b>Paso:</b> '+esc(d.paso)+'</div>'):'')+'</div>';
+      el.appendChild(div);
+    });
+  }
+  function setGlobal(v){
+    var bs=document.getElementById("bigScore"); if(bs) bs.innerHTML=v+'<small>/10</small>';
+    var bar=document.querySelector(".hero .bar > i"); if(bar) bar.style.width=(v*10)+"%";
+    var n2=document.getElementById("heroNote2"); if(n2) n2.textContent="MADRE hoy: "+v+"/10.";
+  }
+  function setCardScore(n,v){
+    document.querySelectorAll(".card").forEach(function(c){
+      var num=c.querySelector(".num");
+      if(num && num.textContent.trim()===String(n)){
+        var vEl=c.querySelector(".score .v"); if(vEl) vEl.textContent=v+"/10";
+        var mi=c.querySelector(".score .mini > i"); if(mi) mi.style.width=(v*10)+"%";
+      }
+    });
+  }
+  function setActualizado(s){ var el=document.getElementById("actualizado"); if(el) el.textContent=s; }
+
+  function renderInvestig(list){
+    var el=document.getElementById("investig"); if(!el) return; el.innerHTML="";
+    list.forEach(function(it){
+      var d=document.createElement("div"); d.className="dec"; d.style.margin="8px 0";
+      d.innerHTML='<h4 style="margin:0 0 4px">'+esc(it.tema)+'</h4>'+
+        '<div class="prop">'+esc(it.concl||"(sin conclusión aún)")+'</div>'+
+        (it.fecha?('<div class="small">última actualización: '+esc(fmtDate(it.fecha))+'</div>'):'');
+      el.appendChild(d);
+    });
+  }
+  function renderCambios(list){
+    var el=document.getElementById("changelog"); if(!el) return; el.innerHTML="";
+    list.forEach(function(c){
+      var d=document.createElement("div"); d.style.cssText="border-left:3px solid var(--accent);padding:3px 0 3px 10px;margin:9px 0";
+      d.innerHTML='<div style="font-size:12px;color:var(--muted)">'+esc(fmtDate(c.fecha))+'</div>'+
+        '<div style="font-weight:600;font-size:13.5px">'+esc(c.titulo)+'</div>'+
+        (c.detalle?('<div class="small">'+esc(c.detalle)+'</div>'):'');
+      el.appendChild(d);
+    });
+  }
+  function fallback(id,msg){ var el=document.getElementById(id); if(el) el.innerHTML='<div class="small">'+esc(msg)+'</div>'; }
+
+  var investigLoaded=false;
+  function parseEstado(txt){
+    var A=[],D=[],IV=[],cs={},g=null,upd=null,changed=false;
+    txt.split(/\r?\n/).forEach(function(ln){
+      if(!ln || ln.charAt(0)==="#") return;
+      var p=ln.split("\t"); for(var i=0;i<p.length;i++) p[i]=(p[i]||"").trim();
+      var k=p[0];
+      if(k==="actualizado" && p[1]) upd=p[1];
+      else if(k==="global_score" && p[1]) g=clamp(p[1]);
+      else if(k==="area" && p[1] && p[2]) { var v=clamp(p[2]); A.push([p[1],v, v>=7?"g":(v>=4?"a":"r")]); }
+      else if(k==="card_score" && p[1] && p[2]) cs[p[1]]=clamp(p[2]);
+      else if(k==="desvio" && p.length>=3) D.push({sev:(p[1]==="r"?"r":"a"),h:p[2]||"",detalle:p[3]||"",paso:p[4]||""});
+      else if(k==="investig" && p[1]) IV.push({tema:p[1],concl:p[2]||"",fecha:p[3]||""});
+    });
+    if(g!=null){ setGlobal(g); changed=true; }
+    if(A.length){ areas=A; renderAreas(); changed=true; }
+    if(D.length){ desvios=D; renderDesvios(); changed=true; }
+    if(IV.length){ renderInvestig(IV); investigLoaded=true; changed=true; }
+    Object.keys(cs).forEach(function(n){ setCardScore(n,cs[n]); changed=true; });
+    if(upd) setActualizado(fmtDate(upd)+" (auto)"); else if(changed) setActualizado("recién (auto)");
+    return changed;
+  }
+  async function loadEstado(){
+    try{
+      var s=await mcp(T_SEARCH,{query:"title = 'CUADERNO_ESTADO.tsv'",pageSize:5,excludeContentSnippets:true});
+      var files=(s.data&&s.data.files)?s.data.files:[];
+      if(!files.length) return;
+      var r=await mcp(T_READ,{fileId:files[0].id});
+      var txt=(r.data&&r.data.fileContent)?r.data.fileContent:(r.text||"");
+      if(txt) parseEstado(txt);
+    }catch(e){}
+  }
+  async function loadCambios(){
+    try{
+      var s=await mcp(T_SEARCH,{query:"title = 'CUADERNO_CAMBIOS.tsv'",pageSize:5,excludeContentSnippets:true});
+      var files=(s.data&&s.data.files)?s.data.files:[];
+      if(!files.length){ fallback("changelog","MADRE aún no ha publicado su historial de cambios. En cuanto recoja la propuesta, verás cada mejora con su fecha, como las actualizaciones de una app."); return; }
+      var r=await mcp(T_READ,{fileId:files[0].id});
+      var txt=(r.data&&r.data.fileContent)?r.data.fileContent:(r.text||"");
+      var list=[];
+      txt.split(/\r?\n/).forEach(function(ln){
+        if(!ln || ln.charAt(0)==="#") return;
+        var p=ln.split("\t"); if(p[0]!=="cambio") return;
+        list.push({fecha:(p[1]||"").trim(),titulo:(p[2]||"").trim(),detalle:(p[3]||"").trim()});
+      });
+      if(!list.length){ fallback("changelog","MADRE aún no ha anotado cambios aquí."); return; }
+      list.sort(function(a,b){ return (b.fecha||"").localeCompare(a.fecha||""); });
+      renderCambios(list);
+    }catch(e){ fallback("changelog",(String(e.message)==="preview")?"Vista previa: abre el cuaderno en Cowork para ver el historial.":"No pude leer el historial ahora."); }
+  }
+
+  // ---- novedades desde la última visita ----
+  function showNov(txt){
+    var b=document.getElementById("novBanner"); if(!b) return;
+    b.innerHTML='<div style="background:var(--accent-soft);border:1px solid #d9e3ff;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:13.5px"><b>🆕 Novedades desde tu última visita:</b> '+esc(txt)+'</div>';
+  }
+  function novedades(){
+    var prev=state.lastSeen||{}, bs=document.getElementById("bigScore");
+    var cur2={ score: bs?bs.textContent.replace(/\s/g,""):"", desv:document.querySelectorAll("#desvios .alert").length, dec:Object.keys(state.decisions||{}).length };
+    var msgs=[];
+    if(prev.desv!=null && cur2.desv>prev.desv) msgs.push((cur2.desv-prev.desv)+" desviación(es) nueva(s)");
+    if(prev.desv!=null && cur2.desv<prev.desv) msgs.push((prev.desv-cur2.desv)+" desviación(es) resuelta(s)");
+    if(prev.score && cur2.score && prev.score!==cur2.score) msgs.push("progreso global "+prev.score+" → "+cur2.score);
+    if(msgs.length) showNov(msgs.join(" · "));
+    state.lastSeen=cur2; save(state);
+  }
+
+  // ---- soltar un enlace al pipeline ----
+  var linkBtn=document.getElementById("linkSend");
+  if(linkBtn){ linkBtn.addEventListener("click",async function(){
+    var inp=document.getElementById("linkIn"), msg=document.getElementById("linkMsg");
+    var url=(inp.value||"").trim();
+    if(!/^https?:\/\//i.test(url)){ msg.textContent="Pega un enlace que empiece por http…"; return; }
+    msg.textContent="Enviando…";
+    var now=new Date();
+    var body="DE: Tony (cuaderno MADRE) | FECHA: "+now.toISOString()+"\nARTEFACTO: Cuaderno MADRE\nTIPO: enlace-para-pipeline\nLINKS:\n"+url+"\n";
+    try{
+      await mcp(T_CREATE,{ title:"FEEDBACK_TONY_"+stamp()+"__enlace.txt", parentId:BUZON_ENTRANTE_ID, textContent:body, contentMimeType:"text/plain", disableConversionToGoogleType:true });
+      inp.value=""; msg.textContent="Enviado ✓ — MADRE lo absorberá en su pipeline.";
+    }catch(e){ msg.textContent=(String(e.message)==="preview")?"Vista previa: se enviará al abrirlo en Cowork.":"No se pudo enviar ahora, reintenta."; }
+  }); }
+
+  // ---- mis mensajes a MADRE + respuestas ----
+  var statusOpen=false;
+  document.getElementById("btnStatus").addEventListener("click",async function(){
+    var wrap=document.getElementById("statusWrap"); statusOpen=!statusOpen;
+    if(!statusOpen){ wrap.innerHTML=""; return; }
+    wrap.innerHTML='<div class="statusbox">Cargando…</div>';
+    var html='<div class="statusbox">';
+    if(state.sent.length){
+      html+='<div style="font-weight:700;margin-bottom:6px">Lo que has enviado:</div>';
+      state.sent.slice(0,8).forEach(function(s){
+        html+='<div class="it"><span class="dot '+(s.ok?"g":"a")+'"></span>'+esc(s.card||"General")+(s.section?(" › "+esc(s.section)):"")+
+          ' <span class="small">('+esc(s.tipo||"")+(s.ok?"":" · pendiente")+')</span></div>';
+      });
+    } else { html+='<div class="small">Aún no has enviado feedback. Usa cualquier botón 💬.</div>'; }
+    try{
+      var r=await mcp(T_SEARCH,{ query:"parentId = '"+BUZON_ENTRANTE_ID+"' and title contains 'FEEDBACK'", pageSize:50, excludeContentSnippets:true });
+      var files=(r.data&&r.data.files)?r.data.files:[]; var pend=0,proc=0,pendList=[];
+      files.forEach(function(f){ var t=(f.title||""); if(t.indexOf("PROCESADO")>-1) proc++; else if(t.indexOf("FEEDBACK")>-1){ pend++; pendList.push(t); } });
+      html+='<div class="it" style="margin-top:8px"><b>En MADRE ahora:</b> '+pend+' por leer · '+proc+' ya procesados ✓</div>';
+      pendList.slice(0,8).forEach(function(t){ html+='<div class="it small">⏳ '+esc(t)+'</div>'; });
+      try{
+        var rb=await mcp(T_READ,{fileId:BUZON_TXT_ID});
+        var btxt=(rb.data&&rb.data.fileContent)?rb.data.fileContent:(rb.text||"");
+        var reps=[];
+        btxt.split(/\r?\n/).forEach(function(ln){ var t=ln.trim(); if(/^R:/.test(t)) reps.push(t.replace(/^R:\s*/,"")); });
+        if(reps.length){
+          html+='<div class="it" style="margin-top:8px"><b>Últimas respuestas de MADRE:</b></div>';
+          reps.slice(-5).reverse().forEach(function(t){ html+='<div class="it">💬 '+esc(t)+'</div>'; });
+        }
+      }catch(e2){}
+    }catch(e){
+      html+='<div class="small" style="margin-top:8px">'+(String(e.message)==="preview"
+        ? "Vista previa: abre el cuaderno en Cowork para ver el estado en vivo." : "No pude leer el estado en vivo ahora mismo.")+'</div>';
+    }
+    html+='</div>'; wrap.innerHTML=html;
+  });
+
+  // ---- arranque ----
+  if(!hasCowork()){
+    var wb=document.createElement("div");
+    wb.style.cssText="background:#fff7e6;border:1px solid #f0dcae;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:13px";
+    wb.innerHTML='📱 <b>Versión web.</b> Aquí ves el estado guardado de MADRE. Para opinar, tu mensaje se <b>copia etiquetado</b> y lo pegas en tu <b>BUZÓN</b> (igual que sueltas cosas desde el móvil). La versión de escritorio (Cowork) lo envía y se actualiza sola.';
+    var nb=document.getElementById("novBanner"); if(nb&&nb.parentNode) nb.parentNode.insertBefore(wb, nb);
+  }
+  renderAreas(); renderDesvios();
+  document.querySelectorAll('.chip[data-goto]').forEach(function(ch){
+    ch.addEventListener("click",function(){
+      var n=ch.getAttribute("data-goto");
+      document.querySelectorAll(".card").forEach(function(c){
+        var num=c.querySelector(".num");
+        if(num && num.textContent.trim()===n){
+          var d=c.querySelector("details"); if(d) d.open=true;
+          c.scrollIntoView({behavior:"smooth",block:"start"});
+        }
+      });
+    });
+  });
+  loadEstado().then(function(){
+    if(!investigLoaded) fallback("investig","MADRE aún no ha publicado hilos de investigación aquí. En cuanto recoja la propuesta, verás los temas y cómo van cambiando sus conclusiones.");
+    novedades();
+  });
+  loadCambios();
+
+})();
+</script>
+</body>
+</html>
