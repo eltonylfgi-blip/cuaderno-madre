@@ -172,7 +172,7 @@
   .gradtext{background:linear-gradient(90deg,var(--accent),#8a5bdb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   #likeFab{position:fixed;right:16px;bottom:74px;width:48px;height:48px;border-radius:50%;border:none;background:#fff;color:#e0568a;font-size:20px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.22);z-index:60;transition:transform .15s}
   #likeFab:hover{transform:scale(1.12) rotate(-6deg)} #likeFab.on{background:#e0568a;color:#fff}
-  body.likeMode .card:hover,body.likeMode .hero:hover,body.likeMode .senalItem:hover{outline:3px solid #e0568a;outline-offset:2px;cursor:pointer;border-radius:14px}
+  body.likeMode .card:hover,body.likeMode .hero:hover,body.likeMode .senalItem:hover,body.likeMode .body p:hover,body.likeMode .body li:hover,body.likeMode .ctitle .t:hover,body.likeMode summary:hover{outline:3px solid #e0568a;outline-offset:2px;cursor:pointer;border-radius:10px}
   #likeHint{position:fixed;left:50%;top:10px;transform:translateX(-50%);background:#e0568a;color:#fff;padding:8px 14px;border-radius:99px;font-size:13px;z-index:61;box-shadow:0 4px 16px rgba(0,0,0,.25);display:none}
   body.likeMode #likeHint{display:block}
   .inlineArrow{border:none;background:transparent;cursor:pointer;padding:0 5px;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;transition:transform .18s;transform-origin:left center}
@@ -1088,6 +1088,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-21",titulo:"🐱 ¡Cuaderno vivo! gato, dibujos, tour y más",detalle:"Un gato que huye si lo tocas, una zona para hacer DIBUJOS (con likes), un tour guiado para entenderlo en 1 min, una nota secreta 📌, modo lápiz ✏️ para opinar sobre cualquier zona, chat tipo conversación, y la curiosidad de por qué se llama MADRE. Menos manual, más criatura."},
     {fecha:"2026-06-21",titulo:"📲 Opinar con foto desde el móvil + flechas que crecen",detalle:"Desde el móvil ya puedes opinar con imagen y llega solo a MADRE (sin pegar nada). Las flechas de ayuda ahora van pegadas a su sitio y crecen al pasar por encima."},
     {fecha:"2026-06-21",titulo:"💗 Más interactivo + fotos + seguro",detalle:"Botón corazón para marcar lo que te gusta, flechas en los márgenes, imágenes en comentarios, ruta de avance con slider, glosario '¿pa qué sirve?', degradados y fondos que cambian. Y un filtro que bloquea acusaciones graves; MADRE oculta amenazas fuertes."},
     {fecha:"2026-06-21",titulo:"🌍 Evidencia primero + cara nueva cada visita",detalle:"Arriba sale 'Señales del mundo' (€, clientes, estrellas… la prueba real). Hipótesis vivas vs muertas, progreso de lo que se construye, emojis en secciones, MADRE con 🤱🏻 y tooltip, y la web cambia de color/fondo en cada visita (variedad, sin mover nada de sitio)."},
@@ -1317,12 +1318,13 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
   fab.addEventListener("click",function(e){ e.stopPropagation(); setLike(!likeMode); });
   document.addEventListener("click",function(e){
     if(!likeMode || e.target.closest("#likeFab")) return;
-    var el=e.target.closest(".senalItem,.card,.hero"); if(!el){ return; }
+    var el=e.target.closest(".senalItem,.card,.hero,.body p,.body li,.ctitle .t,summary"); if(!el){ return; }
     e.preventDefault(); e.stopPropagation();
-    var label="(zona)", t=el.querySelector(".ctitle .t");
+    var label="(zona)", t=el.querySelector?el.querySelector(".ctitle .t"):null;
     if(t) label=t.textContent.trim();
-    else if(el.classList.contains("senalItem")){ var k=el.querySelector(".k"); if(k) label="Señal: "+k.textContent; }
-    else if(el.classList.contains("hero")) label="Cabecera / puntuación";
+    else if(el.classList&&el.classList.contains("senalItem")){ var k=el.querySelector(".k"); if(k) label="Señal: "+k.textContent; }
+    else if(el.classList&&el.classList.contains("hero")) label="Cabecera / puntuación";
+    else { label=(el.textContent||"").trim().slice(0,70)||"(zona)"; }
     var nota=window.prompt("💗 ¿Qué te gusta de esto?\n("+label+")","me gusta");
     if(nota!==null){ fb({card:"💗 Me gusta", section:label, tipo:"gusto", texto:nota||"(me gusta)"});
       try{ el.animate([{transform:"scale(1)"},{transform:"scale(1.03)"},{transform:"scale(1)"}],{duration:320}); }catch(_){}
@@ -1404,7 +1406,11 @@ st.textContent=`
 .cmtStrip{font-size:12px;color:var(--muted,#667);margin:0 0 8px}
 @keyframes cmtIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 #cmtFab{position:fixed;right:16px;bottom:16px;width:52px;height:52px;border-radius:50%;border:none;background:var(--accent,#3b5bdb);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.25);z-index:60}
-#cmtPanel{position:fixed;right:12px;bottom:130px;width:min(340px,90vw);max-height:64vh;overflow:auto;background:transparent;border:none;box-shadow:none;padding:6px;z-index:59;display:none}
+#cmtPanel{position:fixed;right:12px;bottom:130px;width:min(340px,90vw);max-height:64vh;overflow:auto;background:transparent;border:none;box-shadow:none;padding:6px;z-index:59;display:none;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 48px);mask-image:linear-gradient(to bottom,transparent 0,#000 48px)}
+.cmtSend{position:relative;overflow:hidden}
+.cmtSend::after{content:"✈️";position:absolute;right:7px;top:50%;transform:translate(0,-50%) scale(.85);opacity:0;transition:transform .4s ease,opacity .25s}
+.cmtSend:hover{padding-right:28px}
+.cmtSend:hover::after{opacity:1;transform:translate(8px,-150%) rotate(14deg) scale(1)}
 #cmtPanel.on{display:block}
 #cmtPanel .cmt{background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.06);border-radius:16px 16px 16px 5px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 #cmtPanel .replies .cmt{border-radius:16px 16px 5px 16px;background:var(--accent-soft,#eef)}
@@ -1466,7 +1472,7 @@ function makeForm(parentId){
   function setFile(file){ imgFile=file||null; if(file){ try{prev.src=URL.createObjectURL(file);}catch(e){} prev.style.display="block"; } else { prev.style.display="none"; } }
   img.addEventListener("change",()=>{ if(img.files&&img.files[0]) setFile(img.files[0]); });
   t.addEventListener("paste",(e)=>{ const it=(e.clipboardData&&e.clipboardData.items)||[]; for(let i=0;i<it.length;i++){ if(it[i].type&&it[i].type.indexOf("image")===0){ const ff=it[i].getAsFile(); if(ff){ setFile(ff); e.preventDefault(); } } } });
-  const b=document.createElement("button"); b.className="btn sm primary"; b.textContent=parentId?"Responder":"Comentar";
+  const b=document.createElement("button"); b.className="btn sm primary cmtSend"; b.textContent=parentId?"Responder":"Comentar";
   b.onclick=async()=>{ b.disabled=true; const r=await post(parentId,n.value,t.value,imgFile); b.disabled=false;
     if(!r.error){ t.value=""; setFile(null); img.value=""; if(f.onsent)f.onsent(); load(); }
     else if(r.error==="blocked"){ b.textContent="🚫 eso no se publica"; setTimeout(()=>b.textContent=parentId?"Responder":"Comentar",2000); }
@@ -1495,9 +1501,10 @@ function makeComment(c, isReply){
   }
   return w;
 }
-function renderListInto(el){
+function renderListInto(el, chat){
   el.innerHTML="";
-  const tops=all.filter(x=>!x.parent_id).sort((a,b)=>(b.created_at||"").localeCompare(a.created_at||""));
+  let tops=all.filter(x=>!x.parent_id).sort((a,b)=>(b.created_at||"").localeCompare(a.created_at||""));
+  if(chat) tops=tops.slice().reverse(); // chat: más reciente ABAJO
   if(!tops.length){ const d=document.createElement("div"); d.className="small"; d.textContent="Sé el primero en comentar 🙂"; el.appendChild(d); return; }
   tops.forEach(c=>el.appendChild(makeComment(c,false)));
 }
@@ -1520,11 +1527,1152 @@ function build(){
 function renderAll(){
   const n=all.length;
   if(stripEl) stripEl.textContent = n ? ("✨ "+n+" comentario"+(n!==1?"s":"")+" — los nuevos aparecen al instante") : "";
-  if(listEl) renderListInto(listEl);
-  if(panelListEl) renderListInto(panelListEl);
+  if(listEl) renderListInto(listEl, false);
+  if(panelListEl){ renderListInto(panelListEl, true); var p=document.getElementById("cmtPanel"); if(p && p.classList.contains("on")) p.scrollTop=p.scrollHeight; }
 }
 build(); load();
 sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", table:"comments" },()=>load()).subscribe();
+</script>
+
+<!-- ===== WIDGETS VIVOS (nota-secreta, gato, tour, dibujos, lapiz) ===== -->
+<style>
+/* widget: nota-secreta */
+/* ===== nota-secreta: post-it como nota de papel real ===== */
+.postit.ns-paper{
+  position: relative;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.012) 0 22px, rgba(0,0,0,0.028) 22px 23px),
+    linear-gradient(135deg, #fff6b0 0%, #ffef88 55%, #ffe96f 100%);
+  color:#5b4a17;
+  border:none;
+  border-radius:3px 8px 4px 9px;
+  padding:18px 16px 16px;
+  box-shadow:
+    0 1px 1px rgba(0,0,0,0.10),
+    2px 6px 12px rgba(0,0,0,0.16),
+    6px 14px 28px rgba(0,0,0,0.10);
+  transform: rotate(-2.4deg);
+  transition: transform .25s ease, box-shadow .25s ease;
+  font-family: "Comic Sans MS", "Segoe Print", "Bradley Hand", cursive, system-ui, sans-serif;
+  overflow: visible;
+  isolation: isolate;
+  -webkit-mask-image:
+    radial-gradient(circle at 6px 6px, transparent 0 5px, #000 6px),
+    radial-gradient(circle at calc(100% - 9px) calc(100% - 7px), transparent 0 7px, #000 8px);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    radial-gradient(circle at 6px 6px, transparent 0 5px, #000 6px),
+    radial-gradient(circle at calc(100% - 9px) calc(100% - 7px), transparent 0 7px, #000 8px);
+          mask-composite: intersect;
+}
+.postit.ns-paper:hover{ transform: rotate(-1deg) scale(1.015); }
+
+/* cinta adhesiva translúcida cruzada arriba */
+.postit.ns-paper::before{
+  content:"";
+  position:absolute;
+  top:-13px; left:50%;
+  width:84px; height:26px;
+  transform: translateX(-50%) rotate(-5deg);
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(220,225,210,0.30));
+  border-left:1px dashed rgba(0,0,0,0.05);
+  border-right:1px dashed rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  z-index:3;
+  pointer-events:none;
+}
+/* segunda cinta pequeña abajo-izq, aire hecho a mano */
+.postit.ns-paper::after{
+  content:"";
+  position:absolute;
+  bottom:-9px; left:14px;
+  width:46px; height:18px;
+  transform: rotate(7deg);
+  background: linear-gradient(180deg, rgba(255,255,255,0.45), rgba(220,225,210,0.22));
+  box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+  z-index:3;
+  pointer-events:none;
+}
+
+/* chincheta diminuta y discreta (botón easter-egg) */
+.ns-pin{
+  position:absolute;
+  top:5px; right:7px;
+  width:18px; height:18px;
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  font-size:12px;
+  line-height:18px;
+  text-align:center;
+  padding:0; margin:0;
+  opacity:.38;
+  filter: grayscale(.3);
+  transition: opacity .2s ease, transform .2s ease;
+  z-index:5;
+  border-radius:50%;
+}
+.ns-pin:hover, .ns-pin:focus-visible{ opacity:1; transform: rotate(-12deg) scale(1.25); outline:none; }
+.ns-pin:active{ transform: scale(.9); }
+
+/* mini-nota oculta detrás de la grande */
+.ns-mini{
+  position:absolute;
+  left:50%;
+  bottom:10px;
+  width:128px;
+  padding:12px 10px 14px;
+  background: linear-gradient(135deg, #fff3f6 0%, #ffe1ea 100%);
+  color:#9a3b56;
+  font-family:"Bradley Hand","Segoe Print","Comic Sans MS",cursive;
+  font-size:16px;
+  text-align:center;
+  border-radius:4px 9px 5px 8px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.20);
+  transform: translate(-50%, 4px) rotate(4deg) scale(.55);
+  transform-origin: center top;
+  opacity:0;
+  pointer-events:none;
+  z-index:2;            /* DETRÁS de la nota grande (la grande crea stacking con isolation) */
+  transition: transform .42s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+}
+.ns-mini::before{        /* mini cinta */
+  content:"";
+  position:absolute;
+  top:-8px; left:50%;
+  width:42px; height:15px;
+  transform:translateX(-50%) rotate(-6deg);
+  background: rgba(255,255,255,0.5);
+  box-shadow:0 1px 2px rgba(0,0,0,0.12);
+}
+.ns-mini .ns-heart{ display:block; font-size:13px; margin-top:4px; }
+
+/* visible: se desliza saliendo desde detrás, hacia abajo */
+.postit.ns-open .ns-mini{
+  opacity:1;
+  pointer-events:auto;
+  transform: translate(-50%, 78px) rotate(-3deg) scale(1);
+}
+
+@media (max-width:420px){
+  .ns-mini{ width:118px; font-size:15px; }
+  .postit.ns-open .ns-mini{ transform: translate(-50%, 72px) rotate(-3deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .postit.ns-paper, .postit.ns-paper:hover{ transition:none; transform: rotate(-2deg); }
+  .ns-mini{ transition: opacity .2s linear; }
+  .postit.ns-open .ns-mini{ transform: translate(-50%, 78px) rotate(-3deg) scale(1); }
+}
+/* widget: gato */
+/* ===== GATO easter-egg (prefijo gxg-) ===== */
+.gxg-cat{
+  position:fixed; left:0; top:0; width:44px; height:44px;
+  z-index:40; cursor:pointer; pointer-events:auto;
+  transform:translate3d(0,0,0);
+  transition:transform .9s cubic-bezier(.2,.9,.25,1);
+  will-change:transform; touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent; user-select:none;
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.28));
+}
+.gxg-cat.gxg-flee{ transition:transform .42s cubic-bezier(.16,1.2,.3,1); }
+.gxg-cat.gxg-hidden{ opacity:0; pointer-events:none; transition:transform .9s, opacity .5s; }
+.gxg-cat .gxg-emoji{
+  font-size:34px; line-height:44px; text-align:center; width:44px; height:44px;
+  display:block; transform-origin:50% 80%;
+  animation:gxg-idle 3.6s ease-in-out infinite;
+}
+@keyframes gxg-idle{
+  0%,100%{ transform:translateY(0) rotate(0deg); }
+  25%{ transform:translateY(-2px) rotate(-4deg); }
+  50%{ transform:translateY(0) rotate(0deg); }
+  75%{ transform:translateY(-1px) rotate(4deg); }
+}
+.gxg-cat.gxg-run .gxg-emoji{ animation:gxg-run .28s linear infinite; }
+@keyframes gxg-run{
+  0%{ transform:translateY(0) rotate(-9deg) scaleX(var(--gxg-dir,1)); }
+  50%{ transform:translateY(-4px) rotate(9deg) scaleX(var(--gxg-dir,1)); }
+  100%{ transform:translateY(0) rotate(-9deg) scaleX(var(--gxg-dir,1)); }
+}
+.gxg-cat.gxg-sleep .gxg-emoji{ animation:gxg-breathe 3.2s ease-in-out infinite; opacity:.85; }
+@keyframes gxg-breathe{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
+
+.gxg-bubble{
+  position:absolute; bottom:46px; left:50%; transform:translateX(-50%) scale(.6);
+  background:#fff; color:#1b1b1f; font-size:12.5px; font-weight:600;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.15;
+  padding:6px 10px; border-radius:13px; white-space:nowrap; max-width:160px;
+  box-shadow:0 4px 14px rgba(0,0,0,.25); border:1px solid rgba(0,0,0,.06);
+  opacity:0; pointer-events:none; transform-origin:50% 120%;
+  transition:opacity .18s ease, transform .22s cubic-bezier(.18,1.4,.4,1);
+}
+.gxg-bubble::after{
+  content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+  border:6px solid transparent; border-top-color:#fff;
+}
+.gxg-cat.gxg-talk .gxg-bubble{ opacity:1; transform:translateX(-50%) scale(1); }
+.gxg-cat.gxg-sleep .gxg-bubble{ opacity:1; transform:translateX(-50%) scale(1); }
+@media (prefers-color-scheme:dark){
+  .gxg-bubble{ background:#26262b; color:#f3f3f5; border-color:rgba(255,255,255,.08); }
+  .gxg-bubble::after{ border-top-color:#26262b; }
+}
+@media (prefers-reduced-motion:reduce){
+  .gxg-cat,.gxg-cat *{ animation:none !important; transition:opacity .2s !important; }
+  .gxg-cat{ transition:transform .25s ease !important; }
+}
+/* widget: tour */
+/* ===== TOUR / ONBOARDING ===== */
+#tourLaunch{
+  position:fixed; left:16px; bottom:16px; z-index:62;
+  display:inline-flex; align-items:center; gap:7px;
+  padding:11px 15px; border:none; border-radius:999px;
+  font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  color:#fff; cursor:pointer;
+  background:linear-gradient(135deg,#7c3aed,#2563eb);
+  box-shadow:0 6px 20px rgba(80,40,180,.45);
+  transition:transform .15s ease, box-shadow .15s ease, opacity .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+#tourLaunch:hover{ transform:translateY(-2px); box-shadow:0 10px 26px rgba(80,40,180,.55); }
+#tourLaunch:active{ transform:translateY(0) scale(.97); }
+#tourLaunch .tlEmoji{ font-size:16px; animation:tlCompass 4s ease-in-out infinite; transform-origin:50% 55%; }
+@keyframes tlCompass{ 0%,100%{transform:rotate(-12deg);} 50%{transform:rotate(12deg);} }
+@media(max-width:420px){
+  #tourLaunch{ padding:10px 13px; font-size:13px; }
+  #tourLaunch .tlTxt{ display:none; }
+  #tourLaunch{ left:14px; bottom:14px; }
+}
+
+/* dim backdrop with a "hole" feel (we use box-shadow on highlight ring) */
+#tourBackdrop{
+  position:fixed; inset:0; z-index:9000;
+  background:rgba(8,6,24,.55);
+  backdrop-filter:blur(1.5px);
+  opacity:0; pointer-events:none;
+  transition:opacity .3s ease;
+}
+#tourBackdrop.on{ opacity:1; pointer-events:auto; }
+
+/* spotlight ring drawn around the focused element */
+#tourRing{
+  position:fixed; z-index:9001; pointer-events:none;
+  border-radius:16px;
+  box-shadow:0 0 0 4px #a78bfa, 0 0 0 4000px rgba(8,6,24,.62), 0 0 30px 6px rgba(167,139,250,.7);
+  transition:all .45s cubic-bezier(.22,1,.36,1);
+  opacity:0;
+}
+#tourRing.on{ opacity:1; }
+#tourRing::after{
+  content:""; position:absolute; inset:-4px; border-radius:18px;
+  border:2px solid rgba(255,255,255,.55);
+  animation:tlPulse 1.6s ease-out infinite;
+}
+@keyframes tlPulse{ 0%{transform:scale(1);opacity:.8;} 100%{transform:scale(1.06);opacity:0;} }
+
+/* the explanatory card */
+#tourCard{
+  position:fixed; z-index:9003; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px);
+  width:min(360px,calc(100vw - 28px));
+  background:linear-gradient(160deg,#1e1b3a,#262254);
+  color:#f3f0ff; border:1px solid rgba(167,139,250,.4);
+  border-radius:18px; padding:16px 16px 14px;
+  box-shadow:0 18px 50px rgba(0,0,0,.5);
+  opacity:0; pointer-events:none;
+  transition:opacity .3s ease, transform .35s cubic-bezier(.22,1,.36,1);
+}
+#tourCard.on{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0); }
+#tourCard .tcStep{ font:700 11px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:#a78bfa; }
+#tourCard .tcTitle{ font:800 18px/1.2 system-ui,sans-serif; margin:6px 0 4px; }
+#tourCard .tcBody{ font:400 14px/1.45 system-ui,sans-serif; color:#d8d3f5; }
+#tourCard .tcDots{ display:flex; gap:6px; margin:12px 0 2px; }
+#tourCard .tcDots i{ width:7px; height:7px; border-radius:50%; background:rgba(167,139,250,.3); transition:.2s; }
+#tourCard .tcDots i.act{ background:#a78bfa; transform:scale(1.25); }
+#tourCard .tcBtns{ display:flex; gap:8px; margin-top:12px; }
+#tourCard button{
+  flex:1; padding:11px 12px; border-radius:12px; cursor:pointer;
+  font:700 14px/1 system-ui,sans-serif; border:none; -webkit-tap-highlight-color:transparent;
+  transition:transform .12s, filter .15s;
+}
+#tourCard button:active{ transform:scale(.96); }
+#tourCard .tcNext{ background:linear-gradient(135deg,#7c3aed,#2563eb); color:#fff; }
+#tourCard .tcNext:hover{ filter:brightness(1.1); }
+#tourCard .tcExit{ background:rgba(255,255,255,.08); color:#cdc7ee; flex:0 0 auto; padding:11px 14px; }
+#tourCard .tcExit:hover{ background:rgba(255,255,255,.15); }
+
+/* WELCOME first-visit overlay */
+#tourWelcome{
+  position:fixed; inset:0; z-index:9100;
+  display:flex; align-items:center; justify-content:center; padding:18px;
+  background:radial-gradient(circle at 50% 30%,rgba(124,58,237,.35),rgba(8,6,24,.78));
+  backdrop-filter:blur(4px);
+  opacity:0; pointer-events:none; transition:opacity .35s ease;
+}
+#tourWelcome.on{ opacity:1; pointer-events:auto; }
+#tourWelcome .twBox{
+  width:min(380px,100%); text-align:center;
+  background:linear-gradient(165deg,#211d44,#2c2660);
+  border:1px solid rgba(167,139,250,.45); border-radius:24px;
+  padding:26px 22px 22px; color:#f3f0ff;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);
+  transform:scale(.9) translateY(12px); transition:transform .4s cubic-bezier(.22,1.4,.4,1);
+}
+#tourWelcome.on .twBox{ transform:scale(1) translateY(0); }
+#tourWelcome .twWave{ font-size:54px; display:block; animation:tlWave 2.2s ease-in-out infinite; transform-origin:70% 70%; }
+@keyframes tlWave{ 0%,60%,100%{transform:rotate(0);} 15%{transform:rotate(16deg);} 30%{transform:rotate(-8deg);} 45%{transform:rotate(14deg);} }
+#tourWelcome h2{ font:800 24px/1.15 system-ui,sans-serif; margin:10px 0 6px; }
+#tourWelcome p{ font:400 15px/1.5 system-ui,sans-serif; color:#d8d3f5; margin:0 auto 16px; max-width:300px; }
+#tourWelcome .twBtns{ display:flex; gap:10px; }
+#tourWelcome button{
+  flex:1; padding:13px 12px; border-radius:14px; cursor:pointer; border:none;
+  font:700 15px/1 system-ui,sans-serif; -webkit-tap-highlight-color:transparent;
+  transition:transform .12s, filter .15s;
+}
+#tourWelcome button:active{ transform:scale(.96); }
+#tourWelcome .twGo{ background:linear-gradient(135deg,#7c3aed,#2563eb); color:#fff; }
+#tourWelcome .twGo:hover{ filter:brightness(1.1); }
+#tourWelcome .twNo{ background:rgba(255,255,255,.08); color:#cdc7ee; }
+#tourWelcome .twNo:hover{ background:rgba(255,255,255,.15); }
+
+@media (prefers-reduced-motion: reduce){
+  #tourLaunch .tlEmoji, #tourWelcome .twWave, #tourRing::after{ animation:none !important; }
+  #tourRing,#tourCard,#tourWelcome,#tourWelcome .twBox,#tourBackdrop{ transition:opacity .15s !important; }
+}
+/* widget: dibujos */
+#dbjsSec{margin:28px auto;max-width:640px;padding:18px 16px 22px;border:3px solid #6a5acd;border-radius:20px;background:linear-gradient(135deg,#fff7fb 0%,#f4f1ff 100%);box-shadow:0 8px 28px rgba(106,90,205,.18);position:relative;overflow:hidden}
+#dbjsSec:before{content:"";position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(255,179,71,.25),transparent 70%);border-radius:50%;pointer-events:none}
+#dbjsSec h3{margin:0 0 4px;font-size:1.18rem;line-height:1.25;color:#4b3fa0;text-align:center}
+#dbjsSub{margin:0 0 14px;text-align:center;font-size:.86rem;color:#7a72a6}
+#dbjsStage{display:flex;flex-direction:column;align-items:center;gap:10px}
+#dbjsCanvasWrap{position:relative;border-radius:14px;padding:6px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.1);border:2px dashed #c9c0f0}
+#dbjsCanvas{display:block;background:#fff;border-radius:8px;touch-action:none;cursor:crosshair;max-width:100%}
+#dbjsTools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;width:100%}
+.dbjsColor{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.15);cursor:pointer;padding:0;transition:transform .12s}
+.dbjsColor:hover{transform:scale(1.18)}
+.dbjsColor.dbjsOn{transform:scale(1.25);box-shadow:0 0 0 3px #6a5acd}
+#dbjsClear,#dbjsSend{cursor:pointer;border:none;border-radius:999px;font-weight:600;font-size:.85rem;padding:9px 16px;transition:transform .12s,box-shadow .12s,filter .12s}
+#dbjsClear{background:#eee;color:#555}
+#dbjsClear:hover{background:#e2e2e2;transform:translateY(-1px)}
+#dbjsName{flex:1;min-width:120px;max-width:200px;padding:9px 12px;border-radius:999px;border:2px solid #d9d2f5;font-size:.85rem;outline:none}
+#dbjsName:focus{border-color:#6a5acd}
+#dbjsSend{background:linear-gradient(135deg,#6a5acd,#9b6dff);color:#fff;box-shadow:0 4px 12px rgba(106,90,205,.4)}
+#dbjsSend:hover{transform:translateY(-2px) rotate(-1deg);box-shadow:0 7px 18px rgba(106,90,205,.55);filter:brightness(1.08)}
+#dbjsSend:active{transform:scale(.96)}
+#dbjsSend:disabled{opacity:.6;cursor:wait;transform:none}
+#dbjsMsg{min-height:18px;font-size:.82rem;text-align:center;font-weight:600;color:#6a5acd;transition:opacity .2s}
+#dbjsGalTitle{margin:18px 0 8px;font-size:.95rem;color:#4b3fa0;text-align:center;font-weight:700}
+#dbjsGal{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.dbjsCard{background:#fff;border-radius:12px;padding:6px;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;flex-direction:column;gap:4px;animation:dbjsPop .35s ease both}
+.dbjsCard img{width:100%;height:auto;border-radius:8px;display:block;background:#fafafa}
+.dbjsCardName{font-size:.72rem;color:#555;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.dbjsLike{cursor:pointer;border:none;background:#f3effd;color:#6a5acd;border-radius:999px;font-size:.74rem;font-weight:700;padding:4px 0;transition:transform .12s,background .12s}
+.dbjsLike:hover{background:#e7dffb;transform:scale(1.05)}
+.dbjsLike.dbjsLiked{background:#6a5acd;color:#fff}
+.dbjsLike.dbjsBump{animation:dbjsBump .4s}
+#dbjsGalEmpty{grid-column:1/-1;text-align:center;color:#9a92b8;font-size:.82rem;padding:10px}
+@keyframes dbjsPop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes dbjsBump{0%,100%{transform:scale(1)}40%{transform:scale(1.3)}}
+@media (max-width:420px){#dbjsSec h3{font-size:1.02rem}.dbjsColor{width:34px;height:34px}}
+@media (prefers-reduced-motion:reduce){#dbjsSec *,.dbjsCard{animation:none!important;transition:none!important}}
+/* widget: lapiz */
+#lapizFab{position:fixed;right:16px;bottom:132px;z-index:61;width:48px;height:48px;border-radius:50%;border:none;background:#1d9e75;color:#fff;font-size:22px;line-height:48px;text-align:center;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.28);transition:transform .15s ease,background .15s ease;-webkit-tap-highlight-color:transparent;padding:0;display:flex;align-items:center;justify-content:center}
+#lapizFab:hover{transform:scale(1.08)}
+#lapizFab:active{transform:scale(.94)}
+#lapizFab.on{background:#d85a30;transform:rotate(-12deg) scale(1.06)}
+#lapizFab.on:hover{transform:rotate(-12deg) scale(1.12)}
+body.lapiz-mode{cursor:crosshair}
+body.lapiz-mode .card,body.lapiz-mode .hero,body.lapiz-mode .senalItem,body.lapiz-mode .body p,body.lapiz-mode .body li,body.lapiz-mode .ctitle .t,body.lapiz-mode summary{cursor:crosshair}
+.lapiz-hot{outline:2px dashed #d85a30 !important;outline-offset:3px;background:rgba(216,90,48,.08) !important;border-radius:6px;transition:outline-color .1s ease}
+#lapizBar{position:fixed;top:0;left:0;right:0;z-index:62;background:#1d9e75;color:#fff;font-size:13px;line-height:1.35;padding:10px 14px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.25);transform:translateY(-110%);transition:transform .25s ease;font-family:inherit}
+#lapizBar.show{transform:translateY(0)}
+#lapizBub{position:fixed;z-index:63;width:240px;max-width:calc(100vw - 24px);background:#fff;color:#222;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.3);border:1px solid rgba(0,0,0,.1);padding:12px;font-family:inherit;animation:lapizPop .16s ease}
+@keyframes lapizPop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+#lapizBub .lz-q{font-size:11px;color:#777;margin:0 0 6px;line-height:1.3;max-height:30px;overflow:hidden}
+#lapizBub textarea{width:100%;box-sizing:border-box;min-height:60px;resize:vertical;font-size:14px;font-family:inherit;border:1px solid #ccc;border-radius:8px;padding:8px;color:#222;background:#fafafa;outline:none}
+#lapizBub textarea:focus{border-color:#1d9e75;background:#fff}
+#lapizBub .lz-row{display:flex;gap:8px;margin-top:8px}
+#lapizBub button{flex:1;border:none;border-radius:8px;padding:8px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:500}
+#lapizBub .lz-send{background:#1d9e75;color:#fff}
+#lapizBub .lz-send:active{transform:scale(.97)}
+#lapizBub .lz-cancel{background:#eee;color:#555}
+.lapiz-ok{position:fixed;z-index:64;background:#1d9e75;color:#fff;font-size:12px;font-weight:500;padding:5px 10px;border-radius:20px;box-shadow:0 3px 12px rgba(0,0,0,.25);pointer-events:none;animation:lapizOk 1.4s ease forwards;font-family:inherit;white-space:nowrap}
+@keyframes lapizOk{0%{opacity:0;transform:translate(-50%,4px) scale(.8)}15%{opacity:1;transform:translate(-50%,-2px) scale(1)}70%{opacity:1;transform:translate(-50%,-2px) scale(1)}100%{opacity:0;transform:translate(-50%,-22px) scale(.95)}}
+@media (prefers-reduced-motion: reduce){#lapizFab,#lapizBar,#lapizBub,.lapiz-ok{transition:none;animation:none}#lapizFab.on{transform:none}}
+</style>
+<script>
+/* widget: nota-secreta */
+(function(){try{
+var postit = document.querySelector('.postit');
+if (postit) {
+  // evitar doble inicialización si el widget se inyecta más de una vez
+  if (!postit.classList.contains('ns-paper')) {
+    postit.classList.add('ns-paper');
+
+    // mini-nota cariñosa (texto EXACTO, con textContent para seguridad)
+    var mini = document.createElement('div');
+    mini.className = 'ns-mini';
+    mini.setAttribute('aria-hidden', 'true');
+    var miniTxt = document.createElement('span');
+    miniTxt.textContent = 'pa la tata :)';
+    var heart = document.createElement('span');
+    heart.className = 'ns-heart';
+    heart.textContent = '💛'; // 💛
+    mini.appendChild(miniTxt);
+    mini.appendChild(heart);
+    postit.appendChild(mini);
+
+    // chincheta diminuta = botón easter-egg
+    var pin = document.createElement('button');
+    pin.className = 'ns-pin';
+    pin.type = 'button';
+    pin.textContent = '📌'; // 📌
+    pin.setAttribute('aria-label', 'Nota secreta');
+    pin.setAttribute('aria-expanded', 'false');
+    pin.title = '...';
+
+    pin.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      try {
+        var open = postit.classList.toggle('ns-open');
+        pin.setAttribute('aria-expanded', open ? 'true' : 'false');
+        mini.setAttribute('aria-hidden', open ? 'false' : 'true');
+      } catch (e) {}
+    });
+
+    postit.appendChild(pin);
+  }
+}
+}catch(e){console.warn('widget nota-secreta',e);}})();
+</script>
+<script>
+/* widget: gato */
+(function(){try{
+// ===== GATO easter-egg =====
+var W = window, D = document;
+if (D.getElementById('gxg-cat-root')) { return; }
+
+var reduce = false;
+try { reduce = W.matchMedia && W.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+
+var cat = D.createElement('div');
+cat.id = 'gxg-cat-root';
+cat.className = 'gxg-cat gxg-hidden';
+cat.setAttribute('role','button');
+cat.setAttribute('aria-label','Gato del cuaderno (no le gusta que lo molesten)');
+cat.setAttribute('tabindex','0');
+
+var emoji = D.createElement('span');
+emoji.className = 'gxg-emoji';
+emoji.textContent = '🐈';
+var bubble = D.createElement('div');
+bubble.className = 'gxg-bubble';
+cat.appendChild(emoji);
+cat.appendChild(bubble);
+D.body.appendChild(cat);
+
+var SIZE = 44;
+var MARGIN = 14;          // separación a los bordes
+var EDGE_BAND = 92;       // grosor de la "zona borde" donde puede vivir
+var phrases = ['¡ay!','no me toques 😼','miau de error 404','estoy ocupado','shhh','¿y mi siesta?','prrr…','déjame en paz 🐾','no, gracias','*bufido*'];
+var pIdx = 0;
+
+var x = 20, y = 20;       // posición actual
+var lastDir = 1;
+var lastInteract = Date.now();
+var asleep = false;
+var talkTimer = null, runTimer = null, wakeTimer = null;
+
+function vw(){ return W.innerWidth || D.documentElement.clientWidth || 360; }
+function vh(){ return W.innerHeight || D.documentElement.clientHeight || 640; }
+function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+
+// Genera una posición pegada a un borde, evitando el centro y opcionalmente lejos de (ax,ay)
+function edgePos(ax, ay){
+  var maxX = vw() - SIZE - MARGIN, maxY = vh() - SIZE - MARGIN;
+  if (maxX < MARGIN) maxX = MARGIN;
+  if (maxY < MARGIN) maxY = MARGIN;
+  var best = null, bestScore = -1;
+  for (var i=0;i<10;i++){
+    var side = Math.floor(Math.random()*4); // 0 top,1 bottom,2 left,3 right
+    var nx, ny;
+    if (side===0){ nx = MARGIN + Math.random()*(maxX-MARGIN); ny = MARGIN + Math.random()*EDGE_BAND; }
+    else if (side===1){ nx = MARGIN + Math.random()*(maxX-MARGIN); ny = maxY - Math.random()*EDGE_BAND; }
+    else if (side===2){ nx = MARGIN + Math.random()*EDGE_BAND; ny = MARGIN + Math.random()*(maxY-MARGIN); }
+    else { nx = maxX - Math.random()*EDGE_BAND; ny = MARGIN + Math.random()*(maxY-MARGIN); }
+    nx = clamp(nx, MARGIN, maxX); ny = clamp(ny, MARGIN, maxY);
+    var score;
+    if (typeof ax === 'number'){
+      var dx = (nx+SIZE/2)-ax, dy = (ny+SIZE/2)-ay;
+      score = dx*dx + dy*dy;            // lejos del cursor = mejor
+    } else {
+      var ddx = nx-x, ddy = ny-y;
+      score = ddx*ddx + ddy*ddy;        // lejos de donde estaba = mejor
+    }
+    if (score > bestScore){ bestScore = score; best = {x:nx,y:ny}; }
+  }
+  return best || {x:x,y:y};
+}
+
+function place(nx, ny, instant){
+  if (nx > x) lastDir = 1; else if (nx < x) lastDir = -1;
+  emoji.style.setProperty('--gxg-dir', lastDir);
+  x = nx; y = ny;
+  if (instant){
+    var t = cat.style.transition; cat.style.transition='none';
+    cat.style.transform = 'translate3d('+x+'px,'+y+'px,0)';
+    // forzar reflow para que la próxima transición funcione
+    void cat.offsetWidth;
+    cat.style.transition = t;
+  } else {
+    cat.style.transform = 'translate3d('+x+'px,'+y+'px,0)';
+  }
+}
+
+function say(text){
+  bubble.textContent = text;
+  cat.classList.add('gxg-talk');
+  if (talkTimer) clearTimeout(talkTimer);
+  talkTimer = setTimeout(function(){ cat.classList.remove('gxg-talk'); }, 1600);
+}
+
+function wake(){
+  if (asleep){
+    asleep = false;
+    cat.classList.remove('gxg-sleep');
+    bubble.textContent = '';
+  }
+  lastInteract = Date.now();
+}
+
+function flee(ax, ay){
+  wake();
+  if (cat.classList.contains('gxg-hidden')) cat.classList.remove('gxg-hidden');
+  var dest = edgePos(ax, ay);
+  cat.classList.add('gxg-flee');
+  if (!reduce) cat.classList.add('gxg-run');
+  place(dest.x, dest.y, false);
+  say(phrases[pIdx % phrases.length]); pIdx++;
+  if (runTimer) clearTimeout(runTimer);
+  runTimer = setTimeout(function(){
+    cat.classList.remove('gxg-run');
+    cat.classList.remove('gxg-flee');
+  }, reduce ? 260 : 460);
+}
+
+// Susto por acercar el cursor (escritorio)
+var moveThrottle = 0;
+function onMove(ev){
+  var now = Date.now();
+  if (now - moveThrottle < 60) return;
+  moveThrottle = now;
+  if (cat.classList.contains('gxg-hidden')) return;
+  var cx = x + SIZE/2, cy = y + SIZE/2;
+  var dx = ev.clientX - cx, dy = ev.clientY - cy;
+  if (dx*dx + dy*dy < 72*72){
+    flee(ev.clientX, ev.clientY);
+  }
+}
+
+// Toque/clic: huye lejos del punto tocado
+function onPoke(ev){
+  ev.preventDefault();
+  ev.stopPropagation();
+  var px, py;
+  try {
+    if (ev.touches && ev.touches[0]){ px = ev.touches[0].clientX; py = ev.touches[0].clientY; }
+    else { px = ev.clientX; py = ev.clientY; }
+  } catch(e){}
+  if (typeof px !== 'number'){ px = x+SIZE/2; py = y+SIZE/2; }
+  flee(px, py);
+}
+
+cat.addEventListener('click', onPoke);
+cat.addEventListener('touchstart', onPoke, {passive:false});
+cat.addEventListener('keydown', function(ev){
+  if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); flee(x+SIZE/2, y+SIZE/2); }
+});
+if (!('ontouchstart' in W)) {
+  D.addEventListener('mousemove', onMove, {passive:true});
+}
+
+// Reaparición / paseo ocasional
+function wander(){
+  if (cat.classList.contains('gxg-hidden')){
+    var p = edgePos();
+    place(p.x, p.y, true);
+    requestAnimationFrame(function(){ cat.classList.remove('gxg-hidden'); });
+  } else if (!asleep && Date.now()-lastInteract > 4000) {
+    // paseo tranquilo a otro borde
+    cat.classList.remove('gxg-flee');
+    var d = edgePos();
+    place(d.x, d.y, false);
+  }
+}
+
+// Siesta tras inactividad
+function checkSleep(){
+  if (!asleep && !cat.classList.contains('gxg-hidden') && Date.now()-lastInteract > 11000){
+    asleep = true;
+    cat.classList.add('gxg-sleep');
+    bubble.textContent = '💤';
+  }
+}
+
+// Reposiciona si la ventana cambia y el gato queda fuera
+function onResize(){
+  var maxX = vw()-SIZE-MARGIN, maxY = vh()-SIZE-MARGIN;
+  if (x>maxX || y>maxY){ place(clamp(x,MARGIN,Math.max(MARGIN,maxX)), clamp(y,MARGIN,Math.max(MARGIN,maxY)), true); }
+}
+W.addEventListener('resize', onResize, {passive:true});
+
+// Aparición inicial
+setTimeout(function(){
+  var p = edgePos();
+  place(p.x, p.y, true);
+  requestAnimationFrame(function(){ cat.classList.remove('gxg-hidden'); say('miau 🐾'); });
+}, 2200);
+
+// Bucles de vida (lentos, no molestan)
+setInterval(wander, 9000);
+setInterval(checkSleep, 3000);
+}catch(e){console.warn('widget gato',e);}})();
+</script>
+<script>
+/* widget: tour */
+(function(){try{
+/* ===== TOUR / ONBOARDING widget ===== */
+var SEEN_KEY = "cuaderno_tour_seen";
+
+// ---------- build persistent UI ----------
+var launch = document.createElement("button");
+launch.id = "tourLaunch";
+launch.type = "button";
+launch.setAttribute("aria-label","Ruta guiada");
+launch.innerHTML = '<span class="tlEmoji">🧭</span><span class="tlTxt">Ruta guiada</span>';
+document.body.appendChild(launch);
+
+var backdrop = document.createElement("div");
+backdrop.id = "tourBackdrop";
+document.body.appendChild(backdrop);
+
+var ring = document.createElement("div");
+ring.id = "tourRing";
+document.body.appendChild(ring);
+
+var card = document.createElement("div");
+card.id = "tourCard";
+card.setAttribute("role","dialog");
+card.innerHTML =
+  '<div class="tcStep"></div>'+
+  '<div class="tcTitle"></div>'+
+  '<div class="tcBody"></div>'+
+  '<div class="tcDots"></div>'+
+  '<div class="tcBtns">'+
+    '<button type="button" class="tcExit">Salir</button>'+
+    '<button type="button" class="tcNext">Siguiente</button>'+
+  '</div>';
+document.body.appendChild(card);
+
+var elStep  = card.querySelector(".tcStep");
+var elTitle = card.querySelector(".tcTitle");
+var elBody  = card.querySelector(".tcBody");
+var elDots  = card.querySelector(".tcDots");
+var btnNext = card.querySelector(".tcNext");
+var btnExit = card.querySelector(".tcExit");
+
+// ---------- helper: find a card by its .num text ----------
+function findCardByNum(n){
+  try{
+    var cards = document.querySelectorAll(".card");
+    for(var i=0;i<cards.length;i++){
+      var numEl = cards[i].querySelector(".num");
+      if(numEl && (numEl.textContent||"").trim() === String(n)) return cards[i];
+    }
+  }catch(e){}
+  return null;
+}
+
+// ---------- the steps (resolved lazily, so missing ones are skipped) ----------
+var STEP_DEFS = [
+  { sel:function(){ return document.querySelector(".hero"); },
+    title:"El termómetro 🌡️",
+    body:"Esto mide qué tan lejos ha llegado MADRE en el mundo real, de 0 a 10." },
+  { sel:function(){ return document.querySelector("#senalesCard"); },
+    title:"La prueba real ✅",
+    body:"Aquí van las señales que no mienten: euros, clientes, estrellas… resultados de verdad." },
+  { sel:function(){ return findCardByNum("1"); },
+    title:"¿Qué es MADRE? 🤔",
+    body:"Esta tarjeta lo cuenta en una sola frase. Si solo lees una, lee esta." },
+  { sel:function(){ return findCardByNum("3"); },
+    title:"El primer euro 💶",
+    body:"Cómo MADRE intenta ganar su primer euro de forma autónoma." },
+  { sel:function(){ return document.querySelector("#comentarios"); },
+    title:"Deja tu huella ✍️",
+    body:"Comenta, opina o dibuja. MADRE lee lo que dejas aquí." }
+];
+
+var steps = [];        // resolved at tour start
+var idx = 0;
+var tourActive = false;
+
+// ---------- positioning ----------
+function placeRing(el){
+  var r = el.getBoundingClientRect();
+  var pad = 8;
+  var top = Math.max(6, r.top - pad);
+  var left = Math.max(6, r.left - pad);
+  var w = Math.min(window.innerWidth - left - 6, r.width + pad*2);
+  var h = r.height + pad*2;
+  ring.style.top = top + "px";
+  ring.style.left = left + "px";
+  ring.style.width = w + "px";
+  ring.style.height = h + "px";
+}
+
+function buildDots(){
+  elDots.innerHTML = "";
+  for(var i=0;i<steps.length;i++){
+    var d = document.createElement("i");
+    if(i===idx) d.className = "act";
+    elDots.appendChild(d);
+  }
+}
+
+function showStep(){
+  if(idx >= steps.length){ endTour(); return; }
+  var st = steps[idx];
+  var el = st.el;
+  // scroll element into view, then position ring/card after settle
+  try{ el.scrollIntoView({behavior:"smooth", block:"center"}); }catch(e){ try{el.scrollIntoView();}catch(_){} }
+
+  elStep.textContent = "Paso " + (idx+1) + " de " + steps.length;
+  elTitle.textContent = st.title;
+  elBody.textContent = st.body;
+  btnNext.textContent = (idx === steps.length-1) ? "¡Listo!" : "Siguiente";
+  buildDots();
+
+  setTimeout(function(){
+    if(!tourActive) return;
+    placeRing(el);
+    ring.classList.add("on");
+    card.classList.add("on");
+  }, 360);
+}
+
+function startTour(){
+  // resolve steps now (skip missing zones)
+  steps = [];
+  for(var i=0;i<STEP_DEFS.length;i++){
+    var el = null;
+    try{ el = STEP_DEFS[i].sel(); }catch(e){}
+    if(el) steps.push({ el:el, title:STEP_DEFS[i].title, body:STEP_DEFS[i].body });
+  }
+  if(!steps.length) return;
+  idx = 0;
+  tourActive = true;
+  backdrop.classList.add("on");
+  showStep();
+}
+
+function nextStep(){
+  if(!tourActive) return;
+  if(idx >= steps.length-1){ endTour(true); return; }
+  idx++;
+  ring.classList.remove("on");
+  card.classList.remove("on");
+  setTimeout(showStep, 180);
+}
+
+function endTour(finished){
+  tourActive = false;
+  ring.classList.remove("on");
+  card.classList.remove("on");
+  backdrop.classList.remove("on");
+  if(finished){
+    try{ if(window.__fb) window.__fb({card:"tour", section:"ruta-guiada", tipo:"completado", texto:"Terminó la ruta guiada"}); }catch(e){}
+  }
+}
+
+// reposition ring on resize/scroll while active
+function reposition(){
+  if(tourActive && idx < steps.length && steps[idx]) placeRing(steps[idx].el);
+}
+window.addEventListener("resize", reposition);
+window.addEventListener("scroll", reposition, {passive:true});
+
+// ---------- wire controls ----------
+launch.addEventListener("click", function(){ if(!tourActive) startTour(); });
+btnNext.addEventListener("click", nextStep);
+btnExit.addEventListener("click", function(){ endTour(false); });
+backdrop.addEventListener("click", function(){ endTour(false); });
+document.addEventListener("keydown", function(e){
+  if(!tourActive) return;
+  if(e.key === "Escape") endTour(false);
+  else if(e.key === "Enter" || e.key === "ArrowRight") nextStep();
+});
+
+// ---------- first-visit welcome ----------
+function showWelcome(){
+  var w = document.createElement("div");
+  w.id = "tourWelcome";
+  w.innerHTML =
+    '<div class="twBox">'+
+      '<span class="twWave">👋</span>'+
+      '<h2>¿Qué es esto?</h2>'+
+      '<p>Es el cuaderno vivo de <b>MADRE</b>, un sistema que intenta lograr cosas reales por su cuenta. Te lo enseño en 10 segundos.</p>'+
+      '<div class="twBtns">'+
+        '<button type="button" class="twNo">Ahora no</button>'+
+        '<button type="button" class="twGo">Enséñame (10s)</button>'+
+      '</div>'+
+    '</div>';
+  document.body.appendChild(w);
+  requestAnimationFrame(function(){ w.classList.add("on"); });
+
+  function closeWelcome(go){
+    try{ localStorage.setItem(SEEN_KEY, "1"); }catch(e){}
+    w.classList.remove("on");
+    setTimeout(function(){ try{ w.remove(); }catch(e){} }, 400);
+    if(go) setTimeout(startTour, 420);
+  }
+  w.querySelector(".twGo").addEventListener("click", function(){ closeWelcome(true); });
+  w.querySelector(".twNo").addEventListener("click", function(){ closeWelcome(false); });
+  w.addEventListener("click", function(e){ if(e.target === w) closeWelcome(false); });
+}
+
+var seen = null;
+try{ seen = localStorage.getItem(SEEN_KEY); }catch(e){}
+if(!seen){ setTimeout(showWelcome, 700); }
+}catch(e){console.warn('widget tour',e);}})();
+</script>
+<script>
+/* widget: dibujos */
+(function(){try{
+var LIKES_KEY='draw_likes';
+function lget(){try{return JSON.parse(localStorage.getItem(LIKES_KEY)||'[]')}catch(e){return[]}}
+function lsave(a){try{localStorage.setItem(LIKES_KEY,JSON.stringify(a))}catch(e){}}
+
+var sec=document.createElement('section');
+sec.id='dbjsSec';
+sec.innerHTML='<h3>🎨 Enhorabuena, si has llegado hasta aquí… ¡haz un dibujo!</h3>'+
+'<p id="dbjsSub">Dibuja con el dedo o el ratón y deja tu huella en el cuaderno vivo ✨</p>'+
+'<div id="dbjsStage">'+
+'<div id="dbjsCanvasWrap"><canvas id="dbjsCanvas"></canvas></div>'+
+'<div id="dbjsTools" id="dbjsColors"></div>'+
+'<div id="dbjsTools">'+
+'<input id="dbjsName" type="text" maxlength="40" placeholder="Tu nombre (opcional)">'+
+'<button id="dbjsClear" type="button">🧽 Borrar</button>'+
+'<button id="dbjsSend" type="button">Enviar dibujo 🚀</button>'+
+'</div>'+
+'<div id="dbjsMsg"></div>'+
+'</div>'+
+'<div id="dbjsGalTitle">🖼️ Galería de la comunidad</div>'+
+'<div id="dbjsGal"></div>';
+
+var foot=document.querySelector('footer');
+if(foot&&foot.parentNode){foot.parentNode.insertBefore(sec,foot);}
+else{var wrap=document.querySelector('.wrap')||document.body;wrap.appendChild(sec);}
+
+var canvas=sec.querySelector('#dbjsCanvas');
+var ctx=canvas.getContext('2d');
+var W=Math.min(300,(canvas.parentNode.clientWidth-12)||300),H=180;
+var DPR=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+canvas.width=W*DPR;canvas.height=H*DPR;
+canvas.style.width=W+'px';canvas.style.height=H+'px';
+ctx.scale(DPR,DPR);
+function clearCanvas(){ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);}
+clearCanvas();
+ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=4;
+
+var colors=['#222222','#e23b3b','#2d7ff0','#22a06b','#f5a623'];
+var current=colors[0];
+var toolsRow=sec.querySelectorAll('#dbjsTools')[0];
+colors.forEach(function(c,i){
+  var b=document.createElement('button');
+  b.type='button';b.className='dbjsColor'+(i===0?' dbjsOn':'');
+  b.style.background=c;b.setAttribute('aria-label','color '+c);
+  b.addEventListener('click',function(){
+    current=c;
+    toolsRow.querySelectorAll('.dbjsColor').forEach(function(x){x.classList.remove('dbjsOn');});
+    b.classList.add('dbjsOn');
+  });
+  toolsRow.appendChild(b);
+});
+
+var drawing=false,lx=0,ly=0;
+function pos(e){var r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left),y:(e.clientY-r.top)};}
+function start(e){e.preventDefault();drawing=true;var p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.fillStyle=current;ctx.arc(lx,ly,2,0,Math.PI*2);ctx.fill();}
+function move(e){if(!drawing)return;e.preventDefault();var p=pos(e);ctx.strokeStyle=current;ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.stroke();lx=p.x;ly=p.y;}
+function end(){drawing=false;}
+canvas.addEventListener('pointerdown',start);
+canvas.addEventListener('pointermove',move);
+window.addEventListener('pointerup',end);
+canvas.addEventListener('pointercancel',end);
+canvas.addEventListener('touchstart',function(e){e.preventDefault();},{passive:false});
+canvas.addEventListener('touchmove',function(e){e.preventDefault();},{passive:false});
+
+var msg=sec.querySelector('#dbjsMsg');
+function say(t,err){msg.textContent=t;msg.style.color=err?'#d83a3a':'#6a5acd';}
+
+sec.querySelector('#dbjsClear').addEventListener('click',function(){clearCanvas();say('Lienzo limpio ✨');setTimeout(function(){if(msg.textContent==='Lienzo limpio ✨')say('');},1500);});
+
+function waitSb(cb,err){
+  if(window.__sb){cb(window.__sb);return;}
+  var tries=0,iv=setInterval(function(){
+    tries++;
+    if(window.__sb){clearInterval(iv);cb(window.__sb);}
+    else if(tries>=20){clearInterval(iv);err();}
+  },400);
+}
+
+var sendBtn=sec.querySelector('#dbjsSend');
+sendBtn.addEventListener('click',function(){
+  sendBtn.disabled=true;say('Preparando tu obra… 🎨');
+  waitSb(function(sb){
+    try{
+      canvas.toBlob(function(blob){
+        if(!blob){say('No se pudo leer el lienzo 😕',true);sendBtn.disabled=false;return;}
+        var nameVal=(sec.querySelector('#dbjsName').value||'').trim();
+        var rand=Math.random().toString(36).slice(2,8);
+        var path='d/'+Date.now()+'_'+rand+'.png';
+        say('Subiendo… ☁️');
+        sb.storage.from('comment-images').upload(path,blob,{contentType:'image/png'}).then(function(up){
+          if(up&&up.error)throw up.error;
+          var pub=sb.storage.from('comment-images').getPublicUrl(path);
+          var url=pub&&pub.data?pub.data.publicUrl:null;
+          if(!url)throw new Error('sin url');
+          return sb.from('drawings').insert({name:nameVal||null,image_url:url});
+        }).then(function(ins){
+          if(ins&&ins.error)throw ins.error;
+          clearCanvas();
+          sec.querySelector('#dbjsName').value='';
+          say('¡Enviado! Gracias por dibujar 💜');
+          try{if(window.__fb)window.__fb({card:'dibujos',section:'galeria',tipo:'dibujo',texto:'nuevo dibujo'+(nameVal?(' de '+nameVal):'')});}catch(e){}
+          loadGallery();
+          sendBtn.disabled=false;
+        }).catch(function(e){console.warn('dibujos enviar',e);say('Ups, no se pudo enviar. Inténtalo otra vez 🙏',true);sendBtn.disabled=false;});
+      },'image/png');
+    }catch(e){console.warn('dibujos',e);say('Algo falló al enviar 😕',true);sendBtn.disabled=false;}
+  },function(){say('Conexión no disponible ahora mismo 😴',true);sendBtn.disabled=false;});
+});
+
+var gal=sec.querySelector('#dbjsGal');
+function renderGallery(rows){
+  gal.textContent='';
+  if(!rows||!rows.length){var e=document.createElement('div');e.id='dbjsGalEmpty';e.textContent='Aún no hay dibujos… ¡sé el primero! 🥳';gal.appendChild(e);return;}
+  var liked=lget();
+  rows.forEach(function(r){
+    var card=document.createElement('div');card.className='dbjsCard';
+    var img=document.createElement('img');img.loading='lazy';img.alt='dibujo';img.src=r.image_url||'';
+    img.onerror=function(){img.style.display='none';};
+    card.appendChild(img);
+    if(r.name){var nm=document.createElement('div');nm.className='dbjsCardName';nm.textContent=r.name;card.appendChild(nm);}
+    var lk=document.createElement('button');lk.type='button';lk.className='dbjsLike';
+    var n=r.likes||0;var done=liked.indexOf(r.id)>=0;
+    if(done)lk.classList.add('dbjsLiked');
+    lk.textContent='👍 '+n;
+    lk.addEventListener('click',function(){
+      if(lk.classList.contains('dbjsLiked'))return;
+      var arr=lget();if(arr.indexOf(r.id)<0){arr.push(r.id);lsave(arr);}
+      n++;lk.textContent='👍 '+n;lk.classList.add('dbjsLiked','dbjsBump');
+      r.likes=n;
+      waitSb(function(sb){sb.rpc('like_drawing',{did:r.id}).then(function(res){if(res&&res.error)console.warn('like',res.error);}).catch(function(e){console.warn('like',e);});},function(){});
+      setTimeout(function(){lk.classList.remove('dbjsBump');reorder();},420);
+    });
+    card.appendChild(lk);
+    card._row=r;
+    gal.appendChild(card);
+  });
+}
+function reorder(){
+  var cards=Array.prototype.slice.call(gal.querySelectorAll('.dbjsCard'));
+  cards.sort(function(a,b){return (b._row.likes||0)-(a._row.likes||0);});
+  cards.forEach(function(c){gal.appendChild(c);});
+}
+function loadGallery(){
+  waitSb(function(sb){
+    sb.from('drawings').select('id,name,image_url,likes').eq('hidden',false).order('likes',{ascending:false}).order('created_at',{ascending:false}).then(function(res){
+      if(res&&res.error){console.warn('dibujos galeria',res.error);renderGallery([]);return;}
+      renderGallery((res&&res.data)||[]);
+    }).catch(function(e){console.warn('dibujos galeria',e);renderGallery([]);});
+  },function(){renderGallery([]);});
+}
+loadGallery();
+}catch(e){console.warn('widget dibujos',e);}})();
+</script>
+<script>
+/* widget: lapiz */
+(function(){try{
+var SEL='.card, .hero, .senalItem, .body p, .body li, .ctitle .t, summary';
+var active=false, curHot=null, bub=null;
+
+var fab=document.createElement('button');
+fab.id='lapizFab';
+fab.type='button';
+fab.setAttribute('aria-label','Comentar señalando una zona');
+fab.title='Comentar señalando una zona';
+fab.textContent='✏️';
+document.body.appendChild(fab);
+
+var bar=document.createElement('div');
+bar.id='lapizBar';
+bar.textContent='✏️ Toca la zona sobre la que quieres opinar (otra vez el lápiz para salir)';
+document.body.appendChild(bar);
+
+function closeBub(){
+  if(bub){ try{bub.remove();}catch(e){} bub=null; }
+}
+function clearHot(){
+  if(curHot){ try{curHot.classList.remove('lapiz-hot');}catch(e){} curHot=null; }
+}
+
+function targetFrom(el){
+  if(!el) return null;
+  try{ return el.closest(SEL); }catch(e){ return null; }
+}
+
+function onOver(e){
+  if(!active) return;
+  if(bub && bub.contains(e.target)) return;
+  var t=targetFrom(e.target);
+  if(t===curHot) return;
+  clearHot();
+  if(t && t!==fab && t!==bar){ curHot=t; try{t.classList.add('lapiz-hot');}catch(err){} }
+}
+
+function summarize(el){
+  var txt='';
+  try{ txt=(el.textContent||'').replace(/\s+/g,' ').trim(); }catch(e){}
+  if(!txt) txt='(zona sin texto)';
+  if(txt.length>80) txt=txt.slice(0,80)+'…';
+  return txt;
+}
+
+function showOk(x,y){
+  var ok=document.createElement('div');
+  ok.className='lapiz-ok';
+  ok.textContent='anclado ✓';
+  ok.style.left=x+'px';
+  ok.style.top=y+'px';
+  document.body.appendChild(ok);
+  setTimeout(function(){ try{ok.remove();}catch(e){} },1500);
+}
+
+function placeBub(x,y){
+  var w=240, vw=window.innerWidth, vh=window.innerHeight;
+  var px=x+12, py=y+12;
+  if(px+w+12>vw) px=Math.max(8, x-w-12);
+  if(px<8) px=8;
+  if(py+180>vh) py=Math.max(48, y-190);
+  if(py<48) py=48;
+  bub.style.left=px+'px';
+  bub.style.top=py+'px';
+}
+
+function openBub(el, x, y){
+  closeBub();
+  var resumen=summarize(el);
+  bub=document.createElement('div');
+  bub.id='lapizBub';
+  var q=document.createElement('p');
+  q.className='lz-q';
+  q.textContent='Sobre: '+resumen;
+  var ta=document.createElement('textarea');
+  ta.placeholder='Tu comentario sobre esta zona…';
+  ta.setAttribute('aria-label','Comentario sobre la zona seleccionada');
+  var row=document.createElement('div');
+  row.className='lz-row';
+  var cancel=document.createElement('button');
+  cancel.type='button'; cancel.className='lz-cancel'; cancel.textContent='Cancelar';
+  var send=document.createElement('button');
+  send.type='button'; send.className='lz-send'; send.textContent='Enviar';
+  row.appendChild(cancel); row.appendChild(send);
+  bub.appendChild(q); bub.appendChild(ta); bub.appendChild(row);
+  document.body.appendChild(bub);
+  placeBub(x,y);
+  setTimeout(function(){ try{ta.focus();}catch(e){} },30);
+
+  cancel.addEventListener('click', function(ev){ ev.stopPropagation(); closeBub(); });
+  ta.addEventListener('click', function(ev){ ev.stopPropagation(); });
+  bub.addEventListener('click', function(ev){ ev.stopPropagation(); });
+
+  send.addEventListener('click', function(ev){
+    ev.stopPropagation();
+    var texto=(ta.value||'').trim();
+    if(!texto){ try{ta.focus();}catch(e){} return; }
+    try{
+      if(typeof window.__fb==='function'){
+        window.__fb({card:'✏️ Comentario anclado', section:resumen, tipo:'comentario-zona', texto:texto});
+      }
+    }catch(e){}
+    closeBub();
+    showOk(x,y);
+    deactivate();
+  });
+}
+
+function onClick(e){
+  if(!active) return;
+  if(e.target===fab || (bub && bub.contains(e.target))) return;
+  var t=targetFrom(e.target);
+  if(!t) return;
+  e.preventDefault();
+  e.stopPropagation();
+  clearHot();
+  var x=e.clientX, y=e.clientY;
+  if(typeof x!=='number' || x===0 && y===0){
+    try{ var r=t.getBoundingClientRect(); x=r.left+Math.min(40,r.width/2); y=r.top+Math.min(30,r.height/2); }catch(err){}
+  }
+  openBub(t, x, y);
+}
+
+function activate(){
+  active=true;
+  fab.classList.add('on');
+  fab.title='Salir del modo comentario';
+  bar.classList.add('show');
+  document.body.classList.add('lapiz-mode');
+}
+function deactivate(){
+  active=false;
+  fab.classList.remove('on');
+  fab.title='Comentar señalando una zona';
+  bar.classList.remove('show');
+  document.body.classList.remove('lapiz-mode');
+  clearHot();
+  closeBub();
+}
+
+fab.addEventListener('click', function(e){
+  e.preventDefault(); e.stopPropagation();
+  if(active) deactivate(); else activate();
+});
+
+document.addEventListener('mouseover', onOver, true);
+document.addEventListener('click', onClick, true);
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape' && active){ deactivate(); }
+}, true);
+}catch(e){console.warn('widget lapiz',e);}})();
+</script>
+<script>
+(function(){ try{
+  // 🌳 ¿Por qué se llama MADRE? (curiosidad) en la tarjeta 1
+  document.querySelectorAll(".card").forEach(function(c){ var n=c.querySelector(".num"); if(!n||n.textContent.trim()!=="1") return;
+    var body=c.querySelector(".body"); if(!body) return;
+    var d=document.createElement("details"); d.className="x"; d.style.marginTop="8px";
+    d.innerHTML='<summary><span class="plus">+</span> 🌳 ¿Por qué se llama MADRE?</summary><div class="xb"><p>Cuando se habla de muchos temas, a veces se dice <b>"la raíz madre"</b>: la raíz de la que salen las demás, el <b>origen</b>. Por eso <b>MADRE</b> — representa el punto del que brotan las ideas y desde donde crece todo lo demás. (Curiosidad de Tony 🙂)</p></div>';
+    body.appendChild(d);
+  });
+  // ℹ️ De dónde salen los números (provenance)
+  var sn=document.getElementById("senalNota");
+  if(sn){ var p=document.createElement("div"); p.className="small"; p.style.marginTop="6px";
+    p.textContent="ℹ️ ¿De dónde salen estos números? Los pone MADRE sola: su motor se revisa cada ~30 min, actualiza su estado real y el cuaderno solo lo muestra (no los escribe nadie a mano).";
+    sn.parentNode.insertBefore(p, sn.nextSibling); }
+  // El post-it lleva a dar tu opinión (cómo darlo)
+  var pi=document.querySelector(".postit");
+  if(pi){ pi.style.cursor="pointer"; pi.title="Toca para dar tu opinión";
+    pi.addEventListener("click",function(e){ if(e.target.closest(".ns-pin")) return; if(window.__openFb) window.__openFb("General","","auto"); }); }
+}catch(e){ console.warn("content extra", e); } })();
 </script>
 </body>
 </html>
