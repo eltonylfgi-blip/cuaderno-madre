@@ -1257,6 +1257,7 @@ const sb=createClient(SB_URL, SB_KEY);
 const st=document.createElement("style");
 st.textContent=`
 #comentarios .cmt{border:1px solid var(--line,#e3e6ee);border-radius:10px;padding:9px 11px;margin:8px 0;background:#fff;animation:cmtIn .35s ease both}
+.cmt.madreReply{border-color:var(--accent,#3b6ef5);background:var(--accent-soft,#eaf0ff)}
 .cmt .meta{font-size:12px;color:var(--muted,#8a8f98);margin-bottom:3px}
 .cmt .ctext{font-size:14px;white-space:pre-wrap;word-break:break-word}
 .cmt .acts{margin-top:6px;display:flex;gap:14px}
@@ -1312,6 +1313,7 @@ function makeForm(parentId){
 }
 function makeComment(c, isReply){
   const w=document.createElement("div"); w.className="cmt";
+  if((c.name||"").indexOf("MADRE")===0) w.classList.add("madreReply");
   const m=document.createElement("div"); m.className="meta"; m.textContent=(c.name||"Anónimo")+" · "+fmt(c.created_at);
   const tx=document.createElement("div"); tx.className="ctext"; tx.textContent=c.body;
   const acts=document.createElement("div"); acts.className="acts";
