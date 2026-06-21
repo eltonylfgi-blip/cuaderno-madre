@@ -84,8 +84,10 @@ Pensar en **3 capas** para que un clon sea barato:
 - **Higiene**: consolidar en los 3 docs existentes; no crear docs de un solo uso.
 
 ## 7. PARKING LOT — persistido, no hacer aún (con porqué)
-- **Subir VÍDEOS** en comentarios (la foto ya funciona): peso/moderación; depende de validación (Q1) y rate-limit (Q9).
-- **Seguridad real**: rate-limit, RLS por IP/sesión, honeypot, moderación mejor que `blocked()`; sacar la contraseña de texto plano. (La validación cliente NO es seguridad.)
+> **PRIORIDAD nº1 de la próxima vuelta (criterio de Tony, 2026-06-21): SEGURIDAD antes que más features lúdicas.** Es la única pieza con riesgo de abuso real; el resto es UX.
+- **Seguridad real (TOP)**: rate-limit, RLS por IP/sesión, honeypot, moderación mejor que `blocked()`; sacar la contraseña de texto plano. (La validación cliente NO es seguridad — es bypasseable con un POST directo a la tabla/bucket.)
+- **Comentarios: respuestas HUÉRFANAS con `.limit(200)`** (caso de borde, lejano hoy pero anotado): `load()` trae los 200 comentarios MÁS RECIENTES; si alguien responde a un comentario viejo que ya cayó fuera de esa ventana, esa respuesta tiene `parent_id` pero su padre no está en `all` → no se pinta ni como top-level ni como hijo (huérfana silenciosa). **Fix barato** (cuando crezca): en `renderListInto`, tras pintar los tops, pintar también como top-level los comentarios cuyo `parent_id` exista pero cuyo padre NO esté en `all` (fallback anti-huérfanos). **Fix completo**: paginación / "cargar más antiguos".
+- **Subir VÍDEOS** en comentarios (la foto ya funciona): peso/moderación; depende de validación (Q1) y del rate-limit de arriba.
 - **Split de `index.html`** en `.css`/`.js` externos + TSV→JSON + objeto `CONFIG` de widgets. Alto riesgo (rompe "un solo index.html").
 - **localStorage namespaced+versionado** (`cm.v1.*`) con migración (hoy claves dispersas).
 - **`og:image`** 1200×630 para tarjeta de enlace (las metas OG ya están).
