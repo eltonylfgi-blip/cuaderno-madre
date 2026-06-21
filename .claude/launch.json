@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "cuaderno",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8137", "--directory", "C:/Users/anton/repos/cuaderno-madre"],
+      "port": 8137
+    }
+  ]
+}

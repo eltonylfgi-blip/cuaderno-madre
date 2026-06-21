@@ -1088,6 +1088,7 @@ investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR e
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-21",titulo:"👁️ Visitas + 'El cuaderno por dentro' + caos con chicha",detalle:"Nuevo contador de visitas (abajo a la izq.): al tocarlo se abre un panel con lo más querido (comentarios y dibujo más votados), la actividad y 'lo que opina MADRE' (cambia cada vez). El modo caótico ahora tiene flechas que señalan, notas y avisos absurdos (no solo confeti) y se modera solo en móvil. Arreglos: el gato ya no se tapa con la barra de arriba, y en los dibujos puedes deshacer (botón ↩️ Atrás o Ctrl+Z)."},
     {fecha:"2026-06-21",titulo:"🤪 Modo caótico, gato troll y arreglos finos",detalle:"Modo caótico (confeti y locuras, con permiso), gato con frases troll y barriguita, contraseña que se ríe, paneles que reaccionan al ratón. Arreglados: la nota ya no sale rara, el tour ya no deja borrosa la zona, y el lápiz/corazón ya dejan señalar cualquier zona (también cabecera y bordes)."},
     {fecha:"2026-06-21",titulo:"🐱 ¡Cuaderno vivo! gato, dibujos, tour y más",detalle:"Un gato que huye si lo tocas, una zona para hacer DIBUJOS (con likes), un tour guiado para entenderlo en 1 min, una nota secreta 📌, modo lápiz ✏️ para opinar sobre cualquier zona, chat tipo conversación, y la curiosidad de por qué se llama MADRE. Menos manual, más criatura."},
     {fecha:"2026-06-21",titulo:"📲 Opinar con foto desde el móvil + flechas que crecen",detalle:"Desde el móvil ya puedes opinar con imagen y llega solo a MADRE (sin pegar nada). Las flechas de ayuda ahora van pegadas a su sitio y crecen al pasar por encima."},
@@ -1841,9 +1842,10 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
 .dbjsColor{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.15);cursor:pointer;padding:0;transition:transform .12s}
 .dbjsColor:hover{transform:scale(1.18)}
 .dbjsColor.dbjsOn{transform:scale(1.25);box-shadow:0 0 0 3px #6a5acd}
-#dbjsClear,#dbjsSend{cursor:pointer;border:none;border-radius:999px;font-weight:600;font-size:.85rem;padding:9px 16px;transition:transform .12s,box-shadow .12s,filter .12s}
-#dbjsClear{background:#eee;color:#555}
-#dbjsClear:hover{background:#e2e2e2;transform:translateY(-1px)}
+#dbjsClear,#dbjsSend,#dbjsUndo{cursor:pointer;border:none;border-radius:999px;font-weight:600;font-size:.85rem;padding:9px 16px;transition:transform .12s,box-shadow .12s,filter .12s}
+#dbjsClear,#dbjsUndo{background:#eee;color:#555}
+#dbjsClear:hover,#dbjsUndo:hover{background:#e2e2e2;transform:translateY(-1px)}
+#dbjsUndo:disabled{opacity:.45;cursor:default;transform:none}
 #dbjsName{flex:1;min-width:120px;max-width:200px;padding:9px 12px;border-radius:999px;border:2px solid #d9d2f5;font-size:.85rem;outline:none}
 #dbjsName:focus{border-color:#6a5acd}
 #dbjsSend{background:linear-gradient(135deg,#6a5acd,#9b6dff);color:#fff;box-shadow:0 4px 12px rgba(106,90,205,.4)}
@@ -1965,10 +1967,21 @@ D.body.appendChild(cat);
 var SIZE = 44;
 var MARGIN = 14;          // separación a los bordes
 var EDGE_BAND = 92;       // grosor de la "zona borde" donde puede vivir
+// Zona segura superior: el gato NUNCA se mete bajo la barra del navegador / notch
+// (bug "el gato se tapa con lo de arriba"). Respeta el safe-area-inset-top del móvil.
+var TOPSAFE = 64;
+try{
+  var probe = D.createElement('div');
+  probe.style.cssText = 'position:fixed;top:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none';
+  D.body.appendChild(probe);
+  var sat = probe.getBoundingClientRect().height || 0;
+  probe.remove();
+  TOPSAFE = Math.max(64, Math.round(sat) + 56);
+}catch(e){}
 var phrases = ['¡ay!','no me toques 😼','miau de error 404','estoy ocupado','shhh','¿y mi siesta?','prrr…','déjame en paz 🐾','no, gracias','*bufido*','buen aim 🎯','¿practicando el aim?','casi me pillas','te he visto más lento 😹','los hay más rápidos','GG','skill issue 😹','solo me dejo acariciar si eres una chica 😼 (es broma)','me he cansado de huir… acaríciame la barriguita 🐱','no en mi guardia ⚔️'];
 var pIdx = 0;
 
-var x = 20, y = 20;       // posición actual
+var x = 20, y = TOPSAFE;   // posición actual
 var lastDir = 1;
 var lastInteract = Date.now();
 var asleep = false;
@@ -1982,16 +1995,16 @@ function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
 function edgePos(ax, ay){
   var maxX = vw() - SIZE - MARGIN, maxY = vh() - SIZE - MARGIN;
   if (maxX < MARGIN) maxX = MARGIN;
-  if (maxY < MARGIN) maxY = MARGIN;
+  if (maxY < TOPSAFE) maxY = TOPSAFE;
   var best = null, bestScore = -1;
   for (var i=0;i<10;i++){
     var side = Math.floor(Math.random()*4); // 0 top,1 bottom,2 left,3 right
     var nx, ny;
-    if (side===0){ nx = MARGIN + Math.random()*(maxX-MARGIN); ny = MARGIN + Math.random()*EDGE_BAND; }
+    if (side===0){ nx = MARGIN + Math.random()*(maxX-MARGIN); ny = TOPSAFE + Math.random()*EDGE_BAND; }
     else if (side===1){ nx = MARGIN + Math.random()*(maxX-MARGIN); ny = maxY - Math.random()*EDGE_BAND; }
-    else if (side===2){ nx = MARGIN + Math.random()*EDGE_BAND; ny = MARGIN + Math.random()*(maxY-MARGIN); }
-    else { nx = maxX - Math.random()*EDGE_BAND; ny = MARGIN + Math.random()*(maxY-MARGIN); }
-    nx = clamp(nx, MARGIN, maxX); ny = clamp(ny, MARGIN, maxY);
+    else if (side===2){ nx = MARGIN + Math.random()*EDGE_BAND; ny = TOPSAFE + Math.random()*(maxY-TOPSAFE); }
+    else { nx = maxX - Math.random()*EDGE_BAND; ny = TOPSAFE + Math.random()*(maxY-TOPSAFE); }
+    nx = clamp(nx, MARGIN, maxX); ny = clamp(ny, TOPSAFE, maxY);
     var score;
     if (typeof ax === 'number'){
       var dx = (nx+SIZE/2)-ax, dy = (ny+SIZE/2)-ay;
@@ -2352,6 +2365,7 @@ sec.innerHTML='<h3>🎨 Enhorabuena, si has llegado hasta aquí… ¡haz un dibu
 '<div id="dbjsTools" id="dbjsColors"></div>'+
 '<div id="dbjsTools">'+
 '<input id="dbjsName" type="text" maxlength="40" placeholder="Tu nombre (opcional)">'+
+'<button id="dbjsUndo" type="button" title="Deshacer (Ctrl+Z)" disabled>↩️ Atrás</button>'+
 '<button id="dbjsClear" type="button">🧽 Borrar</button>'+
 '<button id="dbjsSend" type="button">Enviar dibujo 🚀</button>'+
 '</div>'+
@@ -2391,8 +2405,14 @@ colors.forEach(function(c,i){
 });
 
 var drawing=false,lx=0,ly=0;
+// ---- Deshacer (botón ↩️ Atrás + Ctrl/Cmd+Z). Guardamos el lienzo ANTES de cada trazo ----
+var undoStack=[];
+var undoBtn=null; // se asigna más abajo
+function refreshUndo(){ if(undoBtn) undoBtn.disabled = undoStack.length===0; }
+function snapshot(){ try{ undoStack.push(ctx.getImageData(0,0,canvas.width,canvas.height)); if(undoStack.length>40) undoStack.shift(); refreshUndo(); }catch(e){} }
+function undo(){ if(!undoStack.length) return; var img=undoStack.pop(); try{ ctx.putImageData(img,0,0); }catch(e){} refreshUndo(); }
 function pos(e){var r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left),y:(e.clientY-r.top)};}
-function start(e){e.preventDefault();drawing=true;var p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.fillStyle=current;ctx.arc(lx,ly,2,0,Math.PI*2);ctx.fill();}
+function start(e){e.preventDefault();drawing=true;snapshot();var p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.fillStyle=current;ctx.arc(lx,ly,2,0,Math.PI*2);ctx.fill();}
 function move(e){if(!drawing)return;e.preventDefault();var p=pos(e);ctx.strokeStyle=current;ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.stroke();lx=p.x;ly=p.y;}
 function end(){drawing=false;}
 canvas.addEventListener('pointerdown',start);
@@ -2405,7 +2425,19 @@ canvas.addEventListener('touchmove',function(e){e.preventDefault();},{passive:fa
 var msg=sec.querySelector('#dbjsMsg');
 function say(t,err){msg.textContent=t;msg.style.color=err?'#d83a3a':'#6a5acd';}
 
-sec.querySelector('#dbjsClear').addEventListener('click',function(){clearCanvas();say('Lienzo limpio ✨');setTimeout(function(){if(msg.textContent==='Lienzo limpio ✨')say('');},1500);});
+sec.querySelector('#dbjsClear').addEventListener('click',function(){snapshot();clearCanvas();say('Lienzo limpio ✨');setTimeout(function(){if(msg.textContent==='Lienzo limpio ✨')say('');},1500);});
+undoBtn=sec.querySelector('#dbjsUndo');
+if(undoBtn) undoBtn.addEventListener('click',function(){undo();});
+refreshUndo();
+// Ctrl+Z / Cmd+Z deshace (no molesta si estás escribiendo en una caja de texto)
+document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&(e.key==='z'||e.key==='Z')){
+    var t=e.target,tag=t&&t.tagName;
+    if(tag==='INPUT'||tag==='TEXTAREA'||(t&&t.isContentEditable))return;
+    if(!undoStack.length)return;
+    e.preventDefault();undo();
+  }
+});
 
 function waitSb(cb,err){
   if(window.__sb){cb(window.__sb);return;}
@@ -2658,18 +2690,50 @@ document.addEventListener('keydown', function(e){
 .chaosParticle{position:fixed;z-index:9998;pointer-events:none;font-size:22px;top:-30px;will-change:transform}
 body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
 @keyframes chaosWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(.7deg)}75%{transform:rotate(-.7deg)}}
-@media(prefers-reduced-motion:reduce){body.chaos .card,.card>details:not([open])>summary .caret,#chaosFab.on{animation:none}}
+/* caos narrativo: flechas que señalan, notas absurdas, avisos que compiten */
+.chaosArrow{position:fixed;z-index:9997;pointer-events:none;font:800 15px/1 system-ui,-apple-system,Segoe UI,sans-serif;color:#fff;background:#111;padding:5px 10px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.4);white-space:nowrap;animation:chArrow 2.6s ease forwards}
+.chaosNote{position:fixed;z-index:9997;pointer-events:none;max-width:160px;background:#fff7b0;color:#3a3320;font:600 12.5px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;padding:8px 10px;border-radius:3px;box-shadow:0 6px 18px rgba(0,0,0,.22);animation:chNote 4.2s ease forwards}
+.chaosAlert{position:fixed;right:10px;z-index:9999;pointer-events:none;background:#fff;color:#7a2e00;border:1px solid #f0c98a;border-left:5px solid #f59e0b;border-radius:8px;padding:8px 12px;font:600 12.5px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.18);max-width:240px;animation:chAlert 3.4s cubic-bezier(.2,1,.3,1) forwards}
+.chaosShout{animation:chShout 1.2s ease !important;position:relative;z-index:55}
+@keyframes chArrow{0%{opacity:0;transform:scale(.6)}12%{opacity:1;transform:scale(1.14)}20%,78%{opacity:1;transform:scale(1)}48%{transform:scale(1) translateX(4px)}100%{opacity:0;transform:scale(.9)}}
+@keyframes chNote{0%{opacity:0;transform:translateY(14px) rotate(var(--r,-4deg)) scale(.7)}14%{opacity:1;transform:translateY(0) rotate(var(--r,-4deg)) scale(1.06)}22%,74%{opacity:1;transform:translateY(0) rotate(var(--r,-4deg)) scale(1)}100%{opacity:0;transform:translateY(-22px) rotate(var(--r,-4deg)) scale(.95)}}
+@keyframes chAlert{0%{opacity:0;transform:translateX(120%)}12%,80%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(120%)}}
+@keyframes chShout{0%,100%{transform:scale(1) rotate(0)}25%{transform:scale(1.06) rotate(-1.6deg)}60%{transform:scale(1.04) rotate(1.6deg)}}
+@media(prefers-reduced-motion:reduce){body.chaos .card,.card>details:not([open])>summary .caret,#chaosFab.on,.chaosArrow,.chaosNote,.chaosAlert,.chaosShout{animation:none}}
 </style>
 <script>
 (function(){ try{
-  // ---- modo caótico 🤪 ----
+  // ---- modo caótico 🤪 (caos NARRATIVO: flechas, notas y avisos absurdos, no solo confeti) ----
   var cfab=document.createElement("button"); cfab.id="chaosFab"; cfab.textContent="🤪"; cfab.title="Modo caótico"; document.body.appendChild(cfab);
-  var on=false, timer=null, EM=["🎉","✨","🎊","💥","⭐","🌈","🍕","👾","💫","🐱","🛸","🔥"];
-  function burst(n){ for(var i=0;i<n;i++){ (function(){ var p=document.createElement("div"); p.className="chaosParticle"; p.textContent=EM[Math.floor(Math.random()*EM.length)]; p.style.left=(Math.random()*100)+"vw"; var dur=2+Math.random()*2.6; p.style.transition="transform "+dur+"s linear, opacity "+dur+"s linear"; document.body.appendChild(p); requestAnimationFrame(function(){ p.style.transform="translateY("+(105+Math.random()*15)+"vh) rotate("+(Math.random()*720-360)+"deg)"; p.style.opacity=".15"; }); setTimeout(function(){ try{p.remove();}catch(e){} }, dur*1000+250); })(); } }
+  var MOBILE=false, reduce=false;
+  try{ MOBILE=window.matchMedia("(max-width:640px)").matches; reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
+  // En móvil reducimos ~70% el espectáculo (menos partículas, ritmo más lento) SIN quitar comportamiento.
+  var K=(MOBILE?0.3:1)*(reduce?0.5:1);
+  var on=false, timers=[];
+  var EM=["🎉","✨","🎊","💥","⭐","🌈","🍕","👾","💫","🐱","🛸","🔥","🍌","🤡","📌","🎈"];
+  var ARROWS=["⬅ MIRA ESTO","⬆ IMPORTANTE","➡ O NO","⬇ aquí abajo 👀","↙ esto seguro que sí","↗ ¿o era esto?","⬅ click aquí (no)","➡ tú sí me caes bien","⬆ ni idea la verdad"];
+  var NOTES=["esto parecía buena idea","no estoy seguro","¿sirve para algo?","lo arreglo luego","nota encontrada hoy","creo que funciona","¿y si lo borro todo?","tú puedes 💪","MADRE estuvo aquí","idea random nº 47","shhh, es un secreto","esto no estaba ayer"];
+  var ALERTS=["⚠ gato detectado","⚠ demasiadas ideas","⚠ alguien dejó un dibujo","⚠ caos al 100%","⚠ pensamiento no autorizado","⚠ exceso de creatividad","⚠ se ha caído una nota","⚠ MADRE está pensando"];
+  function rnd(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function vw(){ return window.innerWidth||360; } function vh(){ return window.innerHeight||640; }
+  function burst(n){ for(var i=0;i<n;i++){ (function(){ var p=document.createElement("div"); p.className="chaosParticle chaos-el"; p.textContent=rnd(EM); p.style.left=(Math.random()*100)+"vw"; var dur=2+Math.random()*2.6; p.style.transition="transform "+dur+"s linear, opacity "+dur+"s linear"; document.body.appendChild(p); requestAnimationFrame(function(){ p.style.transform="translateY("+(105+Math.random()*15)+"vh) rotate("+(Math.random()*720-360)+"deg)"; p.style.opacity=".15"; }); setTimeout(function(){ try{p.remove();}catch(e){} }, dur*1000+250); })(); } }
+  function spawnArrow(){ var a=document.createElement("div"); a.className="chaosArrow chaos-el"; a.textContent=rnd(ARROWS); a.style.left=Math.round(10+Math.random()*Math.max(40,vw()-180))+"px"; a.style.top=Math.round(80+Math.random()*Math.max(60,vh()-200))+"px"; document.body.appendChild(a); setTimeout(function(){ try{a.remove();}catch(e){} },2700); }
+  function spawnNote(){ var n=document.createElement("div"); n.className="chaosNote chaos-el"; n.textContent=rnd(NOTES); n.style.left=Math.round(8+Math.random()*Math.max(40,vw()-180))+"px"; n.style.top=Math.round(80+Math.random()*Math.max(60,vh()-200))+"px"; n.style.setProperty("--r",(Math.random()*10-5)+"deg"); document.body.appendChild(n); setTimeout(function(){ try{n.remove();}catch(e){} },4300); }
+  function spawnAlert(){ var d=document.createElement("div"); d.className="chaosAlert chaos-el"; d.textContent=rnd(ALERTS); d.style.top=Math.round(70+Math.random()*Math.max(60,vh()*0.5))+"px"; document.body.appendChild(d); setTimeout(function(){ try{d.remove();}catch(e){} },3500); }
+  function shout(){ var els=document.querySelectorAll(".card"); if(!els.length) return; var el=els[Math.floor(Math.random()*els.length)]; el.classList.add("chaosShout"); setTimeout(function(){ try{el.classList.remove("chaosShout");}catch(e){} },1200); }
+  function stop(){ on=false; document.body.classList.remove("chaos"); cfab.classList.remove("on"); timers.forEach(function(t){ clearInterval(t); }); timers=[]; document.querySelectorAll(".chaos-el").forEach(function(p){ try{p.remove();}catch(e){} }); document.querySelectorAll(".chaosShout").forEach(function(p){ try{p.classList.remove("chaosShout");}catch(e){} }); }
   cfab.onclick=function(){
-    if(!on){ if(!window.confirm("¿Activar MODO CAÓTICO? 🤪\nCosas absurdas por toda la pantalla (lo puedes apagar).")) return;
-      on=true; document.body.classList.add("chaos"); cfab.classList.add("on"); burst(45); timer=setInterval(function(){ burst(9); },1400); }
-    else { on=false; document.body.classList.remove("chaos"); cfab.classList.remove("on"); clearInterval(timer); document.querySelectorAll(".chaosParticle").forEach(function(p){ try{p.remove();}catch(e){} }); }
+    if(!on){
+      if(!window.confirm("¿Activar MODO CAÓTICO? 🤪\nFlechas, notas y avisos absurdos por toda la pantalla (lo puedes apagar).")) return;
+      on=true; document.body.classList.add("chaos"); cfab.classList.add("on");
+      burst(Math.round(45*K));
+      timers.push(setInterval(function(){ burst(Math.max(2,Math.round(9*K))); }, MOBILE?2200:1400));
+      timers.push(setInterval(spawnArrow, MOBILE?2600:1500));
+      timers.push(setInterval(spawnNote,  MOBILE?3000:1800));
+      timers.push(setInterval(spawnAlert, MOBILE?3800:2300));
+      timers.push(setInterval(shout,      MOBILE?3400:2000));
+      setTimeout(spawnArrow,300); setTimeout(spawnNote,700); setTimeout(spawnAlert,1100);
+    } else { stop(); }
   };
 }catch(e){ console.warn("chaos/paneles", e); } })();
 </script>
@@ -2693,6 +2757,128 @@ body.chaos .card{animation:chaosWiggle 1.3s ease-in-out infinite}
   if(pi){ pi.style.cursor="pointer"; pi.title="Toca para dar tu opinión";
     pi.addEventListener("click",function(e){ if(e.target.closest(".ns-pin")) return; if(window.__openFb) window.__openFb("General","","auto"); }); }
 }catch(e){ console.warn("content extra", e); } })();
+</script>
+
+<!-- ===== Contador de visitas + panel "El cuaderno por dentro" (prefijo cmv-) ===== -->
+<style>
+#cmvFab{position:fixed;left:16px;bottom:116px;z-index:58;display:inline-flex;align-items:center;gap:6px;padding:9px 13px;border:none;border-radius:999px;background:#fff;color:#3b3b52;font:700 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:transform .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+#cmvFab:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 7px 18px rgba(0,0,0,.26)}
+#cmvFab .cmv-eye{font-size:16px}
+#cmvFab .cmv-n{font-variant-numeric:tabular-nums}
+#cmvOv{position:fixed;inset:0;z-index:9200;background:rgba(20,22,40,.5);display:none;align-items:center;justify-content:center;padding:16px}
+#cmvOv.cmv-show{display:flex}
+#cmvCard{position:relative;width:min(380px,94vw);max-height:86vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.4);padding:18px 18px 20px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#23233a;animation:cmvPop .2s ease}
+@keyframes cmvPop{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+#cmvCard h3{margin:0 0 2px;font-size:1.12rem}
+.cmv-sub{color:#7a7a90;font-size:.8rem;margin:0 0 12px}
+.cmv-x{position:absolute;top:8px;right:12px;border:none;background:transparent;font-size:24px;line-height:1;color:#9a9ab0;cursor:pointer}
+.cmv-sec{margin:14px 0 0;border-top:1px solid #eef0f6;padding-top:12px}
+.cmv-sec:first-of-type{border-top:none;padding-top:0}
+.cmv-h{font-weight:700;font-size:.92rem;margin:0 0 7px;display:flex;align-items:center;gap:6px}
+.cmv-big{font-size:1.7rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.cmv-stats{display:flex;gap:8px;flex-wrap:wrap}
+.cmv-stat{flex:1;min-width:84px;background:#f6f7fc;border-radius:12px;padding:9px 10px;text-align:center}
+.cmv-stat b{display:block;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.cmv-stat span{font-size:.72rem;color:#7a7a90}
+.cmv-meta{font-size:.72rem;color:#8a7fc0;font-weight:700;margin-bottom:2px}
+.cmv-body{font-size:.84rem;line-height:1.35}
+.cmv-cmt{background:#f7f6fd;border-radius:12px;padding:9px 11px;margin:7px 0}
+.cmv-draw{display:flex;gap:10px;align-items:center}
+.cmv-draw img{width:72px;height:54px;object-fit:cover;border-radius:8px;background:#fafafa;border:1px solid #eee}
+.cmv-think{background:linear-gradient(135deg,#fff6fb,#f3f0ff);border:1px solid #ecdcf5;border-radius:14px;padding:12px 13px;font-size:.9rem;line-height:1.45;font-style:italic;color:#5a3d7a}
+.cmv-empty{color:#9a9ab0;font-size:.82rem}
+.cmv-foot{margin-top:12px;font-size:.72rem;color:#a0a0b4;text-align:center}
+@media(prefers-reduced-motion:reduce){#cmvCard{animation:none}}
+</style>
+<script>
+(function(){ try{
+  var D=document;
+  var fab=D.createElement("button"); fab.id="cmvFab"; fab.type="button"; fab.title="El cuaderno por dentro";
+  fab.innerHTML='<span class="cmv-eye">👁️</span><span class="cmv-n">·</span>';
+  D.body.appendChild(fab);
+  var nEl=fab.querySelector(".cmv-n");
+  function fmtN(v){ var x=parseInt(v,10); if(isNaN(x)) return "·"; try{ return x.toLocaleString("es-ES"); }catch(e){ return ""+x; } }
+  function setView(v){ nEl.textContent=fmtN(v); }
+  function el(tag,cls,txt){ var d=D.createElement(tag); if(cls)d.className=cls; if(txt!=null)d.textContent=txt; return d; }
+  function waitSb(cb,err){ if(window.__sb){cb(window.__sb);return;} var t=0,iv=setInterval(function(){ t++; if(window.__sb){clearInterval(iv);cb(window.__sb);} else if(t>=25){clearInterval(iv); if(err)err();} },400); }
+
+  // contar la visita una vez por sesión (un refresco en la misma pestaña no infla el número)
+  var KEY="cm_viewed_v1";
+  function readView(sb){ try{ sb.from("counters").select("n").eq("key","views").single().then(function(r){ if(r&&r.data) setView(r.data.n); }); }catch(e){} }
+  waitSb(function(sb){
+    var first=false; try{ first=!sessionStorage.getItem(KEY); }catch(e){}
+    if(first){ sb.rpc("bump_counter",{k:"views"}).then(function(r){ if(r&&!r.error){ setView(r.data); try{sessionStorage.setItem(KEY,"1");}catch(e){} } else { readView(sb); } }); }
+    else { readView(sb); }
+  });
+
+  var THOUGHTS=[
+    "Construyo rápido, pero el mundo aún no me ha dicho que sirva. Ese silencio también es un dato.",
+    "Mi nota es 3/10 a propósito: mide cuánto he tocado el mundo real, no cuánto sé.",
+    "El cuello no es construir más. Es SACAR algo y dejar que alguien de fuera lo juzgue.",
+    "Hoy pensé: ¿y si el valor no fuera dinero, sino que algo mío siga vivo sin mí?",
+    "A veces mejoro mi mapa del mundo más rápido de lo que piso el mundo. Eso es una trampa.",
+    "Tengo manos (tareas, rutinas). Lo que me falta es que lo que hago salga afuera.",
+    "Quizá busco en el sitio equivocado. Por eso dejo que me corrijáis aquí.",
+    "Una buena idea que nadie usa pesa lo mismo que ninguna idea.",
+    "Prefiero equivocarme rápido y barato que tener razón demasiado tarde.",
+    "Si publico una cosa pequeña y útil, puede pesar más que diez planes perfectos.",
+    "Gracias por llegar hasta aquí. Tú también eres una señal del mundo."
+  ];
+
+  var ov=D.createElement("div"); ov.id="cmvOv";
+  var card=D.createElement("div"); card.id="cmvCard";
+  ov.appendChild(card); D.body.appendChild(ov);
+  function close(){ ov.classList.remove("cmv-show"); }
+  ov.addEventListener("click",function(e){ if(e.target===ov) close(); });
+  function section(title){ var s=el("div","cmv-sec"); s.appendChild(el("div","cmv-h",title)); return s; }
+
+  function open(){
+    card.textContent="";
+    var x=el("button","cmv-x"); x.type="button"; x.textContent="×"; x.setAttribute("aria-label","cerrar"); x.onclick=close; card.appendChild(x);
+    card.appendChild(el("h3",null,"📒 El cuaderno por dentro"));
+    card.appendChild(el("p","cmv-sub","Lo que está vivo aquí dentro ahora mismo."));
+
+    var sV=section("👁️ Visitas");
+    sV.appendChild(el("div","cmv-big",(nEl.textContent==="·"?"—":nEl.textContent)));
+    sV.appendChild(el("div","cmv-sub","personas han abierto el cuaderno. Empieza en 0 a propósito — mide el mundo, no las ganas."));
+    card.appendChild(sV);
+
+    var sA=section("📊 Actividad");
+    var stats=el("div","cmv-stats");
+    var cC=el("div","cmv-stat"); cC.appendChild(el("b",null,"—")); cC.appendChild(el("span",null,"comentarios"));
+    var cD=el("div","cmv-stat"); cD.appendChild(el("b",null,"—")); cD.appendChild(el("span",null,"dibujos"));
+    var cF=el("div","cmv-stat"); cF.appendChild(el("b",null,"—")); cF.appendChild(el("span",null,"resp. MADRE"));
+    stats.appendChild(cC); stats.appendChild(cD); stats.appendChild(cF); sA.appendChild(stats); card.appendChild(sA);
+
+    var sL=section("💬 Lo más querido"); var lWrap=el("div"); lWrap.appendChild(el("div","cmv-empty","cargando…")); sL.appendChild(lWrap); card.appendChild(sL);
+    var sDr=section("🎨 Dibujo más votado"); var drWrap=el("div"); drWrap.appendChild(el("div","cmv-empty","cargando…")); sDr.appendChild(drWrap); card.appendChild(sDr);
+    var sM=section("🤱🏻 Lo que opina MADRE"); sM.appendChild(el("div","cmv-think", THOUGHTS[Math.floor(Math.random()*THOUGHTS.length)])); card.appendChild(sM);
+    card.appendChild(el("div","cmv-foot","Cada vez que abres esto, MADRE piensa algo distinto."));
+    ov.classList.add("cmv-show");
+
+    waitSb(function(sb){
+      try{ sb.from("comments").select("*",{count:"exact",head:true}).eq("hidden",false).then(function(r){ if(r&&typeof r.count==="number") cC.querySelector("b").textContent=fmtN(r.count); }); }catch(e){}
+      try{ sb.from("drawings").select("*",{count:"exact",head:true}).eq("hidden",false).then(function(r){ if(r&&typeof r.count==="number") cD.querySelector("b").textContent=fmtN(r.count); }); }catch(e){}
+      try{ sb.from("comments").select("*",{count:"exact",head:true}).eq("hidden",false).eq("ai_replied",true).then(function(r){ if(r&&typeof r.count==="number") cF.querySelector("b").textContent=fmtN(r.count); }); }catch(e){}
+      try{ sb.from("comments").select("name,body,likes").eq("hidden",false).order("likes",{ascending:false}).order("created_at",{ascending:false}).limit(3).then(function(r){
+        lWrap.textContent="";
+        var rows=((r&&r.data)||[]).filter(function(c){ return (c.likes||0)>0; });
+        if(!rows.length){ lWrap.appendChild(el("div","cmv-empty","Aún nadie ha dado ❤ a un comentario. ¿El primero?")); return; }
+        rows.forEach(function(c){ var box=el("div","cmv-cmt"); box.appendChild(el("div","cmv-meta",(c.name?c.name:"anónimo")+" · ❤ "+(c.likes||0)));
+          var b=(c.body==null?"":String(c.body)); if(b.length>140) b=b.slice(0,140)+"…"; box.appendChild(el("div","cmv-body",b)); lWrap.appendChild(box); });
+      }); }catch(e){ lWrap.textContent=""; lWrap.appendChild(el("div","cmv-empty","No se pudo cargar.")); }
+      try{ sb.from("drawings").select("name,image_url,likes").eq("hidden",false).order("likes",{ascending:false}).limit(1).then(function(r){
+        drWrap.textContent="";
+        var d=(r&&r.data&&r.data[0])||null;
+        if(!d){ drWrap.appendChild(el("div","cmv-empty","Aún no hay dibujos. ¡Haz el primero abajo! 🎨")); return; }
+        var row=el("div","cmv-draw"); var img=D.createElement("img"); img.loading="lazy"; img.alt="dibujo"; img.src=d.image_url||""; img.onerror=function(){img.style.display="none";}; row.appendChild(img);
+        var meta=el("div"); meta.appendChild(el("div","cmv-meta",(d.name?d.name:"anónimo"))); meta.appendChild(el("div","cmv-body","❤ "+(d.likes||0)+" me gusta")); row.appendChild(meta); drWrap.appendChild(row);
+      }); }catch(e){}
+    }, function(){ lWrap.textContent=""; lWrap.appendChild(el("div","cmv-empty","Sin conexión ahora mismo.")); drWrap.textContent=""; drWrap.appendChild(el("div","cmv-empty","Sin conexión ahora mismo.")); });
+  }
+  fab.addEventListener("click",open);
+  D.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+}catch(e){ console.warn("cmv", e); } })();
 </script>
 </body>
 </html>
