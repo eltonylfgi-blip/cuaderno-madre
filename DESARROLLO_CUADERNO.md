@@ -38,6 +38,11 @@ llamativas, MUY explicativas, easter-eggs y recompensa por explorar — **sin ro
 - **Insertar elementos "entre paneles" sin romper anclajes**: las texturas ASMR se insertan como `<aside class="cmTex">` ENTRE las `.card` (que son `<div>`). Se usa `<aside>` a propósito: el anclaje de los corazones 💗 (`cssPath`) usa `:nth-of-type` POR TAG, así que meter `<aside>` no cambia el `nth-of-type` de los `<div>`/`<p>`/`<li>` → los corazones guardados siguen cayendo en su sitio entre sesiones. Si hubiera usado `<div>` para las texturas, habría descolocado los corazones.
 - **ASMR ON por defecto, pero respetando al usuario**: `cm_asmr_v1` ahora arranca `enabled=true` salvo que haya `"0"` guardado (alguien que lo apagó). El audio del navegador NO suena hasta el primer gesto → `unlock()` (pointerdown/keydown/touchstart, `{once}`) hace `ensure()+resume()`; las cosas que se clican (burbujas) ya sirven de gesto. Sonido = motor sintetizado: `brush(speed)` (fricción por velocidad del puntero), `pop`/`crack`/`crunch`.
 - **Verificar en navegador con Supabase Realtime → el screenshot por "networkidle" NUNCA termina** (el websocket queda abierto): no es un cuelgue de la web. Verifica por `preview_eval` (estado del DOM, flujos) + `preview_console_logs` (0 errores), no por captura. Para una captura puntual habría que cortar el realtime antes.
+- **Reescribir funciones del motor pero dejar llamadores viejos = fallo silencioso**: al cambiar el ASMR (eliminé `pop()`/`crack()`/`crunch()` y metí `brush(prof,speed)`/`hit(prof)`), el `buildRibbons` viejo seguía llamando a `crunch`/`crack` → `ReferenceError` a mitad del bucle (tragado por el `try/catch` del IIFE) → **solo se creaba 1 ribbon** y con tipo `null`. Síntoma: "antes salían N, ahora 1". Lección: al cambiar una firma/quitar una función, **busca TODOS los llamadores** (grep) en la misma pasada; y un `try/catch` que envuelve un bucle de construcción **oculta** que petó pronto (cuenta los elementos creados como verificación).
+- **Corpus de contenido como data-island** (`window.__cmCorpus`, `<script id="cmCorpus">`): generado por un workflow de agentes (plantillas SVG, datos, órdenes, comentarios, emoji-labels, skins), validado (SVG: solo tags permitidos, sin `<script>`/`on*`) y embebido como objeto JS (JSON es subconjunto válido de JS). Lo leen varios widgets. Va al principio del `<body>` para estar disponible antes que ellos. Las plantillas se guardan SIN `fill/stroke` por elemento; el estilo se aplica con un `<g fill="none" stroke="#b9aef0"…>` al rasterizar (más compacto).
+- **Rasterizar SVG a `<canvas>`**: `new Image()` con `src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)` y `ctx.drawImage`. Para que cargue, el `<svg>` necesita `xmlns` y `width/height`. Dibujar con `ctx.globalAlpha` bajo = plantilla tenue para calcar.
+- **Modo "señalar" (nieSelect) y modos exclusivos**: el clic de selección se captura en **fase de captura** (`addEventListener(...,true)`) + `stopPropagation` para que NO dispare otros handlers; salir con Esc o clic fuera. Mismo patrón que lápiz/corazón.
+- **Recorte de imagen (`cropImg`)**: modal con caja arrastrable (`pointerdown` en la caja=mover, en el handle=resize; `pointermove`/`pointerup` a nivel document QUE SE QUITAN en `cleanup()`). Inyectado en `uploadImg` ANTES de `shrinkImg`; devuelve File recortado, el original ("usar entera") o `null` (cancelar→aborta subida). Recorte real a resolución natural (canvas) y luego `shrinkImg`. Sigue sin ser seguridad (es cliente).
 
 ## 🎨 Fuentes de inspiración (para sacar ideas de UI viva)
 Galerías de COMPONENTES ya hechos (lo más útil, copiar HTML/CSS):
@@ -103,12 +108,29 @@ post-it **más claro** (chincheta/borde) · dato **"MADRE = carpeta con identida
 tema **por día**, metas **Open Graph**, `aria-live` en toasts. Nuevo doc **`DISEÑO_HEURISTICAS.md`** (cómo
 diseñar: "de la abuela al borracho", checklist, patrones, reutilizar para webs personalizadas).
 
-**PARKING LOT (persistido, no hecho aún — detalle en `DISEÑO_HEURISTICAS.md` §7):** subir VÍDEOS;
-seguridad real (rate-limit/RLS por IP/honeypot/contraseña fuera de texto plano); split de `index.html`
-(.css/.js + TSV→JSON + objeto CONFIG de widgets); `og:image` 1200×630; localStorage namespaced+versionado;
-validación de imagen también en feedback; modal custom para sustituir `confirm`/`prompt`; gestor único de
-timers + `window.__toast()` global. **Pregunta abierta de Tony:** usar los **laterales/fondo** en escritorio
-(en móvil no se ven; en desktop hay márgenes vacíos → notas/ilustraciones laterales posibles).
+**Hecho (v0.7, 2026-06-22):** ASMR **motor reescrito** (suena mejor) + **8 texturas que rotan por carga sin repetir** ·
+**plantillas de dibujo** (24, corpus generado por workflow) para calcar · **"no entiendo → señalar la parte"** ·
+caos con **clickbait + datos random + órdenes/retos + más comentarios** (corpus) · tour con **paso sorpresa = dibujos** ·
+**etiquetas de emoji** (title/aria) · **skins de panel** (variedad por día) · **comentarios en burbujas** + mini-avatar ·
+**recorte de imagen** al subir (`cropImg`) · HUB: lo encendido sube arriba · **versión visible** + nueva **`GUIA_FACIL.md`**.
+
+**STAGED — pedido por Tony (2026-06-22) pero NO hecho aún (plan listo para la próxima vuelta):**
+- **Estado VIVO de verdad (no horneado)** *(prioridad de Tony, "empiezo por el 1")*: mover `global_score/areas/desvios/senales/investig/hipotesis/changelog` a una tabla Supabase; el loop hace `upsert` (service_role) cada pasada; el cliente `select` + se suscribe al canal (igual que `comments`). Cambio aparece al instante, sin esperar build. **Riesgo:** requiere editar el SKILL del loop `cuaderno-feedback` para que escriba (verificable solo con Tony en la app) → hacerlo con cuidado o dejar nota `DESDE_CLAUDE_*`.
+- **Cerrar el ciclo de decisiones:** estado por `.dec` (pendiente/procesada/aplicada) que el loop actualiza + badge en la tarjeta. Depende de la tabla de arriba.
+- **Corazones/likes alrededor de las zonas MÁS queridas + comentarios alrededor de las MENOS entendidas** (Tony): hoy el corazón 💗 es local (lo tuyo). Para que sea GLOBAL hace falta una tabla pública `zone_signals(zone_key, likes, confusions)` + RPC `bump_zone` SECURITY DEFINER (patrón `counters`), que el cliente incremente al marcar gusto/no-entiendo y lea para pintar corazones/notas alrededor. (Las confusiones reales como texto flotante = otra tablita pública o reusar el `section`.)
+- **Subir VÍDEO + recortar (dimensiones y inicio/fin):** nuevo (hoy solo imagen). Cliente: `<video>` + dos sliders (trim) + `MediaRecorder`/canvas para reencodear (pesado). Empezar por trim de tiempo; recorte de dimensiones después.
+- **`og:image` 1200×630 real** (PNG): la web no tiene preview al compartir. (SVG-og lo soportan pocas plataformas → hace falta rasterizar a PNG.)
+- **Gestor único de timers + `requestAnimationFrame`** (gato/ASMR/nudge corren desde el segundo 1): consolidar para ahorrar batería en móvil. **Riesgo:** refactor transversal.
+- **Llevar a tierra TODO el copy in-page** (abuela↔borracho) + revisar "por dónde van los avances": pasada de simplificación de textos de tarjetas (grande). Empezado el marco en `GUIA_FACIL.md`.
+- **Toggled-ON fuera del colapsable (no solo arriba):** hecho a medias (en el HUB lo encendido sube arriba del menú). Confirmar con Tony si quiere los activos como chips SIEMPRE visibles fuera del menú.
+
+**PARKING LOT previo (sigue pendiente — detalle en `DISEÑO_HEURISTICAS.md` §7):** **SEGURIDAD real (prioridad nº1)**
+(rate-limit/RLS por IP/honeypot/contraseña fuera de texto plano); comentarios anclados visibles para todos;
+split de `index.html`; localStorage namespaced+versionado; validación de imagen también en feedback;
+modal custom para `confirm`/`prompt`; usar **laterales** en escritorio.
+**Splice:** Tony lo conectó; `describe_a_sound` (buscar) es gratis, `download_asset` **gasta créditos** y pide
+confirmar + hay duda de licencia para incrustar en web pública → de momento ASMR es sintetizado; presentar
+candidatos de Splice a Tony antes de descargar.
 
 ## Estado actual (resumen)
 Backend Supabase (proyecto kopegamcjozrvmxruwdn): tablas `comments`, `feedback`, `drawings` (RLS; moderación `hidden`; bloqueo cliente de pedofilia). Widgets vivos: gato, dibujos, tour, nota-secreta, lápiz, corazón, modo-caótico, paneles interactivos. La rutina `cuaderno-feedback` (Claude Code, cada hora) procesa feedback (Drive+PC+Supabase), responde/modera comentarios, refresca números, mantiene vivo Supabase y guarda gustos en `GUSTOS_TONY.md`.
