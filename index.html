@@ -2716,7 +2716,15 @@ var DPR=Math.max(1,Math.min(2,window.devicePixelRatio||1));
 canvas.width=W*DPR;canvas.height=H*DPR;
 canvas.style.width=W+'px';canvas.style.height=H+'px';
 ctx.scale(DPR,DPR);
-function clearCanvas(){ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);}
+// La plantilla es una GUÍA superpuesta (solo para calcar): NUNCA se pinta en el lienzo, así el dibujo
+// enviado va LIMPIO (sin resto de plantilla). El lienzo es transparente; el blanco lo pone el marco.
+canvas.style.position='relative';canvas.style.zIndex='2';canvas.style.background='transparent';
+var guide=document.createElement('img');guide.id='dbjsGuide';guide.alt='';guide.setAttribute('aria-hidden','true');
+guide.style.cssText='position:absolute;z-index:1;pointer-events:none;opacity:.55;display:none;border-radius:8px';
+canvas.parentNode.appendChild(guide);
+function placeGuide(){try{guide.style.left=canvas.offsetLeft+'px';guide.style.top=canvas.offsetTop+'px';guide.style.width=W+'px';guide.style.height=H+'px';}catch(e){}}
+function hideGuide(){try{guide.style.display='none';guide.removeAttribute('src');}catch(e){}}
+function clearCanvas(){ctx.clearRect(0,0,W,H);hideGuide();}
 clearCanvas();
 ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=4;
 
@@ -2753,13 +2761,11 @@ colors.forEach(function(c,i){
     '@media(prefers-reduced-motion:reduce){#dbjsTplToggle.nudge{animation:none}.dbjsTpl{transition:none}}';
   sec.appendChild(st);
   function applyTpl(t){
-    try{ snapshot(); }catch(e){}
+    // muestra la plantilla como GUÍA superpuesta (NO se pinta en el lienzo → no sale en el dibujo enviado)
     var data='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180" width="'+W+'" height="'+H+'"><g fill="none" stroke="#b9aef0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'+t.svg+'</g></svg>';
-    var img=new Image();
-    img.onload=function(){ try{ ctx.save(); ctx.globalAlpha=0.6; ctx.drawImage(img,0,0,W,H); ctx.restore(); }catch(e){} };
-    img.onerror=function(){};
-    img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(data);
-    say('✏️ '+t.prompt);
+    guide.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(data);
+    guide.style.display='block'; placeGuide();
+    say('✏️ '+t.prompt+'  ·  (la plantilla solo te guía: no se envía)');
   }
   corpus.forEach(function(t){
     var b=document.createElement('button'); b.type='button'; b.className='dbjsTpl';
@@ -2821,7 +2827,10 @@ sendBtn.addEventListener('click',function(){
   sendBtn.disabled=true;say('Preparando tu obra… 🎨');
   waitSb(function(sb){
     try{
-      canvas.toBlob(function(blob){
+      // exportar = blanco + TUS trazos (la guía es un <img> aparte, nunca está en el lienzo)
+      var _exp=document.createElement('canvas');_exp.width=canvas.width;_exp.height=canvas.height;
+      var _ec=_exp.getContext('2d');_ec.fillStyle='#fff';_ec.fillRect(0,0,_exp.width,_exp.height);_ec.drawImage(canvas,0,0);
+      _exp.toBlob(function(blob){
         if(!blob){say('No se pudo leer el lienzo 😕',true);sendBtn.disabled=false;return;}
         var nameVal=(sec.querySelector('#dbjsName').value||'').trim();
         var rand=Math.random().toString(36).slice(2,8);
