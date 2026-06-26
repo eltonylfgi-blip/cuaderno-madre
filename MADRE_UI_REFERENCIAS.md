@@ -57,6 +57,7 @@ en móvil y, si hace falta, recortar partículas/efectos continuos.
 Tier según encaje con MADRE: **S = lo usaría ya · A = bonito, para más adelante.**
 
 ### 🐹 Hamster en rueda — *Uiverse / Nawsome* · **S-TIER**
+- **Qué es:** un hámster naranja corriendo dentro de una rueda metálica, en bucle (un "cargando" con forma de bicho).
 - **Por qué encaja:** parece un cacharro vivo. No como loader genérico.
 - **Dónde usarlo:** **"MADRE pensando / trabajando"** cuando una tarea tarde (en vez de un spinner).
 - **Fuente:** https://uiverse.io/Nawsome/wet-mayfly-23
@@ -216,6 +217,7 @@ Tier según encaje con MADRE: **S = lo usaría ya · A = bonito, para más adela
 ```
 
 ### 🖱️ Hover tracker "look mom, no JS" — *Uiverse* · **S-TIER**
+- **Qué es:** una tarjeta que se inclina en 3D siguiendo al ratón, como si la movieras con la mano (sin JavaScript).
 - **Por qué encaja:** da sensación de **objeto físico** (la tarjeta sigue al ratón en 3D, sin JS).
 - **Dónde usarlo:** tarjetas/paneles **importantes** o módulos especiales del cuaderno.
 - **Estado:** tengo el HTML (los 25 `.tracker` + `#card`); **falta el CSS**.
@@ -230,6 +232,7 @@ Tier según encaje con MADRE: **S = lo usaría ya · A = bonito, para más adela
 ```
 
 ### 🔥 Antorcha (torch) que se enciende — *Uiverse / 00Kubi* · **S-TIER (como easter-egg)**
+- **Qué es:** una antorcha de píxeles en 3D que, al hacer clic, se enciende con llama, chispas y humo.
 - **Por qué encaja:** cacharro 3D con partículas y humo; muy "artefacto".
 - **Dónde usarlo:** NO como botón normal → como **"Modo explorador"**: al encenderla, **aparecen
   notas/secretos ocultos** por la página. Eso sí es memorable.
@@ -385,6 +388,7 @@ Tier según encaje con MADRE: **S = lo usaría ya · A = bonito, para más adela
 ```
 
 ### ✨ Spotlight card (borde con punto que orbita) — *Uiverse / Spacious74* · **A-TIER**
+- **Qué es:** una tarjeta oscura con un puntito de luz que da vueltas por el borde, como un marco "tech" vivo.
 - **Por qué encaja:** borde "tech" con un punto de luz que recorre el marco; queda muy vivo.
 - **Dónde usarlo:** enmarcar una tarjeta destacada (p.ej. la nota o el panel de visitas).
 - **Estado:** **tengo el CSS completo** (debajo); falta el HTML (`.outer > .dot + .card(.ray/.line…)`).
@@ -400,22 +404,26 @@ Tier según encaje con MADRE: **S = lo usaría ya · A = bonito, para más adela
 ```
 
 ### 🔎 Buscador neón (#poda) — *Uiverse* · **A-TIER**
+- **Qué es:** una barra de búsqueda futurista con bordes de neón que brillan y se animan.
 - **Por qué encaja:** input futurista con glow/bordes animados; muy "cacharro".
 - **Dónde usarlo:** si algún día hay buscador (de comentarios / dibujos / ideas).
 - **Estado:** tengo el HTML (`#poda` con input + filter-icon + search-icon SVG); **falta el CSS**.
 
 ### 🌗 Switch día/noche (sol-luna con nubes y estrellas) — *Uiverse* · **A-TIER**
+- **Qué es:** un interruptor que pasa de día a noche (sol→luna, con nubes y estrellas) al pulsarlo.
 - **Por qué encaja:** bonito, pero **es decoración** (no cambia comportamiento). Para el final.
 - **Dónde usarlo:** toggle de tema claro/oscuro, cuando toque.
 - **Estado:** tengo el HTML completo (sun-moon + clouds + stars); **falta el CSS**.
 
 ### 🫧 Blob card — *Uiverse / dylanharriscameron* · **A-TIER (bajo)**
+- **Qué es:** una tarjeta con una mancha de color (blob) que se mueve suave por detrás.
 - **Por qué encaja:** queda bien pero aporta poco; hay cosas mejores antes.
 ```html
 <div class="card"><div class="bg"></div><div class="blob"></div></div>
 ```
 
 ### 🔴 Botón 3D pulsable (se hunde al tocar) — *Uiverse / cssbuttons-io* · **S-TIER**
+- **Qué es:** un botón rojo con relieve que se hunde al pulsarlo y rebota, como una tecla de verdad.
 - **Por qué encaja:** parece un botón físico real (capas sombra/canto/cara) que **se hunde** al pulsar y rebota; pura afford táctil, no un botón plano. Tony ya pidió "botones pulsables".
 - **Dónde usarlo:** la **acción principal** del cuaderno (CTA: "opina", "deja un dibujo", "enciende"). Ideal en móvil porque el toque se siente. Ligero (sin partículas) → seguro en móvil.
 - **Fuente:** https://uiverse.io/cssbuttons-io/evil-monkey-41
