@@ -229,11 +229,12 @@ Tier según encaje con MADRE: **S = lo usaría ya · A = bonito, para más adela
 </div></div>
 ```
 
-### 🔥 Antorcha (torch) que se enciende — *Uiverse* · **S-TIER (como easter-egg)**
+### 🔥 Antorcha (torch) que se enciende — *Uiverse / 00Kubi* · **S-TIER (como easter-egg)**
 - **Por qué encaja:** cacharro 3D con partículas y humo; muy "artefacto".
 - **Dónde usarlo:** NO como botón normal → como **"Modo explorador"**: al encenderla, **aparecen
   notas/secretos ocultos** por la página. Eso sí es memorable.
-- **Estado:** tengo el HTML completo (checkbox + torch + particles + smoke + head/stick); **falta el CSS**.
+- **Fuente:** https://uiverse.io/00Kubi/quiet-swan-27
+- **Estado:** ✅ completo (HTML + CSS). *(CSS extraído por la rutina/Nimble el 2026-06-22 — era esta antorcha la que estaba a medias.)*
 ```html
 <label class="container">
   <div class="simple-text">Click to light</div>
@@ -244,9 +245,143 @@ Tier según encaje con MADRE: **S = lo usaría ya · A = bonito, para más adela
     <div class="particles"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
     <div class="smoke"><span></span><span></span><span></span><span></span></div>
     <div class="head"><div class="face top"><div></div><div></div><div></div><div></div></div><div class="face left"><div></div><div></div><div></div><div></div></div><div class="face right"><div></div><div></div><div></div><div></div></div></div>
-    <div class="stick"><div class="side side-left"><!-- 16 div --></div><div class="side side-right"><!-- 16 div --></div></div>
+    <div class="stick">
+      <div class="side side-left"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      <div class="side side-right"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
   </div>
 </label>
+```
+```css
+.container input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+.container { display: flex; flex-direction: column; align-items: center; position: relative; cursor: pointer; user-select: none; }
+.simple-text {
+  position: absolute; bottom: -60px; width: 120px; text-align: center;
+  color: #ffd700; font-size: 16pt; font-weight: 800; font-family: monospace;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); transition: all 0.3s ease;
+}
+.torch { display: flex; justify-content: center; height: 150px; }
+.head, .stick {
+  position: absolute; width: 30px; transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(45deg);
+}
+.stick { position: relative; height: 120px; }
+.face {
+  position: absolute; transform-style: preserve-3d; width: 30px; height: 30px;
+  display: grid; grid-template-columns: 50% 50%; grid-template-rows: 50% 50%;
+  background-color: #000000;
+}
+.top { transform: rotateX(90deg) translateZ(15px); }
+.left { transform: rotateY(-90deg) translateZ(15px); }
+.right { transform: rotateY(0deg) translateZ(15px); }
+.top div, .left div, .right div { width: 102%; height: 102%; }
+.top div:nth-child(1), .left div:nth-child(3), .right div:nth-child(3) { background-color: #ffff97aa; }
+.top div:nth-child(2), .left div:nth-child(1), .right div:nth-child(1) { background-color: #ffd800aa; }
+.top div:nth-child(3), .left div:nth-child(4), .right div:nth-child(4) { background-color: #ffffffaa; }
+.top div:nth-child(4), .left div:nth-child(2), .right div:nth-child(2) { background-color: #ff8f00aa; }
+.side {
+  position: absolute; width: 30px; height: 120px; display: grid;
+  grid-template-columns: 50% 50%; grid-template-rows: repeat(8, 12.5%);
+  cursor: pointer; translate: 0 12px;
+}
+.side-left { transform: rotateY(-90deg) translateZ(15px) translateY(8px); }
+.side-right { transform: rotateY(0deg) translateZ(15px) translateY(8px); }
+.side-left div, .side-right div { width: 103%; height: 103%; }
+.side div:nth-child(1) { background-color: #443622; }
+.side div:nth-child(2) { background-color: #2e2517; }
+.side div:nth-child(3), .side div:nth-child(5) { background-color: #4b3b23; }
+.side div:nth-child(4), .side div:nth-child(10) { background-color: #251e12; }
+.side div:nth-child(6) { background-color: #292115; }
+.side div:nth-child(7) { background-color: #4b3c26; }
+.side div:nth-child(8) { background-color: #292115; }
+.side div:nth-child(9) { background-color: #4b3a21; }
+.side div:nth-child(11), .side div:nth-child(15) { background-color: #3d311d; }
+.side div:nth-child(12) { background-color: #2c2315; }
+.side div:nth-child(13) { background-color: #493a22; }
+.side div:nth-child(14) { background-color: #2b2114; }
+.side div:nth-child(16) { background-color: #271e10; }
+.light-effect {
+  position: absolute; top: -20px; left: -35px; width: 100px; height: 100px;
+  background: radial-gradient(circle at center, rgba(255,223,89,0.9) 0%, rgba(255,183,43,0.4) 30%, transparent 70%);
+  filter: blur(8px); opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+}
+.particles { position: absolute; top: -10px; left: -20px; width: 70px; height: 70px; pointer-events: none; }
+.particles span {
+  position: absolute; width: 3px; height: 3px; background: #ffd700; border-radius: 50%;
+  opacity: 0; pointer-events: none; box-shadow: 0 0 10px #ffd700; filter: blur(1px);
+}
+@keyframes particleFloat {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(calc(var(--x) * 20px), calc(var(--y) * -40px)) scale(0) rotate(360deg); opacity: 0; }
+}
+.particles span:nth-child(1) { --x: 1; --y: 1; }
+.particles span:nth-child(2) { --x: -1; --y: 1; }
+.particles span:nth-child(3) { --x: 0.5; --y: 1; }
+.particles span:nth-child(4) { --x: -0.5; --y: 1; }
+.particles span:nth-child(5) { --x: 0.7; --y: 1; }
+.particles span:nth-child(6) { --x: -0.7; --y: 1; }
+.particles span:nth-child(7) { --x: 0.3; --y: 1; }
+.particles span:nth-child(8) { --x: -0.3; --y: 1; }
+.container input:checked ~ .torch .light-effect { opacity: 1; animation: flicker 4s infinite; }
+.container input:checked ~ .torch .particles span { animation: particleFloat 2s infinite; }
+.container input:checked ~ .torch .particles span:nth-child(1) { animation-delay: 0s; }
+.container input:checked ~ .torch .particles span:nth-child(2) { animation-delay: 0.2s; }
+.container input:checked ~ .torch .particles span:nth-child(3) { animation-delay: 0.4s; }
+.container input:checked ~ .torch .particles span:nth-child(4) { animation-delay: 0.6s; }
+.container input:checked ~ .torch .particles span:nth-child(5) { animation-delay: 0.8s; }
+.container input:checked ~ .torch .particles span:nth-child(6) { animation-delay: 1s; }
+.container input:checked ~ .torch .particles span:nth-child(7) { animation-delay: 1.2s; }
+.container input:checked ~ .torch .particles span:nth-child(8) { animation-delay: 1.4s; }
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+  25%, 75% { opacity: 0.9; }
+}
+.container:hover .torch { transform: scale(1.05) rotate(2deg); transition: all 0.3s ease; }
+.container:hover .simple-text {
+  transform: scale(1.1);
+  text-shadow: 0 0 15px rgba(255,215,0,0.7), 0 0 30px rgba(255,215,0,0.4);
+  letter-spacing: 2px;
+}
+.container input:checked ~ .torch .face {
+  filter: drop-shadow(0px 0px 8px rgb(255,255,255)) drop-shadow(0px 0px 20px rgba(255,237,156,0.8)) drop-shadow(0px 0px 40px rgba(255,227,101,0.5));
+  transition: filter 0.3s ease;
+}
+.container input:checked ~ .torch .side { filter: brightness(1.3); transition: filter 0.3s ease; }
+.glow-effect {
+  position: absolute; top: -30px; left: -45px; width: 120px; height: 120px;
+  background: radial-gradient(circle at center, rgba(255,160,0,0.4) 0%, rgba(255,120,0,0.2) 30%, transparent 70%);
+  filter: blur(15px); opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+  animation: glowPulse 3s infinite;
+}
+.smoke { position: absolute; top: -20px; left: -10px; width: 50px; height: 50px; pointer-events: none; }
+.smoke span {
+  position: absolute; width: 4px; height: 4px; background: rgba(255,255,255,0.3);
+  border-radius: 50%; filter: blur(2px); opacity: 0; pointer-events: none;
+}
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.1); opacity: 0.5; }
+}
+@keyframes smokeRise {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  20% { opacity: 0.5; }
+  100% { transform: translate(calc(var(--x) * 30px), calc(var(--y) * -60px)) scale(3); opacity: 0; }
+}
+.smoke span:nth-child(1) { --x: 0.5; --y: 1; }
+.smoke span:nth-child(2) { --x: -0.5; --y: 1; }
+.smoke span:nth-child(3) { --x: 0.2; --y: 1; }
+.smoke span:nth-child(4) { --x: -0.2; --y: 1; }
+.container input:checked ~ .torch .smoke span { animation: smokeRise 3s infinite; }
+.container input:checked ~ .torch .smoke span:nth-child(1) { animation-delay: 0s; }
+.container input:checked ~ .torch .smoke span:nth-child(2) { animation-delay: 0.8s; }
+.container input:checked ~ .torch .smoke span:nth-child(3) { animation-delay: 1.6s; }
+.container input:checked ~ .torch .smoke span:nth-child(4) { animation-delay: 2.4s; }
+.container input:checked ~ .torch .glow-effect { opacity: 1; }
+.face div { transition: all 0.3s ease; }
+.side div { transition: all 0.3s ease; }
+.container input:checked ~ .torch .side div { filter: brightness(1.3); box-shadow: inset 0 0 5px rgba(255,183,43,0.2); }
 ```
 
 ### ✨ Spotlight card (borde con punto que orbita) — *Uiverse / Spacious74* · **A-TIER**
@@ -278,6 +413,46 @@ Tier según encaje con MADRE: **S = lo usaría ya · A = bonito, para más adela
 - **Por qué encaja:** queda bien pero aporta poco; hay cosas mejores antes.
 ```html
 <div class="card"><div class="bg"></div><div class="blob"></div></div>
+```
+
+### 🔴 Botón 3D pulsable (se hunde al tocar) — *Uiverse / cssbuttons-io* · **S-TIER**
+- **Por qué encaja:** parece un botón físico real (capas sombra/canto/cara) que **se hunde** al pulsar y rebota; pura afford táctil, no un botón plano. Tony ya pidió "botones pulsables".
+- **Dónde usarlo:** la **acción principal** del cuaderno (CTA: "opina", "deja un dibujo", "enciende"). Ideal en móvil porque el toque se siente. Ligero (sin partículas) → seguro en móvil.
+- **Fuente:** https://uiverse.io/cssbuttons-io/evil-monkey-41
+- **Estado:** ✅ completo (HTML + CSS). *(auto-extraído por la rutina/Nimble el 2026-06-22.)*
+```html
+<button>
+  <span class="shadow"></span>
+  <span class="edge"></span>
+  <span class="front text"> Click me </span>
+</button>
+```
+```css
+button {
+  position: relative; border: none; background: transparent; padding: 0;
+  cursor: pointer; outline-offset: 4px; transition: filter 250ms;
+  user-select: none; touch-action: manipulation;
+}
+.shadow {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  border-radius: 12px; background: hsl(0deg 0% 0% / 0.25); will-change: transform;
+  transform: translateY(2px); transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+}
+.edge {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px;
+  background: linear-gradient(to left, hsl(340deg 100% 16%) 0%, hsl(340deg 100% 32%) 8%, hsl(340deg 100% 32%) 92%, hsl(340deg 100% 16%) 100%);
+}
+.front {
+  display: block; position: relative; padding: 12px 27px; border-radius: 12px;
+  font-size: 1.1rem; color: white; background: hsl(345deg 100% 47%); will-change: transform;
+  transform: translateY(-4px); transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+}
+button:hover { filter: brightness(110%); }
+button:hover .front { transform: translateY(-6px); transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5); }
+button:active .front { transform: translateY(-2px); transition: transform 34ms; }
+button:hover .shadow { transform: translateY(4px); transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5); }
+button:active .shadow { transform: translateY(1px); transition: transform 34ms; }
+button:focus:not(:focus-visible) { outline: none; }
 ```
 
 ---
