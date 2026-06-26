@@ -1,6 +1,7 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> Para retomar en un chat nuevo de Claude Code. Estado a 2026-06-21, commit `8d5f6d4`.
+> Para retomar en un chat nuevo de Claude Code. **Estado a 2026-06-22, versión v0.7.1, commit `69bfde8`.**
+> Lee también **`GUIA_FACIL.md`** (separa el Cuaderno de MADRE y explica lo mejor de cada uno en simple).
 
 ## Qué es
 Web pública "Cuaderno MADRE" (un solo `index.html` autocontenido) en GitHub Pages:
@@ -30,13 +31,28 @@ Bloque A (modo lectura/gateo), refresco de números (TSV horneado), comentarios 
 - **2026-06-21 (tanda 1):** 👁️ **contador de visitas** + panel **"El cuaderno por dentro"** · **modo caótico narrativo** · **arreglado el gato tapado** (`TOPSAFE`) · **deshacer** (↩️/Ctrl+Z) en dibujos. Favoritos de Uiverse en `MADRE_UI_REFERENCIAS.md`.
 - **2026-06-21 (tanda 2):** **HUB de FAB** (6 botones → un menú ✦ + nudge "toca aquí") · **ASMR** (sonidos sintetizados) · **"🤔 no entiendo"** por tarjeta + en la ruta guiada · gato con **poses** + arreglo móvil · **caos x2** (flechas a elementos reales, círculos, citas reales, travesuras, megaFlip) · chat abre **en lo último + foco** · comentarios con **scroll interno** · **post-it claro** · **MADRE = carpeta con identidad** · **dibujos con dueño** · **modos exclusivos** · bugs: chips reales (5), aviso **estado desfasado >48h**, `.limit()`, validación imagen, tema **por día**, **Open Graph**, `aria-live`. Nuevo `DISEÑO_HEURISTICAS.md`. Verificado en navegador (desktop+móvil), 0 errores; revisado por workflow adversarial. **Parking lot** en DESARROLLO_CUADERNO.md / DISEÑO_HEURISTICAS.md §7.
 
-## SIGUIENTE (backlog COMPLETO y priorizado → `DESARROLLO_CUADERNO.md` sección 🗂️)
-0. **SEGURIDAD (PRIORIDAD nº1 — criterio de Tony 2026-06-21):** rate-limit / RLS por IP-sesión / honeypot / contraseña fuera de texto plano. Es lo único con riesgo de abuso real; hacerlo ANTES que más features lúdicas. (Detalle en `DISEÑO_HEURISTICAS.md` §7.) Caso de borde anotado: respuestas huérfanas con `.limit(200)` (fix barato descrito en §7).
-1. **Comentarios anclados VISIBLES para todos** (Notion completo) — el de más impacto en UX. Hoy el lápiz captura la zona y la manda a MADRE; falta anclar el marcador y renderizarlo para todos los visitantes.
-2. **Avatares/fotos** en comentarios: (A) avatar aleatorio de un set, o (B) que cada quien suba la suya.
-3. **Ideas "organismo vivo"** (lista de ChatGPT que Tony aprobó, persistidas en DESARROLLO_CUADERNO.md): gato coleccionista (nº), pared de garabatos, mensajes encontrados, botón inútil, museo de ideas muertas, cementerio de bugs, huellas de visitantes, nivel secreto, antorcha "modo explorador".
-4. Coleccionables/polaroids/pegatinas; gato-barriguita completa.
-5. Rutina "buscadora de ideas" de UI (en BUZON_ENTRANTE como tarea opcional de MADRE).
+## v0.7 / v0.7.1 (2026-06-22) — hecho en esta tanda
+ASMR motor reescrito (suena mejor) + **8 texturas que rotan por carga sin repetir** · **plantillas de dibujo**
+(24, corpus en `window.__cmCorpus`) que solo GUÍAN (no salen en el dibujo enviado — fix v0.7.1) · "🤔 no entiendo →
+**señalar la parte**" · caos con **clickbait + datos random + órdenes** · tour con paso sorpresa = dibujos ·
+**etiquetas de emoji** · **skins de panel** (variedad por día) · **comentarios en burbujas** + mini-avatar ·
+**recorte de imagen** al subir · HUB: lo encendido sube arriba · **versión visible** + nueva `GUIA_FACIL.md`.
+
+## SIGUIENTE (backlog priorizado → detalle en `DESARROLLO_CUADERNO.md` sección 🗂️ "STAGED")
+0. **Decisión pendiente de Tony — SPLICE:** está conectado; `describe_a_sound` (buscar) es gratis, `download_asset`
+   **gasta créditos + duda de licencia** para web pública. El ASMR es sintetizado (mejorado). Candidatos ya listados
+   (bubble_wrap UUID `4ae4267e-f0fb-487a-ae04-a82fe7fa579d`, paper_crunch 1s UUID `8e409aef-7834-41c5-b057-056d03506b19`).
+   Preguntar a Tony si descargar e incrustar de verdad, o seguir sintetizado.
+1. **Estado VIVO en Supabase (el "punto 1" que Tony quiere):** mover `global_score/areas/desvios/senales/investig/hipotesis/changelog`
+   a una tabla; el loop `cuaderno-feedback` hace `upsert` (service_role) cada pasada; el cliente `select` + se suscribe al
+   canal (igual que `comments`) → cambios al instante sin esperar build. Implica editar el SKILL del loop con cuidado.
+2. **Cerrar el ciclo de decisiones:** estado por `.dec` (pendiente/procesada/aplicada) que el loop actualiza + badge.
+3. **Corazones/likes GLOBALES alrededor de zonas más queridas + comentarios alrededor de las menos entendidas:** tabla pública
+   `zone_signals(zone_key, likes, confusions)` + RPC `bump_zone` SECURITY DEFINER (patrón `counters`). Hoy el 💗 es local.
+4. **Vídeo + recorte** (tiempo y dimensiones; hoy solo imagen) · **og:image 1200×630 PNG** · **simplificar copy in-page** (abuela/borracho).
+5. **Confirmar con Tony:** "toggled-on fuera del colapsable" — hoy en el HUB lo activo sube arriba del menú; ¿lo quiere como chips SIEMPRE visibles fuera?
+6. **SEGURIDAD (sigue siendo prioridad de fondo):** rate-limit / RLS por IP / honeypot / contraseña fuera de texto plano; respuestas huérfanas `.limit(200)`.
+7. Resto persistido: comentarios anclados visibles para todos; ideas "organismo vivo" (gato coleccionista, pared de garabatos, museo de ideas muertas, etc.).
 
 > Componentes de UI candidatos (favoritos de Tony en Uiverse) → **`MADRE_UI_REFERENCIAS.md`** (hamster=MADRE pensando, hover-tracker, antorcha=modo explorador, etc.). Para pasar más: el formato está en ese doc.
 
