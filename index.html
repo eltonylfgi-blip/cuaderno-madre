@@ -685,7 +685,7 @@
 # El artefacto lo LEE por titulo via conector de Drive; si falta o no parsea -> usa su texto congelado (degradacion segura).
 # Formato tolerante: 1 dato por linea, campos separados por TAB. Lineas con # o vacias se ignoran.
 # ANTI-FALSO-VERDE: si 'actualizado' es de hace >48h, considera este estado POSIBLEMENTE DESFASADO (no te fies del verde).
-actualizado	2026-06-21T09:00Z
+actualizado	2026-06-22T17:50Z
 global_score	3
 global_nota	Capacidad y orden altos, subsistemas vivos; pero el VALOR EXTERNO real (primer euro / 1a senal del mundo) sigue en 0 -- ese es el numero que de verdad importa.
 area	Valor externo logrado	1
@@ -699,9 +699,24 @@ desvio	a	Colision multi-IA	Riesgo numero 1 (ya corrompio contenido antes): varia
 desvio	a	Frente dinero esperando tu paso	El primer euro (peluqueria) necesita 1 paso tuyo; el resto esta preparado.	Cuando puedas, di "tengo una" o "monta demo". Encaje: montar y atender un asistente IA por WhatsApp (~150-250 euros/mes recurrente).
 # --- INVESTIGACION (hilos vivos; el loop reescribe la conclusion cuando evoluciona) ---
 investig	Frente dinero: peluqueria (1er euro)	El mercado paga ~150-250 euros/mes por un asistente IA de citas por WhatsApp; el valor real es montarlo+atenderlo (el bot solo se commoditiza). Falta el paso de Tony.	2026-06-21
-investig	Sacar cosas al mundo (activacion)	GitHub Skills virales (44k-7k estrellas en dias): publicar UNA skill util puede dar mas senal externa que tikslide solo (L4 cold-start). Pendiente: observar aprende-github lun-22/jue-25.	2026-06-21
+investig	Sacar cosas al mundo (activacion)	GitHub Skills virales (44k-7k estrellas en dias): publicar UNA skill util puede dar mas senal externa que tikslide solo (L4 cold-start). madre-aprende-github P-AG1=NO (APRENDIZAJE_GITHUB.md no existe tras Run#1 lun-22; comportamiento EPISODICO, no acumulativo). P-AG2 sin-premisa (cierra sin dato). Cuello de memoria operativa, no calidad de candidatos.	2026-06-22
 investig	Generar activos que renten	Nuevo filtro antes de construir: "captura defendible" -- no basta con ser util, hay que poder quedarse el valor (que no lo copien el usuario/plataforma).	2026-06-21
 investig	Que multiplica de verdad	Lo explosivo necesita un MOTOR + un SELECTOR externo que lo califique (uso/pago); ese selector externo es justo lo que MADRE aun no tiene.	2026-06-21
+# --- SENALES DEL MUNDO (evidencia externa; 0 = el numero que importa) ---
+senal	Euros ganados	0 EUR	r
+senal	Stars GitHub tikslide (semana)	0	r
+senal	Clientes peluqueria	0	r
+senal_nota	El valor externo real sigue en 0. Ese es el numero que importa.
+# --- HIPOTESIS VIVAS / MUERTAS ---
+hipotesis	viva	tikslide sigue ~0 senal al 18-jul sin distribucion activa (P21 80%)
+hipotesis	viva	Cuello peluqueria es la venta, no la tecnologia (P16 70%)
+hipotesis	muerta	madre-aprende-github Run1 crea archivo+marcador+subcarpeta (P-AG1=NO 2026-06-22; episodico)
+hipotesis	muerta	tikslide tiene diferenciador unico -- refutado (cobalt+rapidok cubren CLI/batch)
+hipotesis	muerta	key-Groq era el cuello del almacen de oportunidades -- REFUTADA-PREMISA (102 entradas sin key)
+# --- BUILDS EN CURSO ---
+build	Demo peluqueria	10	conceptualizado; n8n+Meta-test-number; falta montar
+build	tikslide	100	publicado; distribucion=0; senal=0; P21 vence 18-jul
+build	AI Audit 1-pager	100	SISTEMA/02_PROYECTOS/AI_AUDIT_1_PAGER.md
 </script>
 
 <script id="cmCorpus">
