@@ -18,3 +18,19 @@ Tony lee esto y decide. (Lo grande SIEMPRE espera; lo pequeño y claro la rutina
 **Lo que decides tú (esto NO lo hago solo — necesita lógica/decisión):** ¿cómo subimos la imagen desde el móvil? Opciones típicas: (a) un pequeño backend/endpoint propio que reciba la imagen; (b) subirla a un servicio (Drive/Imgur/etc.) con una clave que no se puede dejar en una web pública; (c) dejar el móvil solo-texto y las imágenes solo en escritorio. Dime cuál y lo montamos.
 
 ---
+
+## 2026-06-28 — Revisión del "corrector de errores" de MADRE (recordatorio, NO urgente)
+
+**De qué va:** preguntaste si MADRE tiene un buen sistema que corrija fallos solo, para poder "hacer y hacer" sin nunca arriesgar nada catastrófico. Se revisó a fondo.
+
+**Conclusión (puedes dejar de preocuparte):** la parte anti-catástrofe es **sólida** y ya ha funcionado de verdad en el pasado. NO hay que hacer nada por ese lado.
+
+**Lo único pendiente (un afinado, no un fuego):** MADRE tenía un "segundo par de ojos" (un vigilante que comprueba que de verdad hace lo que dice) y **estaba dormido hacía una semana**. Ya quedó dejado para que el propio sistema lo despierte solo en su revisión diaria → **no necesita acción tuya**.
+
+**Esto SÍ lo decides tú (opcional, sin prisa):** (1) convertir ese vigilante en tarea fija programada; (2) guardar copia del núcleo de MADRE fuera de OneDrive con git (taparía de raíz el riesgo real, que es que un archivo se corte al guardarse). Ninguna es urgente.
+
+**El detalle técnico completo está en privado**, en el buzón de MADRE: `BUZON_ENTRANTE/DESDE_CLAUDE_2026-06-28_corrector-se-autocalifica-y-detector-dormido.txt` (no se pone aquí para no airear las tripas del sistema).
+
+**DECIDIDO (28-jun):** para ver la salud de MADRE de un vistazo se montará un **semáforo (verde/ámbar/rojo) dentro de tu propio *pacer*** (privado, no en la web pública). Pendiente de montar en una sesión nueva (la receta exacta quedó guardada). Frase para arrancar: *"monta el semáforo de salud de MADRE dentro del pacer"*.
+
+---
