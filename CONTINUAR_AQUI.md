@@ -1,6 +1,15 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
 > Para retomar en un chat nuevo de Claude Code. **Estado a 2026-06-28, versión v0.10.**
+
+## ⚠️ ESTADO DE PUBLICACIÓN — LÉEME PRIMERO (2026-06-28)
+- **v0.10 está COMMITEADA EN LOCAL pero NO PUSHEADA** (commit `091448c`, `main ahead 1` de `origin/main`). Tony pidió **no hacer push hasta que él dé el OK**. NO pushees sin su OK explícito.
+- **⚠️ RIESGO de push accidental:** la rutina `cuaderno-feedback` (cada 6h) hace `git push` si su horneado produce un cambio. Como el `#caminoBaked` de la web está con acentos y `SISTEMA/CAMINO_10.tsv` está en ASCII, la rutina detectará "CAMBIO" y **probablemente pushee v0.10 sola en su próxima pasada** (arrastra el commit local). Si Tony quiere DE VERDAD retener v0.10: o se le pide OK para pushear, o se pausa el push de la rutina. **Avisar a Tony de esto.**
+- **PENDIENTE de Tony / próximo chat:**
+  1. ¿**Push** de v0.10? (todo verificado en navegador, 0 errores).
+  2. **ASMR por oído**: los sonidos reales (`sounds/pop.mp3`, `wood.wav`, `click.wav`) cargan+decodean OK pero NADIE los ha oído desde Code. Tony confirma. Si quiere más texturas reales: **papel** (Freesound CC0 id 653953, hay que recortar a <1s) y **cremallera/zipper** (buscar CC0). Fuentes seguras: Kenney "Interface Sounds" (CC0, zip) + Freesound items CC0. Mapa actual `PROF2SAMPLE={burbujas:'pop',madera:'wood'}`; el resto sigue sintetizado.
+  3. **Estado rancio**: `CUADERNO_ESTADO.tsv` lleva 6 días sin refrescar (lo escribe el loop Cowork `madre-mejora-continua`, NO Claude Code). La web ya avisa en ROJO. Notas en BUZÓN: `refresco-estado-cuaderno` + `seccion-ayuda-cuaderno`. Si Tony quiere forzarlo a mano, decidir con él (es fichero del loop).
+  4. Posible pulido del hámster / más componentes de `MADRE_UI_REFERENCIAS.md`.
 > Lee también **`GUIA_FACIL.md`** (separa el Cuaderno de MADRE y explica lo mejor de cada uno en simple).
 
 ## Qué es
