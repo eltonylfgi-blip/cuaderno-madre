@@ -53,3 +53,46 @@ Tony lee esto y decide. (Lo grande SIEMPRE espera; lo pequeño y claro la rutina
 4. **Vídeo en el cuaderno** + **sección de chat dedicada con el cuaderno** (ver respuestas arriba).
 
 ---
+
+## DERIVA (revisar) — 2026-06-28
+
+**Control de deriva (≥7 días desde el último informe, 2026-06-21).**
+
+Desde el baseline `8d5f6d4` hasta HEAD hay **16 commits**, con cambios en 12 ficheros:
+- `index.html`: +1219 líneas netas (plantillas de dibujo, ASMR nuevos, skins, ruta guiada, HUB de FAB, visitas, panel "el cuaderno por dentro", caos mejorado, comentarios en burbujas, tarjeta "¿dónde vive?")
+- Docs nuevos/actualizados: `GLOSARIO.md`, `GUIA_FACIL.md`, `DISEÑO_HEURISTICAS.md`, `CONTINUAR_AQUI.md`
+- `CHANGELOG.md`: 16 entradas
+
+**¿Quieres avanzar el baseline?** Di "deriva ok" o "baseline al día" y la rutina lo resetea. Si no dices nada, el contador sigue creciendo desde el antiguo punto de referencia.
+
+---
+
+## 2026-06-28 — Feedback de visitantes (6 items nuevos)
+
+**1. "No entiendo nada MADRE" (visitante, 2026-06-21)**
+- Feedback id `3a1c4dac`, tipo auto→mas-claridad, general.
+- Señal de que la intro/tour no está enganchando a gente que llega de cero. Demasiado vago para editar algo concreto solo.
+- ¿Quieres reforzar la intro o simplificar la ruta guiada?
+
+**2. "No tengo ninguna peluquería, ¿qué hago?" (visitante, 2026-06-21)**
+- Feedback id `0a99c3a0`, sección "Tu parte / Paso 1 — frente peluquería".
+- Pregunta de visitante sin peluquería.
+- ¿Añadimos una nota aclaratoria en esa sección ("si no tienes peluquería, aplica a tu negocio o al que conozcas")?
+
+**3. "Resumen guiado de MADRE con imágenes y comparaciones" (visitante, 2026-06-21)**
+- Feedback id `cc0febb1`, sección Evolución / Changelog.
+- PARKING: estructural (nueva sección visual/timeline). ¿Lo planificamos en una sesión nueva?
+
+**4. Tony (via cuaderno): "si lo de suelo externo es cambio a mejor, decídelo tú" (2026-06-22)**
+- Feedback id `e4ca8cf9`, sección "Valor externo = 0".
+- PARKING: "cambio a mejor" es ambiguo. ¿Optimismo? ¿Actualizado con tikslide? ¿Eliminado? Dime qué y lo hago.
+
+**5. "No entiendo" — Ruta Guiada Paso 1, El Termómetro (visitante, 2026-06-21)**
+- Feedback id `7efc942b`.
+- Señal: la explicación del Paso 1 del tour no queda clara. ¿Quieres que lo simplifique?
+
+**6. Propuesta "Changelog de lecciones" (sesión Claude Code anterior, 2026-06-28)**
+- Drive `1-rF_p8T7KkajixzjNE-ApDN8uJ7SX6V5`, PC: `FEEDBACK_TONY_2026-06-28__cuaderno-changelog-lecciones.txt`.
+- Propuesta: sección pública con lecciones aprendidas de MADRE, filtrada por el moat. Si dices "sí, arranca con 3-5 ejemplos", lo monto.
+
+---
