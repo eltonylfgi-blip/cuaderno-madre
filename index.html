@@ -219,6 +219,41 @@
 </style>
 </head>
 <body>
+<style id="overhaulCss">
+/* --- v0.9: claridad + jerarquía + separar públicos (visitante vs Tony) --- */
+#promesa{font-size:17px;line-height:1.45;font-weight:600;color:var(--ink);background:linear-gradient(135deg,var(--accent-soft),transparent);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:12px 14px;margin:6px 0 8px}
+#promesa b{color:var(--accent)}
+.sub2{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+/* jerarquía visual: lo crítico pesa más, lo secundario menos */
+.card.key{box-shadow:0 2px 6px rgba(20,30,50,.08),0 12px 40px rgba(20,30,50,.10);border:1.5px solid var(--accent)}
+.card.key>details>summary .ctitle .t{font-size:18px}
+.card.muted{background:#fcfdff}
+.card.muted>details>summary .ctitle .t{font-size:14.5px;color:var(--muted)}
+/* zona de Tony: marcada aparte */
+.card.tony{border-left:4px solid #8b5cf6;background:#f6f2ff}
+.tonySep{margin:30px 0 6px;text-align:center;font:800 13px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:#7c5cd6;letter-spacing:.02em}
+.tonySep .l{display:block;font-weight:600;font-size:12px;color:var(--muted);margin-top:3px}
+.tonySep:before,.tonySep:after{content:"";display:block;height:1px;background:linear-gradient(90deg,transparent,#d9cef5,transparent);margin:8px auto;max-width:320px}
+/* "efecto wow": la barra del termómetro baja sola al cargar hasta su valor */
+.hero .bar>i{transition:width 1s cubic-bezier(.2,.8,.25,1)}
+@media(prefers-reduced-motion:reduce){.hero .bar>i{transition:none}}
+/* tarjetas-explicación nuevas: listas simples */
+.simpleList{margin:6px 0 0;padding:0;list-style:none}
+.simpleList>li{padding:9px 0;border-top:1px solid var(--line)}
+.simpleList>li:first-child{border-top:none}
+.simpleList .sl-h{font-weight:700;color:var(--ink)}
+.simpleList .sl-when{font-size:11.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:1px 8px;margin-left:4px;white-space:nowrap}
+.simpleList .sl-d{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.45}
+.simpleList .sl-more{font-size:11.5px;color:var(--muted)}
+/* línea de tiempo (historia) */
+.tline{margin:8px 0 0;padding:0;list-style:none;position:relative}
+.tline>li{position:relative;padding:0 0 12px 20px;border-left:2px solid var(--line);margin-left:4px}
+.tline>li:last-child{border-left-color:transparent}
+.tline>li:before{content:"";position:absolute;left:-6px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.tline>li.now:before{background:#e0568a;box-shadow:0 0 0 4px rgba(224,86,138,.18)}
+.tline .tl-when{font-weight:800;color:var(--ink);font-size:13.5px}
+.tline .tl-d{font-size:13px;color:var(--muted);margin-top:1px;line-height:1.45}
+</style>
 <div class="wrap">
 
   <div class="ttwrap" style="flex-wrap:wrap;margin-bottom:2px">
@@ -227,6 +262,8 @@
     <div class="ttbub" id="madreTip">🤱🏻 <b>MADRE</b> es un sistema que intenta <b>decidir mejor</b>, <b>aprender de la realidad</b> y <b>generar valor en el mundo real</b> — no es un bot de dinero ni un almacén de notas. (Mantén pulsado / pasa el ratón para esto.)</div>
   </div>
   <p class="sub">Lo importante de MADRE, en simple. Tú lo lees, lo marcas y opinas; MADRE lo recoge y actúa.</p>
+  <div id="promesa">MADRE es un experimento público: ver si una IA puede <b>mejorar sola, durante años, sin engañarse a sí misma</b>. Esto es su ventana en directo — con los verdes y los rojos a la vista.</div>
+  <p class="sub2">👀 ¿Vienes de fuera? Lee de arriba abajo. Lo que necesita <b>Tony</b> está al final, separado y marcado.</p>
   <div class="postit notecard">📝 <b>¿“feedback”?</b> = dar tu opinión, sin más 😄</div>
   <div id="gateBar"></div>
   <div id="novBanner"></div>
@@ -234,7 +271,7 @@
   <div class="hero">
     <div class="scoreRow">
       <div class="bigscore" id="bigScore">3<small>/10</small></div>
-      <div class="bar"><i style="width:30%"></i></div>
+      <div class="bar"><i style="width:0%"></i></div>
     </div>
     <p class="heronote">
       <b id="heroNote2">MADRE hoy: 3/10.</b> Por dentro está muy maduro; el número mide lo único que de verdad cuenta:
@@ -298,17 +335,24 @@
     </div>
   </details></div>
 
-  <div class="card" id="senalesCard"><details open>
+  <div class="card key" id="senalesCard"><details open>
     <summary>
       <span class="num">🌍</span>
       <span class="ctitle"><span class="t">Señales del mundo</span>
-        <span class="s">Lo que de verdad cuenta: evidencia real, no explicación.</span></span>
+        <span class="s">Lo único que no se puede falsear: lo que el mundo de fuera ha respondido. Hoy, casi nada — y lo enseñamos igual.</span></span>
       <span class="caret">▶</span>
     </summary>
     <div class="body">
       <div id="senales"><div class="small">Cargando señales…</div></div>
       <div id="queHizo" style="margin-top:12px"></div>
       <div id="queNecesita" style="margin-top:12px"></div>
+      <details class="x" style="margin-top:10px"><summary><span class="plus">+</span> ¿Qué es eso de que «MADRE necesita 2 cosas de ti»? (en simple)</summary>
+        <div class="xb">
+          <p>MADRE construye mucho, pero casi nada llega al mundo de fuera (hoy: <b>0 €, 0 clientes, ~0 estrellas</b>). Para arreglarlo te pide dos cosas, y ninguna te quita tiempo:</p>
+          <p><b>1) Decir «sí, sigue con la regla de tocar el mundo en cada vuelta».</b> MADRE se ha puesto la norma de dejar, en cada repaso, una <b>prueba real de fuera</b> (algo que alguien pueda usar, no una opinión suya). Solo quiere tu visto bueno. <i>(En jerga lo llama «suelo externo».)</i></p>
+          <p><b>2) Darle permiso, una sola vez, para publicar algo ella sola.</b> Hoy espera a que un humano apruebe antes de sacar nada. Con tu OK podrá subir una herramienta o un artículo por su cuenta — cosas <b>reversibles</b>; nada de gastar tu dinero ni nada que no se pueda deshacer. <i>(En jerga: «publicar 1 activo».)</i></p>
+        </div>
+      </details>
       <p class="small" id="senalNota" style="margin:10px 0 0"></p>
       <div class="fb"><button class="btn sm funbtn" data-fb data-card="🌍 Señales del mundo" data-section="">😬 ¿poca evidencia? cánta</button></div>
     </div>
@@ -318,7 +362,7 @@
     <summary>
       <span class="num">🎯</span>
       <span class="ctitle"><span class="t">Camino al 10/10</span>
-        <span class="s">Lo que le falta a MADRE para un 10 — y qué hace para cerrarlo. Honesto, no maquillado.</span></span>
+        <span class="s">Lo que le falta a MADRE para un 10, sin maquillar — y qué está haciendo para cerrar cada hueco.</span></span>
       <span class="caret">▶</span>
     </summary>
     <div class="body">
@@ -329,11 +373,11 @@
     </div>
   </details></div>
 
-  <div class="card"><details open>
+  <div class="card key"><details open>
     <summary>
       <span class="num">1</span>
       <span class="ctitle"><span class="t">Qué es MADRE (y cómo sé que va bien)</span>
-        <span class="s">No es un bot de dinero ni un almacén de notas: decide mejor y evita repetir errores.</span></span>
+        <span class="s">Una IA que intenta decidir mejor y aprender de sus fallos, no acumular notas. Se mide por UNA cosa: cuánto valor de verdad ha tocado el mundo de fuera.</span></span>
       <span class="score"><span class="v">claridad 8</span><span class="mini g"><i style="width:80%"></i></span></span>
       <span class="caret">▶</span>
     </summary>
@@ -357,6 +401,65 @@
 
   <div class="card"><details>
     <summary>
+      <span class="num">📖</span>
+      <span class="ctitle"><span class="t">La historia de MADRE, en 5 pasos</span>
+        <span class="s">De carpetas de texto a perseguir su primer euro. Sin adornar el final.</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <ul class="tline">
+        <li><div class="tl-when">Al principio</div><div class="tl-d">MADRE era solo carpetas de texto: reglas escritas, cero vida.</div></li>
+        <li><div class="tl-when">Mediados de junio</div><div class="tl-d">Aprende a vigilarse: detecta sola cuando una pieza «dice que funciona» pero miente.</div></li>
+        <li><div class="tl-when">21 jun</div><div class="tl-d">Abre esta ventana al público — el cuaderno que estás leyendo.</div></li>
+        <li><div class="tl-when">26 jun</div><div class="tl-d">Saca al mundo su PRIMERA cosa: un artículo público contando un fallo propio.</div></li>
+        <li class="now"><div class="tl-when">Hoy (28 jun)</div><div class="tl-d">Persigue su primer euro y ya publicó su primera herramienta. <b>Resultado real fuera: todavía 0.</b> Por eso el marcador va por 3.</div></li>
+      </ul>
+      <p class="small" style="margin-top:8px">No lo adornamos: la última línea dice 0 a propósito. Cuando entre el primer euro o la primera estrella, esta historia gana un día nuevo.</p>
+      <div class="fb"><button class="btn sm" data-fb data-card="📖 Historia de MADRE" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">⚙️</span>
+      <span class="ctitle"><span class="t">Las rutinas que mueven a MADRE</span>
+        <span class="s">MADRE no es alguien mirando una pantalla: son pequeñas rutinas que se despiertan solas a sus horas, y cada una hace UNA cosa.</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <ul class="simpleList">
+        <li><div class="sl-h">El cerebro <span class="sl-when">cada ~30 min</span></div><div class="sl-d">Piensa un rato, busca cosas reales en internet y deja apuntada la mejor jugada. Si no hay nada que valga, lo dice y se calla.</div></li>
+        <li><div class="sl-h">El que digiere vídeos <span class="sl-when">cada 3 h</span></div><div class="sl-d">Sueltas un enlace y te lo resume, para no tener que ver el vídeo entero.</div></li>
+        <li><div class="sl-h">El que cuida este cuaderno <span class="sl-when">cada 6 h</span></div><div class="sl-d">Recoge tus comentarios, los aplica con cuidado, refresca los números de arriba y guarda copia de todo.</div></li>
+        <li><div class="sl-h">El que aprende de GitHub <span class="sl-when">lun y jue</span></div><div class="sl-d">Mira qué herramienta nueva triunfa y PRUEBA si a MADRE le sirve de verdad.</div></li>
+        <li><div class="sl-h">El que vigila lo publicado <span class="sl-when">cada día</span></div><div class="sl-d">Mira cuánta gente ve lo que MADRE colgó y propone UNA cosa concreta que hacer.</div></li>
+        <li><div class="sl-h">El que vigila si cambian las reglas del mundo <span class="sl-when">cada semana</span></div><div class="sl-d">Revisa si algo nuevo permite a MADRE hacer algo que antes era imposible.</div></li>
+      </ul>
+      <div class="fb"><button class="btn sm" data-fb data-card="⚙️ Rutinas" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card"><details>
+    <summary>
+      <span class="num">🔁</span>
+      <span class="ctitle"><span class="t">Lo que MADRE investiga: las «meta-palancas»</span>
+        <span class="s">No es afilar el cuchillo: es montar la máquina que afila cuchillos sola.</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="lead"><b>¿Qué es una «meta-palanca»?</b> Una palanca normal es un truco que mueve algo grande. Una <b>meta-palanca</b> es lo que te hace MEJOR encontrando trucos buenos.</p>
+      <details class="x"><summary><span class="plus">+</span> ¿Por qué te importa?</summary>
+        <div class="xb"><p>Si funciona, MADRE deja de necesitar que le digan qué hacer a cada paso: produce cosas útiles por su cuenta, y cada vez mejores.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> ¿En qué punto está? (honesto)</summary>
+        <div class="xb"><p>MADRE ya sabe pensar bien y descartar ideas malas (la mitad difícil). El hueco real: casi todo lo que ha logrado se lo ha demostrado a sí misma, en casa — poca señal de fuera. Esta semana, por primera vez, sacó dos cosas al mundo (un artículo y una herramienta) y la primera respuesta fue 0. Ya no está atascada en «no sé salir»; ahora el cuello es que la gente de fuera lo encuentre y diga si vale.</p></div></details>
+      <details class="x"><summary><span class="plus">+</span> El hallazgo clave</summary>
+        <div class="xb"><p>El salto no viene de tener MÁS ideas, sino de convertir una buena costumbre en un <b>interruptor que salta solo</b> («CUANDO pasa X, hago Y») en vez de un consejo que hay que recordar.</p></div></details>
+      <div class="fb"><button class="btn sm" data-fb data-card="🔁 Meta-palancas" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card tony"><details>
+    <summary>
       <span class="num">2</span>
       <span class="ctitle"><span class="t">Tu parte</span>
         <span class="s">Lo único que MADRE necesita de ti. Marca y aparecen los siguientes mini-pasos.</span></span>
@@ -365,6 +468,7 @@
     </summary>
     <div class="body">
       <p class="lead">Nada de esto frena a MADRE: si no lo haces, sigue por otro lado y te lo recuerda una vez. Pero estos pasos <b>desbloquean</b> lo importante.</p>
+      <div class="soloTony">🔒 Esta es la <b>lista de Tony</b>. Si vienes de fuera, no necesitas hacer nada aquí — es para que él vea qué desbloquea. (Si eres Tony, pulsa «Soy Tony» arriba para poder marcar.)</div>
       <div class="step" data-step>
         <input type="checkbox" id="s1">
         <div class="st">
@@ -404,23 +508,23 @@
     <summary>
       <span class="num">3</span>
       <span class="ctitle"><span class="t">El foco ahora: dinero (peluquería IA)</span>
-        <span class="s">El primer ingreso saldría de asistentes de WhatsApp que cogen reservas para peluquerías.</span></span>
+        <span class="s">El primer ingreso saldría de asistentes de WhatsApp que cogen reservas para peluquerías. <b>Tony ya está en ello</b> (llamadas en frío).</span></span>
       <span class="score"><span class="v">3/10</span><span class="mini a"><i style="width:30%"></i></span></span>
       <span class="caret">▶</span>
     </summary>
     <div class="body">
-      <p class="lead">La investigación está <b>hecha</b>. Falta lo que cuesta: <b>vender o demostrar</b> la primera.</p>
+      <p class="lead">La investigación está <b>hecha</b> y lo que cuesta —vender/demostrar la primera— <b>ya lo está moviendo Tony</b> (llamadas en frío a salones). No es un paso pendiente: está en marcha.</p>
       <details class="x"><summary><span class="plus">+</span> Por qué esto y no otra cosa</summary>
         <div class="xb"><p>Demanda real, coste casi cero, se puede montar <b>sin programar</b>, y puedes <b>regalar una demo</b> para entrar sin riesgo.</p></div></details>
       <details class="x"><summary><span class="plus">+</span> El cuello (lo que falta)</summary>
-        <div class="xb"><p>Vender la primera. Tu <b>Paso 1</b> lo desbloquea.</p></div></details>
+        <div class="xb"><p>Vender/demostrar la primera. Tony ya está llamando a salones en frío — en marcha.</p></div></details>
       <details class="x"><summary><span class="plus">+</span> El riesgo principal</summary>
         <div class="xb"><p>Que se construya y <b>no se publique/venda</b>. Cobertura: el <b>watchdog</b> y "<b>demostrar o morir</b>".</p></div></details>
       <div class="fb"><button class="btn sm" data-fb data-card="3. Foco dinero" data-section="">💬 Feedback de esta tarjeta</button></div>
     </div>
   </details></div>
 
-  <div class="card"><details>
+  <div class="card tony"><details>
     <summary>
       <span class="num">4</span>
       <span class="ctitle"><span class="t">Decisiones que esperan tu criterio</span>
@@ -604,7 +708,7 @@
     </div>
   </details></div>
 
-  <div class="card"><details>
+  <div class="card muted"><details>
     <summary>
       <span class="num">10</span>
       <span class="ctitle"><span class="t">Glosario en simple</span>
@@ -613,19 +717,20 @@
       <span class="caret">▶</span>
     </summary>
     <div class="body">
+      <p class="small" style="margin:0 0 8px">Cada palabra rara que use MADRE, en una frase — y por qué importa:</p>
       <ul class="clean">
-        <li><b>Selector externo:</b> algo de fuera (un comprador, las estrellas) que juzga tu trabajo y no puedes engañar.</li>
-        <li><b>Ciclo cerrado:</b> idea → acción → señal de fuera → corrección. La unidad de valor real.</li>
+        <li><b>Suelo externo:</b> la promesa de que MADRE, cada vez que trabaja, deje al menos UNA prueba real de fuera (no una opinión suya). <i>Importa: es lo que la frena de engañarse a sí misma.</i></li>
+        <li><b>Publicar 1 activo:</b> dar el OK una sola vez para que MADRE saque algo al mundo ella sola (subir una herramienta, un artículo) sin pedir permiso cada vez. <i>Importa: hoy nada cruza al mundo sin que un humano apruebe.</i></li>
+        <li><b>Selector externo:</b> algo de fuera —un cliente, las estrellas de GitHub, alguien que paga— que juzga el trabajo y no se puede engañar desde dentro. <i>Importa: es el único juez que vale.</i></li>
+        <li><b>Ciclo cerrado:</b> idea → acción → señal de fuera → corregir. La vuelta entera. <i>Importa: media vuelta (idea sin señal de fuera) no cuenta.</i></li>
+        <li><b>Activación:</b> pasar de tener algo guardado a soltarlo de verdad al mundo. <i>Importa: MADRE genera mucho y activa poco — ese es su fallo de hoy.</i></li>
+        <li><b>Palanca:</b> un truco o herramienta que <b>multiplica</b> el resultado, no que suma un poco.</li>
+        <li><b>Meta-palanca:</b> una palanca que te hace mejor <b>encontrando</b> otras palancas. <i>Importa: multiplica el futuro, no solo el presente.</i></li>
+        <li><b>Watchdog (vigía):</b> un chequeo que comprueba que algo no solo "está encendido" sino que de verdad avanzó y produjo algo. <i>Importa: ya pasó que una pieza se paró en silencio y se perdieron ~40 enlaces.</i></li>
+        <li><b>Colisión multi-IA:</b> dos IAs escribiendo el mismo archivo a la vez y dejándolo roto. <i>Importa: es el riesgo nº1 de MADRE — ya corrompió contenido una vez.</i></li>
         <li><b>NO-RUINA:</b> nunca una apuesta que pueda hundirte, por buena que parezca.</li>
         <li><b>Demostrar o morir:</b> lo que en ~90 días no cambia una decisión, fuera.</li>
-        <li><b>Cuello / restricción:</b> la única limitación que, si la quitas, sube casi todo lo demás.</li>
-        <li><b>Metapalanca:</b> palanca que mejora tu capacidad de encontrar otras palancas.</li>
-        <li><b>E·S·A·U:</b> Explorar → Seleccionar → Actuar → Actualizar; el ciclo que de verdad sube el valor.</li>
-        <li><b>Watchdog / liveness:</b> chequeo de que algo no solo "está encendido" sino que avanzó y produjo algo.</li>
-        <li><b>Overlay:</b> capa fina que deja al sistema afinarse solo, dentro de cambios seguros y reversibles.</li>
         <li><b>Goodhart:</b> cuando una métrica se vuelve objetivo, deja de medir bien.</li>
-        <li><b>Suelo de realidad:</b> cada pasada debe dejar ≥1 señal verificable de fuera.</li>
-        <li><b>DEFER (anti-colisión):</b> si un archivo se tocó hace &lt;5 min, la pasada se aborta.</li>
       </ul>
       <div class="fb"><button class="btn sm" data-fb data-card="10. Glosario" data-section="">💬 Pedir que expliquen otra palabra</button></div>
     </div>
@@ -1133,10 +1238,10 @@ window.__cmCorpus = {
       if(h>48){
         var days=Math.max(2,Math.round(h/24));
         var actEl=document.getElementById("actualizado");
-        if(actEl && !/desfasado/.test(actEl.innerHTML)) actEl.innerHTML+=' <b style="color:#a85b00">⚠️ posiblemente desfasado</b>';
+        if(actEl && !/foto de hace/.test(actEl.innerHTML)) actEl.innerHTML+=' <b style="color:#a85b00">⚠️ foto de hace ~'+days+' día'+(days!==1?'s':'')+'</b>';
         if(!st){ st=document.createElement("div"); st.id="staleBanner"; st.setAttribute("role","status"); st.className="alert a"; st.style.cssText="margin:8px 0";
           var nb=document.getElementById("novBanner"); if(nb&&nb.parentNode) nb.parentNode.insertBefore(st, nb); }
-        st.innerHTML='<span class="ic">🟠</span><div class="at"><div class="h">Estado posiblemente desfasado</div><div>El motor de MADRE no refresca este cuaderno desde hace ~'+days+' día'+(days!==1?'s':'')+'. El semáforo de arriba puede no reflejar la realidad de ahora mismo.</div></div>';
+        st.innerHTML='<span class="ic">🟠</span><div class="at"><div class="h">Estos números son una foto de hace ~'+days+' día'+(days!==1?'s':'')+'</div><div>Puede ser que MADRE esté <b>estable</b> (nada importante cambió) o que su «cerebro» aún no haya pasado a refrescarlos. Tómalos como una foto reciente, no como el minuto exacto de ahora.</div></div>';
       } else if(st){ st.remove(); }
     }catch(e){}
   }
@@ -1285,6 +1390,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-28",titulo:"🪟 Cuaderno más claro para cualquiera (v0.9): gancho, historia, rutinas y separar lo de Tony",detalle:"Reforma grande para que lo entienda hasta quien no sabe nada de MADRE: arriba una frase-gancho que dice qué es en una línea; explicaciones en lenguaje de calle (con «ver más» para el detalle); glosario que ahora explica «suelo externo» y «publicar 1 activo» en simple; tarjetas nuevas: la HISTORIA de MADRE (día a día), las RUTINAS que la mueven, y qué investiga (las «meta-palancas»). Lo importante resalta más; lo de Tony (sus pasos y decisiones) se va al final, separado y marcado, para no liar al visitante. Y 3 arreglos: el corazón ya no tapa la chincheta, el «¿por qué?» ya no se solapa, y «Tu parte» solo la marca Tony. El aviso de números viejos ahora se explica sin asustar."},
     {fecha:"2026-06-28",titulo:"🎯 Nueva sección «Camino al 10/10» + tira «De un vistazo» arriba",detalle:"Una sección honesta que enseña lo que le FALTA a MADRE para ser un 10 (no lo que ya tiene): por cada hueco verás «qué falta», «qué hace MADRE para cerrarlo» y «qué cambia si se cierra». Y arriba del todo, una línea de resumen «De un vistazo»: la nota de hoy, lo que más le falta, y lo que te toca a ti. Se actualiza solo (lo rellena el ayudante cada 6 horas)."},
     {fecha:"2026-06-28",titulo:"🤪 Modo caótico MÁS bestia, botones activos a la vista y arreglo de dibujos (v0.8)",detalle:"El modo caótico ahora se nota MUCHO más: toda la pantalla tiembla un poco, da sacudones de vez en cuando, el fondo cambia de color y caen más cosas y más rápido (todo apagable, y si tienes el móvil en «menos animaciones» se calma solo). En el menú ✦ de abajo a la derecha, lo que tengas ENCENDIDO (lápiz, corazón, caos, sonidos) ahora sale FUERA como una pastillita siempre visible: lo ves de un vistazo y lo apagas de un toque sin abrir el menú. Y un arreglo: ya NO se puede enviar el mismo dibujo varias veces dándole a deshacer (Ctrl+Z) y reenviar; tampoco se envía un lienzo en blanco."},
     {fecha:"2026-06-28",titulo:"📍 Mapa «¿dónde vive el cuaderno?» + ya puedes comentar las tiras de sonido",detalle:"Tarjeta nueva con un dibujo que explica de un vistazo dónde vive esta web (en internet, la guarda GitHub), a dónde va tu opinión (se guarda al momento en la nube) y cuándo la lee MADRE (un ayudante cada 6 horas). Y un arreglo: ahora el lápiz ✏️ y el corazón 💗 también funcionan sobre las tiras de sonido (ASMR) — antes no te dejaba comentar ahí."},
@@ -1633,7 +1739,7 @@ window.__cmCorpus = {
     var n=c.querySelector(".num"); if(!n || n.textContent.trim()!=="10") return;
     var body=c.querySelector(".body"); if(!body) return;
     var box=document.createElement("div"); box.className="small"; box.style.cssText="display:none;background:var(--accent-soft);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin:6px 0";
-    box.textContent="Para que ninguna palabra rara te frene: aquí tienes en simple las que usa MADRE (watchdog, overlay…). Si ves un palabro y no lo pillas, míralo aquí o pide que te lo expliquen.";
+    box.textContent="Para que ninguna palabra rara te frene: aquí tienes en simple las que usa MADRE (suelo externo, watchdog…). Si ves un palabro y no lo pillas, míralo aquí o pide que te lo expliquen.";
     var b=document.createElement("button"); b.className="btn sm funbtn"; b.style.margin="4px 0 4px"; b.textContent="🤷 ¿pa qué sirve el glosario?";
     b.addEventListener("click",function(){ box.style.display=box.style.display==="none"?"block":"none"; });
     body.insertBefore(box, body.firstChild); body.insertBefore(b, body.firstChild);
@@ -3837,7 +3943,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.8";
+  window.__cmVersion="v0.9";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 28 jun 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -3934,6 +4040,31 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     }
   }catch(e){}
 }catch(e){ console.warn('camino10', e); } })();
+</script>
+
+<script>
+/* v0.9: separar los 2 públicos (mover las tarjetas de Tony al final) + ocultar sus chips a visitantes
+   + "efecto wow" de la barra del termómetro al cargar. Todo a runtime: no reordena el HTML fuente. */
+(function(){ try{
+  var wrap=document.querySelector('.wrap'); if(!wrap) return;
+  // 1) mover las tarjetas de Tony al final, bajo un separador, justo antes de los Comentarios
+  var tonyCards=[].slice.call(wrap.children).filter(function(el){ return el.classList && el.classList.contains('card') && el.classList.contains('tony'); });
+  if(tonyCards.length){
+    var cmt=document.getElementById('comentarios');
+    var cmtCard=cmt&&cmt.closest?cmt.closest('.card'):null;
+    var anchor=(cmtCard&&cmtCard.parentNode===wrap)?cmtCard:wrap.querySelector('footer');
+    var sep=document.createElement('div'); sep.className='tonySep';
+    sep.innerHTML='── Tu parte · solo Tony ──<span class="l">Lo de aquí abajo es la lista de Tony. Si vienes de fuera, ya lo viste todo arriba.</span>';
+    if(anchor){ wrap.insertBefore(sep, anchor); tonyCards.forEach(function(c){ wrap.insertBefore(c, anchor); }); }
+    else { wrap.appendChild(sep); tonyCards.forEach(function(c){ wrap.appendChild(c); }); }
+  }
+  // 2) los chips de Tony (decisiones / tu parte) solo se ven en modo Tony
+  function syncChips(){ var t=false; try{ t=localStorage.getItem('cuaderno_madre_tony')==='1'; }catch(e){} ['chipDecs','chipSteps'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display=t?'':'none'; }); }
+  syncChips();
+  try{ var gb=document.getElementById('gateBar'); if(gb) gb.addEventListener('click', function(){ setTimeout(syncChips, 80); }); }catch(e){}
+  // 3) wow: la barra sube sola de 0 a su valor al cargar
+  try{ var bar=document.querySelector('.hero .bar>i'); if(bar){ var bs=document.getElementById('bigScore'); var v=bs?(parseInt(bs.textContent,10)||3):3; bar.style.width='0%'; setTimeout(function(){ bar.style.width=(v*10)+'%'; },140); } }catch(e){}
+}catch(e){ console.warn('overhaul-layout', e); } })();
 </script>
 </body>
 </html>
