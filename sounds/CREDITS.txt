@@ -1,0 +1,8 @@
+Sonidos del Cuaderno MADRE — todos CC0 / dominio público (libres de usar y redistribuir, sin atribución obligatoria; se acredita por cortesía).
+
+- wood.wav  — Kenney "Interface Sounds" (drop_004), CC0 1.0 — https://kenney.nl/assets/interface-sounds
+- click.wav — Kenney "Interface Sounds" (click_001), CC0 1.0 — https://kenney.nl/assets/interface-sounds
+- pop.mp3   — "Plop!" by Breviceps (Freesound id 447910), Creative Commons 0 — https://freesound.org/people/Breviceps/sounds/447910/
+
+Uso: micro-sonidos ASMR/UI que suenan al tocar las texturas y botones (apagable desde el menú ✦).
+El roce (hover) sigue siendo sintetizado por código (Web Audio); estos ficheros son para los toques/pops.
