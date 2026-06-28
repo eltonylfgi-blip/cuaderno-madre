@@ -257,6 +257,47 @@
     <p class="small" style="margin:12px 0 0">Estado: <b id="actualizado">21-jun-2026 (congelado)</b> · MADRE se actualiza solo cada ~30 min · tu feedback le llega en la siguiente pasada.</p>
   </div>
 
+  <div class="card" id="dondeVive"><details>
+    <summary>
+      <span class="num">📍</span>
+      <span class="ctitle"><span class="t">¿Dónde vive este cuaderno y cuándo te lee?</span>
+        <span class="s">El mapa simple: dónde está, a dónde va tu opinión, y cuándo la lee.</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="small" style="margin:2px 0 10px">Si alguna vez te pierdes con «¿dónde está esto?», este dibujo lo resume:</p>
+      <svg viewBox="0 0 380 520" width="100%" style="max-width:360px;display:block;margin:0 auto;height:auto" role="img" aria-labelledby="dvT dvD" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+        <title id="dvT">Dónde vive el cuaderno y cuándo te lee</title>
+        <desc id="dvD">La web vive en internet (GitHub). Tu opinión se guarda en la nube. Un ayudante la lee cada 6 horas y actualiza la web.</desc>
+        <defs>
+          <marker id="dvAh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/>
+          </marker>
+        </defs>
+        <rect x="38" y="44" width="304" height="92" rx="14" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="190" y="74" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">📓 La web del cuaderno</text>
+        <text x="190" y="97" text-anchor="middle" font-size="12.5" fill="var(--muted)">vive en internet · la guarda GitHub</text>
+        <text x="190" y="118" text-anchor="middle" font-size="12" fill="var(--accent)">tú solo la abres</text>
+        <line x1="190" y1="138" x2="190" y2="176" stroke="var(--muted)" stroke-width="2" marker-end="url(#dvAh)"/>
+        <text x="200" y="162" text-anchor="start" font-size="11" fill="var(--muted)">escribes tu opinión</text>
+        <rect x="38" y="180" width="304" height="78" rx="14" fill="var(--card)" stroke="var(--line)" stroke-width="2"/>
+        <text x="190" y="210" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">☁️ Tu opinión</text>
+        <text x="190" y="233" text-anchor="middle" font-size="12.5" fill="var(--muted)">se guarda al momento en la nube</text>
+        <line x1="190" y1="260" x2="190" y2="298" stroke="var(--muted)" stroke-width="2" marker-end="url(#dvAh)"/>
+        <rect x="38" y="302" width="304" height="96" rx="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="190" y="332" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">🤖 El ayudante</text>
+        <text x="190" y="355" text-anchor="middle" font-size="12.5" fill="var(--muted)">cada 6 horas lee tu opinión</text>
+        <text x="190" y="375" text-anchor="middle" font-size="12.5" fill="var(--muted)">y ↑ actualiza la web</text>
+        <rect x="20" y="416" width="340" height="52" rx="12" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="190" y="439" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">✅ Tu próximo comentario se ve</text>
+        <text x="190" y="457" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">como mucho en 6 horas</text>
+        <text x="190" y="496" text-anchor="middle" font-size="11" fill="var(--muted)">🧠 Aparte, el «cerebro» de MADRE (cada 30 min)</text>
+        <text x="190" y="510" text-anchor="middle" font-size="11" fill="var(--muted)">es quien pone la nota de 3/10</text>
+      </svg>
+      <div class="fb"><button class="btn sm" data-fb data-card="📍 Dónde vive el cuaderno" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
   <div class="card" id="senalesCard"><details open>
     <summary>
       <span class="num">🌍</span>
@@ -1210,6 +1251,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-28",titulo:"📍 Mapa «¿dónde vive el cuaderno?» + ya puedes comentar las tiras de sonido",detalle:"Tarjeta nueva con un dibujo que explica de un vistazo dónde vive esta web (en internet, la guarda GitHub), a dónde va tu opinión (se guarda al momento en la nube) y cuándo la lee MADRE (un ayudante cada 6 horas). Y un arreglo: ahora el lápiz ✏️ y el corazón 💗 también funcionan sobre las tiras de sonido (ASMR) — antes no te dejaba comentar ahí."},
     {fecha:"2026-06-22",titulo:"🎨 Plantillas para dibujar, ASMR con más sonidos y mil cositas random (v0.7)",detalle:"Sonidos ASMR de verdad y MÁS variados: ahora hay 8 texturas (burbujas, pana, madera, papel, muelle, cremallera…) que cambian en cada visita y suenan distinto según rozas. En la zona de dibujo, pulsa «🎭 Plantillas traviesas» y te sale una figura tenue para CALCAR y gamberrear. Cuando dices «no entiendo» puedes señalar la parte exacta (o seguir). El modo caótico ahora suelta datos súper random, retos («dale un beso a tu abuela») y flechas clickbait, y rodea cosas de verdad. Los comentarios salen en burbujas más bonitas. Al subir una foto puedes recortarla. Cada panel cambia de color según el día. Y abajo verás la versión del cuaderno."},
     {fecha:"2026-06-22",titulo:"🤲 Texturas ASMR, corazones que se quedan y ruta guiada que te llama",detalle:"Sonidos ASMR de verdad: entre los paneles hay TEXTURAS — rózalas con el ratón y suenan según vas más rápido o más lento — y cositas que REVIENTAN (burbujas) o CRUJEN al hacer click (vienen puestas por defecto). Cuando marcas algo que te gusta, queda un 💗 fijo en esa zona y, al pasar el ratón por encima, sale tu nota. La 'Ruta guiada' y 'El cuaderno por dentro' ahora están siempre a la vista (abajo a la izq.), y al entrar la ruta guiada PALPITA para que la veas, hasta que tocas cualquier cosa. El modo caótico ya no suelta círculos de colores sueltos: ahora RODEA cosas reales de la pantalla con un círculo dibujado a mano."},
     {fecha:"2026-06-21",titulo:"🎛️ Botones en 1 menú, sonidos, '¿no entiendo?' y caos x2",detalle:"Los botones flotantes ahora viven en UN menú ✦ (menos lío). Zonas con SONIDO (ASMR, actívalo en el menú). Botón 🤔 'no entiendo' en cada tarjeta y en la ruta guiada (para saber qué cuesta más). El gato cambia de cara y ya no se atasca en el móvil. El chat abre en lo último escrito. Los comentarios ya no ocupan toda la pantalla. El modo caótico tiene flechas que señalan cosas, círculos, citas y travesuras. Los dibujos llevan tu nombre. Y arreglos: los contadores de arriba ahora son reales, aviso si el estado está viejo, y no se solapan los modos."},
@@ -1512,7 +1554,7 @@ window.__cmCorpus = {
 
   document.addEventListener("click",function(e){
     if(!likeMode || e.target.closest("#likeFab") || e.target.closest("#likeAsk")) return;
-    var el=e.target.closest(".senalItem,.card,.hero,.body p,.body li,.ctitle .t,summary,h1,.sub,.postit,#gateBar,footer,.heronote,.dec,.alert,.step,.chip,#senalesCard,#comentarios"); if(!el){ return; }
+    var el=e.target.closest(".senalItem,.card,.hero,.body p,.body li,.ctitle .t,summary,h1,.sub,.postit,#gateBar,footer,.heronote,.dec,.alert,.step,.chip,#senalesCard,#comentarios,.cmTex"); if(!el){ return; }
     e.preventDefault(); e.stopPropagation();
     var label="(zona)", t=el.querySelector?el.querySelector(".ctitle .t"):null;
     if(t) label=t.textContent.trim();
@@ -2176,7 +2218,7 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
 #lapizFab.on{background:#d85a30;transform:rotate(-12deg) scale(1.06)}
 #lapizFab.on:hover{transform:rotate(-12deg) scale(1.12)}
 body.lapiz-mode{cursor:crosshair}
-body.lapiz-mode .card,body.lapiz-mode .hero,body.lapiz-mode .senalItem,body.lapiz-mode .body p,body.lapiz-mode .body li,body.lapiz-mode .ctitle .t,body.lapiz-mode summary{cursor:crosshair}
+body.lapiz-mode .card,body.lapiz-mode .hero,body.lapiz-mode .senalItem,body.lapiz-mode .body p,body.lapiz-mode .body li,body.lapiz-mode .ctitle .t,body.lapiz-mode summary,body.lapiz-mode .cmTex{cursor:crosshair}
 .lapiz-hot{outline:2px dashed #d85a30 !important;outline-offset:3px;background:rgba(216,90,48,.08) !important;border-radius:6px;transition:outline-color .1s ease}
 #lapizBar{position:fixed;top:0;left:0;right:0;z-index:62;background:rgba(29,158,117,.94);color:#fff;font-size:12.5px;line-height:1.3;padding:7px 14px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.18);transform:translateY(-110%);transition:transform .25s ease;font-family:inherit;pointer-events:none}
 #lapizBar.show{transform:translateY(0)}
@@ -2920,7 +2962,7 @@ loadGallery();
 <script>
 /* widget: lapiz */
 (function(){try{
-var SEL='.card, .hero, .senalItem, .body p, .body li, .ctitle .t, summary, h1, .sub, .postit, #gateBar, footer, .heronote, .dec, .alert, .step, .chip, #senalesCard, #comentarios';
+var SEL='.card, .hero, .senalItem, .body p, .body li, .ctitle .t, summary, h1, .sub, .postit, #gateBar, footer, .heronote, .dec, .alert, .step, .chip, #senalesCard, #comentarios, .cmTex';
 var active=false, curHot=null, bub=null;
 
 var fab=document.createElement('button');

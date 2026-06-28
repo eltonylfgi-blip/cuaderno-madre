@@ -34,3 +34,22 @@ Tony lee esto y decide. (Lo grande SIEMPRE espera; lo pequeño y claro la rutina
 **DECIDIDO (28-jun):** para ver la salud de MADRE de un vistazo se montará un **semáforo (verde/ámbar/rojo) dentro de tu propio *pacer*** (privado, no en la web pública). Pendiente de montar en una sesión nueva (la receta exacta quedó guardada). Frase para arrancar: *"monta el semáforo de salud de MADRE dentro del pacer"*.
 
 ---
+
+## 2026-06-28 — Feedback del cuaderno (3 notas) procesado + 1 widget que pediste
+
+**HECHO YA (esta sesión, subido y verificado en navegador):**
+- ✅ Widget **"📍 ¿Dónde vive este cuaderno y cuándo te lee?"** — tarjeta nueva con un dibujo simple (lo pediste tú). Verificado en móvil (375px), 0 errores.
+- ✅ **Arreglado:** ya puedes usar el lápiz ✏️ y el corazón 💗 sobre las **tiras de sonido (ASMR)** — faltaba `.cmTex` en el selector. (Feedback id `c3c1f7f8`.)
+
+**RESPUESTAS a tus preguntas:**
+- **"¿Dónde está el guiño pa la tata y cómo lo abro?"** → Es la **nota secreta** escondida en el **post-it de arriba del todo** (el "📝 ¿feedback?"). Para abrirla: toca la **chincheta 📌 pequeñita** que tiene encima. Está discreta a propósito (easter-egg) — por eso no la encontrabas. *(PARKING: hacerla más fácil de ver, como pediste.)*
+- **"¿Dónde meto vídeos para que salgan en la web del cuaderno?"** → Hoy **NO se pueden poner vídeos en la web del cuaderno** (función por construir). No confundir: los vídeos para que **MADRE los APRENDA** van al *pipeline de vídeo* (bandeja "PEGAR TODO" / `VIDEO_NUEVOS`), que es OTRA cosa distinta de esta web. *(PARKING: incrustar un vídeo elegido en el cuaderno.)*
+- **"Falta una sección donde el cuaderno me hable/responda"** → **Ya existe a medias**: si dejas un **COMENTARIO PÚBLICO** (no "feedback"), **MADRE te contesta** (verás respuestas firmadas "MADRE 🤱🏻"). *(PARKING: una sección de chat dedicada, más grande.)*
+
+**PARKING (lo grande — tú decides/priorizas; necesita más que un retoque):**
+1. **Corazones GLOBALES alrededor de las zonas más queridas** (id `ffac4e41`): hoy el 💗 es solo tuyo (local). Para "los que más tienen" hace falta una tabla nueva en la nube (`zone_signals` + RPC). Ya estaba en el backlog como prioridad alta.
+2. **Modo caótico más bestia** (id `3815c20d`): que cosas vibren, más caos, rodear/señalar, flechas en pantalla. Mejora lúdica.
+3. **ASMR que pegue con lo que parece** (id `c3c1f7f8`): dices que los sonidos suenan raros y no reflejan la textura. Afinar el motor de sonido.
+4. **Vídeo en el cuaderno** + **sección de chat dedicada con el cuaderno** (ver respuestas arriba).
+
+---
