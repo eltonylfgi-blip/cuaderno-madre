@@ -208,11 +208,11 @@
   #likeAsk .laOk{flex:1;border:none;border-radius:10px;padding:10px;font:700 14px/1 system-ui;background:linear-gradient(135deg,#e0568a,#c43b6e);color:#fff;cursor:pointer}
   #likeAsk .laNo{border:none;border-radius:10px;padding:10px 12px;font:700 14px/1 system-ui;background:#f1f1f4;color:#555;cursor:pointer}
   @media(prefers-reduced-motion:reduce){.lHeart{transition:none}}
-  .inlineArrow{border:none;background:transparent;cursor:pointer;padding:0 5px;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;transition:transform .18s;transform-origin:left center}
+  .inlineArrow{border:none;background:transparent;cursor:pointer;padding:0 5px;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;transition:transform .18s;transform-origin:left center;position:relative;z-index:4}
   .inlineArrow .ar{animation:nudgeX 1s ease-in-out infinite;display:inline-block;font-size:15px}
   .inlineArrow .lbl{max-width:0;overflow:hidden;white-space:nowrap;opacity:0;font-size:11px;font-weight:700;color:var(--accent);transition:max-width .28s,opacity .2s}
-  .inlineArrow:hover{transform:scale(1.7)}
-  .inlineArrow:hover .lbl{max-width:240px;opacity:1}
+  .inlineArrow:hover{transform:scale(1.18)}
+  .inlineArrow:hover .lbl{max-width:240px;opacity:1;background:var(--card,#fff);border:1px solid var(--line);border-radius:7px;padding:2px 7px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
   .ruta input[type=range]{width:100%;accent-color:var(--accent)}
   .rutaStep{background:#fcfdff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin-top:8px;min-height:46px}
   .rutaStep .rf{font-size:11.5px;color:var(--muted);margin-top:3px}
@@ -1057,9 +1057,14 @@ window.__cmCorpus = {
     var sb=document.getElementById("stepBar"); if(sb) sb.style.width=(n?(done/n*100):0)+"%";
     var ch=document.getElementById("chipSteps"); if(ch) ch.innerHTML="✅ Tu parte: <b>"+done+"/"+n+"</b> ›";
   }
+  function isTonyNow(){ try{ return localStorage.getItem("cuaderno_madre_tony")==="1"; }catch(e){ return false; } }
   document.querySelectorAll('.step input[type=checkbox]').forEach(function(c){
     if(state.steps[c.id]) c.checked=true;
-    c.addEventListener("change",function(){ state.steps[c.id]=c.checked; save(state); refreshSteps(); });
+    c.addEventListener("change",function(){
+      // "Tu parte" es de Tony: un visitante no debe poder marcarla (igual que las decisiones)
+      if(!isTonyNow()){ c.checked=!!state.steps[c.id]; try{ if(typeof toast==="function") toast("🔒 «Tu parte» la marca Tony — pulsa «Soy Tony» arriba"); }catch(e){} return; }
+      state.steps[c.id]=c.checked; save(state); refreshSteps();
+    });
   });
   refreshSteps();
 
@@ -1412,6 +1417,7 @@ window.__cmCorpus = {
     st.textContent="#gateBar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#f3f6ff;border:1px solid #d9e3ff;border-radius:12px;padding:8px 12px;margin-bottom:12px;font-size:13px}"+
       "body.lectura .decbtns,body.lectura .reason{display:none !important}"+
       ".soloTony{display:none;font-size:12.5px;color:var(--muted);background:#f3f6ff;border:1px solid #d9e3ff;border-radius:8px;padding:6px 9px;margin:6px 0}body.lectura .soloTony{display:block}"+
+      "body.lectura .step input[type=checkbox]{opacity:.45;cursor:not-allowed}"+
       ".tipoBtns{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px}"+
       ".tbtn{font-size:12.5px;padding:6px 10px;border-radius:999px;border:1px solid var(--line,#ccc);background:#fff;color:#333;cursor:pointer}"+
       ".tbtn.on{background:var(--accent,#3b5bdb);border-color:var(--accent,#3b5bdb);color:#fff;font-weight:600}";
@@ -1537,7 +1543,13 @@ window.__cmCorpus = {
     var up=cssPath(p); return (up?up+">":"")+seg;
   }catch(e){ return ""; } }
 
-  function placeHeart(h){ try{ var el=h._el; if(!el || !el.isConnected){ h.style.display="none"; return; } var r=el.getBoundingClientRect(); if(r.width<1 && r.height<1){ h.style.display="none"; return; } h.style.display=""; h.style.left=Math.min(window.innerWidth-12, r.right-12)+"px"; h.style.top=Math.max(12, r.top+12)+"px"; }catch(e){} }
+  function placeHeart(h){ try{ var el=h._el; if(!el || !el.isConnected){ h.style.display="none"; return; } var r=el.getBoundingClientRect(); if(r.width<1 && r.height<1){ h.style.display="none"; return; } h.style.display="";
+    // Si la zona tiene chincheta (el post-it 📌, arriba-dcha) o es muy pequeña, el corazón va al borde IZQUIERDO
+    // para no taparla; el resto, arriba-dcha como siempre.
+    var hasPin = el.querySelector && el.querySelector('.ns-pin');
+    if(hasPin){ h.style.left=Math.max(2, r.left-10)+"px"; h.style.top=Math.max(12, r.top+Math.min(10, r.height/2-10))+"px"; }
+    else { h.style.left=Math.min(window.innerWidth-12, r.right-12)+"px"; h.style.top=Math.max(12, r.top+12)+"px"; }
+  }catch(e){} }
   function repositionHearts(){ for(var i=0;i<hearts.length;i++) placeHeart(hearts[i]); }
   function removeHeart(h){ try{ var i=hearts.indexOf(h); if(i>=0) hearts.splice(i,1); h.remove(); var arr=loadLikes().filter(function(r){ return !(r.path===h._rec.path && r.note===h._rec.note); }); saveLikes(arr); }catch(e){} }
   function addHeart(rec){ try{
@@ -1610,10 +1622,7 @@ window.__cmCorpus = {
     a.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); fn(); });
     target.parentNode.insertBefore(a, target);
   }
-  // 1) junto a "¿por qué tan bajo?" (en la cabecera)
-  arrowBeside(document.querySelector(".hero details.def"), "¿por qué 3/10?", function(){
-    var d=document.querySelector(".hero details.def"); if(d) d.open=true;
-  });
+  // (la flecha "¿por qué 3/10?" del hero se quitó: era REDUNDANTE con el «¿por qué tan bajo?» de al lado y se solapaban)
   // 2) junto al título del Glosario
   (function(){ var g=null; document.querySelectorAll(".card").forEach(function(c){ var n=c.querySelector(".num"); if(n&&n.textContent.trim()==="10") g=c; });
     arrowBeside(g?g.querySelector(".ctitle .t"):null, "¿qué es lo que menos entiendes?", function(){ openFb("¿Qué es lo que menos entiendes?","","mas-claridad"); });
