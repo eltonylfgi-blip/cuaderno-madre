@@ -314,6 +314,21 @@
     </div>
   </details></div>
 
+  <div class="card" id="caminoCard"><details open>
+    <summary>
+      <span class="num">🎯</span>
+      <span class="ctitle"><span class="t">Camino al 10/10</span>
+        <span class="s">Lo que le falta a MADRE para un 10 — y qué hace para cerrarlo. Honesto, no maquillado.</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="lead" style="margin-top:0">Esto es lo que le falta a MADRE para un 10/10 — y qué hace para cerrarlo.</p>
+      <div id="caminoList"><div class="small">Cargando el camino…</div></div>
+      <p class="small" id="caminoUpd" style="margin:10px 0 0"></p>
+      <div class="fb"><button class="btn sm" data-fb data-card="🎯 Camino al 10/10" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
+
   <div class="card"><details open>
     <summary>
       <span class="num">1</span>
@@ -758,6 +773,20 @@ hipotesis	muerta	key-Groq era el cuello del almacen de oportunidades -- REFUTADA
 build	Demo peluqueria	10	conceptualizado; n8n+Meta-test-number; falta montar
 build	tikslide	100	publicado; distribucion=0; senal=0; P21 vence 18-jul
 build	AI Audit 1-pager	100	SISTEMA/02_PROYECTOS/AI_AUDIT_1_PAGER.md
+</script>
+
+<script id="caminoBaked" type="text/plain">
+# CAMINO_10.tsv (horneado) -- lo que le FALTA a MADRE para un 10/10 (honesto). Escritor unico = el loop; la web lo hornea.
+# Formato: hueco<TAB>titulo<TAB>que falta<TAB>que hace MADRE<TAB>si se cierra. Lineas con # o vacias se ignoran.
+actualizado	2026-06-28T10:15Z
+hueco	Valor externo aún = 0	Construye mucho pero casi nada cruza al mundo: 0 €, 0 clientes, ~0 estrellas.	2 activos publicados (artículo dev.to + plugin usage-guard); envío a lista grande 6-jul; apuesta falsable P-EXT1 vence 19-jul.	MADRE pasa de teoría a pruebas reales de que vale.
+hueco	Cuello real = captura/distribución autónoma	Nunca sacó un activo a un sitio con canal de selección NO-humano (apropiabilidad>0); el síntoma «0 resultado externo» es eso.	Redirige el generador hacia skill/plugin de Claude Code (canal auto-distribuible); usage-guard ya es esa categoría, falta su envío.	Un activo se valida SOLO, sin que un humano apruebe euro a euro.
+hueco	Sin actuador que cobre solo	El que paga siempre es un humano (Tony); MADRE no cierra el valor sola.	«Manos» parciales: web por Nimble, git por Claude Code, rutinas; el cobro sigue dependiendo de Tony.	Deja de depender de Tony para cada euro.
+hueco	Sobre-genera y sub-activa	Mucho stock guardado, poca cosa activada (esta semana: ~28 notas de diseño, casi todo interno).	MODO VALIDACIÓN: demostrar lo que ya hay antes de añadir; el loop aparca leyes nuevas que no traen falsador.	Convierte el almacén muerto en valor real.
+hueco	Producto demasiado genérico	Lo que hace se copia fácil (usage-guard resultó REDUNDANTE vs el mercado; el bot de peluquería se commoditiza).	Busca captura defendible: un diferencial verificado ANTES de construir, no después.	Un activo que la gente paga y no se regala.
+hueco	Sin audiencia (cold-start)	Las primeras estrellas/clientes no llegan solos; falta DIFUNDIR.	Cuaderno público + envío de usage-guard a la lista de 47k (6-jul) + portada/GIF con gancho.	El mundo empieza a mirar.
+hueco	Foco de dinero sin elegir	Dos vías abiertas: peluquería (coste ~0, solo tiempo) vs Shopify-dropshipping (pide 500-3.500$ + ads); Tony aún no eligió.	Le presenta a Tony el cruce honesto con la barrera REAL de cada vía y deja preparada la que elija; el loop no gasta su dinero.	Recursos concentrados en UNA vía en vez de repartidos.
+hueco	Colisión multi-IA (salud, riesgo nº1)	Varias IAs sobre la misma carpeta a la vez pueden corromper contenido.	Un solo escritor + apartarse si te detecta + herramientas de fichero (no shell) + verificar releyendo.	Nada de lo construido se corrompe.
 </script>
 
 <script id="cmCorpus">
@@ -3829,6 +3858,72 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     }
   }catch(e){}
 }catch(e){ console.warn("skins/emoji/version",e); } })();
+</script>
+
+<script>
+/* Camino al 10/10: lee el data-island #caminoBaked (lo hornea el loop) y pinta los huecos honestos;
+   además arma la tira "De un vistazo" de arriba (score + hueco principal + tu turno). Autocontenido. */
+(function(){ try{
+  function esc(s){ var d=document.createElement('div'); d.textContent=(s==null?'':String(s)); return d.innerHTML; }
+  var raw=(document.getElementById('caminoBaked')||{}).textContent||'';
+  var huecos=[], upd=null;
+  raw.split(/\r?\n/).forEach(function(ln){
+    if(!ln || ln.charAt(0)==='#') return;
+    var p=ln.split('\t'); if(p.length<3 && /\s{2,}/.test(ln)) p=ln.split(/\s{2,}/);  // tolerante: tab o 2+ espacios
+    for(var i=0;i<p.length;i++) p[i]=(p[i]||'').trim();
+    if(p[0]==='actualizado' && p[1]) upd=p[1];
+    else if(p[0]==='hueco' && p[1]) huecos.push({t:p[1],falta:p[2]||'',hace:p[3]||'',cierra:p[4]||''});
+  });
+  var st=document.createElement('style'); st.textContent=
+    '#caminoCard .camHueco{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:10px 12px;margin:10px 0;background:var(--card)}'+
+    '#caminoCard .camH{font-weight:800;font-size:.98rem;color:var(--ink);display:flex;align-items:flex-start;gap:8px;margin-bottom:5px}'+
+    '#caminoCard .camNo{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-top:1px}'+
+    '#caminoCard .camRow{font-size:.86rem;line-height:1.45;color:var(--muted);margin:3px 0}'+
+    '#caminoCard .camRow b{color:var(--ink)}'+
+    '#caminoCard .camDo b{color:#1d9e75}#caminoCard .camWin b{color:var(--accent)}'+
+    '#deUnVistazo{margin:8px 0 4px;font-size:12.5px;line-height:1.55;color:var(--ink);background:var(--accent-soft);border:1px solid var(--line);border-radius:10px;padding:7px 11px}'+
+    '#deUnVistazo .dvIco{margin-right:4px}#deUnVistazo .dvSep{opacity:.45;margin:0 3px}';
+  document.head.appendChild(st);
+  var list=document.getElementById('caminoList');
+  if(list){
+    if(!huecos.length){ list.innerHTML='<div class="small">Aún no hay datos del camino (el ayudante los rellenará en su próxima pasada).</div>'; }
+    else{
+      var html='';
+      huecos.forEach(function(h,i){
+        html+='<div class="camHueco">'+
+          '<div class="camH"><span class="camNo">'+(i+1)+'</span><span>'+esc(h.t)+'</span></div>'+
+          (h.falta?'<div class="camRow"><b>Qué falta:</b> '+esc(h.falta)+'</div>':'')+
+          (h.hace?'<div class="camRow camDo"><b>Qué hace MADRE:</b> '+esc(h.hace)+'</div>':'')+
+          (h.cierra?'<div class="camRow camWin"><b>Si se cierra:</b> '+esc(h.cierra)+'</div>':'')+
+          '</div>';
+      });
+      list.innerHTML=html;
+    }
+  }
+  try{ var u=document.getElementById('caminoUpd'); if(u&&upd){ u.textContent='Actualizado: '+String(upd).replace('T',' ').replace('Z',' UTC'); } }catch(e){}
+
+  // ---- Tira "De un vistazo" (arriba): score + lo que más le falta + lo que te toca a ti ----
+  try{
+    var bs=document.getElementById('bigScore');
+    var score=(bs&&(bs.textContent.match(/\d+/)||[])[0])||null;
+    if(score==null){ var estado0=(document.getElementById('estadoBaked')||{}).textContent||''; score=(estado0.match(/global_score\t(\d+)/)||[])[1]||null; }
+    var mainGap=huecos.length?huecos[0].t:null;
+    var estado=(document.getElementById('estadoBaked')||{}).textContent||'';
+    var tuyo=null, RE=/(tuyo|tu paso|cuando puedas|responder|autoriza|decide|elige|no corras|pendiente tuyo|di "|tu ok)/i;
+    estado.split(/\r?\n/).some(function(ln){ if(!ln||ln.charAt(0)==='#') return false; var p=ln.split('\t'); if(p[0]!=='desvio') return false; if(RE.test((p[4]||'')+' '+(p[5]||''))){ tuyo=(p[2]||'').trim(); return true;} return false; });
+    if(!tuyo) estado.split(/\r?\n/).some(function(ln){ var p=ln.split('\t'); if(p[0]==='desvio'){ tuyo=(p[2]||'').trim(); return true;} return false; });
+    var host=document.querySelector('.sub');
+    if(host && (score||mainGap||tuyo)){
+      var parts=[];
+      if(score!=null) parts.push('<b>MADRE hoy:</b> '+esc(score)+'/10');
+      if(mainGap) parts.push('<b>Lo que más le falta:</b> '+esc(mainGap));
+      if(tuyo) parts.push('<b>Tu turno:</b> '+esc(tuyo));
+      var strip=document.createElement('div'); strip.id='deUnVistazo';
+      strip.innerHTML='<span class="dvIco">👀</span>'+parts.join(' <span class="dvSep">·</span> ');
+      host.parentNode.insertBefore(strip, host.nextSibling);
+    }
+  }catch(e){}
+}catch(e){ console.warn('camino10', e); } })();
 </script>
 </body>
 </html>
