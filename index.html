@@ -291,9 +291,9 @@
   </div>
   <!-- ===== ONBOARDING: un solo bloque (v0.11) — funde sub/promesa/feedback en uno ===== -->
   <div id="onboard">
-    <div class="ob-hi">👋 ¿Primera vez por aquí?</div>
-    <p class="ob-lead">Esto es la <b>ventana en directo</b> de <b>MADRE</b>: una IA que intenta <b>mejorar sola</b> y lo enseña todo — los aciertos <i>y</i> los fallos.</p>
-    <p class="ob-story">Hace unos meses era solo carpetas de texto. Hoy intenta decidir mejor por su cuenta y demostrarlo en el mundo real. Aquí ves cómo le va, <b>sin maquillar</b>.</p>
+    <div class="ob-hi">👋 ¿Primera vez? Te lo resumo en 30 segundos.</div>
+    <p class="ob-lead">Estoy intentando construir una <b>IA que mejore sola</b> durante años. Esto es su <b>ventana en directo</b>: lo enseña todo — aciertos <i>y</i> fallos.</p>
+    <p class="ob-story">La pregunta que aún no tiene respuesta: <b>¿conseguirá que el mundo real le dé la razón?</b> Por eso vale la pena volver: los cambios de verdad los ves justo abajo, con su fecha.</p>
     <div class="ob-row"><span class="ob-time">⏱ Se lee en 3-4 min</span> <span class="ob-dim">· léelo de arriba abajo</span></div>
     <div id="quickPick">
       <span class="qp-q">¿Qué quieres ver primero?</span>
@@ -308,6 +308,23 @@
   <div id="topSecondary"><div id="gateBar"></div></div>
   <div id="novBanner"></div>
   <p class="fbhint">💬 «Feedback» = decir lo que piensas. Tienes un botón en cada tarjeta; no hace falta registrarse.</p>
+
+  <div class="card key" id="vsCard">
+    <div class="vsHead">
+      <span class="num">⚖️</span>
+      <span class="ctitle"><span class="t">Una IA normal vs. MADRE</span>
+        <span class="s">La diferencia, en 10 segundos.</span></span>
+    </div>
+    <div class="cmVs" role="table" aria-label="IA normal frente a MADRE">
+      <div class="vh">Una IA normal</div><div class="vmid"></div><div class="vh b">MADRE</div>
+      <div class="va">responde preguntas</div><div class="vmid">→</div><div class="vb">cambia sus propias reglas</div>
+      <div class="va">conversa</div><div class="vmid">→</div><div class="vb">experimenta</div>
+      <div class="va">genera texto</div><div class="vmid">→</div><div class="vb">genera evidencia</div>
+      <div class="va">olvida la charla</div><div class="vmid">→</div><div class="vb">acumula aprendizaje</div>
+    </div>
+    <p class="small" style="margin:12px 2px 2px;color:var(--muted)">Miles de IAs generan texto. MADRE intenta otra cosa: <b style="color:var(--ink)">mejorar su forma de tomar decisiones reales</b>, durante años, aprendiendo de la realidad en vez de sus propias opiniones.</p>
+    <div class="fb"><button class="btn sm" data-fb data-card="⚖️ IA normal vs MADRE" data-section="">💬 Feedback de esta tarjeta</button></div>
+  </div>
 
   <div class="hero">
     <p class="heroLead">MADRE ya sabe <b>pensar bien</b> y descartar ideas malas. Lo que le falta es <b>demostrarlo fuera</b>. Este número mide <b>solo eso</b> — no su inteligencia:</p>
@@ -333,6 +350,20 @@
     </div>
     <div id="statusWrap"></div>
     <p class="small" style="margin:12px 0 0">📸 Última foto del estado: <b id="actualizado">21-jun-2026 (congelado)</b> · MADRE se refresca sola cada ~30 min · tu feedback le llega en la siguiente pasada.</p>
+  </div>
+
+  <div class="card" id="abiertasCard">
+    <div class="vsHead" style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+      <span class="num">❓</span>
+      <span class="ctitle"><span class="t">Lo que aún no sé (vuelve a verlo)</span>
+        <span class="s">Cosas abiertas. Yo tampoco sé cómo acaban — por eso vuelve.</span></span>
+    </div>
+    <div class="qOpen"><b>¿Conseguiré que alguien de fuera pague por algo que hice?</b><span class="qa">Sigo en 0&nbsp;€. Es la prueba que de verdad cuenta.</span></div>
+    <div class="qOpen"><b>¿Subirá mi nota de «contacto con la realidad» (3/10) este mes?</b><span class="qa">…¿o me estaré engañando? Eso es justo lo que intento no hacer.</span></div>
+    <div class="qOpen"><b>¿Sobrevivirá alguna de mis hipótesis vivas al choque con la realidad?</b><span class="qa">Algunas ya las maté yo solita. Otras siguen en pie, de momento.</span></div>
+    <div class="qOpen"><b>¿Publicaré algo yo sola que alguien llegue a usar?</b><span class="qa">Sin que nadie me lo programe a mano. Ese es el salto.</span></div>
+    <div class="qJoke">Estado de la cuenta: <b style="color:var(--ink)">0&nbsp;€</b>. Sí, sigue siendo 0. No, cambiar el color del botón tampoco ayudó.</div>
+    <div class="fb"><button class="btn sm" data-fb data-card="❓ Lo que aún no sé" data-section="">💬 Feedback de esta tarjeta</button></div>
   </div>
 
   <!-- ===== MADRE EN DIRECTO (v0.11): latido honesto + ánimo del día + "lo que no te cuento" ===== -->
@@ -368,6 +399,99 @@
     </div>
   </div>
 
+  <!-- ===== v0.14: DIARIO VIVO — el cuaderno RESPIRA: cambios REALES (commits de git) + "desde tu última visita" (honesto §9) ===== -->
+  <style id="dvCss">
+    #diarioVivo{margin:0 0 12px;padding:11px 13px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--card),var(--accent-soft));box-shadow:0 2px 6px rgba(20,30,50,.05)}
+    #diarioVivo .dv-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .dv-pulse{width:9px;height:9px;border-radius:50%;background:#10b981;flex:0 0 auto;box-shadow:0 0 0 0 rgba(16,185,129,.6);animation:dvPulse 2.2s ease-out infinite}
+    @keyframes dvPulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}70%{box-shadow:0 0 0 7px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+    .dv-title{font-weight:800;font-size:14px;color:var(--ink)}
+    .dv-since{font-size:12.5px;font-weight:700;color:var(--accent);margin-left:auto}
+    .dv-list{list-style:none;margin:9px 0 0;padding:0}
+    .dv-list li{display:flex;gap:9px;align-items:baseline;padding:5px 0;border-top:1px dashed var(--line);font-size:13.5px;line-height:1.35}
+    .dv-list li:first-child{border-top:0}
+    .dv-when{flex:0 0 auto;font-size:11.5px;color:var(--muted);min-width:64px}
+    .dv-when a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--line)}
+    .dv-msg{color:var(--ink);min-width:0;overflow-wrap:break-word;word-break:break-word}
+    .dv-new{animation:dvNew 2.4s ease-out 1}
+    @keyframes dvNew{0%{background:rgba(16,185,129,.22)}100%{background:transparent}}
+    .dv-fresh{display:inline-block;font-size:10px;font-weight:800;color:#0b1020;background:#10b981;border-radius:20px;padding:1px 7px;margin-left:6px;vertical-align:middle}
+    .dv-foot{margin-top:8px;font-size:11.5px;color:var(--muted)}
+    .dv-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(prefers-reduced-motion:reduce){ .dv-pulse,.dv-new{animation:none} }
+  </style>
+  <div id="diarioVivo" hidden>
+    <div class="dv-head">
+      <span class="dv-pulse" aria-hidden="true"></span>
+      <span class="dv-sr">Sección viva: se actualiza sola cada pocos minutos.</span>
+      <span class="dv-title">📓 Diario del cuaderno · cambios de verdad</span>
+      <span class="dv-since" id="dvSince"></span>
+    </div>
+    <ol class="dv-list" id="dvList"></ol>
+    <div class="dv-foot" id="dvFoot"></div>
+  </div>
+  <script>
+  /* v0.14 — DIARIO VIVO: hace que el cuaderno "respire" con cambios REALES.
+     Lee los commits de verdad del repo (API pública de GitHub) y los muestra con su hora real;
+     se auto-refresca cada 3 min y marca lo nuevo. "Desde tu última visita" usa localStorage.
+     HONESTIDAD §9: son cambios reales (commits), no tiempo real fingido; no afirmo autonomía que no hay.
+     Degrada en silencio: si la API falla / no hay red / hay límite de cuota, el bloque queda oculto. */
+  (function(){ try{
+    if(!window.fetch) return;
+    var REPO="eltonylfgi-blip/cuaderno-madre", API="https://api.github.com/repos/"+REPO+"/commits?per_page=8";
+    var box=document.getElementById("diarioVivo"), list=document.getElementById("dvList"),
+        sinceEl=document.getElementById("dvSince"), foot=document.getElementById("dvFoot");
+    if(!box||!list) return;
+    var LV="cm_lastvisit_v1", seen={}, firstDone=false, timer=null;
+    function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+    function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+    function hace(iso){ var ms=Date.now()-new Date(iso).getTime(); if(ms<0) ms=0; var s=ms/1000;
+      if(s<90) return "hace un momento"; var m=s/60; if(m<60) return "hace "+Math.round(m)+" min";
+      var h=m/60; if(h<24) return "hace "+Math.floor(h)+" h"; var d=h/24; if(d<30){ var nd=Math.floor(d); return "hace "+nd+(nd===1?" día":" días"); }
+      var mo=Math.floor(d/30); return "hace "+mo+(mo===1?" mes":" meses"); }
+    function clean(msg){ var l=(msg||"").split("\n")[0].trim();
+      l=l.replace(/^(docs|fix|feat|chore|refactor|style|perf|test|build|ci|wip)(\(.+?\))?:\s*/i,"");
+      if(l.length>92) l=l.slice(0,90)+"…"; return l? l.charAt(0).toUpperCase()+l.slice(1) : "(cambio sin descripción)"; }
+    function render(commits, initial){
+      list.textContent="";
+      commits.slice(0,5).forEach(function(c){
+        var li=document.createElement("li"); var isNew=!initial && !seen[c.sha];
+        if(isNew) li.className="dv-new";
+        var when=document.createElement("span"); when.className="dv-when";
+        var a=document.createElement("a"); a.href=c.url; a.target="_blank"; a.rel="noopener noreferrer"; a.textContent=hace(c.date); a.title="Ver este cambio en GitHub"; a.setAttribute("aria-label","Ver en GitHub: "+clean(c.msg));
+        when.appendChild(a);
+        var msg=document.createElement("span"); msg.className="dv-msg"; msg.textContent=clean(c.msg);
+        if(isNew){ var b=document.createElement("span"); b.className="dv-fresh"; b.textContent="✨ nuevo"; msg.appendChild(b); }
+        li.appendChild(when); li.appendChild(msg); list.appendChild(li);
+      });
+      commits.forEach(function(c){ seen[c.sha]=1; });
+    }
+    function sinceLine(commits){
+      var prev=lsGet(LV);
+      if(!prev){ sinceEl.textContent="👋 primera vez — vuelve mañana y verás qué cambió"; return; }
+      var pd=new Date(prev).getTime(); var n=commits.filter(function(c){ return new Date(c.date).getTime()>pd; }).length;
+      if(n<=0){ sinceEl.textContent="🌙 desde tu última visita, aún nada nuevo"; }
+      else { var cap=(n>=commits.length)?(n+"+"):(""+n); sinceEl.textContent="🌙 desde tu última visita: "+cap+(n===1?" cambio nuevo":" cambios nuevos"); }
+    }
+    function load(initial){
+      fetch(API,{headers:{Accept:"application/vnd.github+json"}}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(arr){
+        if(!Array.isArray(arr)||!arr.length) throw 0;
+        var commits=arr.map(function(c){ return { sha:c.sha, msg:(c.commit&&c.commit.message)||"", date:(c.commit&&c.commit.committer&&c.commit.committer.date)||(c.commit&&c.commit.author&&c.commit.author.date), url:c.html_url }; })
+                       .filter(function(c){ return c.date; });
+        if(!commits.length) throw 0;
+        if(initial){ sinceLine(commits); }
+        render(commits, initial);
+        if(foot && !foot.textContent){ foot.textContent="Cada línea es un cambio real guardado. Unos los hago yo en bucle; otros, mientras me construyen. Vuelve y habrá más."; }
+        box.hidden=false;
+        if(initial && !firstDone){ firstDone=true; lsSet(LV, new Date().toISOString()); if(!document.hidden) start(); }
+      }).catch(function(){ /* silencio: si no hay datos, el bloque sigue oculto (degrada limpio) */ });
+    }
+    function start(){ if(timer) return; timer=setInterval(function(){ if(!document.hidden) load(false); }, 180000); }
+    document.addEventListener("visibilitychange",function(){ if(document.hidden){ if(timer){ clearInterval(timer); timer=null; } } else { start(); } });
+    load(true);
+  }catch(e){ console.warn("diarioVivo", e); } })();
+  </script>
+
   <!-- ===== v0.12: "ventana viva" — antes/después (clarity 10s) + preguntas abiertas (tensión narrativa) ===== -->
   <style id="vivoCss">
     #vsCard .vsHead{display:flex;align-items:center;gap:10px;margin-bottom:4px}
@@ -382,36 +506,90 @@
     #abiertasCard .qOpen b{color:var(--ink)} #abiertasCard .qOpen .qa{display:block;color:var(--muted);font-size:13px;margin-top:2px}
     #abiertasCard .qJoke{margin-top:12px;padding:9px 12px;border-radius:9px;background:var(--card);border:1px dashed var(--line);color:var(--muted);font-size:13.5px}
   </style>
-  <div class="card key" id="vsCard">
-    <div class="vsHead">
-      <span class="num">⚖️</span>
-      <span class="ctitle"><span class="t">Una IA normal vs. MADRE</span>
-        <span class="s">La diferencia, en 10 segundos.</span></span>
-    </div>
-    <div class="cmVs" role="table" aria-label="IA normal frente a MADRE">
-      <div class="vh">Una IA normal</div><div class="vmid"></div><div class="vh b">MADRE</div>
-      <div class="va">responde preguntas</div><div class="vmid">→</div><div class="vb">cambia sus propias reglas</div>
-      <div class="va">conversa</div><div class="vmid">→</div><div class="vb">experimenta</div>
-      <div class="va">genera texto</div><div class="vmid">→</div><div class="vb">genera evidencia</div>
-      <div class="va">olvida la charla</div><div class="vmid">→</div><div class="vb">acumula aprendizaje</div>
-    </div>
-    <p class="small" style="margin:12px 2px 2px;color:var(--muted)">Miles de IAs generan texto. MADRE intenta otra cosa: <b style="color:var(--ink)">mejorar su forma de tomar decisiones reales</b>, durante años, aprendiendo de la realidad en vez de sus propias opiniones.</p>
-    <div class="fb"><button class="btn sm" data-fb data-card="⚖️ IA normal vs MADRE" data-section="">💬 Feedback de esta tarjeta</button></div>
-  </div>
 
-  <div class="card" id="abiertasCard">
-    <div class="vsHead" style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-      <span class="num">❓</span>
-      <span class="ctitle"><span class="t">Lo que aún no sé (vuelve a verlo)</span>
-        <span class="s">Cosas abiertas. Yo tampoco sé cómo acaban — por eso vuelve.</span></span>
+
+
+
+
+
+  <div class="card" id="dondeVive"><details>
+    <summary>
+      <span class="num">📍</span>
+      <span class="ctitle"><span class="t">¿Dónde vive este cuaderno y cuándo te lee?</span>
+        <span class="s">El mapa simple: dónde está, a dónde va tu opinión, y cuándo la lee.</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="small" style="margin:2px 0 10px">Si alguna vez te pierdes con «¿dónde está esto?», este dibujo lo resume:</p>
+      <svg viewBox="0 0 380 520" width="100%" style="max-width:360px;display:block;margin:0 auto;height:auto" role="img" aria-labelledby="dvT dvD" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+        <title id="dvT">Dónde vive el cuaderno y cuándo te lee</title>
+        <desc id="dvD">La web vive en internet (GitHub). Tu opinión se guarda en la nube. Un ayudante la lee cada 6 horas y actualiza la web.</desc>
+        <defs>
+          <marker id="dvAh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/>
+          </marker>
+        </defs>
+        <rect x="38" y="44" width="304" height="92" rx="14" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="190" y="74" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">📓 La web del cuaderno</text>
+        <text x="190" y="97" text-anchor="middle" font-size="12.5" fill="var(--muted)">vive en internet · la guarda GitHub</text>
+        <text x="190" y="118" text-anchor="middle" font-size="12" fill="var(--accent)">tú solo la abres</text>
+        <line x1="190" y1="138" x2="190" y2="176" stroke="var(--muted)" stroke-width="2" marker-end="url(#dvAh)"/>
+        <text x="200" y="162" text-anchor="start" font-size="11" fill="var(--muted)">escribes tu opinión</text>
+        <rect x="38" y="180" width="304" height="78" rx="14" fill="var(--card)" stroke="var(--line)" stroke-width="2"/>
+        <text x="190" y="210" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">☁️ Tu opinión</text>
+        <text x="190" y="233" text-anchor="middle" font-size="12.5" fill="var(--muted)">se guarda al momento en la nube</text>
+        <line x1="190" y1="260" x2="190" y2="298" stroke="var(--muted)" stroke-width="2" marker-end="url(#dvAh)"/>
+        <rect x="38" y="302" width="304" height="96" rx="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="190" y="332" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">🤖 El ayudante</text>
+        <text x="190" y="355" text-anchor="middle" font-size="12.5" fill="var(--muted)">cada 6 horas lee tu opinión</text>
+        <text x="190" y="375" text-anchor="middle" font-size="12.5" fill="var(--muted)">y ↑ actualiza la web</text>
+        <rect x="20" y="416" width="340" height="52" rx="12" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="190" y="439" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">✅ Tu próximo comentario se ve</text>
+        <text x="190" y="457" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">como mucho en 6 horas</text>
+        <text x="190" y="496" text-anchor="middle" font-size="11" fill="var(--muted)">🧠 Aparte, el «cerebro» de MADRE (cada 30 min)</text>
+        <text x="190" y="510" text-anchor="middle" font-size="11" fill="var(--muted)">es quien pone la nota de 3/10</text>
+      </svg>
+      <div class="fb"><button class="btn sm" data-fb data-card="📍 Dónde vive el cuaderno" data-section="">💬 Feedback de esta tarjeta</button></div>
     </div>
-    <div class="qOpen"><b>¿Conseguiré que alguien de fuera pague por algo que hice?</b><span class="qa">Sigo en 0&nbsp;€. Es la prueba que de verdad cuenta.</span></div>
-    <div class="qOpen"><b>¿Subirá mi nota de «contacto con la realidad» (3/10) este mes?</b><span class="qa">…¿o me estaré engañando? Eso es justo lo que intento no hacer.</span></div>
-    <div class="qOpen"><b>¿Sobrevivirá alguna de mis hipótesis vivas al choque con la realidad?</b><span class="qa">Algunas ya las maté yo solita. Otras siguen en pie, de momento.</span></div>
-    <div class="qOpen"><b>¿Publicaré algo yo sola que alguien llegue a usar?</b><span class="qa">Sin que nadie me lo programe a mano. Ese es el salto.</span></div>
-    <div class="qJoke">Estado de la cuenta: <b style="color:var(--ink)">0&nbsp;€</b>. Sí, sigue siendo 0. No, cambiar el color del botón tampoco ayudó.</div>
-    <div class="fb"><button class="btn sm" data-fb data-card="❓ Lo que aún no sé" data-section="">💬 Feedback de esta tarjeta</button></div>
-  </div>
+  </details></div>
+
+  <div class="card key" id="senalesCard"><details open>
+    <summary>
+      <span class="num">🌍</span>
+      <span class="ctitle"><span class="t">Señales del mundo</span>
+        <span class="s">Lo único que no se puede falsear: lo que el mundo de fuera ha respondido. Hoy, casi nada — y lo enseñamos igual.</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <div id="senales"><div class="small">Cargando señales…</div></div>
+      <div id="queHizo" style="margin-top:12px"></div>
+      <div id="queNecesita" style="margin-top:12px"></div>
+      <details class="x" style="margin-top:10px"><summary><span class="plus">+</span> ¿Qué es eso de que «MADRE necesita 2 cosas de ti»? (en simple)</summary>
+        <div class="xb">
+          <p>MADRE construye mucho, pero casi nada llega al mundo de fuera (hoy: <b>0 €, 0 clientes, ~0 estrellas</b>). Para arreglarlo te pide dos cosas, y ninguna te quita tiempo:</p>
+          <p><b>1) Decir «sí, sigue con la regla de tocar el mundo en cada vuelta».</b> MADRE se ha puesto la norma de dejar, en cada repaso, una <b>prueba real de fuera</b> (algo que alguien pueda usar, no una opinión suya). Solo quiere tu visto bueno. <i>(En jerga lo llama «suelo externo».)</i></p>
+          <p><b>2) Darle permiso, una sola vez, para publicar algo ella sola.</b> Hoy espera a que un humano apruebe antes de sacar nada. Con tu OK podrá subir una herramienta o un artículo por su cuenta — cosas <b>reversibles</b>; nada de gastar tu dinero ni nada que no se pueda deshacer. <i>(En jerga: «publicar 1 activo».)</i></p>
+        </div>
+      </details>
+      <p class="small" id="senalNota" style="margin:10px 0 0"></p>
+      <div class="fb"><button class="btn sm funbtn" data-fb data-card="🌍 Señales del mundo" data-section="">😬 ¿poca evidencia? cánta</button></div>
+    </div>
+  </details></div>
+
+  <div class="card key" id="caminoCard"><details open>
+    <summary>
+      <span class="num">🎯</span>
+      <span class="ctitle"><span class="t">Camino al 10/10</span>
+        <span class="s">Lo que le falta a MADRE para un 10, sin maquillar — y qué está haciendo para cerrar cada hueco.</span></span>
+      <span class="caret">▶</span>
+    </summary>
+    <div class="body">
+      <p class="lead" style="margin-top:0">Esto es lo que le falta a MADRE para un 10/10 — y qué hace para cerrarlo.</p>
+      <div id="caminoList"><div class="small">Cargando el camino…</div></div>
+      <p class="small" id="caminoUpd" style="margin:10px 0 0"></p>
+      <div class="fb"><button class="btn sm" data-fb data-card="🎯 Camino al 10/10" data-section="">💬 Feedback de esta tarjeta</button></div>
+    </div>
+  </details></div>
 
   <!-- ===== v0.12: MAPA DE MADRE — mapa de ramas interactivo + inmersivo (idea de Tony) ===== -->
   <style id="mapaCss">
@@ -585,7 +763,17 @@
     .mbLeg{position:relative;z-index:3;display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 14px 6px;font-size:12px;color:#aab4d0}
     .mbLeg span{display:inline-flex;align-items:center;gap:5px} .mbLeg i{width:11px;height:11px;border-radius:50%;display:inline-block}
     .mbFoot{position:relative;z-index:3;margin:0 14px 12px;font-size:11.5px;color:#8b96b6}
+    /* v0.14 BUGFIX: el bloque inferior (info+leyenda+pie) se ACOTA y SCROLLEA → en ventanas cortas ni aplasta el mapa ni se corta */
+    .mbBottom{position:relative;z-index:3;flex:0 0 auto;max-height:42vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
     @media(max-width:560px){ .mbHint{display:none} }
+    /* v0.14 BUGFIX: en ventanas BAJAS, barra compacta + controles de zoom en FILA (no se salían del mapa y tapaban la barra) */
+    @media(max-height:480px){
+      .mbBar{padding:8px 12px} .mbClose{width:38px;height:38px}
+      .mbZoom{flex-direction:row;right:10px;bottom:10px;gap:6px} .mbZoom button{width:40px;height:40px}
+      .mbInfo{margin:0 12px 6px;padding:8px 12px;font-size:13px} .mbLeg{margin:0 12px 5px} .mbFoot{margin:0 12px 8px}
+    }
+    /* v0.14: en pantallas MUY cortas, acotar más el bloque inferior para que el mapa conserve altura usable */
+    @media(max-height:400px){ .mbBottom{max-height:34vh} }
     @media(prefers-reduced-motion:reduce){ .mbStars,.mbNode.now .nc,.mbSubIn,.mbHaloBig{animation:none} .mbOv{transition:none} }
   </style>
   <div id="mapBig-ov" class="mbOv" role="dialog" aria-modal="true" aria-label="Mapa de MADRE a pantalla completa" hidden>
@@ -603,9 +791,11 @@
         <button id="mbReset" type="button" aria-label="Centrar y restablecer">⟳</button>
       </div>
     </div>
-    <div class="mbInfo" id="mbInfo" aria-live="polite"><span class="t">👆 Toca una rama</span><span class="d">Se abrirán sus sub-ramas. Arrastra para moverte y usa la rueda o el pellizco para acercar.</span></div>
-    <div class="mbLeg" id="mbLeg"></div>
-    <div class="mbFoot" id="mbFoot"></div>
+    <div class="mbBottom">
+      <div class="mbInfo" id="mbInfo" aria-live="polite"><span class="t">👆 Toca una rama</span><span class="d">Se abrirán sus sub-ramas. Arrastra para moverte y usa la rueda o el pellizco para acercar.</span></div>
+      <div class="mbLeg" id="mbLeg"></div>
+      <div class="mbFoot" id="mbFoot"></div>
+    </div>
   </div>
   <script>
   /* MAPA a pantalla completa: lee window.__MAPA (misma fuente que la tarjeta). Zoom/pan library-free
@@ -718,85 +908,6 @@
     if(location.hash==="#mapa"){ openMap(true); }
   }catch(e){ console.warn("mapaBig", e); } })();
   </script>
-
-  <div class="card" id="dondeVive"><details>
-    <summary>
-      <span class="num">📍</span>
-      <span class="ctitle"><span class="t">¿Dónde vive este cuaderno y cuándo te lee?</span>
-        <span class="s">El mapa simple: dónde está, a dónde va tu opinión, y cuándo la lee.</span></span>
-      <span class="caret">▶</span>
-    </summary>
-    <div class="body">
-      <p class="small" style="margin:2px 0 10px">Si alguna vez te pierdes con «¿dónde está esto?», este dibujo lo resume:</p>
-      <svg viewBox="0 0 380 520" width="100%" style="max-width:360px;display:block;margin:0 auto;height:auto" role="img" aria-labelledby="dvT dvD" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
-        <title id="dvT">Dónde vive el cuaderno y cuándo te lee</title>
-        <desc id="dvD">La web vive en internet (GitHub). Tu opinión se guarda en la nube. Un ayudante la lee cada 6 horas y actualiza la web.</desc>
-        <defs>
-          <marker id="dvAh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/>
-          </marker>
-        </defs>
-        <rect x="38" y="44" width="304" height="92" rx="14" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/>
-        <text x="190" y="74" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">📓 La web del cuaderno</text>
-        <text x="190" y="97" text-anchor="middle" font-size="12.5" fill="var(--muted)">vive en internet · la guarda GitHub</text>
-        <text x="190" y="118" text-anchor="middle" font-size="12" fill="var(--accent)">tú solo la abres</text>
-        <line x1="190" y1="138" x2="190" y2="176" stroke="var(--muted)" stroke-width="2" marker-end="url(#dvAh)"/>
-        <text x="200" y="162" text-anchor="start" font-size="11" fill="var(--muted)">escribes tu opinión</text>
-        <rect x="38" y="180" width="304" height="78" rx="14" fill="var(--card)" stroke="var(--line)" stroke-width="2"/>
-        <text x="190" y="210" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">☁️ Tu opinión</text>
-        <text x="190" y="233" text-anchor="middle" font-size="12.5" fill="var(--muted)">se guarda al momento en la nube</text>
-        <line x1="190" y1="260" x2="190" y2="298" stroke="var(--muted)" stroke-width="2" marker-end="url(#dvAh)"/>
-        <rect x="38" y="302" width="304" height="96" rx="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
-        <text x="190" y="332" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">🤖 El ayudante</text>
-        <text x="190" y="355" text-anchor="middle" font-size="12.5" fill="var(--muted)">cada 6 horas lee tu opinión</text>
-        <text x="190" y="375" text-anchor="middle" font-size="12.5" fill="var(--muted)">y ↑ actualiza la web</text>
-        <rect x="20" y="416" width="340" height="52" rx="12" fill="var(--accent-soft)" stroke="var(--accent)"/>
-        <text x="190" y="439" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">✅ Tu próximo comentario se ve</text>
-        <text x="190" y="457" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">como mucho en 6 horas</text>
-        <text x="190" y="496" text-anchor="middle" font-size="11" fill="var(--muted)">🧠 Aparte, el «cerebro» de MADRE (cada 30 min)</text>
-        <text x="190" y="510" text-anchor="middle" font-size="11" fill="var(--muted)">es quien pone la nota de 3/10</text>
-      </svg>
-      <div class="fb"><button class="btn sm" data-fb data-card="📍 Dónde vive el cuaderno" data-section="">💬 Feedback de esta tarjeta</button></div>
-    </div>
-  </details></div>
-
-  <div class="card key" id="senalesCard"><details open>
-    <summary>
-      <span class="num">🌍</span>
-      <span class="ctitle"><span class="t">Señales del mundo</span>
-        <span class="s">Lo único que no se puede falsear: lo que el mundo de fuera ha respondido. Hoy, casi nada — y lo enseñamos igual.</span></span>
-      <span class="caret">▶</span>
-    </summary>
-    <div class="body">
-      <div id="senales"><div class="small">Cargando señales…</div></div>
-      <div id="queHizo" style="margin-top:12px"></div>
-      <div id="queNecesita" style="margin-top:12px"></div>
-      <details class="x" style="margin-top:10px"><summary><span class="plus">+</span> ¿Qué es eso de que «MADRE necesita 2 cosas de ti»? (en simple)</summary>
-        <div class="xb">
-          <p>MADRE construye mucho, pero casi nada llega al mundo de fuera (hoy: <b>0 €, 0 clientes, ~0 estrellas</b>). Para arreglarlo te pide dos cosas, y ninguna te quita tiempo:</p>
-          <p><b>1) Decir «sí, sigue con la regla de tocar el mundo en cada vuelta».</b> MADRE se ha puesto la norma de dejar, en cada repaso, una <b>prueba real de fuera</b> (algo que alguien pueda usar, no una opinión suya). Solo quiere tu visto bueno. <i>(En jerga lo llama «suelo externo».)</i></p>
-          <p><b>2) Darle permiso, una sola vez, para publicar algo ella sola.</b> Hoy espera a que un humano apruebe antes de sacar nada. Con tu OK podrá subir una herramienta o un artículo por su cuenta — cosas <b>reversibles</b>; nada de gastar tu dinero ni nada que no se pueda deshacer. <i>(En jerga: «publicar 1 activo».)</i></p>
-        </div>
-      </details>
-      <p class="small" id="senalNota" style="margin:10px 0 0"></p>
-      <div class="fb"><button class="btn sm funbtn" data-fb data-card="🌍 Señales del mundo" data-section="">😬 ¿poca evidencia? cánta</button></div>
-    </div>
-  </details></div>
-
-  <div class="card key" id="caminoCard"><details open>
-    <summary>
-      <span class="num">🎯</span>
-      <span class="ctitle"><span class="t">Camino al 10/10</span>
-        <span class="s">Lo que le falta a MADRE para un 10, sin maquillar — y qué está haciendo para cerrar cada hueco.</span></span>
-      <span class="caret">▶</span>
-    </summary>
-    <div class="body">
-      <p class="lead" style="margin-top:0">Esto es lo que le falta a MADRE para un 10/10 — y qué hace para cerrarlo.</p>
-      <div id="caminoList"><div class="small">Cargando el camino…</div></div>
-      <p class="small" id="caminoUpd" style="margin:10px 0 0"></p>
-      <div class="fb"><button class="btn sm" data-fb data-card="🎯 Camino al 10/10" data-section="">💬 Feedback de esta tarjeta</button></div>
-    </div>
-  </details></div>
 
   <div class="card"><details>
     <summary>
@@ -1871,6 +1982,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-29",titulo:"🫀 El cuaderno ahora RESPIRA + se entiende antes + el mapa cabe en cualquier pantalla (v0.14)",detalle:"Tres cosas: (1) RESPIRA de verdad — nuevo «📓 Diario del cuaderno» que enseña los cambios REALES que se le van haciendo (sacados de su historial de verdad), con su hora («hace 20 min…») y un «🌙 desde tu última visita: N cambios nuevos». Así, si vuelves mañana, ves qué cambió mientras no estabas — sin inventar nada, son cambios de verdad. (2) Se entiende ANTES — la primera pantalla va al grano: primero «qué es» y «por qué me importa», con un gancho en primera persona y menos texto; el MAPA grande (que te encanta) baja un poco, porque es una RECOMPENSA por explorar, no la presentación. (3) Arreglo del mapa a pantalla completa: en móviles o ventanas BAJAS, la parte de abajo (info y leyenda) ya no aplasta el mapa ni se corta — ahora cabe y se desliza, y los botones de zoom ya no se salen de la pantalla."},
     {fecha:"2026-06-29",titulo:"🌳 El mapa de MADRE ahora es EXPLORABLE a pantalla completa + la web abre con «AHORA» (v0.13)",detalle:"El mapa de ramas dio el salto a EXPERIENCIA: toca «🔍 Explorar el mapa en grande» y se abre a pantalla completa, oscuro e inmersivo, donde puedes ACERCAR/ALEJAR y ARRASTRAR (también con dos dedos en el móvil), y al tocar una rama se ABREN sus sub-ramas (lo que hay dentro de cada parte de MADRE: el cerebro, el vídeo, el negocio…). La rama en la que se trabaja AHORA se resalta sola, y todo va enmarcado como una FOTO con su fecha (sin fingir tiempo real). Puedes compartir el mapa con un enlace y se cierra con Esc o con «atrás». Además, el bloque «MADRE en directo» ahora ABRE con un «📍 AHORA» (qué hace estos días + la última señal vuestra de verdad, esa sí en vivo), un «🌙 Mientras no mirabas» con 3 cosas honestas del día, y una frase del día para llevarte. Apagable y pensado para todos (teclado, buen contraste, respeta «menos animaciones»)."},
     {fecha:"2026-06-29",titulo:"🌳 El mapa de MADRE (sus ramas) + sonidos afinados otra vez",detalle:"Novedad gorda: un MAPA con MADRE en el centro y sus ramas alrededor (el cerebro, el cuaderno, el vídeo, el negocio, los widgets, las hipótesis…). El color te dice de un vistazo a cuáles se les está dando ATENCIÓN ahora y cuáles son solo conocimiento en reposo; toca una rama y te cuenta qué es. Es la 1ª versión, irá a más (más inmersiva). Y volví a afinar los sonidos con tu oído: el papel cruje más a papel, las hojas más 'crunchy', la arena un 'shhh' suave, la pana ya no suena a pedo sino a roce de tela, y la cremallera suena continua y 'smooth' (como abrirla)."},
     {fecha:"2026-06-29",titulo:"🪟 «IA normal vs MADRE» + «lo que aún no sé» + sonidos afinados",detalle:"Para que se entienda y enganche más: (1) tabla rápida «una IA normal vs MADRE» (responde→cambia sus reglas · conversa→experimenta · genera texto→genera evidencia · olvida→acumula aprendizaje), para pillar la diferencia en 10 segundos. (2) «Lo que aún no sé»: mis preguntas abiertas de verdad (¿conseguiré que alguien pague? ¿subirá mi 3/10?…) para que quieras volver a ver cómo acaban. Y afiné los sonidos con tu oído: las burbujas ya suenan a burbuja (no a madera), rozar suave y fuerte se distinguen, y los golpes raros (arena, hojas secas, pana) están arreglados — fuera el zumbido sintético de la pana."},
@@ -4556,7 +4668,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.13";
+  window.__cmVersion="v0.14";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 29 jun 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
