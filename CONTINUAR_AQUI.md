@@ -2,6 +2,14 @@
 
 > Para retomar en un chat nuevo de Claude Code. **Estado a 2026-06-29, versión v0.13.**
 
+## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-06-29, para el chat nuevo)
+> **NORTE NUEVO (la mejora nº1 de Tony, 29-jun): convertir el cuaderno en una HISTORIA / ORGANISMO que RESPIRA, no una documentación.** Detalle COMPLETO en `DESARROLLO_CUADERNO.md` §«🌳🫁 STAGED v0.14+ — DE WEB-VIVA A ORGANISMO» (léela ENTERA; ahí está toda la crítica de Tony estructurada en A–G). Resumen del orden a atacar:
+> 1. **🐞 BUG (primero): la PARTE DE ABAJO del mapa a pantalla completa (`#mapBig-ov`) está bugueada** — el panel info/leyenda/pie se aprieta/solapa o se corta (sospecha: en ventanas BAJAS la pila `mbInfo+mbLeg+mbFoot` desborda el overlay fijo y se recorta). Reproducir en preview a varias alturas (móvil corto) y arreglar que quepa/scrollee sin tapar el mapa.
+> 2. **Re-secuenciar la 1ª pantalla:** los primeros 60 s solo «¿qué es?» + «¿por qué me importa?»; bajar el resto; **MOVER EL MAPA más abajo** (Tony: «es una recompensa, no una introducción»); gancho 1ª persona corto; −40% texto; auditar funciones (si quito X, ¿se pierde algo? si no, fuera).
+> 3. **Hacerlo «respirar» (REAL y barato, honestidad §9):** diario vivo desde commits, «alguien comentó (Argentina) → MADRE lo leyó» desde `comments` de Supabase, «pensando ahora…», cambios espontáneos sin recargar, «mientras leías, MADRE cambió de opinión». 1-2 primero y medir.
+> 4. **🌳 Mapa siguiente nivel:** sub-ramas de TODO (varios niveles) + botón «explicación» y «no entiendo» por (sub)rama (reusar `__fb`) + que las ramas se auto-ordenen según lo que emerge (vía `MAPA_RAMAS.tsv` horneable, buzón ya dejado). Decisión de Tony pendiente: ¿mapa como página/acceso directo aparte o seguir overlay?
+> A Tony LE ENCANTA el mapa grande («que chuloo»); el resto de su crítica (historia/personaje, progreso con movimiento, momentos wow, realidad cruda, menos funciones) está en la sección A–G. **Persistido el 29-jun; el chat viejo se cerró por tokens (~400k).**
+
 ## ✅ ESTADO DE PUBLICACIÓN — LÉEME PRIMERO (2026-06-29, v0.13 — DESPLEGADO)
 - **🟢 v0.10 + v0.11 + v0.12 + v0.13 = PUSHEADAS y EN VIVO.** Tony autorizó subir («hazlos sin mi ok»). v0.10 ya estaba en 2 commits locales (`091448c` + `9fa98fd`); v0.11+v0.12+v0.13 se juntaron en **un commit** (`5cea1dd`). `git push origin main` OK (`c8e99d8..5cea1dd`); `main` == `origin/main`. **Verificado EN LA WEB VIVA:** https://eltonylfgi-blip.github.io/cuaderno-madre/ sirve `__cmVersion="v0.13"`, con `#mapBig-ov` y `#evNow` presentes (HTTP 200). Antes de subir: 0 errores/0 warnings consola, `node --check` 26/26, revisado por workflow adversarial (12 hallazgos corregidos), móvil 375px OK.
 - **🟢 La rutina `cuaderno-feedback` está REACTIVADA** (`enabled:true`, cada 6 h). El gate de push terminó. (Pausarla otra vez si hace falta: tool `update_scheduled_task` → `enabled:false`.)

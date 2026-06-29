@@ -156,7 +156,49 @@ candidatos de Splice a Tony antes de descargar.
 - **Pasada de simplificación de copy** (abuela↔borracho): que la MAYORÍA de tarjetas se entienda **sin** desplegar `▸ ver más`; reservar los desplegables para lo profundo. + **alternar la palabra «MADRE»** (el sistema / la IA / el proyecto) para que no canse.
 - **Metáfora «ventanas»**: cada tarjeta = una ventana al organismo (cerebro / GitHub / gato / pasado / futuro / mundo). Dirección unificadora a futuro.
 
-## 🪟 STAGED v0.13+ — "VENTANA VIVA" (crítica grande de Tony/ChatGPT, 29-jun) — PERSISTIDO
+## 🌳🫁 STAGED v0.14+ — EL GRAN SALTO: DE «WEB CON COSAS VIVAS» A «ORGANISMO VIVO» (crítica grande Tony/ChatGPT, 29-jun) — NORTE ACTUAL
+> **TESIS RECTORA (Tony, la mejora nº1 sobre todo lo demás):** convertir el cuaderno en una **HISTORIA, no una documentación**.
+> Hoy el visitante APRENDE; queremos que además QUIERA VOLVER. La pregunta que debe quedarle al cerrar:
+> **«¿Qué habrá conseguido MADRE la próxima vez que entre?»** Eso = razón para regresar, y vale más que otra animación/widget/sección.
+> **Matiz clave:** el cuaderno es vivo TÉCNICAMENTE pero se PERCIBE como «una web que tiene cosas vivas», no como **un organismo que respira**.
+> El salto no es más animaciones: es que **parezca que está ocurriendo algo mientras tú estás ahí** y que **siga viviendo aunque cierres la pestaña** («si vuelvo mañana, probablemente habrá cambiado algo»).
+
+**A) RE-SECUENCIAR LA PRIMERA PANTALLA (el problema nº1: demasiadas cosas compiten; "si todo es importante, nada lo es").**
+- Los primeros ~60 s deben responder SOLO **(1) ¿qué es?** y **(2) ¿por qué debería importarme?**. Todo lo demás, DESPUÉS.
+- **Crear la PREGUNTA antes de enseñar la respuesta.** Hoy enseñamos capacidades (mapa, ramas, loop, widgets, hipótesis, pipeline, memoria…) antes de generar curiosidad → el visitante piensa «vale… ¿y esto para qué sirve?».
+- **Menos texto (−~40%)** aunque esté bien escrito. Gancho de entrada tipo **«Estoy intentando construir una IA que mejore sola durante años»** (1ª persona, engancha) y dejar el «decide mejor / aprende de la realidad…» para MÁS TARDE.
+- **El MAPA llega demasiado pronto: es una RECOMPENSA, no una introducción.** Moverlo a DESPUÉS de que se entienda MADRE.
+- **Auditoría de funciones (carga mental):** comentar/dibujar/votar/feedback/explorar/mapa… por CADA una preguntar «si la quito, ¿el visitante pierde algo REALMENTE importante?». Si no → fuera. **Concentrar la emoción en MENOS sitios** (hoy repartida en hero/directo/preguntas/árbol).
+
+**B) MÁS HISTORIA / PERSONAJE (no un sistema, un personaje al que coger apego).** Timeline tipo:
+  `Día 0: solo eran carpetas → Día 60: aprendió a corregirse → Día 120: publicó su 1er activo → Hoy: sigue sin ganar dinero → Próximo objetivo: 1er cliente.`
+
+**C) SENSACIÓN DE PROGRESO ENORME (movimiento, no foto).** No solo «3/10»: barras a lo largo del tiempo `hace 4 meses ▮▯▯▯▯ → hace 2 ▮▮▯▯▯ → hoy ▮▮▮▯▯`. Aunque siga bajo, que se VEA moverse.
+
+**D) MOMENTOS «WOW» / «hostia» (pocos, fuertes; > que 10 animaciones).** Ejemplos: MADRE predijo algo hace 2 meses y ACERTÓ; una idea murió y explica por qué; una conversación interna; un error ENORME; cómo cambió una regla.
+
+**E) MÁS REALIDAD VISIBLE (paradoja: habla de realidad, hay que VERLA).** Ejemplos crudos:
+  `Hoy llamó a 6 peluquerías → ❌❌❌❌✅❌` · `Hoy publicó esto → 0 visitas` · `Predicción 60% → Fallé`. Eso hace TODO más real.
+
+**F) HACERLO «RESPIRAR» (mecanismos de organismo — el corazón del salto). Honestidad §9 manda: si es foto, enmárcalo; pero busca señales REALES baratas (commits, comments/drawings.created_at, runs de rutinas).**
+- **🧠 Pensando AHORA:** «Ahora mismo intento decidir si publico este widget. Llevo 12 min con ello.» (cambia cada pocos min).
+- **🌱 Cambios espontáneos SIN recargar:** aparece solo «Nueva hipótesis creada: "Quizá el problema no es generar valor, sino capturarlo". Hace 8 s.» (natural, no popup).
+- **📝 Diario vivo:** `03:42 He descartado una idea. Razón: no sobrevivía al mundo real.` → 2 min después `03:44 Nueva prueba iniciada.`
+- **🌍 El mundo influye:** «Alguien desde Argentina acaba de comentar → MADRE lo ha leído → lo clasificó como "posible mejora".» (de los `comments` REALES de Supabase = honesto y barato).
+- **👀 Descubrimiento mientras lees:** tras ~2 min: «👀 Ah. Mientras leías, MADRE cambió de opinión sobre una hipótesis. ¿Quieres verla?» (sorpresa).
+- **❤️ Recuerda que estás ahí (no chatbot):** «Llevas aquí 6 min. Creo que ya entiendes lo básico. ¿Quieres ver cómo pienso por dentro?»
+- **📈 Consecuencias / continuidad:** «Has marcado 7 cosas → MADRE las leerá en 24 min» → luego «Leídas: 2 aceptadas, 5 rechazadas».
+
+**G) 🌳 EL MAPA — SIGUIENTE NIVEL (a Tony le ENCANTA; «que chuloo»). Ideas de Tony 29-jun:**
+- 🐞 **BUG ABIERTO (arreglar 1º): la PARTE DE ABAJO del mapa a pantalla completa está bugueada** (el panel info/leyenda/pie se ve apretado/solapado o se corta — sospecha: en ventanas BAJAS la pila inferior `mbInfo+mbLeg+mbFoot` desborda el `.mbOv` fijo `inset:0` y se recorta; o la leyenda envuelve mal). Reproducir en preview a varias alturas (incl. móvil corto) y que el bottom quepa/scrollee sin solapar el mapa.
+- **Sub-ramas de TODO** (no solo 1 nivel): que cada parte de MADRE se pueda abrir hacia dentro, con profundidad.
+- **Botones de EXPLICACIÓN y de «no entiendo» en cada (sub)rama** → que Tony (y cualquiera) marque qué cosas de MADRE no entiende, por nodo. (Reusar el patrón `__fb`/«no entiendo» que ya existe por tarjeta, llevado al mapa.)
+- **Que las ramas se CONSTRUYAN/ORDENEN SOLAS según lo que EMERGE de MADRE** (auto-organizar las ramas que van surgiendo; conectar con el `MAPA_RAMAS.tsv` horneable por el loop — buzón `DESDE_CLAUDE_2026-06-29_mapa-ramas-horneable-cuaderno.txt`).
+- **Decisión abierta de Tony:** ¿el mapa inmersivo como **página/acceso directo aparte** o seguir como overlay en el cuaderno? (Hoy = overlay deep-link `#mapa`. Sopesar página propia más inmersiva.)
+
+**CÓMO ABORDARLO (no de un golpe):** es un rediseño de SECUENCIA + sensación, no «otra sección». Empezar por (1) el BUG del mapa, (2) re-secuenciar la 1ª pantalla (qué-es/por-qué + bajar el resto, mover el mapa abajo), (3) 1-2 mecanismos «respira» REALES y baratos (diario vivo desde commits + «alguien comentó → MADRE lo leyó» desde Supabase). Medir si engancha antes de añadir más. Mantener honestidad §9 (no fingir tiempo real) y «abuela↔borracho» (acción a un toque).
+
+## 🪟 STAGED v0.13+ — "VENTANA VIVA" (crítica grande de Tony/ChatGPT, 29-jun) — PERSISTIDO (BASE de lo de arriba; v0.13 ya HIZO: AHORA, mientras dormías, frases, mapa inmersivo)
 > **TESIS RECTORA (Tony):** hoy el cuaderno parece **DOCUMENTACIÓN** («te explico qué es MADRE»); debe parecer
 > una **VENTANA a una IA trabajando AHORA** («entra, mira qué está haciendo ahora mismo»). No añadir más
 > INFORMACIÓN: aumentar 3 SENSACIONES → (1) «quiero ver qué cambió desde la última vez», (2) «quiero descubrir
