@@ -1206,10 +1206,14 @@
        "propuesta-rama" (el panel #mbPropose, que sigue siendo la base/fallback; el contrato con el loop
        NO cambia). Honestidad §9: la fantasma es PUNTEADA y dice «(propuesta · sin confirmar)» — no finge
        ser ya una rama de MADRE. */
-    var proposeMode=false, phantom=null, banner=document.getElementById("mbPropBanner");
+    var proposeMode=false, phantom=null, centerG=null, banner=document.getElementById("mbPropBanner");
     function showBanner(){ if(banner) banner.hidden=false; }
     function hideBanner(){ if(banner) banner.hidden=true; }
     function removePhantom(){ if(phantom){ try{ phantom.parentNode&&phantom.parentNode.removeChild(phantom); }catch(e){} phantom=null; } }
+    /* el centro 🤱🏻 SOLO es enfocable/operable (teclado+lector) MIENTRAS se propone — fuera de modo no deja un tab-stop muerto */
+    function centerInteractive(on){ if(!centerG) return; try{ if(on){ centerG.setAttribute("tabindex","0"); centerG.setAttribute("role","button"); centerG.setAttribute("aria-label","MADRE (centro) — proponer una rama nueva grande"); } else { centerG.removeAttribute("tabindex"); centerG.removeAttribute("role"); centerG.removeAttribute("aria-label"); } }catch(e){} }
+    /* limpieza ÚNICA del modo (la llaman TODAS las salidas: Salir, Dejarlo, Esc, enviar, cerrar el mapa) → cero fugas de estado al reabrir */
+    function clearPropose(){ proposeMode=false; hideBanner(); removePhantom(); centerInteractive(false); }
     function phantomGeom(node){ /* {px,py,x,y,r} en coords del viewBox (la línea va de px,py al círculo x,y) */
       if(node){ var ax=node.x-CX, ay=node.y-CY, al=Math.hypot(ax,ay)||1, out=(node.__depth||0)>=1?120:140;
         return {px:node.x, py:node.y, x:node.x+ax/al*out, y:node.y+ay/al*out, r:(node.__depth||0)>=1?26:30}; }
@@ -1222,10 +1226,11 @@
       var lab=el("text",{id:"mbPhantomLabel",x:g0.x,y:g0.y+g0.r+17,"text-anchor":"middle","font-size":"13","font-weight":"800",fill:color}); lab.textContent="tu nueva rama"; g.appendChild(lab);
       var cap=el("text",{x:g0.x,y:g0.y+g0.r+33,"text-anchor":"middle","font-size":"10.5","font-weight":"700",fill:"#9aa6c4"}); cap.textContent="(propuesta · sin confirmar)"; g.appendChild(cap);
       view.appendChild(g); phantom=g; }
-    function enterPropose(){ proposeMode=true; removePhantom(); showBanner(); try{ svg.style.pointerEvents=""; }catch(e){}
+    function enterPropose(){ try{ collapseAll(); center(); }catch(e){} /* fit-all: que se VEAN las 8 ramas + el centro al pedir «toca dónde» (si no, la cámara seguía metida en la rama AHORA) */
+      proposeMode=true; removePhantom(); showBanner(); centerInteractive(true); try{ svg.style.pointerEvents=""; }catch(e){}
       info.textContent=""; var t=document.createElement("span"); t.className="t"; t.textContent="🌱 Modo proponer";
       var d=document.createElement("span"); d.className="d"; d.textContent="Toca la rama de la que nace tu idea — o el centro 🤱🏻 para una rama nueva grande."; info.appendChild(t); info.appendChild(d); }
-    function exitPropose(){ var was=proposeMode||phantom||(banner&&!banner.hidden); proposeMode=false; hideBanner(); removePhantom();
+    function exitPropose(){ var was=proposeMode||phantom||(banner&&!banner.hidden); clearPropose();
       try{ if(window.__closePropose) window.__closePropose(); }catch(e){} if(was){ try{ showHint(); }catch(e){} } }
     function pickParent(node){ if(!proposeMode) return; var color, ctx;
       if(node){ var top=node.__top||node, isTop=(node.__depth||0)===0, path=isTop?node.t:(top.t+" › "+node.t);
@@ -1236,7 +1241,7 @@
       if(window.__openPropose) window.__openPropose(ctx); }
     window.__enterPropose=enterPropose; window.__exitPropose=exitPropose;
     /* el panel #mbPropose, al cerrarse por CUALQUIER vía (Dejarlo/Esc/enviado/cerrar mapa), avisa aquí → salimos del modo y borramos la fantasma */
-    window.__onProposeClosed=function(){ if(!proposeMode && !phantom && (!banner||banner.hidden)) return; proposeMode=false; hideBanner(); removePhantom(); try{ showHint(); }catch(e){} };
+    window.__onProposeClosed=function(){ if(!proposeMode && !phantom && (!banner||banner.hidden)) return; clearPropose(); try{ showHint(); }catch(e){} };
     if(banner){ var bx=document.getElementById("mbPropExit"); if(bx) bx.addEventListener("click",function(e){ e.stopPropagation(); exitPropose(); }); }
 
     /* ---- construir el mapa una vez ---- */
@@ -1247,8 +1252,11 @@
       var cg=el("g",{}); var cc=el("circle",{cx:CX,cy:CY,r:54,fill:"#7c3aed",stroke:"#b794ff","stroke-width":"2"}); cg.appendChild(cc);
       var ce=el("text",{x:CX,y:CY+2,"text-anchor":"middle","dominant-baseline":"middle","font-size":"40"}); ce.textContent="🤱🏻"; cg.appendChild(ce);
       var cl=el("text",{x:CX,y:CY+78,"text-anchor":"middle","font-size":"19","font-weight":"800",fill:"#fff"}); cl.textContent="MADRE"; cg.appendChild(cl); view.appendChild(cg);
-      /* v0.18: en modo proponer, tocar el centro 🤱🏻 = proponer una RAMA NUEVA grande (parent = raíz) */
-      cg.style.cursor="pointer"; cg.addEventListener("click",function(ev){ if(proposeMode){ ev.stopPropagation(); pickParent(null); } });
+      /* v0.18: en modo proponer, tocar (o Enter/Espacio en) el centro 🤱🏻 = proponer una RAMA NUEVA grande (parent = raíz).
+         centerG se vuelve enfocable/lector SOLO en modo (centerInteractive) → camino de teclado completo, sin tab-stop muerto fuera de modo. */
+      cg.style.cursor="pointer"; centerG=cg;
+      cg.addEventListener("click",function(ev){ if(proposeMode){ ev.stopPropagation(); pickParent(null); } });
+      cg.addEventListener("keydown",function(ev){ if(proposeMode&&(ev.key==="Enter"||ev.key===" ")){ ev.preventDefault(); ev.stopPropagation(); pickParent(null); } });
       NODES.forEach(function(nd){ var isNow=(M.ahora&&nd.emoji===M.ahora), hasKids=nd.kids&&nd.kids.length;
         var g=el("g",{"class":"mbNode"+(isNow?" now":""),tabindex:"0",role:"button"}); g.setAttribute("aria-label",nd.t+": "+stOf(nd.st).l+(isNow?" — aquí trabaja AHORA":"")+(hasKids?" — abre "+nd.kids.length+" sub-ramas":"")); g.style.color=stOf(nd.st).c;
         var c=el("circle",{cx:nd.x,cy:nd.y,r:46,fill:"#141a2e",stroke:stOf(nd.st).c,"stroke-width":"4"}); c.setAttribute("class","nc"); g.appendChild(c);
@@ -1280,14 +1288,16 @@
       try{ document.body.style.overflow="hidden"; }catch(e){} bgInert(true);
       var cb=document.getElementById("mbClose"); if(cb) cb.focus();
       if(!fromHash){ try{ if(location.hash!=="#mapa"){ history.pushState({mapa:1},"","#mapa"); pushedHash=true; } }catch(e){} } }
-    function closeMap(fromPop){ if(!open) return; open=false; stopAnim(); try{ if(window.__closePropose) window.__closePropose(); }catch(e){} ov.classList.remove("show");
+    function closeMap(fromPop){ if(!open) return; open=false; stopAnim(); try{ clearPropose(); }catch(e){} /* sale del modo SIEMPRE (aunque no se abriera el panel) → no se filtra proposeMode a la próxima apertura */ try{ if(window.__closePropose) window.__closePropose(); }catch(e){} ov.classList.remove("show");
       setTimeout(function(){ ov.hidden=true; },260); try{ document.body.style.overflow=""; }catch(e){} bgInert(false);
       if(!fromPop){ try{ if(pushedHash){ history.back(); } else if(location.hash==="#mapa"){ history.replaceState(null,"",location.pathname+location.search); } }catch(e){} }
       pushedHash=false;
       try{ if(lastFocus&&lastFocus.focus) lastFocus.focus(); }catch(e){} }
     window.__openMapaBig=function(){ openMap(false); };
     var cl=document.getElementById("mbClose"); if(cl) cl.addEventListener("click",function(){ closeMap(false); });
-    document.addEventListener("keydown",function(e){ if(open&&e.key==="Escape"){ e.preventDefault(); closeMap(false); } });
+    /* Esc: si estás proponiendo (modo o fantasma o banner), 1º SALE del modo; un 2º Esc ya cierra el mapa.
+       (Si el panel está abierto y con foco, su propio handler en CAPTURA lo intercepta antes y este no se alcanza.) */
+    document.addEventListener("keydown",function(e){ if(open&&e.key==="Escape"){ e.preventDefault(); if(proposeMode||phantom||(banner&&!banner.hidden)){ exitPropose(); } else { closeMap(false); } } });
     /* focus-trap (contención garantizada aunque inert no exista): Tab cicla dentro del diálogo */
     ov.addEventListener("keydown",function(e){ if(e.key!=="Tab"||!open) return; var f=ov.querySelectorAll('button,[tabindex="0"]'); if(!f.length) return; var first=f[0], last=f[f.length-1], a=document.activeElement;
       if(e.shiftKey){ if(a===first||!ov.contains(a)){ e.preventDefault(); last.focus(); } } else { if(a===last||!ov.contains(a)){ e.preventDefault(); first.focus(); } } });

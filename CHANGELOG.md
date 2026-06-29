@@ -3,6 +3,13 @@
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
 Cada línea: fecha · qué cambió · por qué (qué feedback) · cómo revertir (`git revert <hash>`).
 
+## 2026-06-29 — v0.18: proponer rama VISUAL / por clic («rama fantasma»)
+- **Qué cambió:** el botón «🌱 Proponer rama» del mapa ya no abre un formulario directo: entra en «modo proponer», tocas (o Enter/Espacio) la rama de la que nace —o el centro 🤱🏻 para una rama nueva grande—, sale una rama fantasma punteada ahí y se abre `#mbPropose` para nombrarla (el nombre se refleja inline en la fantasma, anti-XSS por `textContent`). Mismo envío `window.__fb` tipo `propuesta-rama` (contrato con el loop sin cambios). El botón por-nodo «Proponer una sub-rama aquí» sigue de base/fallback. `window.__cmVersion="v0.18"`.
+- **Por qué:** Tony, tras ver v0.17, pidió que proponer fuese «clicar DÓNDE sale en el mapa, no rellenar un formulario».
+- **Revisión:** workflow adversarial 5 lentes + síntesis → 3 fixes reales aplicados (fuga de `proposeMode` al salir antes de elegir; centro inalcanzable por teclado/lector; cámara metida en la rama AHORA al entrar). Verificado DOM E2E (todas las rutas) + `node --check` 29/29 + 0 errores de consola + web viva sirviendo v0.18.
+- **Nota de colisión (riesgo #1):** la feature base se publicó sola en el commit `073eb95` (la rutina `cuaderno-feedback` hizo `git add -A` y la arrastró; su mensaje solo dice «refresca datos»). Los 3 fixes de review van en el commit de esta tanda.
+- **Revertir:** `git revert <hash de esta tanda v0.18>` para los fixes; `git revert 073eb95` para quitar también la feature base (ojo: 073eb95 incluía un refresco de datos del loop).
+
 ## 2026-06-29 — Glosario más claro (3 entradas)
 - **Qué cambió:** texto de «Suelo externo» (más directo, sin "la promesa"), «NO-RUINA» (añadida nota «Importa:» que faltaba igual que al resto de entradas), «Temperatura» (analogía maleta en el texto principal, no solo en el popup).
 - **Por qué:** 6 feedbacks `tipo:simplificar` del Glosario el 2026-06-28 (IDs: 098cd136, 98356813, 3abc2651, 1cc1a420, aca2595c, db256f88). Los otros 3 (Activación, Meta-palanca, Colisión multi-IA) ya eran claros → ya-resuelto.
