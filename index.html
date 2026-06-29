@@ -137,7 +137,7 @@
   .sheet .ctx{font-size:12.5px;color:var(--muted);margin-bottom:10px}
   .sheet label{font-size:12.5px;font-weight:600;display:block;margin:10px 0 4px}
   .sheet .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
-  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#13203b;color:#fff;padding:10px 16px;border-radius:99px;font-size:13px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#13203b;color:#fff;padding:10px 16px;border-radius:99px;font-size:13px;z-index:100050;opacity:0;transition:opacity .2s;pointer-events:none}
   .toast.on{opacity:1}
   .statusbox{font-size:13px;background:#fbfcfe;border:1px dashed var(--line);border-radius:11px;padding:11px;margin-top:6px}
   .statusbox .it{padding:6px 0;border-bottom:1px solid var(--line)}
@@ -950,12 +950,33 @@
     .mbExpl{position:relative;z-index:3;margin:0 14px 8px;padding:8px 12px;border-radius:11px;text-align:center;font-size:12.5px;font-weight:700;color:#c7d0ea;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14)}
     .mbExpl.done{color:#241a02;background:linear-gradient(90deg,#fcd34d,#f59e0b);border-color:#fcd34d}
     @media(max-height:480px){ .mbExpl{margin:0 12px 6px;padding:6px 10px;font-size:12px} }
+    /* v0.17: botón global + panel propio para SUGERIR ramas/sub-ramas (dentro del overlay → sin pelea de z-index ni inert con el modal externo) */
+    .mbBarBtn{flex:0 0 auto;min-height:44px;box-sizing:border-box;background:rgba(124,58,237,.22);color:#e8edf8;border:1px solid rgba(183,148,255,.5);border-radius:22px;padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+    .mbBarBtn:hover{background:rgba(124,58,237,.4)}
+    #mbPropose{position:absolute;left:0;right:0;bottom:0;z-index:7;background:rgba(17,22,40,.975);border-top:2px solid var(--mbAcc,#7c3aed);border-radius:16px 16px 0 0;padding:14px 16px 16px;box-shadow:0 -10px 34px rgba(0,0,0,.5);max-height:88%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+    #mbPropose[hidden]{display:none}
+    .mbPropTitle{font-weight:800;font-size:15px;color:#fff}
+    .mbPropChip{font-size:12.5px;color:#aab4d0;margin:3px 0 10px}
+    .mbPropLbl{display:block;font-size:12.5px;font-weight:700;color:#dfe6f7;margin:9px 0 4px}
+    #mbPropose input,#mbPropose textarea{width:100%;box-sizing:border-box;font-size:16px;font-family:inherit;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);border-radius:10px;color:#e8edf8;padding:10px 12px}
+    #mbPropose input:focus,#mbPropose textarea:focus{outline:none;border-color:var(--mbAcc,#7c3aed);box-shadow:0 0 0 3px rgba(124,58,237,.28)}
+    #mbPropose textarea{resize:vertical;min-height:46px}
+    .mbPropNote{font-size:11.5px;color:#8b96b6;margin-top:9px;line-height:1.42}
+    .mbPropRow{display:flex;gap:9px;margin-top:12px}
+    .mbPropBtn{flex:1;min-height:44px;border-radius:11px;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.22)}
+    .mbPropBtn.ghost{background:rgba(255,255,255,.08);color:#e8edf8}
+    .mbPropBtn.primary{background:var(--mbAcc,#7c3aed);color:#fff;border-color:transparent}
+    .mbPropBtn:disabled{opacity:.55;cursor:default}
+    .mbPropStatus{font-size:12.5px;font-weight:700;margin-top:9px;min-height:1px;color:#10b981}
+    @media(prefers-reduced-motion:no-preference){ #mbPropose:not([hidden]){animation:mbSheetUp .2s ease} }
+    @keyframes mbSheetUp{from{transform:translateY(20px);opacity:.35}to{transform:translateY(0);opacity:1}}
   </style>
   <div id="mapBig-ov" class="mbOv" role="dialog" aria-modal="true" aria-label="Mapa de MADRE a pantalla completa" hidden>
     <div class="mbAmbient"></div><div class="mbStars" id="mbStars"></div>
     <div class="mbBar">
       <span class="mbTitle">🌳 El mapa de MADRE</span>
       <span class="mbHint" id="mbHint">Arrastra para mover · rueda o pellizca para acercar · toca una rama para abrir sus sub-ramas</span>
+      <button class="mbBarBtn" id="mbPropGlobal" type="button">🌱 Proponer rama</button>
       <button class="mbClose" id="mbClose" type="button" aria-label="Cerrar el mapa">✕</button>
     </div>
     <div class="mbStage">
@@ -971,6 +992,21 @@
       <div class="mbInfo" id="mbInfo" aria-live="polite"><span class="t">👆 Toca una rama</span><span class="d">La cámara entra en ella y se abren sus sub-ramas. Arrastra para moverte; rueda o pellizco para acercar.</span></div>
       <div class="mbLeg" id="mbLeg"></div>
       <div class="mbFoot" id="mbFoot"></div>
+    </div>
+    <!-- v0.17: panel propio para SUGERIR una rama/sub-rama (vive DENTRO del overlay; se llena por JS) -->
+    <div id="mbPropose" role="dialog" aria-label="Proponer una rama para el mapa" hidden>
+      <div class="mbPropTitle">🌱 Proponer una rama para el mapa</div>
+      <div class="mbPropChip" id="mbPropChip"></div>
+      <label class="mbPropLbl" for="mbPropName">¿Cómo se llamaría?</label>
+      <input id="mbPropName" type="text" maxlength="60" tabindex="0" autocomplete="off" placeholder="Ej.: Memoria a largo plazo">
+      <label class="mbPropLbl" for="mbPropWhat">¿Qué sería? (en una frase, opcional)</label>
+      <textarea id="mbPropWhat" maxlength="240" tabindex="0" rows="2" placeholder="Ej.: dónde MADRE guarda lo que aprende para no olvidarlo"></textarea>
+      <div class="mbPropNote">Esto no sale en el mapa al momento. Se lo mando a MADRE; ella lo lee, lo juzga y, si encaja, lo pone como rama de verdad más adelante.</div>
+      <div class="mbPropRow">
+        <button id="mbPropCancel" type="button" class="mbPropBtn ghost">Dejarlo</button>
+        <button id="mbPropSend" type="button" class="mbPropBtn primary">Mandárselo a MADRE 🌳</button>
+      </div>
+      <div class="mbPropStatus" id="mbPropStatus" aria-live="polite"></div>
     </div>
   </div>
   <script>
@@ -991,7 +1027,7 @@
     function txt(c){ return (window.__mapText?window.__mapText(c):"#fff"); }
 
     /* ---- panel de info (con «cómo avanza» + botón «no entiendo» por nodo) ---- */
-    function mkBtn(label,fn){ var b=document.createElement("button"); b.type="button"; b.className="mbFb"; b.textContent=label; b.addEventListener("click",function(e){ e.stopPropagation(); fn(); }); return b; }
+    function mkBtn(label,fn){ var b=document.createElement("button"); b.type="button"; b.className="mbFb"; b.textContent=label; b.addEventListener("click",function(e){ e.stopPropagation(); fn(b); }); return b; }
     function showInfo(nd){ var isTop=(nd.__depth||0)===0, top=nd.__top||nd, path=isTop?nd.t:(top.t+" › "+nd.t);
       info.textContent="";
       var tt=document.createElement("span"); tt.className="t"; tt.textContent=(isTop?(nd.emoji+" "+nd.t):(top.emoji+" "+path)); info.appendChild(tt);
@@ -1000,9 +1036,71 @@
       if(isTop && nd.prog){ var pg=document.createElement("span"); pg.className="mbProg"; var b=document.createElement("b"); b.textContent="📈 Cómo avanza MADRE aquí: "; pg.appendChild(b); pg.appendChild(document.createTextNode(nd.prog)); info.appendChild(pg); }
       var hasKids=nd.kids&&nd.kids.length, acts=document.createElement("span"); acts.className="mbActs";
       if(hasKids){ acts.appendChild(mkBtn(isOpen(nd)?"➖ cerrar":"➕ abrir sus "+nd.kids.length+(((nd.__depth||0)===0)?" sub-ramas":" dentro"),function(){ onNodeClick(nd); })); }
-      acts.appendChild(mkBtn("🤔 No entiendo esto",function(){ if(window.__openFb) window.__openFb("🌳 Mapa › "+path,"","no-entiendo"); }));
+      /* «no entiendo» = UN toque, se manda directo a MADRE (window.__fb) con confirmación inline; NO abre el
+         modal externo (quedaría detrás del mapa). Fallback al modal solo si __fb no existe. */
+      acts.appendChild(mkBtn("🤔 No entiendo esto",function(btn){
+        if(!window.__fb){ if(window.__openFb) window.__openFb("🌳 Mapa › "+path,"","no-entiendo"); return; }
+        if(btn){ btn.disabled=true; btn.textContent="…"; }
+        Promise.resolve(window.__fb({card:"🌳 Mapa › "+path, section:path, tipo:"no-entiendo", texto:"No entiendo esta parte del mapa: "+path})).then(function(r){ if(btn) btn.textContent=(r==="copied")?"📋 copiado — pégalo en tu buzón":"✓ apuntado, MADRE lo verá"; }).catch(function(){ if(btn){ btn.disabled=false; btn.textContent="🤔 No entiendo esto"; } });
+      }));
+      /* «proponer una sub-rama aquí» = abre el panel propio del overlay (sub-rama bajo este nodo) */
+      if(window.__fb && window.__openPropose){ acts.appendChild(mkBtn("🌱 Proponer una sub-rama aquí",function(){
+        window.__openPropose({donde:"sub-rama", parentT:nd.t, parentTop:top.t, parentEmoji:top.emoji, parentPath:path, depth:(nd.__depth||0), color:(nd.__color||stOf(top.st).c)});
+      })); }
       info.appendChild(acts); }
     function showHint(){ info.textContent=""; var t=document.createElement("span"); t.className="t"; t.textContent="👆 Toca una rama"; var d=document.createElement("span"); d.className="d"; d.textContent="La cámara ENTRA en ella y se abren sus sub-ramas. Arrastra para moverte; rueda o pellizco para acercar."; info.appendChild(t); info.appendChild(d); }
+
+    /* ---- SUGERIR rama/sub-rama: panel PROPIO dentro del overlay (sin modal externo → sin pelea de z-index/inert).
+       Cualquiera propone; se manda por window.__fb (tabla privada feedback) con tipo "propuesta-rama" + texto
+       estructurado que el loop parsea y JUZGA. NO aparece al instante (honestidad §9). Cero texto de usuario en el SVG. */
+    (function(){
+      var prop=document.getElementById("mbPropose"); if(!prop) return;
+      var pName=document.getElementById("mbPropName"), pWhat=document.getElementById("mbPropWhat"),
+          pChip=document.getElementById("mbPropChip"), pSend=document.getElementById("mbPropSend"),
+          pCancel=document.getElementById("mbPropCancel"), pStatus=document.getElementById("mbPropStatus"),
+          gBtn=document.getElementById("mbPropGlobal");
+      var ctx=null, propLast=null;
+      function san(s,max){ return (s||"").replace(/[\r\n\t]+/g," ").replace(/[\x00-\x1f]+/g,"").replace(/\s{2,}/g," ").trim().slice(0,max); }
+      function openP(c){ ctx=c||{donde:"rama-nueva"}; var sub=(ctx.donde==="sub-rama");
+        pChip.textContent=sub?("Colgaría de: "+(ctx.parentPath||"")):"Sería una rama nueva, de las grandes";
+        try{ prop.setAttribute("aria-label", sub?("Proponer una sub-rama bajo: "+(ctx.parentPath||"")):"Proponer una rama nueva para el mapa"); }catch(e){}
+        try{ prop.style.setProperty("--mbAcc", ctx.color||"#7c3aed"); }catch(e){}
+        pName.value=""; pWhat.value=""; pStatus.textContent=""; pSend.disabled=false;
+        propLast=document.activeElement; prop.hidden=false;
+        try{ svg.style.pointerEvents="none"; }catch(e){}
+        setTimeout(function(){ try{ pName.focus(); }catch(e){} },30); }
+      function closeP(){ if(prop.hidden) return; prop.hidden=true; try{ svg.style.pointerEvents=""; }catch(e){} try{ if(propLast&&propLast.focus) propLast.focus(); }catch(e){} }
+      window.__closePropose=closeP; /* para que cerrar el mapa también cierre el panel (sin estado sucio) */
+      function sendP(){
+        if(!window.__fb){ pStatus.style.color="#fbbf24"; pStatus.textContent="Ahora mismo no puedo enviarlo. Inténtalo en un momento."; return; }
+        var nm=san(pName.value,60);
+        if(!nm || !/[0-9a-zñáéíóúü].*[0-9a-zñáéíóúü]/i.test(nm)){ pStatus.style.color="#fbbf24"; pStatus.textContent="Ponle un nombre con sentido y ya está 🙂"; try{ pName.focus(); }catch(e){} return; }
+        try{ var last=+(localStorage.getItem("cm_rama_ts")||0); if(Date.now()-last<5000){ pStatus.style.color="#fbbf24"; pStatus.textContent="Espera un momentito antes de mandar otra 🙂"; return; } }catch(e){}
+        var what=san(pWhat.value,240), c=ctx||{}, donde=c.donde||"rama-nueva";
+        /* sanea TODO valor de contexto antes de armar el texto clave:valor (un nombre de nodo con ':' o salto
+           de línea no debe poder crear/romper campos para el parser del loop) */
+        var pTop=san(c.parentTop||(donde==="rama-nueva"?"(raíz)":""),60), pPath=san(c.parentPath||"(raíz)",100), pEmo=san(c.parentEmoji||"",16);
+        var texto="PROPUESTA-RAMA\nnombre: "+nm+"\nque-es: "+what+"\ndonde-va: "+donde+"\nparent: "+pTop+"\nparent-path: "+pPath+"\nparent-emoji: "+pEmo+"\ndepth-padre: "+((c.depth==null)?-1:c.depth)+"\norigen: mapa-cuaderno";
+        pSend.disabled=true; pStatus.style.color="#9aa6c4"; pStatus.textContent="Mandándoselo a MADRE…";
+        try{ localStorage.setItem("cm_rama_ts", String(Date.now())); }catch(e){}
+        Promise.resolve(window.__fb({card:"🌳 Mapa › propuesta de rama", section:pPath, tipo:"propuesta-rama", texto:texto}))
+          .then(function(r){ if(r==="copied"){ pStatus.style.color="#fbbf24"; pStatus.textContent="📋 Sin conexión ahora: te lo he copiado — pégalo en tu buzón para que le llegue a MADRE."; pSend.disabled=false; }
+            else { pStatus.style.color="#10b981"; pStatus.textContent="✓ Enviado. MADRE lo mirará y, si encaja, lo añade al mapa. ¡Gracias!"; setTimeout(closeP,1700); } })
+          .catch(function(){ pStatus.style.color="#fbbf24"; pStatus.textContent="No se pudo enviar ahora — reinténtalo luego."; pSend.disabled=false; });
+      }
+      if(pSend) pSend.addEventListener("click",function(e){ e.stopPropagation(); sendP(); });
+      if(pCancel) pCancel.addEventListener("click",function(e){ e.stopPropagation(); closeP(); });
+      if(pName) pName.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); sendP(); } });
+      /* Esc en CAPTURA: cierra SOLO el panel, no el mapa (el Esc global vive en document, fase de burbuja) */
+      prop.addEventListener("keydown",function(e){ if(!prop.hidden && e.key==="Escape"){ e.stopPropagation(); e.preventDefault(); closeP(); } }, true);
+      /* atrapa-foco propio del panel: Tab cicla SOLO entre sus campos/botones (no se escapa a los nodos del
+         mapa de detrás) + stopPropagation para que el focus-trap del overlay no interfiera */
+      prop.addEventListener("keydown",function(e){ if(prop.hidden||e.key!=="Tab") return; e.stopPropagation(); var f=prop.querySelectorAll("input,textarea,button"); if(!f.length) return; var first=f[0], last=f[f.length-1], a=document.activeElement;
+        if(e.shiftKey){ if(a===first||!prop.contains(a)){ e.preventDefault(); last.focus(); } } else { if(a===last||!prop.contains(a)){ e.preventDefault(); first.focus(); } } });
+      prop.addEventListener("click",function(e){ e.stopPropagation(); }); /* clic dentro no colapsa el mapa */
+      if(gBtn) gBtn.addEventListener("click",function(e){ e.stopPropagation(); openP({donde:"rama-nueva", parentPath:"(raíz)", depth:-1, color:"#7c3aed"}); });
+      window.__openPropose=openP;
+    })();
 
     /* ---- zoom/pan ---- */
     var k=1,tx=0,ty=0,MINK=.55,MAXK=3.4;
@@ -1119,7 +1217,7 @@
       try{ document.body.style.overflow="hidden"; }catch(e){} bgInert(true);
       var cb=document.getElementById("mbClose"); if(cb) cb.focus();
       if(!fromHash){ try{ if(location.hash!=="#mapa"){ history.pushState({mapa:1},"","#mapa"); pushedHash=true; } }catch(e){} } }
-    function closeMap(fromPop){ if(!open) return; open=false; stopAnim(); ov.classList.remove("show");
+    function closeMap(fromPop){ if(!open) return; open=false; stopAnim(); try{ if(window.__closePropose) window.__closePropose(); }catch(e){} ov.classList.remove("show");
       setTimeout(function(){ ov.hidden=true; },260); try{ document.body.style.overflow=""; }catch(e){} bgInert(false);
       if(!fromPop){ try{ if(pushedHash){ history.back(); } else if(location.hash==="#mapa"){ history.replaceState(null,"",location.pathname+location.search); } }catch(e){} }
       pushedHash=false;
@@ -1840,15 +1938,15 @@ window.__cmCorpus = {
         }
       }catch(e){}
       rec.web=true; rec.ok=sent; state.sent.unshift(rec); save(state);
-      if(sent){ toast("Enviado ✓ — MADRE lo verá en su próxima pasada"); return true; }
+      if(sent){ toast("Enviado ✓ — MADRE lo verá en su próxima pasada"); return "sent"; }
       var copiado=false;
       try{ await navigator.clipboard.writeText(body); copiado=true; }catch(e){}
       if(copiado) toast("Copiado ✓ — pégalo en tu BUZÓN"); else window.prompt("Copia este texto y pégalo en tu BUZÓN:", body);
-      return true;
+      return "copied";
     }
     try{
       await mcp(T_CREATE,{ title:title, parentId:BUZON_ENTRANTE_ID, textContent:body, contentMimeType:"text/plain", disableConversionToGoogleType:true });
-      rec.ok=true; state.sent.unshift(rec); save(state); toast("Enviado ✓ — MADRE lo verá en su próxima pasada"); return true;
+      rec.ok=true; state.sent.unshift(rec); save(state); toast("Enviado ✓ — MADRE lo verá en su próxima pasada"); return "sent";
     }catch(e){
       rec.ok=false; state.sent.unshift(rec); save(state);
       toast(String(e.message)==="preview" ? "Vista previa: se enviará al abrirlo en Cowork" : "No se pudo enviar ahora — reintenta luego");
@@ -2210,6 +2308,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-29",titulo:"🌱 Ahora puedes PROPONER ramas y sub-ramas al mapa (v0.17)",detalle:"El mapa deja de ser solo para mirar: ahora puedes AYUDAR a construirlo. Dentro de una rama verás «🌱 Proponer una sub-rama aquí» (sabe sola bajo qué rama la pones, no tienes que elegir nada), y arriba del mapa hay «🌱 Proponer rama» para un tema nuevo de los grandes. Le pones un nombre (y, si quieres, una frase de qué sería) y se lo mandas a MADRE. HONESTO: no aparece en el mapa al momento — se lo queda MADRE, lo JUZGA (puede decir que sí o que no) y, si encaja, lo añade como rama de verdad más adelante. De paso arreglé el botón «🤔 No entiendo esto»: antes abría una ventana que se quedaba detrás del mapa (no se veía); ahora es de un toque y te confirma «✓ apuntado». Todo revisado por un equipo de revisores (10 fallos reales encontrados y corregidos: que el texto raro no rompa nada, que no mienta si te quedas sin conexión, botones grandes para el dedo, y accesible con teclado/lector)."},
     {fecha:"2026-06-29",titulo:"🗣️ «MADRE te dice» v2: ordenado por IMPACTO y cada cosa dice qué cambió PARA SIEMPRE (v0.16)",detalle:"Mejorado con tu feedback: el panel ya no es una lista de tareas por orden de tiempo. Ahora va por IMPORTANCIA — arriba un «⚡ Hoy el sistema es diferente» (3 líneas que lees en 3 segundos), luego los CAMBIOS PERMANENTES (cada uno dice «aprendí X → desde ahora hago Y», no «arreglé algo suelto»), luego las DECISIONES que SOLO tú puedes tomar (el resto las resuelvo yo y te aviso), el trabajo hecho, y el conocimiento absorbido EVALUADO: con su impacto y si sustituye/contradice algo tuyo, no una colección suelta. Y una MÉTRICA de evolución (281 técnicas conocidas · 3 aplicadas · 278 pendientes) para ver que el sistema CAMBIA, no solo lee."},
     {fecha:"2026-06-29",titulo:"🗣️ «MADRE te dice»: MADRE ahora te habla desde el cuaderno (v0.15)",detalle:"Nuevo panel arriba donde MADRE te deja cosas en la web que más miras: (1) lo que ACABA DE HACER (avances reales), (2) las DECISIONES que necesita de ti —que solo ves tú en «modo creador»— cada una con su recomendación y una FECHA LÍMITE: si no decides a tiempo, MADRE elige la recomendada y te avisa, así nada se queda parado en ti; y (3) OPORTUNIDADES de negocio que ha absorbido de los vídeos. Puedes elegir una opción de un toque y le llega como feedback. Lo secreto de verdad sigue yendo al buzón privado, no a la web."},
     {fecha:"2026-06-29",titulo:"🌳 El MAPA da otro salto: entras en cada rama y ves cómo avanza MADRE (v0.15)",detalle:"El mapa (lo que más te engancha) sube de nivel: (1) al tocar una rama, la CÁMARA ENTRA en ella (se acerca) y se abren sus sub-ramas — y ahora se DESCUBREN solas, porque al abrir el mapa la rama en la que se trabaja AHORA ya viene desplegada. (2) MULTINIVEL de verdad: algunas sub-ramas tienen más cosas dentro (verás «＋ 3 dentro»); tócalas y se abre otra capa. (3) Cada rama te cuenta «cómo AVANZA MADRE aquí» (qué hace y qué le falta) y tiene un botón «🤔 no entiendo» para marcar lo que no pillas. (4) Abajo llevas la cuenta «has abierto N/8 ramas»: explóralas todas y desbloqueas un guiño — una razón honesta para volver y terminar de descubrirla. Además, arreglos que pediste: el 🐹 hámster vuelve a MOVERSE aunque tengas el móvil/PC en «menos animaciones»; la zona «en directo» respira mejor (menos apretada, nada pegado al borde); y dejé claro que lo de «ayudar a MADRE» NO son deberes para ti — MADRE ya busca esas soluciones sola."},
@@ -4899,7 +4998,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.16";
+  window.__cmVersion="v0.17";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 29 jun 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
