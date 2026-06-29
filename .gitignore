@@ -2,3 +2,6 @@
 UI_REFS_INBOX.txt
 # Temporales de las rutinas (p.ej. backup de index.html de cuaderno-feedback)
 *.bak
+# Borradores de artículos "field notes": publicarlos es una decisión APARTE de Tony
+# (regla del moat "da la enseñanza, no la receta"). No versionar hasta que Tony lo decida.
+articulos/

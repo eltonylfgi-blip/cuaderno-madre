@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Audición ASMR — Cuaderno MADRE (herramienta local)</title>
+<style>
+  :root{ --accent:#7c3aed; --bg:#faf7ff; --ink:#2c2440; --soft:#efe9fb; --ok:#059669; --meh:#b45309; --bad:#dc2626; }
+  *{box-sizing:border-box}
+  body{ margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; color:var(--ink);
+        background:radial-gradient(1200px 500px at 50% -10%,#f3edff,transparent),var(--bg); padding:18px; }
+  .wrap{ max-width:760px; margin:0 auto; }
+  h1{ font-size:22px; margin:.2em 0; }
+  .lead{ background:#fff; border:1px solid var(--soft); border-radius:14px; padding:14px 16px; box-shadow:0 6px 22px rgba(80,50,150,.08); margin-bottom:14px; }
+  .lead b{ color:var(--accent); }
+  .lead ol{ margin:.4em 0 0; padding-left:1.2em; }
+  .gesture{ display:block; width:100%; border:0; border-radius:12px; padding:14px; font:600 17px system-ui; color:#fff;
+            background:linear-gradient(135deg,#8b5cf6,#6d28d9); cursor:pointer; box-shadow:0 6px 18px rgba(109,40,217,.35); margin-bottom:14px; }
+  .gesture.armed{ background:linear-gradient(135deg,#10b981,#059669); box-shadow:0 6px 18px rgba(5,150,105,.3); }
+  .row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; background:#fff; border:1px solid var(--soft);
+        border-radius:12px; padding:10px 12px; margin-bottom:9px; }
+  .row .name{ flex:1 0 116px; font-weight:700; display:flex; align-items:center; gap:7px; }
+  .row .name .em{ font-size:20px; }
+  button.b{ border:1px solid #d9cdf5; background:#fff; color:var(--accent); border-radius:9px; padding:8px 11px;
+            font:600 13px system-ui; cursor:pointer; transition:transform .07s, background .12s; min-height:40px; }
+  button.b:hover{ background:var(--soft); } button.b:active{ transform:scale(.94); }
+  button.b.hit{ background:linear-gradient(135deg,#ede9fe,#ddd6fe); }
+  button.b.flash{ background:#c4b5fd!important; color:#fff; }
+  .rate{ display:flex; gap:4px; margin-left:auto; }
+  button.r{ border:1px solid #e2dcf2; background:#fff; border-radius:8px; width:38px; height:38px; font-size:17px; cursor:pointer; padding:0; line-height:1; }
+  button.r.sel-ok{ background:#d1fae5; border-color:var(--ok); }
+  button.r.sel-meh{ background:#fef3c7; border-color:var(--meh); }
+  button.r.sel-bad{ background:#fee2e2; border-color:var(--bad); }
+  .note{ font-size:13px; color:#6b6386; }
+  .rowNote{ flex:1 1 100%; margin-top:6px; }
+  .rowNote input{ width:100%; border:1px solid #e2dcf2; border-radius:8px; padding:7px 9px; font:13px system-ui; }
+  .speedrow{ display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--soft); border-radius:12px; padding:10px 12px; margin:6px 0 14px; }
+  .speedrow input{ flex:1; accent-color:var(--accent); }
+  .allbtn{ width:100%; border:0; border-radius:11px; padding:12px; font:600 15px system-ui; color:#fff;
+           background:linear-gradient(135deg,#7c3aed,#9333ea); cursor:pointer; margin:6px 0 14px; }
+  .copybox{ background:#fff; border:1px solid var(--soft); border-radius:14px; padding:14px 16px; margin-top:14px; }
+  .copybox textarea{ width:100%; min-height:64px; border:1px solid #e2dcf2; border-radius:9px; padding:9px; font:13px system-ui; resize:vertical; }
+  .copybtn{ width:100%; border:0; border-radius:11px; padding:13px; font:700 15px system-ui; color:#fff; background:linear-gradient(135deg,#059669,#047857); cursor:pointer; margin-top:10px; }
+  .copybtn.done{ background:linear-gradient(135deg,#10b981,#059669); }
+  .tag{ display:inline-block; font-size:11px; background:var(--soft); color:var(--accent); border-radius:20px; padding:2px 9px; margin-left:6px; vertical-align:middle; }
+  iframe{ position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; border:0; left:-9999px; }
+  .status{ font-size:13px; margin-top:6px; } .status.ok{ color:var(--ok); } .status.wait{ color:var(--meh); }
+  footer{ margin-top:20px; font-size:12px; color:#8a82a6; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎧 Audición ASMR <span class="tag">herramienta local · no es la web pública</span></h1>
+  <div class="lead">
+    Reproduce el <b>motor de sonido REAL</b> del cuaderno (carga <code>../index.html</code> oculto y llama a sus
+    funciones). Claude no oye — <b>tú juzgas</b>.
+    <ol>
+      <li>Pulsa <b>“Activar sonido”</b> (el navegador pide un primer toque).</li>
+      <li>Prueba cada textura: <b>rozar suave / fuerte</b> y <b>golpe</b>.</li>
+      <li>Marca 👍/😐/👎 y escribe a qué te suena. Al final pulsa <b>“Copiar para Claude”</b> y pégamelo en el chat.</li>
+    </ol>
+  </div>
+
+  <button id="arm" class="gesture">🔊 Activar sonido (tócame primero)</button>
+  <div id="status" class="status wait">Cargando el motor del cuaderno…</div>
+
+  <div class="speedrow">
+    <span class="note">Velocidad “rozar fuerte”</span>
+    <input id="speed" type="range" min="40" max="100" value="85">
+    <span id="spv" class="note">0.85</span>
+  </div>
+
+  <div id="grid"></div>
+
+  <button id="all" class="allbtn">▶︎ Tocar TODOS los golpes en fila</button>
+
+  <div class="copybox">
+    <div class="note" style="margin-bottom:6px"><b>Notas generales</b> (opcional): qué sensación general, qué textura es la peor, ideas…</div>
+    <textarea id="genNote" placeholder="Ej: en general bien; la peor es arena; las burbujas ya suenan a burbuja…"></textarea>
+    <button id="copy" class="copybtn">📋 Copiar para Claude</button>
+    <div id="copyStatus" class="note" style="margin-top:6px"></div>
+  </div>
+
+  <p class="note">Deberían sonar a: <b>burbujas</b>=plástico de burbujas (pop) · <b>madera</b>=“toc”/raspado cálido ·
+  <b>papel</b>=arrugar papel · <b>hojas secas</b>=crujido seco · <b>arena</b>=“shhh”/granular · <b>pana</b>=frote
+  acanalado (“brrrp”) · <b>cremallera</b>=zip · <b>muelle</b>=“boing”.</p>
+
+  <footer>Cuaderno MADRE · audición v0.12 · local (no se enlaza desde la web; borrable antes de publicar).</footer>
+</div>
+
+<iframe id="cm" src="../index.html" title="motor cuaderno"></iframe>
+
+<script>
+(function(){
+  var frame=document.getElementById("cm"), statusEl=document.getElementById("status"), grid=document.getElementById("grid");
+  var armBtn=document.getElementById("arm"), speed=document.getElementById("speed"), spv=document.getElementById("spv");
+  var allBtn=document.getElementById("all"), copyBtn=document.getElementById("copy"), copyStatus=document.getElementById("copyStatus"), genNote=document.getElementById("genNote");
+  var LABELS={ burbujas:["🫧","burbujas"], madera:["🪵","madera"], papel:["📄","papel"], hojas:["🍂","hojas secas"],
+               arena:["⏳","arena"], pana:["🧶","pana"], cremallera:["🤐","cremallera"], muelle:["🌀","muelle"] };
+  var ORDER=["burbujas","madera","papel","hojas","arena","pana","cremallera","muelle"];
+  var FB={}; // textura -> {rate, note}
+
+  function asmr(){ try{ return frame.contentWindow && frame.contentWindow.__asmr; }catch(e){ return null; } }
+  function sp(){ return (+speed.value)/100; }
+  speed.addEventListener("input",function(){ spv.textContent=sp().toFixed(2); });
+  function flash(btn){ btn.classList.add("flash"); setTimeout(function(){ btn.classList.remove("flash"); },130); }
+  function mkBtn(txt,cls,fn){ var b=document.createElement("button"); b.className="b"+(cls?(" "+cls):""); b.textContent=txt; b.addEventListener("click",function(){ flash(b); try{ fn(); }catch(e){} }); return b; }
+
+  function buildGrid(keys){
+    grid.innerHTML="";
+    keys.forEach(function(k){
+      FB[k]=FB[k]||{rate:"",note:""};
+      var L=LABELS[k]||["✦",k];
+      var row=document.createElement("div"); row.className="row";
+      var name=document.createElement("div"); name.className="name"; name.innerHTML='<span class="em">'+L[0]+'</span> '+L[1];
+      row.appendChild(name);
+      row.appendChild(mkBtn("🤚 suave","",function(){ var A=asmr(); if(A) A.brushAt(k,0.22); }));
+      row.appendChild(mkBtn("✋ fuerte","",function(){ var A=asmr(); if(A) A.brushAt(k, sp()); }));
+      row.appendChild(mkBtn("👆 golpe","hit",function(){ var A=asmr(); if(A) A.demo(k); }));
+      // rating
+      var rate=document.createElement("div"); rate.className="rate";
+      var defs=[["bien","👍","sel-ok"],["meh","😐","sel-meh"],["raro","👎","sel-bad"]];
+      var rbtns=[];
+      defs.forEach(function(d){ var rb=document.createElement("button"); rb.className="r"; rb.textContent=d[1]; rb.title=d[0];
+        rb.addEventListener("click",function(){ FB[k].rate=d[0]; rbtns.forEach(function(x){ x.el.classList.remove("sel-ok","sel-meh","sel-bad"); }); rb.classList.add(d[2]); });
+        rbtns.push({el:rb,key:d[0]}); rate.appendChild(rb); });
+      row.appendChild(rate);
+      // per-row note
+      var nWrap=document.createElement("div"); nWrap.className="rowNote";
+      var inp=document.createElement("input"); inp.placeholder="a qué suena / qué cambiar (opcional)";
+      inp.addEventListener("input",function(){ FB[k].note=inp.value; });
+      nWrap.appendChild(inp); row.appendChild(nWrap);
+      grid.appendChild(row);
+    });
+  }
+
+  function arm(){ var A=asmr(); if(A){ try{ A.brushAt("burbujas",0.3); }catch(e){} } armBtn.classList.add("armed"); armBtn.textContent="✅ Sonido activado — prueba las texturas"; }
+  armBtn.addEventListener("click",arm);
+  allBtn.addEventListener("click",function(){ var A=asmr(); if(!A) return; var keys=(A.list&&A.list())||ORDER; var i=0; (function next(){ if(i>=keys.length) return; try{ A.demo(keys[i]); }catch(e){} i++; setTimeout(next,520); })(); });
+
+  function buildReport(){
+    var lines=["FEEDBACK ASMR — Cuaderno MADRE v0.12 (por oído de Tony)",""];
+    ORDER.forEach(function(k){ if(!FB[k]) return; var ic=FB[k].rate==="bien"?"👍":FB[k].rate==="meh"?"😐":FB[k].rate==="raro"?"👎":"·"; var n=FB[k].note?(" — "+FB[k].note):""; lines.push("- "+(LABELS[k]?LABELS[k][1]:k)+": "+ic+n); });
+    if(genNote.value.trim()){ lines.push("","Notas: "+genNote.value.trim()); }
+    return lines.join("\n");
+  }
+  copyBtn.addEventListener("click",function(){
+    var txt=buildReport();
+    function ok(){ copyBtn.classList.add("done"); copyBtn.textContent="✅ Copiado — pégalo en el chat de Claude"; copyStatus.textContent="Copiado al portapapeles."; setTimeout(function(){ copyBtn.textContent="📋 Copiar para Claude"; copyBtn.classList.remove("done"); },2500); }
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok,function(){ fallback(txt); }); } else fallback(txt);
+    function fallback(t){ var ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); ok(); }catch(e){ copyStatus.textContent="No pude copiar; selecciona y copia a mano:"; } ta.style.position="fixed"; ta.style.left="0"; ta.style.bottom="0"; ta.style.width="100%"; ta.style.height="80px"; }
+  });
+
+  var tries=0;
+  (function waitReady(){
+    var A=asmr();
+    if(A && A.list){
+      var keys; try{ keys=A.list(); }catch(e){ keys=ORDER; } if(!keys||!keys.length) keys=ORDER;
+      keys=ORDER.filter(function(k){ return keys.indexOf(k)>=0; }).concat(keys.filter(function(k){ return ORDER.indexOf(k)<0; }));
+      buildGrid(keys);
+      statusEl.className="status ok"; statusEl.textContent="Motor cargado ("+keys.length+" texturas). Pulsa “Activar sonido”.";
+      return;
+    }
+    if(tries++>80){ statusEl.className="status wait"; statusEl.textContent="No se pudo cargar __asmr desde ../index.html (¿server local en marcha?). Reintenta recargando."; buildGrid(ORDER); return; }
+    setTimeout(waitReady,150);
+  })();
+})();
+</script>
+</body>
+</html>
