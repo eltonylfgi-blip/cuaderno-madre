@@ -96,3 +96,19 @@ Desde el baseline `8d5f6d4` hasta HEAD hay **16 commits**, con cambios en 12 fic
 - Propuesta: sección pública con lecciones aprendidas de MADRE, filtrada por el moat. Si dices "sí, arranca con 3-5 ejemplos", lo monto.
 
 ---
+
+## 2026-06-30 — 5 opiniones detalladas sobre secciones del cuaderno (posiblemente IA)
+
+Llegaron el 29-jun ~20:22-20:27 (5 feedbacks en 5 minutos, mismo patrón de redacción). Parecen de un modelo de IA revisando el cuaderno (¿usaste la 2ª opinión panel?). Son valiosas pero TODAS son mejoras estructurales → PARKING por el gate.
+
+**1. "📄 🗳️ Decisiones que esperan tu criterio"** (id `a6b77cda`) — Evalúa 5 propuestas de autonomía de MADRE (watchdog, pipeline móvil, auto-implementar tras 5 revisiones, overlay de auto-ajuste, adelgazar instrucciones). Aprueba 4 directamente y la del overlay "con límites muy claros": snapshot → aplicar → observar → keep/rollback. NO es cambio al cuaderno sino valoración de decisiones del CORE. Lo dejo como registro; si quieres que actúe en esas propuestas, dímelo.
+
+**2. "📄 El cementerio de ideas muertas"** (id `04d5cbfe`) — Propone: (a) fecha de defunción por entrada, (b) etiqueta de causa (Redundancia / Ya existía / No tocaba realidad…), (c) contador arriba (evaluadas / vivas / enterradas), (d) categorías: ⚰️Muerta / 😴Dormida / ♻️Absorbida / 🧬Fusionada / 🚫Refutada, (e) frase introductoria más potente. ¿Quieres que aplique alguna de estas?
+
+**3. "📄 ⚠️ Riesgos y puntos ciegos"** (id `5dc82b9c`) — Propone: separar en 3 tipos (riesgos operativos / puntos ciegos / límites actuales), formato 4 partes por riesgo, medidor visual de cobertura, añadir 5 riesgos que faltan (dependencia de modelo, dependencia de Tony, corrupción lenta, complejidad creciente, éxito local), ordenar por riesgo existencial. ¿Priorizamos una?
+
+**4. "📄 Lo que MADRE investiga: las «meta-palancas»"** (id `55496cbc`) — Propone: diagrama ciclo auto-mejora, ejemplo real, cambiar "hallazgo clave" → "la regla que cambió todo", barra de progreso de objetivos de MADRE, mostrar meta-palancas activas en tiempo real. ¿Cuál aplico primero?
+
+**5. "📄 Las rutinas que mueven a MADRE"** (id `81275d71`) — Propone: personaje por rutina (🧠 El cerebro / 📹 El archivista / 📖 El bibliotecario…), mostrar cuándo despertaron y qué hicieron, diagrama de dependencias, coste y % de éxito, rutina "El auditor" que cuestione supuestos propios, hacer la sección viva con datos en tiempo real. ¿Lo planificamos?
+
+---
