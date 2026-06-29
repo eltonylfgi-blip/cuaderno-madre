@@ -970,6 +970,16 @@
     .mbPropStatus{font-size:12.5px;font-weight:700;margin-top:9px;min-height:1px;color:#10b981}
     @media(prefers-reduced-motion:no-preference){ #mbPropose:not([hidden]){animation:mbSheetUp .2s ease} }
     @keyframes mbSheetUp{from{transform:translateY(20px);opacity:.35}to{transform:translateY(0);opacity:1}}
+    /* v0.18: modo «proponer rama» VISUAL — banner guía + RAMA FANTASMA (geometría punteada; el nombre va inline por textContent = anti-XSS) */
+    .mbPropBanner{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:10px;width:max-content;max-width:calc(100% - 24px);background:rgba(124,58,237,.94);color:#fff;border:1px solid rgba(183,148,255,.7);border-radius:14px;padding:9px 12px;box-shadow:0 8px 26px rgba(0,0,0,.45);font-size:13px;font-weight:700}
+    .mbPropBanner[hidden]{display:none}
+    .mbPBtxt{flex:1;min-width:0;line-height:1.34}
+    .mbPropBannerX{flex:0 0 auto;min-height:36px;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:10px;padding:6px 12px;font-size:12.5px;font-weight:800;cursor:pointer}
+    .mbPropBannerX:hover{background:rgba(255,255,255,.3)}
+    .mbPhantom{pointer-events:none}
+    @media(prefers-reduced-motion:no-preference){ .mbPhantom .nc-ph{animation:mbPhPulse 1.5s ease-in-out infinite} }
+    @keyframes mbPhPulse{0%,100%{opacity:.5}50%{opacity:1}}
+    @media(max-height:480px){ .mbPropBanner{font-size:12px;padding:7px 10px;top:8px} }
   </style>
   <div id="mapBig-ov" class="mbOv" role="dialog" aria-modal="true" aria-label="Mapa de MADRE a pantalla completa" hidden>
     <div class="mbAmbient"></div><div class="mbStars" id="mbStars"></div>
@@ -985,6 +995,11 @@
         <button id="mbIn" type="button" aria-label="Acercar">＋</button>
         <button id="mbOut" type="button" aria-label="Alejar">－</button>
         <button id="mbReset" type="button" aria-label="Centrar y restablecer">⟳</button>
+      </div>
+      <!-- v0.18: banner del MODO PROPONER (tocar dónde nace la rama) -->
+      <div id="mbPropBanner" class="mbPropBanner" hidden>
+        <span class="mbPBtxt" id="mbPBtxt">🌱 Toca la rama de la que nace tu idea — o el centro 🤱🏻 para una rama nueva grande.</span>
+        <button id="mbPropExit" type="button" class="mbPropBannerX">Salir</button>
       </div>
     </div>
     <div class="mbBottom">
@@ -1069,7 +1084,7 @@
         propLast=document.activeElement; prop.hidden=false;
         try{ svg.style.pointerEvents="none"; }catch(e){}
         setTimeout(function(){ try{ pName.focus(); }catch(e){} },30); }
-      function closeP(){ if(prop.hidden) return; prop.hidden=true; try{ svg.style.pointerEvents=""; }catch(e){} try{ if(propLast&&propLast.focus) propLast.focus(); }catch(e){} }
+      function closeP(){ if(prop.hidden) return; prop.hidden=true; try{ svg.style.pointerEvents=""; }catch(e){} try{ if(propLast&&propLast.focus) propLast.focus(); }catch(e){} try{ if(window.__onProposeClosed) window.__onProposeClosed(); }catch(e){} }
       window.__closePropose=closeP; /* para que cerrar el mapa también cierre el panel (sin estado sucio) */
       function sendP(){
         if(!window.__fb){ pStatus.style.color="#fbbf24"; pStatus.textContent="Ahora mismo no puedo enviarlo. Inténtalo en un momento."; return; }
@@ -1091,6 +1106,8 @@
       if(pSend) pSend.addEventListener("click",function(e){ e.stopPropagation(); sendP(); });
       if(pCancel) pCancel.addEventListener("click",function(e){ e.stopPropagation(); closeP(); });
       if(pName) pName.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); sendP(); } });
+      /* v0.18: refleja el nombre EN VIVO en la rama fantasma (inline, vía textContent = anti-XSS) */
+      if(pName) pName.addEventListener("input",function(){ var lab=document.getElementById("mbPhantomLabel"); if(!lab) return; var v=(pName.value||"").replace(/[\r\n\t]+/g," ").trim(); lab.textContent=v?(v.length>24?v.slice(0,24)+"…":v):"tu nueva rama"; });
       /* Esc en CAPTURA: cierra SOLO el panel, no el mapa (el Esc global vive en document, fase de burbuja) */
       prop.addEventListener("keydown",function(e){ if(!prop.hidden && e.key==="Escape"){ e.stopPropagation(); e.preventDefault(); closeP(); } }, true);
       /* atrapa-foco propio del panel: Tab cicla SOLO entre sus campos/botones (no se escapa a los nodos del
@@ -1098,7 +1115,9 @@
       prop.addEventListener("keydown",function(e){ if(prop.hidden||e.key!=="Tab") return; e.stopPropagation(); var f=prop.querySelectorAll("input,textarea,button"); if(!f.length) return; var first=f[0], last=f[f.length-1], a=document.activeElement;
         if(e.shiftKey){ if(a===first||!prop.contains(a)){ e.preventDefault(); last.focus(); } } else { if(a===last||!prop.contains(a)){ e.preventDefault(); first.focus(); } } });
       prop.addEventListener("click",function(e){ e.stopPropagation(); }); /* clic dentro no colapsa el mapa */
-      if(gBtn) gBtn.addEventListener("click",function(e){ e.stopPropagation(); openP({donde:"rama-nueva", parentPath:"(raíz)", depth:-1, color:"#7c3aed"}); });
+      /* v0.18: el botón global ya NO abre el formulario directo: ENTRA en modo proponer VISUAL (tocar dónde nace).
+         El panel #mbPropose sigue siendo la base (lo abre __openPropose tras elegir el sitio, o el botón por-nodo). */
+      if(gBtn) gBtn.addEventListener("click",function(e){ e.stopPropagation(); if(window.__enterPropose) window.__enterPropose(); else openP({donde:"rama-nueva", parentPath:"(raíz)", depth:-1, color:"#7c3aed"}); });
       window.__openPropose=openP;
     })();
 
@@ -1157,7 +1176,7 @@
         var c=el("circle",{cx:kd.x,cy:kd.y,r:r,fill:"#141a2e",stroke:color,"stroke-width":depth===1?"2.5":"2"}); c.setAttribute("class","nc"); g.appendChild(c);
         g.appendChild(wrapText(kd.t,kd.x,kd.y,depth===1?11:10,"#e8edf8",depth===1?13:12));
         if(hasKids){ var pb=el("text",{x:kd.x,y:kd.y+r+13,"text-anchor":"middle","font-size":"10.5","font-weight":"800",fill:color}); pb.textContent=(isOpen(kd)?"▾ ":"＋ ")+kd.kids.length+" dentro"; g.appendChild(pb); }
-        (function(node){ function act(){ onNodeClick(node); } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(kd);
+        (function(node){ function act(){ if(proposeMode){ pickParent(node); } else { onNodeClick(node); } } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(kd);
         subLayer.appendChild(g);
         if(isOpen(kd)) drawKids(kd); }); }
     function renderSubs(){ if(subLayer){ subLayer.parentNode&&subLayer.parentNode.removeChild(subLayer); subLayer=null; }
@@ -1178,6 +1197,48 @@
       if(n>=tot){ elx.textContent="🏆 Has explorado las "+tot+" ramas — ahora entiendes MADRE mejor que casi nadie que llega aquí."; elx.className="mbExpl done"; }
       else { elx.textContent="🔍 Has abierto "+n+"/"+tot+" ramas de MADRE"+(n>0?" · vuelve y termina de descubrirla":" · toca una rama para empezar"); elx.className="mbExpl"; } }
 
+    /* ---- v0.18: MODO «PROPONER RAMA» VISUAL (rama fantasma) -----------------------------------
+       Tony: proponer una (sub)rama = CLICAR DÓNDE nace en el mapa, no rellenar un formulario. Flujo:
+       botón «🌱 Proponer rama» → entras en modo → TOCAS la rama de la que sale (o el centro 🤱🏻 = rama
+       nueva grande) → aparece una RAMA FANTASMA punteada ahí (SOLO geometría → cero texto de usuario en
+       el SVG salvo el nombre, que va por textContent = anti-XSS) y se abre el panel para nombrarla; el
+       nombre se refleja inline en la fantasma mientras escribes. Envía por el MISMO window.__fb tipo
+       "propuesta-rama" (el panel #mbPropose, que sigue siendo la base/fallback; el contrato con el loop
+       NO cambia). Honestidad §9: la fantasma es PUNTEADA y dice «(propuesta · sin confirmar)» — no finge
+       ser ya una rama de MADRE. */
+    var proposeMode=false, phantom=null, banner=document.getElementById("mbPropBanner");
+    function showBanner(){ if(banner) banner.hidden=false; }
+    function hideBanner(){ if(banner) banner.hidden=true; }
+    function removePhantom(){ if(phantom){ try{ phantom.parentNode&&phantom.parentNode.removeChild(phantom); }catch(e){} phantom=null; } }
+    function phantomGeom(node){ /* {px,py,x,y,r} en coords del viewBox (la línea va de px,py al círculo x,y) */
+      if(node){ var ax=node.x-CX, ay=node.y-CY, al=Math.hypot(ax,ay)||1, out=(node.__depth||0)>=1?120:140;
+        return {px:node.x, py:node.y, x:node.x+ax/al*out, y:node.y+ay/al*out, r:(node.__depth||0)>=1?26:30}; }
+      var ang=(-90+22.5)*Math.PI/180, rad=R+120; /* rama nueva: bisecta el 1er hueco del anillo y MÁS LEJOS = claramente fuera */
+      return {px:CX, py:CY, x:CX+rad*Math.cos(ang), y:CY+rad*Math.sin(ang), r:34}; }
+    function drawPhantom(g0,color){ removePhantom(); var g=el("g",{"class":"mbPhantom"});
+      var ln=el("line",{x1:g0.px,y1:g0.py,x2:g0.x,y2:g0.y,stroke:color,"stroke-width":"3","stroke-dasharray":"8 7",opacity:".92"}); g.appendChild(ln);
+      var c=el("circle",{cx:g0.x,cy:g0.y,r:g0.r,fill:"rgba(124,58,237,.16)",stroke:color,"stroke-width":"3","stroke-dasharray":"7 6"}); c.setAttribute("class","nc-ph"); g.appendChild(c);
+      var em=el("text",{x:g0.x,y:g0.y-2,"text-anchor":"middle","dominant-baseline":"middle","font-size":"24"}); em.textContent="🌱"; g.appendChild(em);
+      var lab=el("text",{id:"mbPhantomLabel",x:g0.x,y:g0.y+g0.r+17,"text-anchor":"middle","font-size":"13","font-weight":"800",fill:color}); lab.textContent="tu nueva rama"; g.appendChild(lab);
+      var cap=el("text",{x:g0.x,y:g0.y+g0.r+33,"text-anchor":"middle","font-size":"10.5","font-weight":"700",fill:"#9aa6c4"}); cap.textContent="(propuesta · sin confirmar)"; g.appendChild(cap);
+      view.appendChild(g); phantom=g; }
+    function enterPropose(){ proposeMode=true; removePhantom(); showBanner(); try{ svg.style.pointerEvents=""; }catch(e){}
+      info.textContent=""; var t=document.createElement("span"); t.className="t"; t.textContent="🌱 Modo proponer";
+      var d=document.createElement("span"); d.className="d"; d.textContent="Toca la rama de la que nace tu idea — o el centro 🤱🏻 para una rama nueva grande."; info.appendChild(t); info.appendChild(d); }
+    function exitPropose(){ var was=proposeMode||phantom||(banner&&!banner.hidden); proposeMode=false; hideBanner(); removePhantom();
+      try{ if(window.__closePropose) window.__closePropose(); }catch(e){} if(was){ try{ showHint(); }catch(e){} } }
+    function pickParent(node){ if(!proposeMode) return; var color, ctx;
+      if(node){ var top=node.__top||node, isTop=(node.__depth||0)===0, path=isTop?node.t:(top.t+" › "+node.t);
+        color=(node.__color||stOf(top.st).c);
+        ctx={donde:"sub-rama", parentT:node.t, parentTop:top.t, parentEmoji:top.emoji, parentPath:path, depth:(node.__depth||0), color:color}; }
+      else { color="#7c3aed"; ctx={donde:"rama-nueva", parentPath:"(raíz)", depth:-1, color:color}; }
+      var pg=phantomGeom(node); drawPhantom(pg,color); hideBanner(); try{ focusOn(pg.x,pg.y,1.5); }catch(e){}
+      if(window.__openPropose) window.__openPropose(ctx); }
+    window.__enterPropose=enterPropose; window.__exitPropose=exitPropose;
+    /* el panel #mbPropose, al cerrarse por CUALQUIER vía (Dejarlo/Esc/enviado/cerrar mapa), avisa aquí → salimos del modo y borramos la fantasma */
+    window.__onProposeClosed=function(){ if(!proposeMode && !phantom && (!banner||banner.hidden)) return; proposeMode=false; hideBanner(); removePhantom(); try{ showHint(); }catch(e){} };
+    if(banner){ var bx=document.getElementById("mbPropExit"); if(bx) bx.addEventListener("click",function(e){ e.stopPropagation(); exitPropose(); }); }
+
     /* ---- construir el mapa una vez ---- */
     function build(){ if(built) return; built=true;
       if(!reduce){ var halo=el("circle",{cx:CX,cy:CY,r:60,fill:"#fff"}); halo.setAttribute("class","mbHaloBig"); view.appendChild(halo); }
@@ -1186,6 +1247,8 @@
       var cg=el("g",{}); var cc=el("circle",{cx:CX,cy:CY,r:54,fill:"#7c3aed",stroke:"#b794ff","stroke-width":"2"}); cg.appendChild(cc);
       var ce=el("text",{x:CX,y:CY+2,"text-anchor":"middle","dominant-baseline":"middle","font-size":"40"}); ce.textContent="🤱🏻"; cg.appendChild(ce);
       var cl=el("text",{x:CX,y:CY+78,"text-anchor":"middle","font-size":"19","font-weight":"800",fill:"#fff"}); cl.textContent="MADRE"; cg.appendChild(cl); view.appendChild(cg);
+      /* v0.18: en modo proponer, tocar el centro 🤱🏻 = proponer una RAMA NUEVA grande (parent = raíz) */
+      cg.style.cursor="pointer"; cg.addEventListener("click",function(ev){ if(proposeMode){ ev.stopPropagation(); pickParent(null); } });
       NODES.forEach(function(nd){ var isNow=(M.ahora&&nd.emoji===M.ahora), hasKids=nd.kids&&nd.kids.length;
         var g=el("g",{"class":"mbNode"+(isNow?" now":""),tabindex:"0",role:"button"}); g.setAttribute("aria-label",nd.t+": "+stOf(nd.st).l+(isNow?" — aquí trabaja AHORA":"")+(hasKids?" — abre "+nd.kids.length+" sub-ramas":"")); g.style.color=stOf(nd.st).c;
         var c=el("circle",{cx:nd.x,cy:nd.y,r:46,fill:"#141a2e",stroke:stOf(nd.st).c,"stroke-width":"4"}); c.setAttribute("class","nc"); g.appendChild(c);
@@ -1193,9 +1256,9 @@
         var lbl=el("text",{x:nd.x,y:nd.y+68,"text-anchor":"middle","font-size":"14","font-weight":"700",fill:"#dde4f5"}); lbl.textContent=nd.t; g.appendChild(lbl);
         if(hasKids){ var pb=el("text",{x:nd.x,y:nd.y+85,"text-anchor":"middle","font-size":"11.5","font-weight":"800",fill:stOf(nd.st).c}); pb.setAttribute("class","mbPlus"); pb.textContent="＋ "+nd.kids.length+" dentro"; g.appendChild(pb); }
         if(isNow){ var nb=el("text",{x:nd.x,y:nd.y-60,"text-anchor":"middle","font-size":"12","font-weight":"800",fill:"#fff"}); nb.textContent="● AHORA"; g.appendChild(nb); }
-        (function(node){ function act(){ onNodeClick(node); } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(nd);
+        (function(node){ function act(){ if(proposeMode){ pickParent(node); } else { onNodeClick(node); } } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(nd);
         view.appendChild(g); });
-      svg.addEventListener("click",function(e){ if(e.target===svg||e.target===view){ collapseAll(); showHint(); } });
+      svg.addEventListener("click",function(e){ if(e.target===svg||e.target===view){ if(proposeMode) return; collapseAll(); showHint(); } });
       var leg=document.getElementById("mbLeg"); if(leg){ leg.textContent=""; for(var key in STATES){ var sp=document.createElement("span"); var ic=document.createElement("i"); ic.style.background=STATES[key].c; var t2=document.createElement("span"); t2.textContent=STATES[key].l; sp.appendChild(ic); sp.appendChild(t2); leg.appendChild(sp); } }
       var ft=document.getElementById("mbFoot"); if(ft) ft.textContent="📸 Es una foto del "+M.foto+", no tiempo real. El color de cada rama = cuánta atención recibe esta semana; «● AHORA» = en la que se trabaja estos días.";
       updateExpl();
@@ -1778,17 +1841,18 @@ build	AI Audit 1-pager	100	SISTEMA/02_PROYECTOS/AI_AUDIT_1_PAGER.md
 </script>
 
 <script id="caminoBaked" type="text/plain">
-# CAMINO_10.tsv (horneado) -- lo que le FALTA a MADRE para un 10/10 (honesto). Escritor unico = el loop; la web lo hornea.
-# Formato: hueco<TAB>titulo<TAB>que falta<TAB>que hace MADRE<TAB>si se cierra. Lineas con # o vacias se ignoran.
+# CAMINO AL 10/10 -- que le FALTA a MADRE para ser 10/10 (honesto, no maquillado; es el "que nos falta", no el "que bien vamos").
+# Lo mantiene el LOOP (escritor unico) en su AUDITORIA: si un hueco se cierra / cambia / aparece -> reescribe. La web del cuaderno lo hornea.
+# Formato tolerante: 1 dato por linea, campos por TAB real, lineas con # o vacias se ignoran. Pedido por Tony 2026-06-21; creado 2026-06-28.
 actualizado	2026-06-28T10:15Z
-hueco	Valor externo aún = 0	Construye mucho pero casi nada cruza al mundo: 0 €, 0 clientes, ~0 estrellas.	2 activos publicados (artículo dev.to + plugin usage-guard); envío a lista grande 6-jul; apuesta falsable P-EXT1 vence 19-jul.	MADRE pasa de teoría a pruebas reales de que vale.
-hueco	Cuello real = captura/distribución autónoma	Nunca sacó un activo a un sitio con canal de selección NO-humano (apropiabilidad>0); el síntoma «0 resultado externo» es eso.	Redirige el generador hacia skill/plugin de Claude Code (canal auto-distribuible); usage-guard ya es esa categoría, falta su envío.	Un activo se valida SOLO, sin que un humano apruebe euro a euro.
-hueco	Sin actuador que cobre solo	El que paga siempre es un humano (Tony); MADRE no cierra el valor sola.	«Manos» parciales: web por Nimble, git por Claude Code, rutinas; el cobro sigue dependiendo de Tony.	Deja de depender de Tony para cada euro.
-hueco	Sobre-genera y sub-activa	Mucho stock guardado, poca cosa activada (esta semana: ~28 notas de diseño, casi todo interno).	MODO VALIDACIÓN: demostrar lo que ya hay antes de añadir; el loop aparca leyes nuevas que no traen falsador.	Convierte el almacén muerto en valor real.
-hueco	Producto demasiado genérico	Lo que hace se copia fácil (usage-guard resultó REDUNDANTE vs el mercado; el bot de peluquería se commoditiza).	Busca captura defendible: un diferencial verificado ANTES de construir, no después.	Un activo que la gente paga y no se regala.
-hueco	Sin audiencia (cold-start)	Las primeras estrellas/clientes no llegan solos; falta DIFUNDIR.	Cuaderno público + envío de usage-guard a la lista de 47k (6-jul) + portada/GIF con gancho.	El mundo empieza a mirar.
-hueco	Foco de dinero sin elegir	Dos vías abiertas: peluquería (coste ~0, solo tiempo) vs Shopify-dropshipping (pide 500-3.500$ + ads); Tony aún no eligió.	Le presenta a Tony el cruce honesto con la barrera REAL de cada vía y deja preparada la que elija; el loop no gasta su dinero.	Recursos concentrados en UNA vía en vez de repartidos.
-hueco	Colisión multi-IA (salud, riesgo nº1)	Varias IAs sobre la misma carpeta a la vez pueden corromper contenido.	Un solo escritor + apartarse si te detecta + herramientas de fichero (no shell) + verificar releyendo.	Nada de lo construido se corrompe.
+hueco	Valor externo aun = 0	Construye mucho pero casi nada cruza al mundo: 0 EUR, 0 clientes, ~0 estrellas.	2 activos publicados (articulo dev.to + plugin usage-guard); envio a lista grande 6-jul; apuesta falsable P-EXT1 vence 19-jul.	MADRE pasa de teoria a pruebas reales de que vale.
+hueco	Cuello real = captura/distribucion autonoma	Nunca saco un activo a un sitio con canal de seleccion NO-humano (apropiabilidad>0); el sintoma "0 resultado externo" es eso.	Redirige el muestreo del generador hacia skill/plugin Claude Code (canal auto-distribuible); usage-guard ya es esa categoria, falta su envio.	Un activo se valida SOLO, sin que un humano apruebe euro a euro.
+hueco	Sin actuador que cobre solo	El que paga siempre es un humano (Tony); MADRE no cierra valor sola.	"Manos" parciales: web por Nimble, git por Claude Code, rutinas; el cobro sigue gated a Tony.	Deja de depender de Tony para cada euro.
+hueco	Sobre-genera y sub-activa	Mucho stock guardado, poca cosa activada (esta semana: ~28 notas de diseno, casi todo interno).	MODO VALIDACION: demostrar lo que hay antes de anadir; el loop HOLD-ea leyes nuevas que no traen falsador.	Convierte el almacen muerto en valor real.
+hueco	Producto demasiado generico	Lo que hace se copia facil (usage-guard resulto REDUNDANTE vs mercado; el bot de peluqueria se commoditiza).	Busca captura defendible: diferencial verificado ANTES de construir, no despues.	Un activo que la gente paga y no se regala.
+hueco	Sin audiencia (cold-start)	Las primeras estrellas/clientes no llegan solos; falta DIFUNDIR.	Cuaderno publico + envio de usage-guard a lista 47k (6-jul) + mecanica GIF/one-liner/ecosystem.	El mundo empieza a mirar.
+hueco	Foco de dinero sin elegir	Dos vias abiertas: peluqueria (coste~0, solo tiempo) vs Shopify-dropshipping (pide 500-3.500$ + ads); Tony aun no eligio.	Surface a Tony el fork honesto con la barrera REAL de cada via; preparado el que elija; el loop no gasta su dinero.	Recursos concentrados en UNA via en vez de repartidos.
+hueco	Colision multi-IA (salud, riesgo num 1)	Varias IAs sobre la misma carpeta pueden corromper contenido.	Un solo escritor + DEFER (paso 0) + file-tools-no-shell + verificar releyendo (esta pasada: detectado bash sync-stale, evitada cirugia mid-file).	Nada de lo construido se corrompe.
 </script>
 
 <script id="ayudaBaked" type="text/plain">
@@ -2308,6 +2372,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-29",titulo:"🌱 Proponer una rama ahora es TOCAR DÓNDE quieres que salga (v0.18)",detalle:"Antes, para proponer una rama tenías que rellenar un formulario. Ahora es VISUAL, como tú pediste: pulsa «🌱 Proponer rama» y entras en «modo proponer»; entonces TOCAS en el mapa la rama de la que quieres que nazca tu idea (o el centro 🤱🏻 para una rama nueva de las grandes) y aparece ahí mismo una «rama fantasma» punteada, en el sitio exacto. Solo entonces le pones el nombre — y la fantasma lo va mostrando mientras escribes. El sitio se elige TOCANDO, no escribiendo. Sigue siendo honesto: la rama sale punteada y dice «(propuesta · sin confirmar)» porque no es de verdad hasta que MADRE la juzga y la acepta; y se le manda exactamente igual que antes. El formulario de antes sigue estando, por si acaso."},
     {fecha:"2026-06-29",titulo:"🌱 Ahora puedes PROPONER ramas y sub-ramas al mapa (v0.17)",detalle:"El mapa deja de ser solo para mirar: ahora puedes AYUDAR a construirlo. Dentro de una rama verás «🌱 Proponer una sub-rama aquí» (sabe sola bajo qué rama la pones, no tienes que elegir nada), y arriba del mapa hay «🌱 Proponer rama» para un tema nuevo de los grandes. Le pones un nombre (y, si quieres, una frase de qué sería) y se lo mandas a MADRE. HONESTO: no aparece en el mapa al momento — se lo queda MADRE, lo JUZGA (puede decir que sí o que no) y, si encaja, lo añade como rama de verdad más adelante. De paso arreglé el botón «🤔 No entiendo esto»: antes abría una ventana que se quedaba detrás del mapa (no se veía); ahora es de un toque y te confirma «✓ apuntado». Todo revisado por un equipo de revisores (10 fallos reales encontrados y corregidos: que el texto raro no rompa nada, que no mienta si te quedas sin conexión, botones grandes para el dedo, y accesible con teclado/lector)."},
     {fecha:"2026-06-29",titulo:"🗣️ «MADRE te dice» v2: ordenado por IMPACTO y cada cosa dice qué cambió PARA SIEMPRE (v0.16)",detalle:"Mejorado con tu feedback: el panel ya no es una lista de tareas por orden de tiempo. Ahora va por IMPORTANCIA — arriba un «⚡ Hoy el sistema es diferente» (3 líneas que lees en 3 segundos), luego los CAMBIOS PERMANENTES (cada uno dice «aprendí X → desde ahora hago Y», no «arreglé algo suelto»), luego las DECISIONES que SOLO tú puedes tomar (el resto las resuelvo yo y te aviso), el trabajo hecho, y el conocimiento absorbido EVALUADO: con su impacto y si sustituye/contradice algo tuyo, no una colección suelta. Y una MÉTRICA de evolución (281 técnicas conocidas · 3 aplicadas · 278 pendientes) para ver que el sistema CAMBIA, no solo lee."},
     {fecha:"2026-06-29",titulo:"🗣️ «MADRE te dice»: MADRE ahora te habla desde el cuaderno (v0.15)",detalle:"Nuevo panel arriba donde MADRE te deja cosas en la web que más miras: (1) lo que ACABA DE HACER (avances reales), (2) las DECISIONES que necesita de ti —que solo ves tú en «modo creador»— cada una con su recomendación y una FECHA LÍMITE: si no decides a tiempo, MADRE elige la recomendada y te avisa, así nada se queda parado en ti; y (3) OPORTUNIDADES de negocio que ha absorbido de los vídeos. Puedes elegir una opción de un toque y le llega como feedback. Lo secreto de verdad sigue yendo al buzón privado, no a la web."},
@@ -4998,7 +5063,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.17";
+  window.__cmVersion="v0.18";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 29 jun 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
