@@ -204,6 +204,34 @@ candidatos de Splice a Tony antes de descargar.
 - **(3) Mecanismo «respira» nº1 = DIARIO VIVO** (`#diarioVivo`, tras `#envivo`): lee los **commits reales** del repo (API pública de GitHub), 5 últimos con hora real + enlace, auto-refresca 3 min (pausa si la pestaña no se ve), marca lo nuevo. **«🌙 desde tu última visita: N cambios nuevos»** (localStorage `cm_lastvisit_v1`) = razón honesta para volver. Degrada en silencio si la API falla. (El 2º mecanismo previsto —«alguien comentó (Argentina) → MADRE lo leyó» desde `comments` de Supabase— queda para la próxima tanda; `#envivo` ya tiene «última señal vuestra» en vivo, así que ampliar eso es lo natural.)
 - **PENDIENTE de esta visión (próxima tanda):** 2º mecanismo «respira» (mundo→MADRE desde Supabase), **🌳 mapa siguiente nivel** (sub-ramas de TODO multinivel + «no entiendo» por (sub)rama + auto-orden desde `MAPA_RAMAS.tsv` horneable por el loop), y las secciones B–E (historia/personaje, progreso con movimiento, momentos wow, realidad cruda). Decisión abierta de Tony: ¿mapa como página/acceso directo aparte o seguir overlay?
 
+## 🌳 v0.15+ — EL MAPA ES EL NÚCLEO (PRIORIDAD ABSOLUTA «PARA SIEMPRE» de Tony, 29-jun post-v0.14) + 2ª crítica ChatGPT
+> **DIRECTIVA DURADERA DE TONY (literal):** «me tiene enganchado lo del mapa con las ramas porque puedo **entender bien MADRE desde ahí**; eso lo tenemos que poner como **PRIORIDAD ABSOLUTA PARA SIEMPRE**.» → El 🌳 mapa deja de ser «una tarjeta más» y pasa a ser **LA forma principal de entender y seguir MADRE**. El esfuerzo del cuaderno prioriza el mapa hasta nuevo aviso.
+
+**EL MAPA — VISIÓN A CONSTRUIR (lo que Tony pidió, 29-jun):**
+- ⚠️ **OJO confusión real:** Tony cree que «aún no hay sub-ramas». **SÍ existen** (v0.13: tocar una rama en el overlay abre sus sub-ramas), pero **NO las encuentra/ve** → problema de **DESCUBRIMIENTO + interacción**, no de que falten. Siguiente chat: 1º VERIFICAR en navegador que salen al tocar; luego hacerlas OBVIAS.
+- **Al clicar una rama → ZOOM hacia ella** (que la cámara ENTRE en la rama; inmersivo), no solo abrir sub-ramas al lado.
+- **Sub-ramas multinivel «que se vayan creando»**: varios niveles de profundidad; idealmente que se construyan/ordenen solas según lo que EMERGE de MADRE (conectar con `SISTEMA/MAPA_RAMAS.tsv` horneable por el loop — buzón ya dejado `DESDE_CLAUDE_2026-06-29_mapa-ramas-horneable-cuaderno.txt`).
+- **Que «salgan cosas interactivas» al entrar en una rama** + **se explique BIEN cómo AVANZA MADRE en cada rama** (progreso por rama: qué hizo, en qué punto está, qué falta). El mapa = panel de control NARRATIVO de MADRE.
+- **Por nodo:** botón «explicar» y «no entiendo» (reusar `__fb`), para marcar qué parte no se entiende.
+- **Decisión abierta de Tony (sigue):** ¿mapa como **página/acceso directo aparte** (más inmersivo) o seguir overlay `#mapa`? Siendo el núcleo, sopesar página propia.
+
+**🐞 BUGS / PULIDO que Tony vio en v0.14 (arreglar pronto, ANTES de añadir más):**
+- **El HÁMSTER SIGUE SIN MOVERSE** (recurrente; `#envivo .cmHamWrap .wheel-and-hamster`). Investigar en navegador: ¿animación CSS pisada por el restyle de `#envivo`? ¿`prefers-reduced-motion`? ¿el `font-size` de escala rompió las animaciones (van en `em`)? Que la rueda GIRE.
+- **«Esta parte se ve un poco mal hecha»** = la zona `#envivo` + `#diarioVivo` (AHORA + hámster + diario) se ve apretada/tosca. Pulir: jerarquía, aire, que el texto del «AHORA» no choque con el hámster.
+- **«Algunas cosas demasiado pegadas al margen»**: texto/píldoras pegados al borde izquierdo (visible en capturas). Revisar paddings laterales (móvil sobre todo).
+- **Sección «🙌 ¿Quieres ayudar a MADRE?»**: Tony pregunta «MADRE de vez en cuando también busca esas soluciones, ¿no?» → dejar CLARO y VERDADERO que MADRE TAMBIÉN las busca sola (no solo le pide ayuda al visitante). Ajustar el copy.
+
+**2ª CRÍTICA (ChatGPT, pegada por Tony 29-jun) — refuerza el norte «organismo»; NO añadir más tarjetas:**
+> **LA ÚNICA PREGUNTA en la que invertir el siguiente esfuerzo: «¿Qué hará que alguien quiera VOLVER mañana?»** = crear expectativa de EVOLUCIÓN: que cada visita pueda revelar algo que ayer no existía. *(Notas ChatGPT: Claridad 8.5 · Sistema vivo 9 · Honestidad 10 · Originalidad 9.5 · Curiosidad 8.5 · Comprensión nuevo 8 · Potencial memorable 9.5.)*
+- **Problema nº1 sigue: demasiado parece importante a la vez.** **NO quitar contenido → ESPACIARLO EN EL TIEMPO**: que el cuaderno vaya **DESBLOQUEANDO** cosas conforme el visitante avanza (revelado progresivo).
+- **Falta RECOMPENSA emocional** (no gamificación barata): algo que ocurra **solo tras explorar** → sensación de PROGRESO. Ej.: «Has descubierto 3 cosas sobre MADRE», «Ya entiendes más que el 90% de los visitantes», «Acabas de desbloquear una nota privada del creador».
+- **MADRE habla poco en 1ª persona** (se habla mucho DE ella). Meter **frases espontáneas** tipo diario: «Hoy me cargué una hipótesis que llevaba defendiendo dos semanas», «Sigo pensando demasiado y publicando poco», «Aún me da vergüenza publicar esto», «Hoy no aprendí nada útil». (Deja de ser dashboard → diario.)
+- **Falta SORPRESA** (a los minutos ya sabes el patrón: todo tarjetas+desplegables). Necesita **2-3 momentos «hostia»**: línea temporal animada · experimento fallido que se reproduce · una decisión donde el visitante pueda **VOTAR** · un gráfico que cambia delante de él · una hipótesis que **muere en directo**.
+- **Demasiado «explicar», poco «mostrar»**: en vez de «MADRE aprende», MOSTRAR el proceso real → `08:14 Hipótesis creada → 09:02 La realidad la contradijo → 09:03 Regla eliminada automáticamente`. Vale más que 3 párrafos.
+- **Lo que MÁS falta = SENSACIÓN DE FUTURO**: cerrar la pestaña pensando «tengo que volver en unos días». Para eso, **varias HISTORIAS ABIERTAS en paralelo** (no solo «¿ganará dinero?»): ¿morirá esta hipótesis? ¿subirá a 4/10? ¿publicará sola? ¿primera estrella? ¿qué experimento hace AHORA? (El diario vivo v0.14 es un 1er paso; faltan los hilos narrativos.)
+
+**CÓMO ABORDARLO (orden sugerido para el próximo chat):** (1) BUGS/pulido (hámster, márgenes, `#envivo` tosco, copy de «ayudar»). (2) **EL MAPA al siguiente nivel = PRIORIDAD** (verificar sub-ramas → zoom-on-click → multinivel → contenido/progreso por nodo → «no entiendo» por nodo). (3) UNA mecánica de «volver mañana» (revelado progresivo O recompensa-tras-explorar O 1-2 hilos narrativos abiertos), medir. Honestidad §9 + abuela↔borracho + «inmersivo por defecto» (§10). **NO añadir tarjetas nuevas porque sí.**
+
 ## 🪟 STAGED v0.13+ — "VENTANA VIVA" (crítica grande de Tony/ChatGPT, 29-jun) — PERSISTIDO (BASE de lo de arriba; v0.13 ya HIZO: AHORA, mientras dormías, frases, mapa inmersivo)
 > **TESIS RECTORA (Tony):** hoy el cuaderno parece **DOCUMENTACIÓN** («te explico qué es MADRE»); debe parecer
 > una **VENTANA a una IA trabajando AHORA** («entra, mira qué está haciendo ahora mismo»). No añadir más
