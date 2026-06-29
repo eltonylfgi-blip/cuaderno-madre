@@ -493,32 +493,48 @@
   }catch(e){ console.warn("diarioVivo", e); } })();
   </script>
 
-  <!-- ===== v0.15: "MADRE TE DICE" — canal MADRE -> Tony (avances publicos + decisiones que te requieren, en modo creador) ===== -->
+  <!-- ===== v0.16: "MADRE TE DICE" v2 — ordenado por IMPACTO + cada item dice su CONSECUENCIA permanente ===== -->
   <style id="mhCss">
     #madreHabla{margin:0 0 12px;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--card),var(--accent-soft));box-shadow:0 2px 6px rgba(20,30,50,.05)}
     #madreHabla .mh-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px}
     .mh-emoji{font-size:18px}
     .mh-title{font-weight:800;font-size:14px;color:var(--ink)}
     .mh-sub{font-size:12px;color:var(--muted);margin-left:auto}
-    .mh-group{margin-top:10px}
-    .mh-glabel{font:800 11px/1.2 system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
-    .mh-item{padding:7px 0;border-top:1px dashed var(--line)}
+    #mhTitular{margin-top:8px;padding:9px 11px;border:1.5px solid var(--accent);border-radius:11px;background:rgba(16,185,129,.07)}
+    .mh-tt-h{font:800 11px/1.2 system-ui;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+    .mh-tt-l{font-size:13px;color:var(--ink);display:flex;gap:7px;align-items:baseline;padding:2px 0}
+    .mh-tt-l b{color:var(--accent)}
+    .mh-group{margin-top:11px}
+    .mh-glabel{font:800 11px/1.2 system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 5px}
+    .mh-item{padding:8px 0;border-top:1px dashed var(--line)}
     .mh-item:first-child{border-top:0}
     .mh-it-tit{font-weight:700;font-size:13.5px;color:var(--ink)}
-    .mh-it-det{font-size:12.8px;color:var(--ink);opacity:.86;margin-top:2px;line-height:1.4}
+    .mh-apr{font-size:12.6px;color:var(--ink);opacity:.8;margin-top:3px;line-height:1.4}
+    .mh-cons{font-size:12.8px;color:var(--ink);margin-top:4px;line-height:1.4;padding-left:9px;border-left:3px solid var(--accent)}
+    .mh-cons b{color:var(--accent)}
+    .mh-it-det{font-size:12.6px;color:var(--ink);opacity:.85;margin-top:2px;line-height:1.4}
     .mh-rec{font-size:12.8px;color:var(--accent);font-weight:700;margin-top:4px}
     .mh-opts{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
     .mh-opt{font:600 12px system-ui;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:3px 10px;cursor:pointer}
     .mh-opt:hover{border-color:var(--accent);color:var(--accent)}
     .mh-opt:disabled{opacity:.6;cursor:default}
     .mh-lim{font-size:11.8px;color:var(--muted);margin-top:5px}
-    .mh-done{font-size:12px;font-weight:700;color:#10b981;margin-top:4px}
-    .mh-auto{font-size:12px;font-weight:700;color:#d97706;margin-top:4px}
-    .mh-lock{font-size:12.8px;color:var(--ink);background:rgba(0,0,0,.04);border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin-top:4px}
-    .mh-foot{margin-top:9px;font-size:11.3px;color:var(--muted)}
+    .mh-lock{font-size:12.8px;color:var(--ink);background:rgba(0,0,0,.04);border:1px dashed var(--line);border-radius:10px;padding:8px 10px}
+    .mh-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+    .mh-chip{font:700 10.5px system-ui;border-radius:20px;padding:1px 8px;border:1px solid var(--line);color:var(--muted)}
+    .mh-chip.imp-alto{border-color:#ef4444;color:#ef4444}
+    .mh-chip.imp-media{border-color:#d97706;color:#d97706}
+    .mh-sus{font-size:12.4px;color:var(--ink);opacity:.85;margin-top:3px;line-height:1.4}
+    .mh-metric{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px;padding:9px 12px;border:1.5px solid var(--line);border-radius:11px;background:var(--card)}
+    .mh-mc{text-align:center}
+    .mh-mc .n{font-weight:800;font-size:19px;color:var(--ink);line-height:1}
+    .mh-mc .l{font-size:10.5px;color:var(--muted);margin-top:2px}
+    .mh-mc.ap .n{color:#10b981}
+    .mh-mc.pe .n{color:#d97706}
+    .mh-foot{margin-top:10px;font-size:11.3px;color:var(--muted)}
     .mh-tag{display:inline-block;font:800 10px system-ui;border-radius:20px;padding:1px 7px;margin-right:6px;vertical-align:middle}
-    .mh-tag.av{background:#10b981;color:#0b1020}
-    .mh-tag.op{background:#6366f1;color:#fff}
+    .mh-tag.tr{background:#94a3b8;color:#0b1020}
+    .mh-tag.ar{background:#475569;color:#fff}
   </style>
   <div id="madreHabla" hidden>
     <div class="mh-head">
@@ -526,58 +542,84 @@
       <span class="mh-title">MADRE te dice</span>
       <span class="mh-sub" id="mhSub"></span>
     </div>
-    <div id="mhAvances" class="mh-group"></div>
+    <div id="mhTitular"></div>
+    <div id="mhCambios" class="mh-group"></div>
     <div id="mhDecisiones" class="mh-group"></div>
-    <div id="mhOport" class="mh-group"></div>
+    <div id="mhTrabajo" class="mh-group"></div>
+    <div id="mhConoc" class="mh-group"></div>
+    <div id="mhMetrica" class="mh-group"></div>
     <div class="mh-foot" id="mhFoot"></div>
   </div>
   <script>
-  /* v0.15 — "MADRE te dice": canal MADRE -> Tony en la web que Tony mira.
+  /* v0.16 — "MADRE te dice" v2: ordenado por IMPACTO (no cronología); cada item dice su CONSECUENCIA permanente.
      Lee la tabla Supabase madre_para_tony (la escribe la rutina cuaderno-feedback, service_role).
-     - avances y oportunidades: PUBLICOS (todos los ven).
-     - decisiones: solo en "modo creador" (localStorage cuaderno_madre_tony==="1"); a los demas solo se les dice cuantas hay.
-     - cada decision pendiente lleva recomendacion + fecha limite + "si no decides, decido yo" (regla anti-bloqueo).
-     - clic en una opcion -> se manda por window.__fb (feedback) para que la rutina lo recoja.
+     Secciones: titular "hoy el sistema es diferente" -> cambios permanentes -> decisiones (solo creador) ->
+     trabajo hecho -> conocimiento absorbido (impacto/estado/sustituye) -> métrica de evolución.
      Degrada en silencio: si Supabase falla o no hay filas, el panel queda oculto. */
   (function(){
     try{
       var box=document.getElementById("madreHabla");
-      var elA=document.getElementById("mhAvances"), elD=document.getElementById("mhDecisiones"),
-          elO=document.getElementById("mhOport"), elF=document.getElementById("mhFoot"), elS=document.getElementById("mhSub");
+      var elT=document.getElementById("mhTitular"), elC=document.getElementById("mhCambios"),
+          elD=document.getElementById("mhDecisiones"), elW=document.getElementById("mhTrabajo"),
+          elK=document.getElementById("mhConoc"), elM=document.getElementById("mhMetrica"),
+          elF=document.getElementById("mhFoot"), elS=document.getElementById("mhSub");
       function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
       function creador(){ try{ return localStorage.getItem("cuaderno_madre_tony")==="1"; }catch(e){ return false; } }
       function fdate(s){ try{ return new Date(s+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"long"}); }catch(e){ return s; } }
+      function impChip(imp){ return imp?('<span class="mh-chip imp-'+esc(imp)+'">impacto '+esc(imp)+'</span>'):""; }
+      function byOrden(a,b){ return (a.orden||100)-(b.orden||100); }
       var rows=[], lastCreador=null;
       function render(){
         if(!rows.length){ box.hidden=true; return; }
-        var av=rows.filter(function(r){return r.tipo==="avance";});
-        var de=rows.filter(function(r){return r.tipo==="decision";});
-        var op=rows.filter(function(r){return r.tipo==="oportunidad";});
-        elA.innerHTML = av.length ? ('<div class="mh-glabel">📣 Lo que acabo de hacer</div>' + av.map(function(r){
-          return '<div class="mh-item"><div class="mh-it-tit"><span class="mh-tag av">HECHO</span>'+esc(r.titulo)+'</div>'+(r.detalle?'<div class="mh-it-det">'+esc(r.detalle)+'</div>':'')+'</div>';
+        var cam=rows.filter(function(r){return r.tipo==="cambio";}).sort(byOrden);
+        var de=rows.filter(function(r){return r.tipo==="decision";}).sort(byOrden);
+        var tr=rows.filter(function(r){return r.tipo==="trabajo";}).sort(byOrden);
+        var co=rows.filter(function(r){return r.tipo==="conocimiento";}).sort(byOrden);
+        var me=rows.filter(function(r){return r.tipo==="metrica";})[0];
+        elT.innerHTML = cam.length ? ('<div class="mh-tt-h">⚡ Hoy el sistema es diferente</div>' + cam.slice(0,3).map(function(r){
+          return '<div class="mh-tt-l"><b>✓</b>'+esc(r.titulo)+'</div>';
+        }).join("")) : "";
+        elC.innerHTML = cam.length ? ('<div class="mh-glabel">🔧 Cambios permanentes del sistema</div>' + cam.map(function(r){
+          var h='<div class="mh-item"><div class="mh-it-tit">'+esc(r.titulo)+' '+impChip(r.impacto)+'</div>';
+          if(r.aprendido) h+='<div class="mh-apr">Aprendido: '+esc(r.aprendido)+'</div>';
+          if(r.consecuencia) h+='<div class="mh-cons"><b>Desde ahora:</b> '+esc(r.consecuencia)+'</div>';
+          return h+'</div>';
         }).join("")) : "";
         var pend=de.filter(function(r){return r.estado==="pendiente";});
         if(creador()){
-          elD.innerHTML = de.length ? ('<div class="mh-glabel">🤝 Decisiones que te pido (no urgen: si no contestas, decido yo)</div>' + de.map(function(r){
+          elD.innerHTML = de.length ? ('<div class="mh-glabel">🤝 Decisiones que SOLO tú puedes tomar</div>' + de.map(function(r){
             var h='<div class="mh-item"><div class="mh-it-tit">'+esc(r.titulo)+'</div>';
             if(r.detalle) h+='<div class="mh-it-det">'+esc(r.detalle)+'</div>';
             if(r.recomendacion) h+='<div class="mh-rec">👉 Yo haría: '+esc(r.recomendacion)+'</div>';
-            if(r.estado==="decidido_tony"){ h+='<div class="mh-done">✅ Decidido por ti.</div>'; }
-            else if(r.estado==="decidido_auto"){ h+='<div class="mh-auto">🤖 Lo decidí yo sola (no contestaste a tiempo). Reversible: dime si lo cambio.</div>'; }
+            if(r.estado==="decidido_tony"){ h+='<div class="mh-cons"><b>✅ Decidido por ti.</b></div>'; }
+            else if(r.estado==="decidido_auto"){ h+='<div class="mh-cons"><b>🤖 Decidí yo</b> (no contestaste a tiempo). Reversible: dime si lo cambio.</div>'; }
             else{
               if(r.opciones){ h+='<div class="mh-opts">'+String(r.opciones).split("·").map(function(p){ p=p.trim(); return p?('<button class="mh-opt" data-id="'+esc(r.id)+'" data-op="'+esc(p)+'">'+esc(p)+'</button>'):""; }).join("")+'</div>'; }
-              h+='<div class="mh-lim">⏳ '+(r.fecha_limite?('Si no decides antes del '+esc(fdate(r.fecha_limite))+', elijo la recomendada y te aviso.'):'Sin prisa: si no decides, acabo eligiendo la recomendada y te aviso.')+'</div>';
+              h+='<div class="mh-lim">⏳ '+(r.fecha_limite?('Si no decides antes del '+esc(fdate(r.fecha_limite))+', elijo la recomendada y te aviso.'):'Sin prisa: si no decides, elijo la recomendada y te aviso.')+'</div>';
             }
             return h+'</div>';
-          }).join("")) : "";
+          }).join("")) : '<div class="mh-glabel">🤝 Decisiones</div><div class="mh-lock">Ninguna ahora mismo: las que podía resolver yo, ya están resueltas.</div>';
         } else {
-          elD.innerHTML = pend.length ? ('<div class="mh-glabel">🤝 Decisiones para ti</div><div class="mh-lock">🔒 Tengo <b>'+pend.length+'</b> decisi'+(pend.length===1?'ón':'ones')+' esperando tu OK. Pulsa <b>«👤 Soy el creador»</b> arriba para verlas. (Si no decides, las resuelvo yo y te aviso — nada se queda parado en ti.)</div>') : "";
+          elD.innerHTML = pend.length ? ('<div class="mh-glabel">🤝 Decisiones para ti</div><div class="mh-lock">🔒 Tengo <b>'+pend.length+'</b> que SOLO tú puedes tomar. Pulsa <b>«👤 Soy el creador»</b> arriba. (El resto las resuelvo yo y te aviso — no te bloquean.)</div>') : "";
         }
-        elO.innerHTML = op.length ? ('<div class="mh-glabel">💡 Oportunidades que absorbí para ti</div>' + op.map(function(r){
-          return '<div class="mh-item"><div class="mh-it-tit"><span class="mh-tag op">IDEA</span>'+esc(r.titulo)+'</div>'+(r.detalle?'<div class="mh-it-det">'+esc(r.detalle)+'</div>':'')+'</div>';
+        elW.innerHTML = tr.length ? ('<div class="mh-glabel">✅ Trabajo hecho</div>' + tr.map(function(r){
+          return '<div class="mh-item"><div class="mh-it-tit"><span class="mh-tag tr">HECHO</span>'+esc(r.titulo)+'</div>'+(r.detalle?'<div class="mh-it-det">'+esc(r.detalle)+'</div>':'')+'</div>';
         }).join("")) : "";
+        elK.innerHTML = co.length ? ('<div class="mh-glabel">💡 Conocimiento absorbido (evaluado, no solo guardado)</div>' + co.map(function(r){
+          var et = r.estado==="archivada" ? '<span class="mh-tag ar">ARCHIVADA</span>' : "";
+          var h='<div class="mh-item"><div class="mh-it-tit">'+et+esc(r.titulo)+'</div>';
+          if(r.sustituye) h+='<div class="mh-sus">'+esc(r.sustituye)+'</div>';
+          h+='<div class="mh-meta">'+impChip(r.impacto)+(r.accion?'<span class="mh-chip">'+esc(r.accion)+'</span>':"")+'</div>';
+          return h+'</div>';
+        }).join("")) : "";
+        if(me && me.detalle){ var p=String(me.detalle).split("|");
+          elM.innerHTML = '<div class="mh-glabel">📊 '+esc(me.titulo||"Conocimiento")+'</div><div class="mh-metric">'+
+            '<div class="mh-mc"><div class="n">'+esc(p[0]||"?")+'</div><div class="l">conocidas</div></div>'+
+            '<div class="mh-mc ap"><div class="n">'+esc(p[1]||"?")+'</div><div class="l">aplicadas</div></div>'+
+            '<div class="mh-mc pe"><div class="n">'+esc(p[2]||"?")+'</div><div class="l">pendientes</div></div></div>';
+        } else { elM.innerHTML=""; }
         elS.textContent = creador() ? "vista creador" : "";
-        elF.textContent = "MADRE lo deja aquí para ti. Las decisiones solo las ves tú en «modo creador» (lo secreto de verdad va al buzón, no aquí).";
+        elF.textContent = "MADRE lo deja aquí para ti — solo lo que merece tu atención. Lo secreto va al buzón, no a la web.";
         box.hidden=false;
         lastCreador=creador();
         Array.prototype.forEach.call(elD.querySelectorAll(".mh-opt"), function(b){
@@ -590,7 +632,7 @@
         });
       }
       function load(sb){
-        sb.from("madre_para_tony").select("*").eq("hidden",false).order("created_at",{ascending:false}).then(function(res){
+        sb.from("madre_para_tony").select("*").eq("hidden",false).order("orden",{ascending:true}).then(function(res){
           if(res && !res.error && res.data){ rows=res.data; render(); }
         });
       }
@@ -2168,6 +2210,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-29",titulo:"🗣️ «MADRE te dice» v2: ordenado por IMPACTO y cada cosa dice qué cambió PARA SIEMPRE (v0.16)",detalle:"Mejorado con tu feedback: el panel ya no es una lista de tareas por orden de tiempo. Ahora va por IMPORTANCIA — arriba un «⚡ Hoy el sistema es diferente» (3 líneas que lees en 3 segundos), luego los CAMBIOS PERMANENTES (cada uno dice «aprendí X → desde ahora hago Y», no «arreglé algo suelto»), luego las DECISIONES que SOLO tú puedes tomar (el resto las resuelvo yo y te aviso), el trabajo hecho, y el conocimiento absorbido EVALUADO: con su impacto y si sustituye/contradice algo tuyo, no una colección suelta. Y una MÉTRICA de evolución (281 técnicas conocidas · 3 aplicadas · 278 pendientes) para ver que el sistema CAMBIA, no solo lee."},
     {fecha:"2026-06-29",titulo:"🗣️ «MADRE te dice»: MADRE ahora te habla desde el cuaderno (v0.15)",detalle:"Nuevo panel arriba donde MADRE te deja cosas en la web que más miras: (1) lo que ACABA DE HACER (avances reales), (2) las DECISIONES que necesita de ti —que solo ves tú en «modo creador»— cada una con su recomendación y una FECHA LÍMITE: si no decides a tiempo, MADRE elige la recomendada y te avisa, así nada se queda parado en ti; y (3) OPORTUNIDADES de negocio que ha absorbido de los vídeos. Puedes elegir una opción de un toque y le llega como feedback. Lo secreto de verdad sigue yendo al buzón privado, no a la web."},
     {fecha:"2026-06-29",titulo:"🌳 El MAPA da otro salto: entras en cada rama y ves cómo avanza MADRE (v0.15)",detalle:"El mapa (lo que más te engancha) sube de nivel: (1) al tocar una rama, la CÁMARA ENTRA en ella (se acerca) y se abren sus sub-ramas — y ahora se DESCUBREN solas, porque al abrir el mapa la rama en la que se trabaja AHORA ya viene desplegada. (2) MULTINIVEL de verdad: algunas sub-ramas tienen más cosas dentro (verás «＋ 3 dentro»); tócalas y se abre otra capa. (3) Cada rama te cuenta «cómo AVANZA MADRE aquí» (qué hace y qué le falta) y tiene un botón «🤔 no entiendo» para marcar lo que no pillas. (4) Abajo llevas la cuenta «has abierto N/8 ramas»: explóralas todas y desbloqueas un guiño — una razón honesta para volver y terminar de descubrirla. Además, arreglos que pediste: el 🐹 hámster vuelve a MOVERSE aunque tengas el móvil/PC en «menos animaciones»; la zona «en directo» respira mejor (menos apretada, nada pegado al borde); y dejé claro que lo de «ayudar a MADRE» NO son deberes para ti — MADRE ya busca esas soluciones sola."},
     {fecha:"2026-06-29",titulo:"🫀 El cuaderno ahora RESPIRA + se entiende antes + el mapa cabe en cualquier pantalla (v0.14)",detalle:"Tres cosas: (1) RESPIRA de verdad — nuevo «📓 Diario del cuaderno» que enseña los cambios REALES que se le van haciendo (sacados de su historial de verdad), con su hora («hace 20 min…») y un «🌙 desde tu última visita: N cambios nuevos». Así, si vuelves mañana, ves qué cambió mientras no estabas — sin inventar nada, son cambios de verdad. (2) Se entiende ANTES — la primera pantalla va al grano: primero «qué es» y «por qué me importa», con un gancho en primera persona y menos texto; el MAPA grande (que te encanta) baja un poco, porque es una RECOMPENSA por explorar, no la presentación. (3) Arreglo del mapa a pantalla completa: en móviles o ventanas BAJAS, la parte de abajo (info y leyenda) ya no aplasta el mapa ni se corta — ahora cabe y se desliza, y los botones de zoom ya no se salen de la pantalla."},
@@ -4856,7 +4899,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.15";
+  window.__cmVersion="v0.16";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 29 jun 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
