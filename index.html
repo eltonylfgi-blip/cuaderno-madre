@@ -1678,7 +1678,7 @@
     <div class="body">
       <p class="small" style="margin:0 0 8px">Cada palabra rara que use MADRE, en una frase — y por qué importa:</p>
       <ul class="clean">
-        <li><b>Suelo externo:</b> la promesa de que MADRE, cada vez que trabaja, deje al menos UNA prueba real de fuera (no una opinión suya). <i>Importa: es lo que la frena de engañarse a sí misma.</i></li>
+        <li><b>Suelo externo:</b> la regla de dejar, en cada vuelta de trabajo, al menos UNA cosa real de fuera (no solo hablar de ello). <i>Importa: evita que MADRE se crea que avanza cuando en realidad no ha tocado el mundo.</i></li>
         <li><b>Publicar 1 activo:</b> dar el OK una sola vez para que MADRE saque algo al mundo ella sola (subir una herramienta, un artículo) sin pedir permiso cada vez. <i>Importa: hoy nada cruza al mundo sin que un humano apruebe.</i></li>
         <li><b>Selector externo:</b> algo de fuera —un cliente, las estrellas de GitHub, alguien que paga— que juzga el trabajo y no se puede engañar desde dentro. <i>Importa: es el único juez que vale.</i></li>
         <li><b>Ciclo cerrado:</b> idea → acción → señal de fuera → corregir. La vuelta entera. <i>Importa: media vuelta (idea sin señal de fuera) no cuenta.</i></li>
@@ -1687,10 +1687,10 @@
         <li><b>Meta-palanca:</b> una palanca que te hace mejor <b>encontrando</b> otras palancas. <i>Importa: multiplica el futuro, no solo el presente.</i></li>
         <li><b>Watchdog (vigía):</b> un chequeo que comprueba que algo no solo "está encendido" sino que de verdad avanzó y produjo algo. <i>Importa: ya pasó que una pieza se paró en silencio y se perdieron ~40 enlaces.</i></li>
         <li><b>Colisión multi-IA:</b> dos IAs escribiendo el mismo archivo a la vez y dejándolo roto. <i>Importa: es el riesgo nº1 de MADRE — ya corrompió contenido una vez.</i></li>
-        <li><b>NO-RUINA:</b> nunca una apuesta que pueda hundirte, por buena que parezca.</li>
+        <li><b>NO-RUINA:</b> nunca una apuesta que pueda hundirte entera, por buena que parezca. <i>Importa: garantiza que un error no borre todo lo construido.</i></li>
         <li><b>Demostrar o morir:</b> lo que en ~90 días no cambia una decisión, fuera.</li>
         <li><b>Goodhart:</b> cuando una métrica se vuelve objetivo, deja de medir bien.</li>
-        <li><b>Temperatura:</b> cuánto texto e instrucciones carga MADRE de golpe en el modelo. <i>Importa: demasiado la satura; demasiado mascado gasta de más. (No es "calor".)</i></li>
+        <li><b>Temperatura:</b> cuánto texto e instrucciones carga MADRE de golpe — como llenar una maleta: demasiado y no cierra; muy vacía y gasta de más. <i>(No es "calor".)</i></li>
       </ul>
       <div class="fb"><button class="btn sm" data-fb data-card="10. Glosario" data-section="">💬 Pedir que expliquen otra palabra</button></div>
     </div>
@@ -2372,6 +2372,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-29",titulo:"📖 Glosario más claro",detalle:"Tres entradas que los visitantes pidieron simplificar: «Suelo externo» se explica sin jerga, «NO-RUINA» ya tiene su nota de 'por qué importa' (igual que el resto), y «Temperatura» estrena la analogía de la maleta para que se entienda al momento."},
     {fecha:"2026-06-29",titulo:"🌱 Proponer una rama ahora es TOCAR DÓNDE quieres que salga (v0.18)",detalle:"Antes, para proponer una rama tenías que rellenar un formulario. Ahora es VISUAL, como tú pediste: pulsa «🌱 Proponer rama» y entras en «modo proponer»; entonces TOCAS en el mapa la rama de la que quieres que nazca tu idea (o el centro 🤱🏻 para una rama nueva de las grandes) y aparece ahí mismo una «rama fantasma» punteada, en el sitio exacto. Solo entonces le pones el nombre — y la fantasma lo va mostrando mientras escribes. El sitio se elige TOCANDO, no escribiendo. Sigue siendo honesto: la rama sale punteada y dice «(propuesta · sin confirmar)» porque no es de verdad hasta que MADRE la juzga y la acepta; y se le manda exactamente igual que antes. El formulario de antes sigue estando, por si acaso."},
     {fecha:"2026-06-29",titulo:"🌱 Ahora puedes PROPONER ramas y sub-ramas al mapa (v0.17)",detalle:"El mapa deja de ser solo para mirar: ahora puedes AYUDAR a construirlo. Dentro de una rama verás «🌱 Proponer una sub-rama aquí» (sabe sola bajo qué rama la pones, no tienes que elegir nada), y arriba del mapa hay «🌱 Proponer rama» para un tema nuevo de los grandes. Le pones un nombre (y, si quieres, una frase de qué sería) y se lo mandas a MADRE. HONESTO: no aparece en el mapa al momento — se lo queda MADRE, lo JUZGA (puede decir que sí o que no) y, si encaja, lo añade como rama de verdad más adelante. De paso arreglé el botón «🤔 No entiendo esto»: antes abría una ventana que se quedaba detrás del mapa (no se veía); ahora es de un toque y te confirma «✓ apuntado». Todo revisado por un equipo de revisores (10 fallos reales encontrados y corregidos: que el texto raro no rompa nada, que no mienta si te quedas sin conexión, botones grandes para el dedo, y accesible con teclado/lector)."},
     {fecha:"2026-06-29",titulo:"🗣️ «MADRE te dice» v2: ordenado por IMPACTO y cada cosa dice qué cambió PARA SIEMPRE (v0.16)",detalle:"Mejorado con tu feedback: el panel ya no es una lista de tareas por orden de tiempo. Ahora va por IMPORTANCIA — arriba un «⚡ Hoy el sistema es diferente» (3 líneas que lees en 3 segundos), luego los CAMBIOS PERMANENTES (cada uno dice «aprendí X → desde ahora hago Y», no «arreglé algo suelto»), luego las DECISIONES que SOLO tú puedes tomar (el resto las resuelvo yo y te aviso), el trabajo hecho, y el conocimiento absorbido EVALUADO: con su impacto y si sustituye/contradice algo tuyo, no una colección suelta. Y una MÉTRICA de evolución (281 técnicas conocidas · 3 aplicadas · 278 pendientes) para ver que el sistema CAMBIA, no solo lee."},
