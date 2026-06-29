@@ -3,6 +3,11 @@
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
 Cada línea: fecha · qué cambió · por qué (qué feedback) · cómo revertir (`git revert <hash>`).
 
+## 2026-06-29 — Glosario más claro (3 entradas)
+- **Qué cambió:** texto de «Suelo externo» (más directo, sin "la promesa"), «NO-RUINA» (añadida nota «Importa:» que faltaba igual que al resto de entradas), «Temperatura» (analogía maleta en el texto principal, no solo en el popup).
+- **Por qué:** 6 feedbacks `tipo:simplificar` del Glosario el 2026-06-28 (IDs: 098cd136, 98356813, 3abc2651, 1cc1a420, aca2595c, db256f88). Los otros 3 (Activación, Meta-palanca, Colisión multi-IA) ya eran claros → ya-resuelto.
+- **Revertir:** `git revert 9ee45de`
+
 ## 🏷️ Versiones (resumen — para saber sobre qué versión va cada idea)
 > La versión actual también se ve en la web (pie de página) y en `window.__cmVersion`.
 - **v0.1** · base: modo lectura público + refresco de números (TSV horneado).
