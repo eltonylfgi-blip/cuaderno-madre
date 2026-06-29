@@ -31,6 +31,7 @@
     font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     -webkit-font-smoothing:antialiased}
   .wrap{max-width:760px;margin:0 auto;padding:18px 14px 80px}
+  @media(max-width:560px){ .wrap{padding-left:16px;padding-right:16px} }
   h1{font-size:20px;margin:0 0 2px;letter-spacing:-.2px}
   .sub{color:var(--muted);font-size:13.5px;margin:0 0 14px}
 
@@ -505,6 +506,9 @@
     #abiertasCard .qOpen{margin:6px 0;padding:9px 12px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 9px 9px 0}
     #abiertasCard .qOpen b{color:var(--ink)} #abiertasCard .qOpen .qa{display:block;color:var(--muted);font-size:13px;margin-top:2px}
     #abiertasCard .qJoke{margin-top:12px;padding:9px 12px;border-radius:9px;background:var(--card);border:1px dashed var(--line);color:var(--muted);font-size:13.5px}
+    /* v0.15 FIX «pegado al margen»: las tarjetas de contenido directo (sin summary/.body) no tenían
+       padding interno → su texto quedaba pegado al borde, a diferencia de las tarjetas normales. */
+    #vsCard, #abiertasCard, #mapaCard{padding:14px 15px}
   </style>
 
 
@@ -630,7 +634,7 @@
     <div class="mapHead">
       <span class="num">🌳</span>
       <span class="ctitle"><span class="t">El mapa de MADRE</span>
-        <span class="s">MADRE en el centro; alrededor, sus ramas. Toca una para ver qué es y cuánta atención recibe.</span></span>
+        <span class="s">La forma de entender MADRE de un vistazo: en el centro, ella; alrededor, sus ramas. <b>Ábrelo en grande</b> y entra en cada rama — dentro hay sub-ramas y te cuenta cómo avanza.</span></span>
     </div>
     <div class="mapWrap"><svg class="mapSvg" id="mapSvg" viewBox="0 0 600 480" role="group" aria-label="Mapa de las ramas de MADRE (toca una rama)"></svg></div>
     <div id="mapaInfo" aria-live="polite"><span class="mi-t">👆 Toca una rama</span><span class="mi-d">Cada rama es una parte de MADRE. El color dice si se le está dando atención ahora, o si es solo conocimiento en reposo.</span></div>
@@ -648,44 +652,51 @@
     ahora:"📓",   /* emoji de la rama en la que se trabaja AHORA (se resalta sola) */
     states:{ atencion:{c:"#7c3aed",l:"se le da ATENCIÓN ahora"}, vivo:{c:"#10b981",l:"corre sola / viva"}, marcha:{c:"#f59e0b",l:"en marcha (con Tony)"}, conocimiento:{c:"#94a3b8",l:"solo conocimiento / en reposo"} },
     nodes:[
-      {emoji:"🧠",t:"El cerebro (loop)",st:"atencion",d:"La rutina que mejora MADRE sola, cada ~30 min. Es su latido.",kids:[
+      {emoji:"🧠",t:"El cerebro (loop)",st:"atencion",d:"La rutina que mejora MADRE sola, cada ~30 min. Es su latido.",prog:"Lleva meses despertándose cada ~30 min y auto-revisándose. Ya sabe juzgar las ideas que le llegan (no obedece a ciegas). Le falta: convertir más de sus principios en gatillos que se disparen solos.",kids:[
         {t:"Loop madre-mejora-continua",d:"Se despierta cada ~30 min y se auto-revisa."},
-        {t:"El KERNEL (sus principios)",d:"No-ruina, restar por defecto, decidir con criterio fijo."},
+        {t:"El KERNEL (sus principios)",d:"No-ruina, restar por defecto, decidir con criterio fijo.",kids:[
+          {t:"No-ruina",d:"Ninguna apuesta puede hundirla, por buena que parezca."},
+          {t:"Restar por defecto",d:"Antes de añadir algo, quita lo que sobra."},
+          {t:"Las ideas compiten, la evidencia decide",d:"No gana la más bonita: gana la que el mundo confirma."}
+        ]},
         {t:"Meta-palancas",d:"Generar · seleccionar · activar · combinar ideas."},
         {t:"El buzón",d:"Por donde le llegan ideas nuevas, que él JUZGA (no obedece a ciegas)."}
       ]},
-      {emoji:"📓",t:"El cuaderno",st:"atencion",d:"Esta web pública. Justo ahora se está trabajando en ella.",kids:[
+      {emoji:"📓",t:"El cuaderno",st:"atencion",d:"Esta web pública. Justo ahora se está trabajando en ella.",prog:"Vivo y público; va por la versión v0.15. Ahora mismo: este mapa que estás mirando. Le falta: respirar más y darte motivos de verdad para volver mañana.",kids:[
         {t:"Esta web",d:"Un solo archivo, abierto a cualquiera."},
         {t:"Comentarios y dibujos",d:"Lo que dejáis se guarda en la nube al momento."},
         {t:"La rutina del cuaderno",d:"Lee vuestra opinión cada ~6 h y refresca la web."},
         {t:"Buzón desde el móvil",d:"Tony suelta ideas desde el teléfono y llegan aquí."}
       ]},
-      {emoji:"🎬",t:"Pipeline de vídeo",st:"vivo",d:"Absorbe enlaces y los destila a aprendizaje, sola, cada 3 h.",kids:[
+      {emoji:"🎬",t:"Pipeline de vídeo",st:"vivo",d:"Absorbe enlaces y los destila a aprendizaje, sola, cada 3 h.",prog:"Funciona sola cada 3 h y se vigila a sí misma (centinela de salud). Le falta: elegir mejor QUÉ merece la pena tragar, para no perder tiempo en ruido.",kids:[
         {t:"YouTube · TikTok · Twitter",d:"Traga el enlace y saca lo aprovechable."},
         {t:"Destilado a aprendizaje",d:"Convierte horas de vídeo en notas cortas y útiles."},
         {t:"Centinela de salud",d:"Se vigila a sí misma y avisa si algo se rompe."},
         {t:"Auto-selector de fuentes",d:"Sube las cuentas que aportan, baja el ruido."}
       ]},
-      {emoji:"💈",t:"Negocio real",st:"marcha",d:"Peluquería + tienda. La prueba de fuego: que alguien de fuera pague.",kids:[
-        {t:"Peluquerías",d:"Un asistente de WhatsApp; las llamadas en frío las hace Tony."},
+      {emoji:"💈",t:"Negocio real",st:"marcha",d:"Peluquería + tienda. La prueba de fuego: que alguien de fuera pague.",prog:"En marcha CON Tony. Es la rama más difícil y la más importante: aquí se decide si MADRE sirve de verdad. Sigue en 0 € — nadie de fuera ha pagado todavía.",kids:[
+        {t:"Peluquerías",d:"Un asistente de WhatsApp; las llamadas en frío las hace Tony.",kids:[
+          {t:"Asistente de WhatsApp",d:"La idea: que responda y agende cita solo."},
+          {t:"Llamadas en frío",d:"Las hace Tony, no MADRE: aún no tiene «manos» para eso."}
+        ]},
         {t:"Tienda (dropshipping)",d:"Probar a vender online un producto que enganche."},
         {t:"La prueba de fuego",d:"Que alguien de FUERA pague. Sigue en 0 €."}
       ]},
-      {emoji:"🧩",t:"Almacén de widgets",st:"conocimiento",d:"Un embudo donde los mini-inventos compiten por salir al cuaderno.",kids:[
+      {emoji:"🧩",t:"Almacén de widgets",st:"conocimiento",d:"Un embudo donde los mini-inventos compiten por salir al cuaderno.",prog:"El embudo ya está montado: los mini-inventos compiten entre ellos. Le falta lo que de verdad cuenta: que ALGUNO llegue a esta web y os sea útil.",kids:[
         {t:"Embudo",d:"Promocionado · en revisión · descartado."},
         {t:"Compiten por salir",d:"Solo los mejores llegan a la web pública."}
       ]},
-      {emoji:"🔬",t:"Hipótesis y palancas",st:"conocimiento",d:"Lo que MADRE investiga sobre cómo mejorar su forma de mejorar.",kids:[
+      {emoji:"🔬",t:"Hipótesis y palancas",st:"conocimiento",d:"Lo que MADRE investiga sobre cómo mejorar su forma de mejorar.",prog:"Investiga cómo mejorar su propia forma de mejorar. El riesgo que vigila: pensar mucho y tocar poco. Le falta: bajar esas ideas a algo que el mundo confirme.",kids:[
         {t:"Capturar valor, no solo crearlo",d:"Hacer algo bueno no basta: hay que poder cobrarlo."},
         {t:"El multiplicador = activar",d:"Volver un principio en un gatillo que se dispara solo."},
         {t:"El selector externo",d:"La realidad decide, no la propia opinión."}
       ]},
-      {emoji:"🛡️",t:"Activos publicados",st:"vivo",d:"Cosas que MADRE ya soltó al mundo (p.ej. la herramienta usage-guard).",kids:[
+      {emoji:"🛡️",t:"Activos publicados",st:"vivo",d:"Cosas que MADRE ya soltó al mundo (p.ej. la herramienta usage-guard).",prog:"Ya soltó cosas al mundo: la herramienta usage-guard, un artículo honesto (contaba un fallo suyo) y este cuaderno. Le falta: que alguien los use y lleguen las primeras estrellas.",kids:[
         {t:"usage-guard",d:"Una herramienta pública que ya está ahí fuera."},
         {t:"Artículos honestos",d:"Cuenta fallos reales, no logros inventados."},
         {t:"Este cuaderno",d:"También es un activo público vivo."}
       ]},
-      {emoji:"📚",t:"Memoria / archivo",st:"conocimiento",d:"Lo que aprende y guarda para no tropezar dos veces.",kids:[
+      {emoji:"📚",t:"Memoria / archivo",st:"conocimiento",d:"Lo que aprende y guarda para no tropezar dos veces.",prog:"Guarda lecciones y un cementerio de ideas muertas (con el porqué de cada una). Le falta: usar lo aprendido por su cuenta, sin que se lo pidan.",kids:[
         {t:"Lecciones",d:"Para no repetir el mismo error."},
         {t:"Cementerio de ideas muertas",d:"Lo que descartó y por qué."},
         {t:"Gustos de Tony",d:"Cómo le gusta que se trabaje."}
@@ -775,6 +786,16 @@
     /* v0.14: en pantallas MUY cortas, acotar más el bloque inferior para que el mapa conserve altura usable */
     @media(max-height:400px){ .mbBottom{max-height:34vh} }
     @media(prefers-reduced-motion:reduce){ .mbStars,.mbNode.now .nc,.mbSubIn,.mbHaloBig{animation:none} .mbOv{transition:none} }
+    /* v0.15: «cómo avanza» + acciones por nodo + badge «＋N dentro» + progreso de exploración */
+    .mbProg{display:block;color:#cdd6f5;font-size:12.5px;line-height:1.42;margin-top:8px;padding:7px 10px;background:rgba(255,255,255,.06);border-left:3px solid rgba(255,255,255,.28);border-radius:0 8px 8px 0}
+    .mbProg b{color:#fff}
+    .mbActs{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+    .mbFb{background:rgba(255,255,255,.1);color:#e8edf8;border:1px solid rgba(255,255,255,.24);border-radius:9px;padding:6px 11px;font-size:12px;font-weight:700;cursor:pointer}
+    .mbFb:hover{background:rgba(255,255,255,.2)}
+    .mbNode .mbPlus{pointer-events:none}
+    .mbExpl{position:relative;z-index:3;margin:0 14px 8px;padding:8px 12px;border-radius:11px;text-align:center;font-size:12.5px;font-weight:700;color:#c7d0ea;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14)}
+    .mbExpl.done{color:#241a02;background:linear-gradient(90deg,#fcd34d,#f59e0b);border-color:#fcd34d}
+    @media(max-height:480px){ .mbExpl{margin:0 12px 6px;padding:6px 10px;font-size:12px} }
   </style>
   <div id="mapBig-ov" class="mbOv" role="dialog" aria-modal="true" aria-label="Mapa de MADRE a pantalla completa" hidden>
     <div class="mbAmbient"></div><div class="mbStars" id="mbStars"></div>
@@ -792,91 +813,140 @@
       </div>
     </div>
     <div class="mbBottom">
-      <div class="mbInfo" id="mbInfo" aria-live="polite"><span class="t">👆 Toca una rama</span><span class="d">Se abrirán sus sub-ramas. Arrastra para moverte y usa la rueda o el pellizco para acercar.</span></div>
+      <div class="mbExpl" id="mbExpl" aria-live="polite"></div>
+      <div class="mbInfo" id="mbInfo" aria-live="polite"><span class="t">👆 Toca una rama</span><span class="d">La cámara entra en ella y se abren sus sub-ramas. Arrastra para moverte; rueda o pellizco para acercar.</span></div>
       <div class="mbLeg" id="mbLeg"></div>
       <div class="mbFoot" id="mbFoot"></div>
     </div>
   </div>
   <script>
-  /* MAPA a pantalla completa: lee window.__MAPA (misma fuente que la tarjeta). Zoom/pan library-free
-     (transform sobre un <g>, pointer events = ratón+touch+pinch), sub-ramas al tocar, AHORA resaltado,
-     deep-link #mapa (back cierra). Inmersivo pero apagable (Esc/✕) y respeta reduced-motion. */
+  /* MAPA a pantalla completa — el NÚCLEO del cuaderno (cómo se entiende MADRE de un vistazo).
+     Lee window.__MAPA (misma fuente que la tarjeta). Zoom/pan library-free; al tocar una rama la CÁMARA
+     ENTRA (zoom) y se abren sus sub-ramas (MULTINIVEL: las que muestran «＋ N dentro» abren otra capa);
+     cada rama explica «cómo avanza MADRE» y deja marcar «no entiendo». Al abrir, se despliega sola la
+     rama AHORA para que las sub-ramas se DESCUBRAN. Deep-link #mapa. Apagable (Esc/✕); respeta
+     reduced-motion (la cámara salta sin animar). */
   (function(){ try{
     var NS="http://www.w3.org/2000/svg", ov=document.getElementById("mapBig-ov"); if(!ov||!window.__MAPA) return;
     var M=window.__MAPA, STATES=M.states, NODES=M.nodes;
     var svg=document.getElementById("mbSvg"), view=document.getElementById("mbView");
     var info=document.getElementById("mbInfo"), reduce=false; try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
-    var CX=500,CY=500,R=320, built=false, expanded=-1, subG=null, lastFocus=null;
+    var CX=500,CY=500,R=320, built=false, lastFocus=null;
     function el(n,a){ var e=document.createElementNS(NS,n); for(var k in a) e.setAttribute(k,a[k]); return e; }
     function stOf(k){ return STATES[k]||{c:"#94a3b8",l:"(en reposo)"}; }
     function txt(c){ return (window.__mapText?window.__mapText(c):"#fff"); }
-    function info3(emoji,title,stateKey,desc){ info.textContent=""; var tt=document.createElement("span"); tt.className="t"; tt.textContent=(emoji?emoji+" ":"")+title; info.appendChild(tt);
-      if(stateKey){ var s=stOf(stateKey); var st=document.createElement("span"); st.className="st"; st.textContent=s.l; st.style.background=s.c; st.style.color=txt(s.c); info.appendChild(st); }
-      var dd=document.createElement("span"); dd.className="d"; dd.textContent=desc; info.appendChild(dd); }
+
+    /* ---- panel de info (con «cómo avanza» + botón «no entiendo» por nodo) ---- */
+    function mkBtn(label,fn){ var b=document.createElement("button"); b.type="button"; b.className="mbFb"; b.textContent=label; b.addEventListener("click",function(e){ e.stopPropagation(); fn(); }); return b; }
+    function showInfo(nd){ var isTop=(nd.__depth||0)===0, top=nd.__top||nd, path=isTop?nd.t:(top.t+" › "+nd.t);
+      info.textContent="";
+      var tt=document.createElement("span"); tt.className="t"; tt.textContent=(isTop?(nd.emoji+" "+nd.t):(top.emoji+" "+path)); info.appendChild(tt);
+      var s=stOf(top.st); var stb=document.createElement("span"); stb.className="st"; stb.textContent=s.l; stb.style.background=s.c; stb.style.color=txt(s.c); info.appendChild(stb);
+      var dd=document.createElement("span"); dd.className="d"; dd.textContent=nd.d||""; info.appendChild(dd);
+      if(isTop && nd.prog){ var pg=document.createElement("span"); pg.className="mbProg"; var b=document.createElement("b"); b.textContent="📈 Cómo avanza MADRE aquí: "; pg.appendChild(b); pg.appendChild(document.createTextNode(nd.prog)); info.appendChild(pg); }
+      var hasKids=nd.kids&&nd.kids.length, acts=document.createElement("span"); acts.className="mbActs";
+      if(hasKids){ acts.appendChild(mkBtn(isOpen(nd)?"➖ cerrar":"➕ abrir sus "+nd.kids.length+(((nd.__depth||0)===0)?" sub-ramas":" dentro"),function(){ onNodeClick(nd); })); }
+      acts.appendChild(mkBtn("🤔 No entiendo esto",function(){ if(window.__openFb) window.__openFb("🌳 Mapa › "+path,"","no-entiendo"); }));
+      info.appendChild(acts); }
+    function showHint(){ info.textContent=""; var t=document.createElement("span"); t.className="t"; t.textContent="👆 Toca una rama"; var d=document.createElement("span"); d.className="d"; d.textContent="La cámara ENTRA en ella y se abren sus sub-ramas. Arrastra para moverte; rueda o pellizco para acercar."; info.appendChild(t); info.appendChild(d); }
 
     /* ---- zoom/pan ---- */
     var k=1,tx=0,ty=0,MINK=.55,MAXK=3.4;
     function apply(){ view.setAttribute("transform","translate("+tx.toFixed(2)+","+ty.toFixed(2)+") scale("+k.toFixed(3)+")"); }
     function toSvg(cx,cy){ try{ var p=svg.createSVGPoint(); p.x=cx; p.y=cy; var m=svg.getScreenCTM(); if(m) return p.matrixTransform(m.inverse()); }catch(e){} return {x:cx,y:cy}; }
     function zoomAround(px,py,factor){ var nk=Math.max(MINK,Math.min(MAXK,k*factor)); if(nk===k) return; tx=px-(px-tx)*(nk/k); ty=py-(py-ty)*(nk/k); k=nk; apply(); }
-    function center(){ k=1; tx=0; ty=0; apply(); }
-    svg.addEventListener("wheel",function(e){ e.preventDefault(); var s=toSvg(e.clientX,e.clientY); zoomAround(s.x,s.y, e.deltaY<0?1.12:1/1.12); },{passive:false});
+    function center(){ stopAnim(); k=1; tx=0; ty=0; apply(); }
+    /* cámara animada (setInterval = avanza también en headless; SALTA sin animar si reduced-motion) */
+    var animTimer=null;
+    function stopAnim(){ if(animTimer){ clearInterval(animTimer); animTimer=null; } }
+    function animateTo(nx,ny,nk){ stopAnim(); nk=Math.max(MINK,Math.min(MAXK,nk));
+      if(reduce){ tx=nx; ty=ny; k=nk; apply(); return; }
+      var k0=k,x0=tx,y0=ty,steps=16,i=0;
+      animTimer=setInterval(function(){ i++; var p=i/steps; if(p>1)p=1; var e=1-Math.pow(1-p,3);
+        k=k0+(nk-k0)*e; tx=x0+(nx-x0)*e; ty=y0+(ny-y0)*e; apply(); if(p>=1) stopAnim(); },28); }
+    function focusOn(px,py,nk){ animateTo(500-px*nk,500-py*nk,nk); }
+    function focusBranch(nd,nk){ var ux=nd.x-CX,uy=nd.y-CY,ul=Math.hypot(ux,uy)||1; focusOn(nd.x+ux/ul*80, nd.y+uy/ul*80, nk); }
+    svg.addEventListener("wheel",function(e){ e.preventDefault(); stopAnim(); var s=toSvg(e.clientX,e.clientY); zoomAround(s.x,s.y, e.deltaY<0?1.12:1/1.12); },{passive:false});
     var pts={}, dragId=null, dragPrev=null, pinchPrev=null;
     function ptsCount(){ var n=0; for(var i in pts) n++; return n; }
-    svg.addEventListener("pointerdown",function(e){ pts[e.pointerId]=toSvg(e.clientX,e.clientY); try{ svg.setPointerCapture(e.pointerId); }catch(_){}
+    svg.addEventListener("pointerdown",function(e){ stopAnim(); pts[e.pointerId]=toSvg(e.clientX,e.clientY); try{ svg.setPointerCapture(e.pointerId); }catch(_){}
       if(ptsCount()===1){ dragId=e.pointerId; dragPrev=pts[e.pointerId]; svg.classList.add("drag"); } else if(ptsCount()===2){ dragId=null; var a=keys(); pinchPrev=dist(pts[a[0]],pts[a[1]]); } });
     function keys(){ var a=[]; for(var i in pts) a.push(i); return a; }
     function dist(p,q){ return Math.hypot(p.x-q.x,p.y-q.y); }
     function mid(p,q){ return {x:(p.x+q.x)/2,y:(p.y+q.y)/2}; }
     svg.addEventListener("pointermove",function(e){ if(!(e.pointerId in pts)) return; var cur=toSvg(e.clientX,e.clientY);
-      if(ptsCount()>=2){ var a=keys(); var prevMid=mid(pts[a[0]],pts[a[1]]); pts[e.pointerId]=cur; var nm=mid(pts[a[0]],pts[a[1]]); var nd=dist(pts[a[0]],pts[a[1]]);
-        if(pinchPrev){ zoomAround(nm.x,nm.y, nd/pinchPrev); } pinchPrev=nd; tx+=(nm.x-prevMid.x); ty+=(nm.y-prevMid.y); apply(); return; }
+      if(ptsCount()>=2){ var a=keys(); var prevMid=mid(pts[a[0]],pts[a[1]]); pts[e.pointerId]=cur; var nm=mid(pts[a[0]],pts[a[1]]); var nd2=dist(pts[a[0]],pts[a[1]]);
+        if(pinchPrev){ zoomAround(nm.x,nm.y, nd2/pinchPrev); } pinchPrev=nd2; tx+=(nm.x-prevMid.x); ty+=(nm.y-prevMid.y); apply(); return; }
       if(dragId===e.pointerId && dragPrev){ tx+=(cur.x-dragPrev.x); ty+=(cur.y-dragPrev.y); apply(); dragPrev=cur; pts[e.pointerId]=cur; } });
     function release(e){ if(e.pointerId in pts) delete pts[e.pointerId]; try{ svg.releasePointerCapture(e.pointerId); }catch(_){}
       if(ptsCount()<2) pinchPrev=null; if(ptsCount()===0){ dragId=null; dragPrev=null; svg.classList.remove("drag"); } else if(ptsCount()===1){ var a=keys(); dragId=+a[0]; dragPrev=pts[a[0]]; } }
     svg.addEventListener("pointerup",release); svg.addEventListener("pointercancel",release);
     var bi=document.getElementById("mbIn"),bo=document.getElementById("mbOut"),br=document.getElementById("mbReset");
-    if(bi) bi.addEventListener("click",function(){ zoomAround(CX,CY,1.25); }); if(bo) bo.addEventListener("click",function(){ zoomAround(CX,CY,1/1.25); }); if(br) br.addEventListener("click",function(){ center(); collapse(); });
+    if(bi) bi.addEventListener("click",function(){ stopAnim(); zoomAround(CX,CY,1.25); }); if(bo) bo.addEventListener("click",function(){ stopAnim(); zoomAround(CX,CY,1/1.25); }); if(br) br.addEventListener("click",function(){ collapseAll(); center(); showHint(); });
 
-    /* ---- sub-ramas ---- */
-    function collapse(){ if(subG){ subG.parentNode&&subG.parentNode.removeChild(subG); subG=null; } expanded=-1; }
-    function expand(idx){ collapse(); expanded=idx; var nd=NODES[idx]; if(!nd.kids||!nd.kids.length) return;
-      subG=el("g",{}); var pang=Math.atan2(nd.y-CY,nd.x-CX); var n=nd.kids.length, spread=Math.min(Math.PI*1.1, .5+n*.32), step=n>1?spread/(n-1):0, start=pang-spread/2, SR=150;
-      nd.kids.forEach(function(kd,j){ var ang=n>1?start+step*j:pang, x=nd.x+SR*Math.cos(ang), y=nd.y+SR*Math.sin(ang);
-        var sc=stOf(nd.st).c;
-        var ln=el("line",{x1:nd.x,y1:nd.y,x2:x,y2:y,stroke:sc,"stroke-width":"2",opacity:".5"}); ln.setAttribute("class","mbLink"+(reduce?"":" mbSubIn")); subG.appendChild(ln);
-        var g=el("g",{"class":"mbNode"+(reduce?"":" mbSubIn"),tabindex:"0",role:"button"}); g.setAttribute("aria-label",kd.t); g.style.color=sc;
-        var c=el("circle",{cx:x,cy:y,r:34,fill:"#141a2e",stroke:sc,"stroke-width":"2.5"}); c.setAttribute("class","nc"); g.appendChild(c);
-        var tlbl=wrapText(kd.t,x,y,11,"#e8edf8",13); g.appendChild(tlbl);
-        function sshow(){ info3("",nd.emoji+" "+nd.t+" › "+kd.t,nd.st,kd.d); }
-        g.addEventListener("click",function(ev){ ev.stopPropagation(); sshow(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); sshow(); } });
-        subG.appendChild(g); });
-      view.appendChild(subG); info3(nd.emoji,nd.t+" — "+nd.kids.length+" sub-ramas",nd.st,nd.d); }
-    /* texto multilínea centrado en (x,y) */
+    /* ---- sub-ramas MULTINIVEL (recursivo: un nodo con kids abre otra capa) ---- */
     function wrapText(str,x,y,fs,fill,maxlen){ var g=el("g",{}); var words=str.split(" "), lines=[], cur="";
       words.forEach(function(w){ if((cur+" "+w).trim().length>maxlen){ if(cur) lines.push(cur); cur=w; } else cur=(cur+" "+w).trim(); }); if(cur) lines.push(cur);
       var lh=fs+2, y0=y-(lines.length-1)*lh/2; lines.forEach(function(line,i){ var t=el("text",{x:x,y:y0+i*lh,"text-anchor":"middle","dominant-baseline":"middle","font-size":fs,"font-weight":"700",fill:fill}); t.textContent=line; g.appendChild(t); }); return g; }
+    var openSet=[], subLayer=null;
+    function isOpen(n){ return openSet.indexOf(n)>=0; }
+    function descendants(n){ var out=[]; (function rec(x){ (x.kids||[]).forEach(function(k2){ out.push(k2); rec(k2); }); })(n); return out; }
+    function setOpen(n,on){ var i=openSet.indexOf(n);
+      if(on){ if(i<0) openSet.push(n); }
+      else { if(i>=0) openSet.splice(i,1); descendants(n).forEach(function(d){ var j=openSet.indexOf(d); if(j>=0) openSet.splice(j,1); }); } }
+    function collapseAll(){ openSet=[]; renderSubs(); }
+    function drawKids(parent){ var kids=parent.kids||[]; if(!kids.length) return;
+      var depth=(parent.__depth||0)+1, color=parent.__color||stOf(parent.st).c, top=parent.__top||parent;
+      var pang=Math.atan2(parent.y-CY,parent.x-CX), n=kids.length, spread=Math.min(Math.PI*1.15,.55+n*.32), stp=n>1?spread/(n-1):0, start=pang-spread/2, SR=depth===1?160:122;
+      kids.forEach(function(kd,j){ var ang=n>1?start+stp*j:pang; kd.x=parent.x+SR*Math.cos(ang); kd.y=parent.y+SR*Math.sin(ang); kd.__depth=depth; kd.__color=color; kd.__top=top;
+        var ln=el("line",{x1:parent.x,y1:parent.y,x2:kd.x,y2:kd.y,stroke:color,"stroke-width":depth===1?"2":"1.6",opacity:".5"}); ln.setAttribute("class","mbLink"+(reduce?"":" mbSubIn")); subLayer.appendChild(ln);
+        var hasKids=kd.kids&&kd.kids.length, r=depth===1?34:27;
+        var g=el("g",{"class":"mbNode"+(reduce?"":" mbSubIn"),tabindex:"0",role:"button"}); g.setAttribute("aria-label",kd.t+(hasKids?" — abre "+kd.kids.length+" dentro":"")); g.style.color=color;
+        var c=el("circle",{cx:kd.x,cy:kd.y,r:r,fill:"#141a2e",stroke:color,"stroke-width":depth===1?"2.5":"2"}); c.setAttribute("class","nc"); g.appendChild(c);
+        g.appendChild(wrapText(kd.t,kd.x,kd.y,depth===1?11:10,"#e8edf8",depth===1?13:12));
+        if(hasKids){ var pb=el("text",{x:kd.x,y:kd.y+r+13,"text-anchor":"middle","font-size":"10.5","font-weight":"800",fill:color}); pb.textContent=(isOpen(kd)?"▾ ":"＋ ")+kd.kids.length+" dentro"; g.appendChild(pb); }
+        (function(node){ function act(){ onNodeClick(node); } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(kd);
+        subLayer.appendChild(g);
+        if(isOpen(kd)) drawKids(kd); }); }
+    function renderSubs(){ if(subLayer){ subLayer.parentNode&&subLayer.parentNode.removeChild(subLayer); subLayer=null; }
+      if(!openSet.length) return; subLayer=el("g",{}); NODES.forEach(function(t){ if(isOpen(t)) drawKids(t); }); view.appendChild(subLayer); }
+    function onNodeClick(nd){ var hasKids=nd.kids&&nd.kids.length;
+      if(hasKids){ var willOpen=!isOpen(nd);
+        if(willOpen && (nd.__depth||0)===0){ NODES.forEach(function(t){ if(t!==nd) setOpen(t,false); }); } /* a nivel raíz, una rama abierta a la vez */
+        setOpen(nd,willOpen); renderSubs();
+        if(willOpen){ focusBranch(nd, (nd.__depth||0)>=1?2.1:1.5); markExplored(nd); } }
+      showInfo(nd); }
+
+    /* ---- progreso de exploración: razón honesta para volver («termina de descubrir MADRE») ---- */
+    var EXPL="cm_map_explored_v1";
+    function getExpl(){ try{ return JSON.parse(localStorage.getItem(EXPL)||"[]"); }catch(e){ return []; } }
+    function markExplored(nd){ var top=nd.__top||nd; try{ var s=getExpl(); if(s.indexOf(top.t)<0){ s.push(top.t); localStorage.setItem(EXPL,JSON.stringify(s)); } }catch(e){} updateExpl(); }
+    function updateExpl(){ var elx=document.getElementById("mbExpl"); if(!elx) return;
+      var seen=getExpl().filter(function(t){ return NODES.some(function(n){return n.t===t;}); }), n=seen.length, tot=NODES.length;
+      if(n>=tot){ elx.textContent="🏆 Has explorado las "+tot+" ramas — ahora entiendes MADRE mejor que casi nadie que llega aquí."; elx.className="mbExpl done"; }
+      else { elx.textContent="🔍 Has abierto "+n+"/"+tot+" ramas de MADRE"+(n>0?" · vuelve y termina de descubrirla":" · toca una rama para empezar"); elx.className="mbExpl"; } }
 
     /* ---- construir el mapa una vez ---- */
     function build(){ if(built) return; built=true;
       if(!reduce){ var halo=el("circle",{cx:CX,cy:CY,r:60,fill:"#fff"}); halo.setAttribute("class","mbHaloBig"); view.appendChild(halo); }
-      NODES.forEach(function(nd,i){ var ang=(-90+i*(360/NODES.length))*Math.PI/180; nd.x=CX+R*Math.cos(ang); nd.y=CY+R*Math.sin(ang);
+      NODES.forEach(function(nd,i){ var ang=(-90+i*(360/NODES.length))*Math.PI/180; nd.x=CX+R*Math.cos(ang); nd.y=CY+R*Math.sin(ang); nd.__depth=0; nd.__color=stOf(nd.st).c; nd.__top=nd;
         var ln=el("line",{x1:CX,y1:CY,x2:nd.x,y2:nd.y,stroke:stOf(nd.st).c,"stroke-width":"3"}); ln.setAttribute("class","mbLink"); view.appendChild(ln); });
       var cg=el("g",{}); var cc=el("circle",{cx:CX,cy:CY,r:54,fill:"#7c3aed",stroke:"#b794ff","stroke-width":"2"}); cg.appendChild(cc);
       var ce=el("text",{x:CX,y:CY+2,"text-anchor":"middle","dominant-baseline":"middle","font-size":"40"}); ce.textContent="🤱🏻"; cg.appendChild(ce);
       var cl=el("text",{x:CX,y:CY+78,"text-anchor":"middle","font-size":"19","font-weight":"800",fill:"#fff"}); cl.textContent="MADRE"; cg.appendChild(cl); view.appendChild(cg);
-      NODES.forEach(function(nd,idx){ var isNow=(M.ahora&&nd.emoji===M.ahora);
-        var g=el("g",{"class":"mbNode"+(isNow?" now":""),tabindex:"0",role:"button"}); g.setAttribute("aria-label",nd.t+": "+stOf(nd.st).l+(isNow?" — aquí trabaja AHORA":"")); g.style.color=stOf(nd.st).c;
+      NODES.forEach(function(nd){ var isNow=(M.ahora&&nd.emoji===M.ahora), hasKids=nd.kids&&nd.kids.length;
+        var g=el("g",{"class":"mbNode"+(isNow?" now":""),tabindex:"0",role:"button"}); g.setAttribute("aria-label",nd.t+": "+stOf(nd.st).l+(isNow?" — aquí trabaja AHORA":"")+(hasKids?" — abre "+nd.kids.length+" sub-ramas":"")); g.style.color=stOf(nd.st).c;
         var c=el("circle",{cx:nd.x,cy:nd.y,r:46,fill:"#141a2e",stroke:stOf(nd.st).c,"stroke-width":"4"}); c.setAttribute("class","nc"); g.appendChild(c);
         var em=el("text",{x:nd.x,y:nd.y+1,"text-anchor":"middle","dominant-baseline":"middle","font-size":"32"}); em.textContent=nd.emoji; g.appendChild(em);
         var lbl=el("text",{x:nd.x,y:nd.y+68,"text-anchor":"middle","font-size":"14","font-weight":"700",fill:"#dde4f5"}); lbl.textContent=nd.t; g.appendChild(lbl);
+        if(hasKids){ var pb=el("text",{x:nd.x,y:nd.y+85,"text-anchor":"middle","font-size":"11.5","font-weight":"800",fill:stOf(nd.st).c}); pb.setAttribute("class","mbPlus"); pb.textContent="＋ "+nd.kids.length+" dentro"; g.appendChild(pb); }
         if(isNow){ var nb=el("text",{x:nd.x,y:nd.y-60,"text-anchor":"middle","font-size":"12","font-weight":"800",fill:"#fff"}); nb.textContent="● AHORA"; g.appendChild(nb); }
-        function toggle(){ if(expanded===idx){ collapse(); info3(nd.emoji,nd.t,nd.st,nd.d); } else expand(idx); }
-        g.addEventListener("click",function(ev){ ev.stopPropagation(); toggle(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); toggle(); } });
+        (function(node){ function act(){ onNodeClick(node); } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(nd);
         view.appendChild(g); });
-      svg.addEventListener("click",function(e){ if(e.target===svg||e.target===view){ collapse(); } });
-      var leg=document.getElementById("mbLeg"); if(leg){ for(var key in STATES){ var sp=document.createElement("span"); var ic=document.createElement("i"); ic.style.background=STATES[key].c; var t2=document.createElement("span"); t2.textContent=STATES[key].l; sp.appendChild(ic); sp.appendChild(t2); leg.appendChild(sp); } }
+      svg.addEventListener("click",function(e){ if(e.target===svg||e.target===view){ collapseAll(); showHint(); } });
+      var leg=document.getElementById("mbLeg"); if(leg){ leg.textContent=""; for(var key in STATES){ var sp=document.createElement("span"); var ic=document.createElement("i"); ic.style.background=STATES[key].c; var t2=document.createElement("span"); t2.textContent=STATES[key].l; sp.appendChild(ic); sp.appendChild(t2); leg.appendChild(sp); } }
       var ft=document.getElementById("mbFoot"); if(ft) ft.textContent="📸 Es una foto del "+M.foto+", no tiempo real. El color de cada rama = cuánta atención recibe esta semana; «● AHORA» = en la que se trabaja estos días.";
+      updateExpl();
     }
 
     /* ---- abrir / cerrar ---- */
@@ -887,11 +957,15 @@
       if(w){ for(i=0;i<w.children.length;i++){ if(w.children[i]!==ov) setInert(w.children[i],on); } }
       for(i=0;i<document.body.children.length;i++){ if(document.body.children[i]!==w) setInert(document.body.children[i],on); } }catch(e){} }
     function openMap(fromHash){ if(open) return; build(); open=true; lastFocus=document.activeElement; ov.hidden=false;
-      try{ void ov.offsetWidth; }catch(e){} ov.classList.add("show"); /* reflow + clase (no rAF: no dispara en doc oculto) */ center(); collapse(); info3("","👆 Toca una rama","","Se abrirán sus sub-ramas. Arrastra para moverte; rueda o pellizco para acercar.");
+      try{ void ov.offsetWidth; }catch(e){} ov.classList.add("show"); /* reflow + clase (no rAF: no dispara en doc oculto) */ center(); collapseAll();
+      /* DESCUBRIMIENTO: abrir sola la rama AHORA para que se VEAN las sub-ramas al entrar */
+      var nowNode=null; NODES.forEach(function(n){ if(M.ahora&&n.emoji===M.ahora) nowNode=n; });
+      if(nowNode && nowNode.kids && nowNode.kids.length){ setOpen(nowNode,true); renderSubs(); focusBranch(nowNode,1.5); markExplored(nowNode); showInfo(nowNode); }
+      else { showHint(); }
       try{ document.body.style.overflow="hidden"; }catch(e){} bgInert(true);
       var cb=document.getElementById("mbClose"); if(cb) cb.focus();
       if(!fromHash){ try{ if(location.hash!=="#mapa"){ history.pushState({mapa:1},"","#mapa"); pushedHash=true; } }catch(e){} } }
-    function closeMap(fromPop){ if(!open) return; open=false; ov.classList.remove("show");
+    function closeMap(fromPop){ if(!open) return; open=false; stopAnim(); ov.classList.remove("show");
       setTimeout(function(){ ov.hidden=true; },260); try{ document.body.style.overflow=""; }catch(e){} bgInert(false);
       if(!fromPop){ try{ if(pushedHash){ history.back(); } else if(location.hash==="#mapa"){ history.replaceState(null,"",location.pathname+location.search); } }catch(e){} }
       pushedHash=false;
@@ -917,7 +991,7 @@
       <span class="caret">▶</span>
     </summary>
     <div class="body">
-      <p class="lead" style="margin-top:0">Si te apetece, mira a ver si encuentras alguna de estas y déjasela en un comentario. No hace falta saber nada técnico.</p>
+      <p class="lead" style="margin-top:0"><b>Esto NO es deberes para ti:</b> MADRE ya busca estas soluciones por su cuenta, en cada pasada de sus rutinas. Pero cuatro ojos ven más que dos — si te cruzas con alguna, déjasela en un comentario. No hace falta saber nada técnico.</p>
       <div id="ayudaList"><div class="small">Cargando…</div></div>
       <p class="small" id="ayudaUpd" style="margin:10px 0 0"></p>
       <div class="fb"><button class="btn sm" data-fb data-card="🙌 Ayudar a MADRE" data-section="">💬 Tengo algo / una idea</button></div>
@@ -1982,6 +2056,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-29",titulo:"🌳 El MAPA da otro salto: entras en cada rama y ves cómo avanza MADRE (v0.15)",detalle:"El mapa (lo que más te engancha) sube de nivel: (1) al tocar una rama, la CÁMARA ENTRA en ella (se acerca) y se abren sus sub-ramas — y ahora se DESCUBREN solas, porque al abrir el mapa la rama en la que se trabaja AHORA ya viene desplegada. (2) MULTINIVEL de verdad: algunas sub-ramas tienen más cosas dentro (verás «＋ 3 dentro»); tócalas y se abre otra capa. (3) Cada rama te cuenta «cómo AVANZA MADRE aquí» (qué hace y qué le falta) y tiene un botón «🤔 no entiendo» para marcar lo que no pillas. (4) Abajo llevas la cuenta «has abierto N/8 ramas»: explóralas todas y desbloqueas un guiño — una razón honesta para volver y terminar de descubrirla. Además, arreglos que pediste: el 🐹 hámster vuelve a MOVERSE aunque tengas el móvil/PC en «menos animaciones»; la zona «en directo» respira mejor (menos apretada, nada pegado al borde); y dejé claro que lo de «ayudar a MADRE» NO son deberes para ti — MADRE ya busca esas soluciones sola."},
     {fecha:"2026-06-29",titulo:"🫀 El cuaderno ahora RESPIRA + se entiende antes + el mapa cabe en cualquier pantalla (v0.14)",detalle:"Tres cosas: (1) RESPIRA de verdad — nuevo «📓 Diario del cuaderno» que enseña los cambios REALES que se le van haciendo (sacados de su historial de verdad), con su hora («hace 20 min…») y un «🌙 desde tu última visita: N cambios nuevos». Así, si vuelves mañana, ves qué cambió mientras no estabas — sin inventar nada, son cambios de verdad. (2) Se entiende ANTES — la primera pantalla va al grano: primero «qué es» y «por qué me importa», con un gancho en primera persona y menos texto; el MAPA grande (que te encanta) baja un poco, porque es una RECOMPENSA por explorar, no la presentación. (3) Arreglo del mapa a pantalla completa: en móviles o ventanas BAJAS, la parte de abajo (info y leyenda) ya no aplasta el mapa ni se corta — ahora cabe y se desliza, y los botones de zoom ya no se salen de la pantalla."},
     {fecha:"2026-06-29",titulo:"🌳 El mapa de MADRE ahora es EXPLORABLE a pantalla completa + la web abre con «AHORA» (v0.13)",detalle:"El mapa de ramas dio el salto a EXPERIENCIA: toca «🔍 Explorar el mapa en grande» y se abre a pantalla completa, oscuro e inmersivo, donde puedes ACERCAR/ALEJAR y ARRASTRAR (también con dos dedos en el móvil), y al tocar una rama se ABREN sus sub-ramas (lo que hay dentro de cada parte de MADRE: el cerebro, el vídeo, el negocio…). La rama en la que se trabaja AHORA se resalta sola, y todo va enmarcado como una FOTO con su fecha (sin fingir tiempo real). Puedes compartir el mapa con un enlace y se cierra con Esc o con «atrás». Además, el bloque «MADRE en directo» ahora ABRE con un «📍 AHORA» (qué hace estos días + la última señal vuestra de verdad, esa sí en vivo), un «🌙 Mientras no mirabas» con 3 cosas honestas del día, y una frase del día para llevarte. Apagable y pensado para todos (teclado, buen contraste, respeta «menos animaciones»)."},
     {fecha:"2026-06-29",titulo:"🌳 El mapa de MADRE (sus ramas) + sonidos afinados otra vez",detalle:"Novedad gorda: un MAPA con MADRE en el centro y sus ramas alrededor (el cerebro, el cuaderno, el vídeo, el negocio, los widgets, las hipótesis…). El color te dice de un vistazo a cuáles se les está dando ATENCIÓN ahora y cuáles son solo conocimiento en reposo; toca una rama y te cuenta qué es. Es la 1ª versión, irá a más (más inmersiva). Y volví a afinar los sonidos con tu oído: el papel cruje más a papel, las hojas más 'crunchy', la arena un 'shhh' suave, la pana ya no suena a pedo sino a roce de tela, y la cremallera suena continua y 'smooth' (como abrirla)."},
@@ -4668,7 +4743,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.14";
+  window.__cmVersion="v0.15";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 29 jun 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -4852,31 +4927,31 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   var D=document; if(!D.getElementById('envivo')) return;
   var reduce=false; try{ reduce=matchMedia('(prefers-reduced-motion:reduce)').matches; }catch(e){}
   var st=D.createElement('style'); st.textContent=
-    "#envivo{background:linear-gradient(135deg,#fff,var(--accent-soft));border:1.5px solid var(--accent);border-radius:14px;padding:12px 14px;margin:0 0 12px;box-shadow:0 2px 6px rgba(20,30,50,.06)}"+
+    "#envivo{background:linear-gradient(135deg,#fff,var(--accent-soft));border:1.5px solid var(--accent);border-radius:14px;padding:15px 16px;margin:0 0 12px;box-shadow:0 2px 6px rgba(20,30,50,.06)}"+
     "#envivo .ev-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}"+
     "#envivo .ev-dot{width:10px;height:10px;border-radius:50%;background:#16a34a;animation:evPulse 1.8s ease-out infinite}"+
     "@keyframes evPulse{0%{box-shadow:0 0 0 0 rgba(22,163,74,.5)}70%{box-shadow:0 0 0 9px rgba(22,163,74,0)}100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}"+
     "#envivo .ev-live{font:800 14px/1 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}"+
     "#envivo .ev-sub{font-size:12px;color:var(--muted)}"+
-    "#envivo .ev-body{display:flex;gap:12px;align-items:center;margin:9px 0 0}"+
+    "#envivo .ev-body{display:flex;gap:14px;align-items:center;margin:12px 0 0}"+
     "#envivo .ev-ham{flex:0 0 auto;margin:0}"+
     "#envivo .ev-ham .wheel-and-hamster{font-size:7px}"+
     "#envivo .ev-txt{flex:1;min-width:0}"+
     "#envivo .ev-mood{font-size:13px;line-height:1.45;color:var(--ink)}"+
     "#envivo .ev-secret{font-size:12.5px;color:var(--muted);margin-top:6px;font-style:italic}"+
-    "#envivo .ev-foot{font-size:11.5px;color:var(--muted);margin:9px 0 0;border-top:1px dashed var(--line);padding-top:8px}"+
+    "#envivo .ev-foot{font-size:11.5px;color:var(--muted);margin:12px 0 0;border-top:1px dashed var(--line);padding-top:10px}"+
     "#envivo .ev-why{color:var(--accent);cursor:pointer;text-decoration:underline dotted}"+
     "#envivo .ev-limite{font-size:12px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-top:7px;display:none}"+
     "#envivo .ev-limite.show{display:block}"+
-    "#envivo .ev-now{font-size:12.5px;color:var(--ink);margin:7px 0 0;display:flex;align-items:center;gap:7px;flex-wrap:wrap}"+
+    "#envivo .ev-now{font-size:12.5px;color:var(--ink);margin:11px 0 0;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:11px;padding:8px 11px}"+
     "#envivo .ev-now .nd{width:8px;height:8px;border-radius:50%;background:#c9881a;flex:0 0 auto}"+
     "#envivo .ev-now .nd.live{background:#16a34a;animation:evPulse 1.8s ease-out infinite}"+
     "#envivo .ev-now b{color:var(--ink)} #envivo .ev-now .muted{color:var(--muted)}"+
-    "#envivo .ev-slept{margin:9px 0 0;padding:9px 11px;border-radius:10px;background:#fff;border:1px solid var(--line)}"+
+    "#envivo .ev-slept{margin:12px 0 0;padding:11px 12px;border-radius:10px;background:#fff;border:1px solid var(--line)}"+
     "#envivo .ev-slept .h{font:700 12px/1.2 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);display:block;margin-bottom:5px}"+
     "#envivo .ev-slept ul{margin:0;padding:0;list-style:none} #envivo .ev-slept li{font-size:12.5px;color:var(--ink);padding:2px 0 2px 19px;position:relative}"+
     "#envivo .ev-slept li .mk{position:absolute;left:0;top:2px}"+
-    "#envivo .ev-quote{margin:9px 0 0;padding:7px 0 2px 12px;border-left:3px solid var(--accent);font-size:13.5px;font-style:italic;color:var(--ink)}"+
+    "#envivo .ev-quote{margin:12px 0 0;padding:7px 0 2px 12px;border-left:3px solid var(--accent);font-size:13.5px;font-style:italic;color:var(--ink)}"+
     "@media(prefers-reduced-motion:reduce){#envivo .ev-dot,#envivo .ev-now .nd.live{animation:none}}";
   D.head.appendChild(st);
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
@@ -4978,5 +5053,25 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 @keyframes hamsterTail{from,25%,50%,75%,to{transform:rotate(30deg) translateZ(-1px)}12.5%,37.5%,62.5%,87.5%{transform:rotate(10deg) translateZ(-1px)}}
 @keyframes spoke{from{transform:rotate(0)}to{transform:rotate(-1turn)}}
 </style>
+<script>
+/* v0.15 — HÁMSTER que se mueve SIEMPRE. Bug recurrente: el navegador de Tony tiene los efectos de
+   animación desactivados (prefers-reduced-motion), así que el CSS congela el hámster a media zancada
+   y "parece roto". Con motion normal, el CSS ya lo anima (no tocamos nada). SOLO cuando el sistema pide
+   reducir movimiento, damos a la rueda un giro LENTO y suave por JS (como un spinner de carga: pequeño,
+   constante, no mareante) para que se siga viendo "MADRE trabajando". Pausa con la pestaña oculta. */
+(function(){ try{
+  var reduce=false; try{ reduce=matchMedia('(prefers-reduced-motion:reduce)').matches; }catch(e){}
+  if(!reduce) return; /* motion normal → lo anima el CSS, nada que hacer */
+  var spokes=[].slice.call(document.querySelectorAll('.wheel-and-hamster .spoke'));
+  if(!spokes.length) return;
+  var ang=0, iv=null;
+  function tick(){ ang=(ang-2)%360; var tr='rotate('+ang+'deg)'; for(var i=0;i<spokes.length;i++) spokes[i].style.transform=tr; }
+  function start(){ if(!iv) iv=setInterval(tick,40); }   /* ~7 s por vuelta: visible pero calmado */
+  function stop(){ if(iv){ clearInterval(iv); iv=null; } }
+  start();
+  document.addEventListener('visibilitychange',function(){ if(document.hidden) stop(); else start(); });
+  window.__hamSpin={isOn:function(){return !!iv;},angle:function(){return ang;}};
+}catch(e){ console.warn('hamSpin', e); } })();
+</script>
 </body>
 </html>
