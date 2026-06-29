@@ -493,6 +493,118 @@
   }catch(e){ console.warn("diarioVivo", e); } })();
   </script>
 
+  <!-- ===== v0.15: "MADRE TE DICE" — canal MADRE -> Tony (avances publicos + decisiones que te requieren, en modo creador) ===== -->
+  <style id="mhCss">
+    #madreHabla{margin:0 0 12px;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--card),var(--accent-soft));box-shadow:0 2px 6px rgba(20,30,50,.05)}
+    #madreHabla .mh-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px}
+    .mh-emoji{font-size:18px}
+    .mh-title{font-weight:800;font-size:14px;color:var(--ink)}
+    .mh-sub{font-size:12px;color:var(--muted);margin-left:auto}
+    .mh-group{margin-top:10px}
+    .mh-glabel{font:800 11px/1.2 system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+    .mh-item{padding:7px 0;border-top:1px dashed var(--line)}
+    .mh-item:first-child{border-top:0}
+    .mh-it-tit{font-weight:700;font-size:13.5px;color:var(--ink)}
+    .mh-it-det{font-size:12.8px;color:var(--ink);opacity:.86;margin-top:2px;line-height:1.4}
+    .mh-rec{font-size:12.8px;color:var(--accent);font-weight:700;margin-top:4px}
+    .mh-opts{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+    .mh-opt{font:600 12px system-ui;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:3px 10px;cursor:pointer}
+    .mh-opt:hover{border-color:var(--accent);color:var(--accent)}
+    .mh-opt:disabled{opacity:.6;cursor:default}
+    .mh-lim{font-size:11.8px;color:var(--muted);margin-top:5px}
+    .mh-done{font-size:12px;font-weight:700;color:#10b981;margin-top:4px}
+    .mh-auto{font-size:12px;font-weight:700;color:#d97706;margin-top:4px}
+    .mh-lock{font-size:12.8px;color:var(--ink);background:rgba(0,0,0,.04);border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin-top:4px}
+    .mh-foot{margin-top:9px;font-size:11.3px;color:var(--muted)}
+    .mh-tag{display:inline-block;font:800 10px system-ui;border-radius:20px;padding:1px 7px;margin-right:6px;vertical-align:middle}
+    .mh-tag.av{background:#10b981;color:#0b1020}
+    .mh-tag.op{background:#6366f1;color:#fff}
+  </style>
+  <div id="madreHabla" hidden>
+    <div class="mh-head">
+      <span class="mh-emoji" aria-hidden="true">🗣️</span>
+      <span class="mh-title">MADRE te dice</span>
+      <span class="mh-sub" id="mhSub"></span>
+    </div>
+    <div id="mhAvances" class="mh-group"></div>
+    <div id="mhDecisiones" class="mh-group"></div>
+    <div id="mhOport" class="mh-group"></div>
+    <div class="mh-foot" id="mhFoot"></div>
+  </div>
+  <script>
+  /* v0.15 — "MADRE te dice": canal MADRE -> Tony en la web que Tony mira.
+     Lee la tabla Supabase madre_para_tony (la escribe la rutina cuaderno-feedback, service_role).
+     - avances y oportunidades: PUBLICOS (todos los ven).
+     - decisiones: solo en "modo creador" (localStorage cuaderno_madre_tony==="1"); a los demas solo se les dice cuantas hay.
+     - cada decision pendiente lleva recomendacion + fecha limite + "si no decides, decido yo" (regla anti-bloqueo).
+     - clic en una opcion -> se manda por window.__fb (feedback) para que la rutina lo recoja.
+     Degrada en silencio: si Supabase falla o no hay filas, el panel queda oculto. */
+  (function(){
+    try{
+      var box=document.getElementById("madreHabla");
+      var elA=document.getElementById("mhAvances"), elD=document.getElementById("mhDecisiones"),
+          elO=document.getElementById("mhOport"), elF=document.getElementById("mhFoot"), elS=document.getElementById("mhSub");
+      function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+      function creador(){ try{ return localStorage.getItem("cuaderno_madre_tony")==="1"; }catch(e){ return false; } }
+      function fdate(s){ try{ return new Date(s+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"long"}); }catch(e){ return s; } }
+      var rows=[], lastCreador=null;
+      function render(){
+        if(!rows.length){ box.hidden=true; return; }
+        var av=rows.filter(function(r){return r.tipo==="avance";});
+        var de=rows.filter(function(r){return r.tipo==="decision";});
+        var op=rows.filter(function(r){return r.tipo==="oportunidad";});
+        elA.innerHTML = av.length ? ('<div class="mh-glabel">📣 Lo que acabo de hacer</div>' + av.map(function(r){
+          return '<div class="mh-item"><div class="mh-it-tit"><span class="mh-tag av">HECHO</span>'+esc(r.titulo)+'</div>'+(r.detalle?'<div class="mh-it-det">'+esc(r.detalle)+'</div>':'')+'</div>';
+        }).join("")) : "";
+        var pend=de.filter(function(r){return r.estado==="pendiente";});
+        if(creador()){
+          elD.innerHTML = de.length ? ('<div class="mh-glabel">🤝 Decisiones que te pido (no urgen: si no contestas, decido yo)</div>' + de.map(function(r){
+            var h='<div class="mh-item"><div class="mh-it-tit">'+esc(r.titulo)+'</div>';
+            if(r.detalle) h+='<div class="mh-it-det">'+esc(r.detalle)+'</div>';
+            if(r.recomendacion) h+='<div class="mh-rec">👉 Yo haría: '+esc(r.recomendacion)+'</div>';
+            if(r.estado==="decidido_tony"){ h+='<div class="mh-done">✅ Decidido por ti.</div>'; }
+            else if(r.estado==="decidido_auto"){ h+='<div class="mh-auto">🤖 Lo decidí yo sola (no contestaste a tiempo). Reversible: dime si lo cambio.</div>'; }
+            else{
+              if(r.opciones){ h+='<div class="mh-opts">'+String(r.opciones).split("·").map(function(p){ p=p.trim(); return p?('<button class="mh-opt" data-id="'+esc(r.id)+'" data-op="'+esc(p)+'">'+esc(p)+'</button>'):""; }).join("")+'</div>'; }
+              h+='<div class="mh-lim">⏳ '+(r.fecha_limite?('Si no decides antes del '+esc(fdate(r.fecha_limite))+', elijo la recomendada y te aviso.'):'Sin prisa: si no decides, acabo eligiendo la recomendada y te aviso.')+'</div>';
+            }
+            return h+'</div>';
+          }).join("")) : "";
+        } else {
+          elD.innerHTML = pend.length ? ('<div class="mh-glabel">🤝 Decisiones para ti</div><div class="mh-lock">🔒 Tengo <b>'+pend.length+'</b> decisi'+(pend.length===1?'ón':'ones')+' esperando tu OK. Pulsa <b>«👤 Soy el creador»</b> arriba para verlas. (Si no decides, las resuelvo yo y te aviso — nada se queda parado en ti.)</div>') : "";
+        }
+        elO.innerHTML = op.length ? ('<div class="mh-glabel">💡 Oportunidades que absorbí para ti</div>' + op.map(function(r){
+          return '<div class="mh-item"><div class="mh-it-tit"><span class="mh-tag op">IDEA</span>'+esc(r.titulo)+'</div>'+(r.detalle?'<div class="mh-it-det">'+esc(r.detalle)+'</div>':'')+'</div>';
+        }).join("")) : "";
+        elS.textContent = creador() ? "vista creador" : "";
+        elF.textContent = "MADRE lo deja aquí para ti. Las decisiones solo las ves tú en «modo creador» (lo secreto de verdad va al buzón, no aquí).";
+        box.hidden=false;
+        lastCreador=creador();
+        Array.prototype.forEach.call(elD.querySelectorAll(".mh-opt"), function(b){
+          b.addEventListener("click", function(){
+            var txt="DECISION #"+b.getAttribute("data-id")+" -> elijo: "+b.getAttribute("data-op");
+            try{ if(typeof window.__fb==="function"){ window.__fb({card:"madre_para_tony",section:"decision",tipo:"decision",texto:txt}); } }catch(e){}
+            b.textContent="✓ enviado"; b.disabled=true;
+            try{ if(typeof toast==="function") toast("Anotado — MADRE lo aplicará."); }catch(e){}
+          });
+        });
+      }
+      function load(sb){
+        sb.from("madre_para_tony").select("*").eq("hidden",false).order("created_at",{ascending:false}).then(function(res){
+          if(res && !res.error && res.data){ rows=res.data; render(); }
+        });
+      }
+      var t=0, iv=setInterval(function(){
+        t++;
+        if(window.__sb){ clearInterval(iv); load(window.__sb);
+          try{ window.__sb.channel("mpt-rt").on("postgres_changes",{event:"*",schema:"public",table:"madre_para_tony"},function(){ load(window.__sb); }).subscribe(); }catch(e){}
+        } else if(t>=30){ clearInterval(iv); }
+      },400);
+      setInterval(function(){ if(lastCreador!==null && creador()!==lastCreador) render(); }, 1500);
+    }catch(e){ console.warn("madreHabla", e); }
+  })();
+  </script>
+
   <!-- ===== v0.12: "ventana viva" — antes/después (clarity 10s) + preguntas abiertas (tensión narrativa) ===== -->
   <style id="vivoCss">
     #vsCard .vsHead{display:flex;align-items:center;gap:10px;margin-bottom:4px}
@@ -2056,6 +2168,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-06-29",titulo:"🗣️ «MADRE te dice»: MADRE ahora te habla desde el cuaderno (v0.15)",detalle:"Nuevo panel arriba donde MADRE te deja cosas en la web que más miras: (1) lo que ACABA DE HACER (avances reales), (2) las DECISIONES que necesita de ti —que solo ves tú en «modo creador»— cada una con su recomendación y una FECHA LÍMITE: si no decides a tiempo, MADRE elige la recomendada y te avisa, así nada se queda parado en ti; y (3) OPORTUNIDADES de negocio que ha absorbido de los vídeos. Puedes elegir una opción de un toque y le llega como feedback. Lo secreto de verdad sigue yendo al buzón privado, no a la web."},
     {fecha:"2026-06-29",titulo:"🌳 El MAPA da otro salto: entras en cada rama y ves cómo avanza MADRE (v0.15)",detalle:"El mapa (lo que más te engancha) sube de nivel: (1) al tocar una rama, la CÁMARA ENTRA en ella (se acerca) y se abren sus sub-ramas — y ahora se DESCUBREN solas, porque al abrir el mapa la rama en la que se trabaja AHORA ya viene desplegada. (2) MULTINIVEL de verdad: algunas sub-ramas tienen más cosas dentro (verás «＋ 3 dentro»); tócalas y se abre otra capa. (3) Cada rama te cuenta «cómo AVANZA MADRE aquí» (qué hace y qué le falta) y tiene un botón «🤔 no entiendo» para marcar lo que no pillas. (4) Abajo llevas la cuenta «has abierto N/8 ramas»: explóralas todas y desbloqueas un guiño — una razón honesta para volver y terminar de descubrirla. Además, arreglos que pediste: el 🐹 hámster vuelve a MOVERSE aunque tengas el móvil/PC en «menos animaciones»; la zona «en directo» respira mejor (menos apretada, nada pegado al borde); y dejé claro que lo de «ayudar a MADRE» NO son deberes para ti — MADRE ya busca esas soluciones sola."},
     {fecha:"2026-06-29",titulo:"🫀 El cuaderno ahora RESPIRA + se entiende antes + el mapa cabe en cualquier pantalla (v0.14)",detalle:"Tres cosas: (1) RESPIRA de verdad — nuevo «📓 Diario del cuaderno» que enseña los cambios REALES que se le van haciendo (sacados de su historial de verdad), con su hora («hace 20 min…») y un «🌙 desde tu última visita: N cambios nuevos». Así, si vuelves mañana, ves qué cambió mientras no estabas — sin inventar nada, son cambios de verdad. (2) Se entiende ANTES — la primera pantalla va al grano: primero «qué es» y «por qué me importa», con un gancho en primera persona y menos texto; el MAPA grande (que te encanta) baja un poco, porque es una RECOMPENSA por explorar, no la presentación. (3) Arreglo del mapa a pantalla completa: en móviles o ventanas BAJAS, la parte de abajo (info y leyenda) ya no aplasta el mapa ni se corta — ahora cabe y se desliza, y los botones de zoom ya no se salen de la pantalla."},
     {fecha:"2026-06-29",titulo:"🌳 El mapa de MADRE ahora es EXPLORABLE a pantalla completa + la web abre con «AHORA» (v0.13)",detalle:"El mapa de ramas dio el salto a EXPERIENCIA: toca «🔍 Explorar el mapa en grande» y se abre a pantalla completa, oscuro e inmersivo, donde puedes ACERCAR/ALEJAR y ARRASTRAR (también con dos dedos en el móvil), y al tocar una rama se ABREN sus sub-ramas (lo que hay dentro de cada parte de MADRE: el cerebro, el vídeo, el negocio…). La rama en la que se trabaja AHORA se resalta sola, y todo va enmarcado como una FOTO con su fecha (sin fingir tiempo real). Puedes compartir el mapa con un enlace y se cierra con Esc o con «atrás». Además, el bloque «MADRE en directo» ahora ABRE con un «📍 AHORA» (qué hace estos días + la última señal vuestra de verdad, esa sí en vivo), un «🌙 Mientras no mirabas» con 3 cosas honestas del día, y una frase del día para llevarte. Apagable y pensado para todos (teclado, buen contraste, respeta «menos animaciones»)."},
