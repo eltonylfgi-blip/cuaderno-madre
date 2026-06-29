@@ -6,6 +6,17 @@ Tony lee esto y decide. (Lo grande SIEMPRE espera; lo pequeño y claro la rutina
 
 ---
 
+## MODERACIÓN — 2026-06-30 (2 comentarios ocultados)
+
+Ocultados por la rutina automática. Puedes verlos en Supabase si quieres confirmar o restaurar.
+
+- **id `b8940433`** (nombre: "pollamasiva") — Texto: insulto racial con referencia a Hitler. Ocultado: contenido de odio grave (insultos raciales + Hitler).
+- **id `5f528da2`** (nombre: "soy franquista") — Texto: contenido racista dirigido a una etnia. Ocultado: discurso de odio.
+
+Los demás comentarios borderline (juegos de palabras, bromas) se dejaron visibles.
+
+---
+
 ## 2026-06-21 — Pegar imágenes desde el portapapeles (respuesta + 1 cosa que decides tú)
 **Feedback (Drive, pedir-funcion, GENERAL):** "quiero q deje pegar imágenes desde el portapapeles, no lo de adjuntar seleccionando, quiero pegarlas directamente; pero me pregunto ¿cómo las procesa? si no pueden ir al buzón o qué?"
 
