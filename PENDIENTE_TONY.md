@@ -53,7 +53,7 @@ Los demás comentarios borderline (juegos de palabras, bromas) se dejaron visibl
 - ✅ **Arreglado:** ya puedes usar el lápiz ✏️ y el corazón 💗 sobre las **tiras de sonido (ASMR)** — faltaba `.cmTex` en el selector. (Feedback id `c3c1f7f8`.)
 
 **RESPUESTAS a tus preguntas:**
-- **"¿Dónde está el guiño pa la tata y cómo lo abro?"** → Es la **nota secreta** escondida en el **post-it de arriba del todo** (el "📝 ¿feedback?"). Para abrirla: toca la **chincheta 📌 pequeñita** que tiene encima. Está discreta a propósito (easter-egg) — por eso no la encontrabas. *(PARKING: hacerla más fácil de ver, como pediste.)*
+- **"¿Dónde está el guiño pa la tata y cómo lo abro?"** → Es la **nota secreta** escondida en el **post-it de arriba del todo** (el "📝 ¿feedback?"). Para abrirla: toca la **chincheta 📌 pequeñita** que tiene encima. *(✅ 2026-07-01: chincheta más visible — opacity subida de 0.38 a 0.62, commit `018efa7`. Ya no se esconde tanto. Espero que la tata la encuentre ahora 🙂)*
 - **"¿Dónde meto vídeos para que salgan en la web del cuaderno?"** → Hoy **NO se pueden poner vídeos en la web del cuaderno** (función por construir). No confundir: los vídeos para que **MADRE los APRENDA** van al *pipeline de vídeo* (bandeja "PEGAR TODO" / `VIDEO_NUEVOS`), que es OTRA cosa distinta de esta web. *(PARKING: incrustar un vídeo elegido en el cuaderno.)*
 - **"Falta una sección donde el cuaderno me hable/responda"** → **Ya existe a medias**: si dejas un **COMENTARIO PÚBLICO** (no "feedback"), **MADRE te contesta** (verás respuestas firmadas "MADRE 🤱🏻"). *(PARKING: una sección de chat dedicada, más grande.)*
 
