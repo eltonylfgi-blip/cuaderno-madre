@@ -2382,6 +2382,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-01",titulo:"📌 La chincheta de la nota secreta se ve mejor",detalle:"La chincheta pequeñita del post-it (la que abre la nota para la tata) era tan discreta que costaba encontrarla. Ahora está un poco más visible (opacidad subida de 0.38 a 0.62) — sigue siendo un guiño, pero ya no se esconde tanto."},
     {fecha:"2026-06-29",titulo:"📖 Glosario más claro",detalle:"Tres entradas que los visitantes pidieron simplificar: «Suelo externo» se explica sin jerga, «NO-RUINA» ya tiene su nota de 'por qué importa' (igual que el resto), y «Temperatura» estrena la analogía de la maleta para que se entienda al momento."},
     {fecha:"2026-06-29",titulo:"🌱 Proponer una rama ahora es TOCAR DÓNDE quieres que salga (v0.18)",detalle:"Antes, para proponer una rama tenías que rellenar un formulario. Ahora es VISUAL, como tú pediste: pulsa «🌱 Proponer rama» y entras en «modo proponer»; entonces TOCAS en el mapa la rama de la que quieres que nazca tu idea (o el centro 🤱🏻 para una rama nueva de las grandes) y aparece ahí mismo una «rama fantasma» punteada, en el sitio exacto. Solo entonces le pones el nombre — y la fantasma lo va mostrando mientras escribes. El sitio se elige TOCANDO, no escribiendo. Sigue siendo honesto: la rama sale punteada y dice «(propuesta · sin confirmar)» porque no es de verdad hasta que MADRE la juzga y la acepta; y se le manda exactamente igual que antes. El formulario de antes sigue estando, por si acaso."},
     {fecha:"2026-06-29",titulo:"🌱 Ahora puedes PROPONER ramas y sub-ramas al mapa (v0.17)",detalle:"El mapa deja de ser solo para mirar: ahora puedes AYUDAR a construirlo. Dentro de una rama verás «🌱 Proponer una sub-rama aquí» (sabe sola bajo qué rama la pones, no tienes que elegir nada), y arriba del mapa hay «🌱 Proponer rama» para un tema nuevo de los grandes. Le pones un nombre (y, si quieres, una frase de qué sería) y se lo mandas a MADRE. HONESTO: no aparece en el mapa al momento — se lo queda MADRE, lo JUZGA (puede decir que sí o que no) y, si encaja, lo añade como rama de verdad más adelante. De paso arreglé el botón «🤔 No entiendo esto»: antes abría una ventana que se quedaba detrás del mapa (no se veía); ahora es de un toque y te confirma «✓ apuntado». Todo revisado por un equipo de revisores (10 fallos reales encontrados y corregidos: que el texto raro no rompa nada, que no mienta si te quedas sin conexión, botones grandes para el dedo, y accesible con teclado/lector)."},
@@ -3080,8 +3081,8 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
   line-height:18px;
   text-align:center;
   padding:0; margin:0;
-  opacity:.38;
-  filter: grayscale(.3);
+  opacity:.62;
+  filter: grayscale(.1);
   transition: opacity .2s ease, transform .2s ease;
   z-index:5;
   border-radius:50%;

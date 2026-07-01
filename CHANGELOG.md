@@ -3,6 +3,11 @@
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
 Cada línea: fecha · qué cambió · por qué (qué feedback) · cómo revertir (`git revert <hash>`).
 
+## 2026-07-01 — chincheta más visible (feedback ffac4e41)
+- **Qué cambió:** `.ns-pin` opacity subida de `.38` a `.62`; grayscale reducida de `.3` a `.1`. La chincheta del post-it (easter-egg "pa la tata") pasa de casi invisible a perceptible sin perder el toque discreto.
+- **Por qué:** Tony (feedback 2026-06-28, id `ffac4e41`) pidió «haz q se vea mas claro». Llevaba parked desde 2026-06-28 (3+ días → regla 1e: MADRE decide).
+- **Cómo revertir:** `git revert <hash-de-este-commit>`; o cambiar opacity a `.38` y grayscale a `.3` en `.ns-pin`.
+
 ## 2026-06-29 — v0.18: proponer rama VISUAL / por clic («rama fantasma»)
 - **Qué cambió:** el botón «🌱 Proponer rama» del mapa ya no abre un formulario directo: entra en «modo proponer», tocas (o Enter/Espacio) la rama de la que nace —o el centro 🤱🏻 para una rama nueva grande—, sale una rama fantasma punteada ahí y se abre `#mbPropose` para nombrarla (el nombre se refleja inline en la fantasma, anti-XSS por `textContent`). Mismo envío `window.__fb` tipo `propuesta-rama` (contrato con el loop sin cambios). El botón por-nodo «Proponer una sub-rama aquí» sigue de base/fallback. `window.__cmVersion="v0.18"`.
 - **Por qué:** Tony, tras ver v0.17, pidió que proponer fuese «clicar DÓNDE sale en el mapa, no rellenar un formulario».
