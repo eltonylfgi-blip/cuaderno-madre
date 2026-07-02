@@ -3,6 +3,11 @@
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
 Cada línea: fecha · qué cambió · por qué (qué feedback) · cómo revertir (`git revert <hash>`).
 
+## 2026-07-02 — nota visible "¿no tienes salón?" en Paso 1 (feedback 0a99c3a0)
+- **Qué cambió:** añadida línea `💡 ¿No tienes salón? No pasa nada — elige Opción B.` justo antes del "Responde una de dos" en la tarjeta "Tu parte / Paso 1 — frente peluquería".
+- **Por qué:** visitante (id `0a99c3a0`, 2026-06-21) preguntó "no tengo ninguna peluquería qué hago". La Opción B ya lo resolvía pero dentro de un `<details>` colapsado. Llevaba parked desde 2026-06-28 (4 días → regla 1e: MADRE decide).
+- **Cómo revertir:** `git revert <hash>` o borrar la línea `<p class="small" ...>💡 ¿No tienes salón?...</p>` en index.html.
+
 ## 2026-07-01 — chincheta más visible (feedback ffac4e41)
 - **Qué cambió:** `.ns-pin` opacity subida de `.38` a `.62`; grayscale reducida de `.3` a `.1`. La chincheta del post-it (easter-egg "pa la tata") pasa de casi invisible a perceptible sin perder el toque discreto.
 - **Por qué:** Tony (feedback 2026-06-28, id `ffac4e41`) pidió «haz q se vea mas claro». Llevaba parked desde 2026-06-28 (3+ días → regla 1e: MADRE decide).
