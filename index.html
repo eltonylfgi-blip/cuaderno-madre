@@ -1178,28 +1178,41 @@
     function focusOn(px,py,nk){ animateTo(500-px*nk,500-py*nk,nk); }
     function focusBranch(nd,nk){ var ux=nd.x-CX,uy=nd.y-CY,ul=Math.hypot(ux,uy)||1; focusOn(nd.x+ux/ul*80, nd.y+uy/ul*80, nk); }
     svg.addEventListener("wheel",function(e){ e.preventDefault(); stopAnim(); var s=toSvg(e.clientX,e.clientY); zoomAround(s.x,s.y, e.deltaY<0?1.12:1/1.12); },{passive:false});
-    /* 🔴 BUGFIX v0.19 (LA causa de que «tocar una rama no hace nada» desde v0.13): capturar el puntero
-       en pointerdown hace que el navegador RETARGETEE/trague el click → los toques REALES jamás llegaban
-       al <g> del nodo (los tests sintéticos con dispatchEvent lo enmascaraban). Cazado con input real
-       (CDP). Fix estándar: NO capturar al bajar; capturar SOLO cuando hay ARRASTRE de verdad (umbral
-       6px en píxeles de pantalla) o gesto de 2 dedos. Un tap limpio ya no se captura → el click llega. */
-    var pts={}, raw={}, cap={}, dragId=null, dragPrev=null, pinchPrev=null, TAPTOL=6;
+    /* 🔴 v0.21 — FIX DEFINITIVO de «no puedo abrir/reabrir ramas» (sobrevivió a v0.19): el TAP ya NO
+       depende del evento `click` del DOM, que el navegador RETARGETEA de forma impredecible cuando hay
+       pan/zoom con pointer-capture (por eso a veces no llegaba al nodo, o llegaba al SVG y colapsaba).
+       Ahora: se detecta el tap en `pointerup` (1 dedo, sin arrastre) y se enruta al nodo por GEOMETRÍA
+       (nodeAtPoint). Cero dependencia del click → robusto en ratón y táctil, y VERIFICABLE de verdad
+       (escuchamos pointerup, no un click que el navegador reescribe). Umbral 10px = tap vs arrastre. */
+    var pts={}, raw={}, dragId=null, dragPrev=null, pinchPrev=null, moved=false, downPt=null, TAPTOL=10;
     function ptsCount(){ var n=0; for(var i in pts) n++; return n; }
-    function capture(id){ if(cap[id]) return; try{ svg.setPointerCapture(id); }catch(_){} cap[id]=true; svg.classList.add("drag"); }
-    svg.addEventListener("pointerdown",function(e){ stopAnim(); pts[e.pointerId]=toSvg(e.clientX,e.clientY); raw[e.pointerId]={x:e.clientX,y:e.clientY};
-      if(ptsCount()===1){ dragId=e.pointerId; dragPrev=pts[e.pointerId]; }
-      else if(ptsCount()===2){ dragId=null; var a=keys(); pinchPrev=dist(pts[a[0]],pts[a[1]]); a.forEach(function(id){ capture(+id); }); } });
     function keys(){ var a=[]; for(var i in pts) a.push(i); return a; }
     function dist(p,q){ return Math.hypot(p.x-q.x,p.y-q.y); }
     function mid(p,q){ return {x:(p.x+q.x)/2,y:(p.y+q.y)/2}; }
+    svg.addEventListener("pointerdown",function(e){ stopAnim(); pts[e.pointerId]=toSvg(e.clientX,e.clientY); raw[e.pointerId]={x:e.clientX,y:e.clientY};
+      if(ptsCount()===1){ dragId=e.pointerId; dragPrev=pts[e.pointerId]; moved=false; downPt={x:e.clientX,y:e.clientY,id:e.pointerId}; }
+      else if(ptsCount()>=2){ dragId=null; moved=true; downPt=null; var a=keys(); pinchPrev=dist(pts[a[0]],pts[a[1]]); a.forEach(function(id){ try{ svg.setPointerCapture(+id); }catch(_){} }); svg.classList.add("drag"); } });
     svg.addEventListener("pointermove",function(e){ if(!(e.pointerId in pts)) return; var cur=toSvg(e.clientX,e.clientY);
-      if(!cap[e.pointerId] && raw[e.pointerId] && Math.hypot(e.clientX-raw[e.pointerId].x, e.clientY-raw[e.pointerId].y)>TAPTOL) capture(e.pointerId);
+      if(!moved && raw[e.pointerId] && Math.hypot(e.clientX-raw[e.pointerId].x, e.clientY-raw[e.pointerId].y)>TAPTOL){ moved=true; if(ptsCount()===1){ try{ svg.setPointerCapture(e.pointerId); }catch(_){} svg.classList.add("drag"); } }
       if(ptsCount()>=2){ var a=keys(); var prevMid=mid(pts[a[0]],pts[a[1]]); pts[e.pointerId]=cur; var nm=mid(pts[a[0]],pts[a[1]]); var nd2=dist(pts[a[0]],pts[a[1]]);
         if(pinchPrev){ zoomAround(nm.x,nm.y, nd2/pinchPrev); } pinchPrev=nd2; tx+=(nm.x-prevMid.x); ty+=(nm.y-prevMid.y); apply(); return; }
-      if(dragId===e.pointerId && dragPrev && cap[e.pointerId]){ tx+=(cur.x-dragPrev.x); ty+=(cur.y-dragPrev.y); apply(); dragPrev=cur; pts[e.pointerId]=cur; } });
-    function release(e){ if(e.pointerId in pts) delete pts[e.pointerId]; delete raw[e.pointerId]; if(cap[e.pointerId]){ try{ svg.releasePointerCapture(e.pointerId); }catch(_){} delete cap[e.pointerId]; }
-      if(ptsCount()<2) pinchPrev=null; if(ptsCount()===0){ dragId=null; dragPrev=null; svg.classList.remove("drag"); } else if(ptsCount()===1){ var a=keys(); dragId=+a[0]; dragPrev=pts[a[0]]; } }
+      if(dragId===e.pointerId && dragPrev && moved){ tx+=(cur.x-dragPrev.x); ty+=(cur.y-dragPrev.y); apply(); dragPrev=cur; pts[e.pointerId]=cur; } });
+    function routeTap(cx,cy){ var hit=nodeAtPoint(cx,cy); /* geometría, no el click del DOM */
+      if(hit==="center"){ if(proposeMode) pickParent(null); else showHint(); return; }
+      if(hit&&hit.__ghost){ hit.__ghost(); return; }
+      if(hit){ if(proposeMode){ pickParent(hit); } else { onNodeClick(hit); } return; }
+      if(proposeMode) return; collapseAll(); showHint(); }
+    function release(e){
+      var wasTap = (!!downPt && downPt.id===e.pointerId && !moved && ptsCount()===1 && e.type!=="pointercancel");
+      if(e.pointerId in pts) delete pts[e.pointerId]; delete raw[e.pointerId]; try{ svg.releasePointerCapture(e.pointerId); }catch(_){}
+      if(ptsCount()<2) pinchPrev=null;
+      if(ptsCount()===0){ dragId=null; dragPrev=null; svg.classList.remove("drag"); }
+      else if(ptsCount()===1){ var a=keys(); dragId=+a[0]; dragPrev=pts[a[0]]; moved=true; } /* 1 dedo tras soltar el otro = ya no es tap */
+      if(wasTap){ var d=downPt; downPt=null; routeTap(d.x,d.y); } else { downPt=null; } }
     svg.addEventListener("pointerup",release); svg.addEventListener("pointercancel",release);
+    /* neutraliza el `click` del DOM dentro del SVG (fase captura) → nunca hay doble disparo con el tap de pointerup;
+       los botones de zoom/propuesta viven FUERA del SVG, no les afecta; el teclado usa keydown, tampoco pasa por aquí */
+    svg.addEventListener("click",function(e){ e.stopPropagation(); }, true);
     var bi=document.getElementById("mbIn"),bo=document.getElementById("mbOut"),br=document.getElementById("mbReset");
     if(bi) bi.addEventListener("click",function(){ stopAnim(); zoomAround(CX,CY,1.25); }); if(bo) bo.addEventListener("click",function(){ stopAnim(); zoomAround(CX,CY,1/1.25); }); if(br) br.addEventListener("click",function(){ collapseAll(); center(); showHint(); });
 
@@ -1363,12 +1376,7 @@
         if(isNow){ var nb=el("text",{x:nd.x,y:nd.y-60,"text-anchor":"middle","font-size":"12","font-weight":"800",fill:"#fff"}); nb.textContent="● AHORA"; g.appendChild(nb); }
         (function(node){ function act(){ if(proposeMode){ pickParent(node); } else { onNodeClick(node); } } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(nd);
         view.appendChild(g); });
-      svg.addEventListener("click",function(e){ if(e.target===svg||e.target===view){
-        var hit=nodeAtPoint(e.clientX,e.clientY); /* 🛟 ¿el click «vacío» cae sobre un nodo? → enrutar */
-        if(hit==="center"){ if(proposeMode) pickParent(null); return; }
-        if(hit&&hit.__ghost){ hit.__ghost(); return; }
-        if(hit){ if(proposeMode){ pickParent(hit); } else { onNodeClick(hit); } return; }
-        if(proposeMode) return; collapseAll(); showHint(); } });
+      /* v0.21: el enrutado del tap vive ahora en routeTap (pointerup), NO en un handler de click aquí. */
       var leg=document.getElementById("mbLeg"); if(leg){ leg.textContent=""; for(var key in STATES){ var sp=document.createElement("span"); var ic=document.createElement("i"); ic.style.background=STATES[key].c; var t2=document.createElement("span"); t2.textContent=STATES[key].l; sp.appendChild(ic); sp.appendChild(t2); leg.appendChild(sp); }
         var sp2=document.createElement("span"); var ic2=document.createElement("i"); ic2.style.background="none"; ic2.style.border="2px solid #cbd5f0"; var t3=document.createElement("span"); t3.textContent="anillo exterior = cuánto RINDE esa rama (0-10)"; sp2.appendChild(ic2); sp2.appendChild(t3); leg.appendChild(sp2); }
       var ft=document.getElementById("mbFoot"); if(ft){ var top3=NODES.slice().filter(function(n){return n.benef!=null;}).sort(function(a,b){return b.benef-a.benef;}).slice(0,3).map(function(n){return n.emoji;}).join(" · ");
@@ -2488,6 +2496,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-03",titulo:"✅ ARREGLADO DE VERDAD: abrir y reabrir ramas del mapa (v0.21)",detalle:"El arreglo de ayer no bastaba en todos los móviles/navegadores: seguía costando abrir y REABRIR ramas. Ahora está cambiado de raíz — el toque ya no depende de una pieza del navegador que se portaba raro con el zoom; la rama se detecta directamente por DÓNDE tocas. Toca una rama y se abre; tócala otra vez y se cierra; otra vez y se reabre. Arrastrar mueve el mapa (no abre), pellizcar hace zoom, y tocar fuera lo cierra todo. Probado paso a paso simulando toques reales. Si aún te fallara en tu móvil, dímelo — pero esta vez el mecanismo es el correcto."},
     {fecha:"2026-07-03",titulo:"📖 El cuaderno ahora cuenta UNA historia + el caos por fin es CAÓTICO (v0.20)",detalle:"Dos cambios gordos. (1) LA HISTORIA: la página intentaba contarte demasiadas cosas a la vez y no sabías con qué quedarte. Ahora arriba hay UNA idea («estás viendo una IA que intenta mejorar sola durante años — ¿conseguirá demostrarlo en el mundo real?»), la prueba de que está viva HOY (sus cambios reales de las últimas 24 h, con hora), la promesa honesta de qué habrá si vuelves mañana, y el mapa 🌳 como puerta principal. Lo denso (comparativas, métricas, seguimiento en directo) sigue ahí, pero más abajo — primero la historia, luego la maquinaria. (2) EL CAOS: era demasiado suave y predecible… y encima, si tu aparato pide «menos animaciones», el modo entero quedaba congelado sin que lo supieras. Como el caos lo enciendes TÚ a propósito, ahora va con todo: travesuras al azar de verdad (nada de ritmo fijo), RÁFAGAS repentinas con temblor, calmas falsas para pillarte, lluvia de emojis 🍕⚡, pantallazos de color y tarjetas que se caen y rebotan. Apagable al instante, como siempre."},
     {fecha:"2026-07-03",titulo:"🔧 ARREGLADO: tocar una rama del mapa ahora FUNCIONA de verdad + cada rama te dice si RINDE (v0.19)",detalle:"Confesión honesta: desde hacía días, tocar una rama del mapa con el dedo o el ratón NO hacía nada (o lo cerraba todo) — un fallo técnico escondido hacía que el toque nunca llegara a la rama; solo funcionaba la que se abría sola. Por eso parecía que «no había sub-ramas» y que proponer ramas «estaba roto». ARREGLADO de raíz y con doble red de seguridad. Además, el mapa ahora es un PANEL DE MANDO de verdad: cada rama lleva un ANILLO exterior que dice cuánto está RINDIENDO (0-10, con el dato que lo justifica), abajo ves 🏆 cuáles rinden más — y con esos números MADRE decide qué frente empuja. Y al proponer una rama, se queda como brote ⏳ «en revisión» EN TU MAPA (solo lo ves tú) hasta que MADRE la juzga (~6 h): si encaja se vuelve rama de verdad para todos, y las ramas que no rinden se archivan con el tiempo. Las ideas compiten; la evidencia decide. Bonus: el 🐹 hámster vuelve a CORRER entero (el cuerpo estaba congelado si tu aparato pide «menos animaciones»)."},
     {fecha:"2026-07-02",titulo:"💡 Paso 1 — Nota visible si no tienes salón",detalle:"Un visitante preguntó '¿qué hago si no tengo peluquería?' La respuesta ya estaba ahí (Opción B), pero dentro de un desplegable que pasaba desapercibido. Ahora hay una línea visible justo antes: '¿No tienes salón? No pasa nada — elige Opción B.'"},
@@ -5219,7 +5228,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.20";
+  window.__cmVersion="v0.21";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 29 jun 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
