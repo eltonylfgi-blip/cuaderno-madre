@@ -3,6 +3,12 @@
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
 Cada línea: fecha · qué cambió · por qué (qué feedback) · cómo revertir (`git revert <hash>`).
 
+## 2026-07-03 — v0.19: FIX taps del mapa (bug real desde v0.13) + hámster + beneficio por rama + brotes ⏳
+- **Qué cambió (3 cosas):** (1) **BUG REAL arreglado**: `setPointerCapture` en `pointerdown` hacía que el navegador retargeteara/tragara el click → tocar una rama con dedo/ratón REAL no hacía nada (o colapsaba todo) desde v0.13; solo se abría la rama auto-abierta (por eso Tony veía «1/8» y «añadir ramas bugeado», y por eso hay CERO `propuesta-rama` en Supabase). Doble fix: captura solo con arrastre real (umbral 6px / 2 dedos) + **rescate geométrico** (un click que cae en el SVG «vacío» pero dentro de un nodo se enruta al nodo). (2) **Hámster**: bajo `prefers-reduced-motion` el cuerpo quedaba congelado (v0.15 solo giraba la rueda); reglas CSS más específicas re-activan TODA su animación. (3) **Mapa funcional**: `benef` (0-10) + `met` por rama (anillo exterior + barra en el panel + 🏆 top-3 en el pie = con qué MADRE decide qué frente empuja); propuestas → brote ⏳ «en revisión» local (localStorage, honesto) + copy con plazo real (~6 h); la rutina `cuaderno-feedback` es ahora el RECEPTOR de `propuesta-rama` (SKILL PASO 2: juzgar liberal → añadir a `__MAPA` → contarlo en Evolución; buzón avisado para que el loop NO las duplique).
+- **Por qué:** Tony (3-jul): «el hámster no corre», «añadir ramas está bugeado», «métricas numéricas de beneficio para que MADRE decida lo que está funcionando».
+- **Verificación:** click retargeteado simulado + camino directo + vacío + propose (4/4), brote persiste tras recarga, `node --check` 29/29, 0 errores consola. El tap 100% real lo confirma Tony en su móvil (el harness no inyecta input real — su preview_click resultó no meter eventos: cazado con control positivo).
+- **Revertir:** `git revert <hash de esta tanda>`.
+
 ## 2026-07-02 — nota visible "¿no tienes salón?" en Paso 1 (feedback 0a99c3a0)
 - **Qué cambió:** añadida línea `💡 ¿No tienes salón? No pasa nada — elige Opción B.` justo antes del "Responde una de dos" en la tarjeta "Tu parte / Paso 1 — frente peluquería".
 - **Por qué:** visitante (id `0a99c3a0`, 2026-06-21) preguntó "no tengo ninguna peluquería qué hago". La Opción B ya lo resolvía pero dentro de un `<details>` colapsado. Llevaba parked desde 2026-06-28 (4 días → regla 1e: MADRE decide).

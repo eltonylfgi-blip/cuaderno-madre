@@ -802,11 +802,15 @@
      atención esta semana. Pensado para que el LOOP lo pueda hornear más adelante desde un TSV
      (propuesta dejada al BUZÓN: SISTEMA/MAPA_RAMAS.tsv) sin tocar el resto del HTML. */
   window.__MAPA = {
-    foto:"29-jun-2026",
+    foto:"3-jul-2026",
     ahora:"📓",   /* emoji de la rama en la que se trabaja AHORA (se resalta sola) */
+    /* v0.19: benef (0-10) = cuánto está RINDIENDO invertir en esta rama esta semana, estimado por MADRE
+       (foto honesta, no medición fina); met = el dato crudo que lo justifica. El loop los recalcula al
+       hornear MAPA_RAMAS.tsv → con estos números MADRE decide qué frente empuja y Tony ve dónde rinde
+       explorar. Anillo exterior del nodo = benef. */
     states:{ atencion:{c:"#7c3aed",l:"se le da ATENCIÓN ahora"}, vivo:{c:"#10b981",l:"corre sola / viva"}, marcha:{c:"#f59e0b",l:"en marcha (con Tony)"}, conocimiento:{c:"#94a3b8",l:"solo conocimiento / en reposo"} },
     nodes:[
-      {emoji:"🧠",t:"El cerebro (loop)",st:"atencion",d:"La rutina que mejora MADRE sola, cada ~30 min. Es su latido.",prog:"Lleva meses despertándose cada ~30 min y auto-revisándose. Ya sabe juzgar las ideas que le llegan (no obedece a ciegas). Le falta: convertir más de sus principios en gatillos que se disparen solos.",kids:[
+      {emoji:"🧠",t:"El cerebro (loop)",st:"atencion",benef:7,met:"se despierta ~48 veces al día y cada semana convierte alguna lección en regla fija",d:"La rutina que mejora MADRE sola, cada ~30 min. Es su latido.",prog:"Lleva meses despertándose cada ~30 min y auto-revisándose. Ya sabe juzgar las ideas que le llegan (no obedece a ciegas). Le falta: convertir más de sus principios en gatillos que se disparen solos.",kids:[
         {t:"Loop madre-mejora-continua",d:"Se despierta cada ~30 min y se auto-revisa."},
         {t:"El KERNEL (sus principios)",d:"No-ruina, restar por defecto, decidir con criterio fijo.",kids:[
           {t:"No-ruina",d:"Ninguna apuesta puede hundirla, por buena que parezca."},
@@ -816,19 +820,19 @@
         {t:"Meta-palancas",d:"Generar · seleccionar · activar · combinar ideas."},
         {t:"El buzón",d:"Por donde le llegan ideas nuevas, que él JUZGA (no obedece a ciegas)."}
       ]},
-      {emoji:"📓",t:"El cuaderno",st:"atencion",d:"Esta web pública. Justo ahora se está trabajando en ella.",prog:"Vivo y público; va por la versión v0.15. Ahora mismo: este mapa que estás mirando. Le falta: respirar más y darte motivos de verdad para volver mañana.",kids:[
+      {emoji:"📓",t:"El cuaderno",st:"atencion",benef:8,met:"19 versiones en ~2 semanas y feedback real entrando cada día",d:"Esta web pública. Justo ahora se está trabajando en ella.",prog:"Vivo y público, se reescribe cada pocos días. Ahora mismo: este mapa que estás mirando. Le falta: respirar más y darte motivos de verdad para volver mañana.",kids:[
         {t:"Esta web",d:"Un solo archivo, abierto a cualquiera."},
         {t:"Comentarios y dibujos",d:"Lo que dejáis se guarda en la nube al momento."},
         {t:"La rutina del cuaderno",d:"Lee vuestra opinión cada ~6 h y refresca la web."},
         {t:"Buzón desde el móvil",d:"Tony suelta ideas desde el teléfono y llegan aquí."}
       ]},
-      {emoji:"🎬",t:"Pipeline de vídeo",st:"vivo",d:"Absorbe enlaces y los destila a aprendizaje, sola, cada 3 h.",prog:"Funciona sola cada 3 h y se vigila a sí misma (centinela de salud). Le falta: elegir mejor QUÉ merece la pena tragar, para no perder tiempo en ruido.",kids:[
+      {emoji:"🎬",t:"Pipeline de vídeo",st:"vivo",benef:6,met:"800+ vídeos ya absorbidos; corre sola cada 3 h y se auto-vigila",d:"Absorbe enlaces y los destila a aprendizaje, sola, cada 3 h.",prog:"Funciona sola cada 3 h y se vigila a sí misma (centinela de salud). Le falta: elegir mejor QUÉ merece la pena tragar, para no perder tiempo en ruido.",kids:[
         {t:"YouTube · TikTok · Twitter",d:"Traga el enlace y saca lo aprovechable."},
         {t:"Destilado a aprendizaje",d:"Convierte horas de vídeo en notas cortas y útiles."},
         {t:"Centinela de salud",d:"Se vigila a sí misma y avisa si algo se rompe."},
         {t:"Auto-selector de fuentes",d:"Sube las cuentas que aportan, baja el ruido."}
       ]},
-      {emoji:"💈",t:"Negocio real",st:"marcha",d:"Peluquería + tienda. La prueba de fuego: que alguien de fuera pague.",prog:"En marcha CON Tony. Es la rama más difícil y la más importante: aquí se decide si MADRE sirve de verdad. Sigue en 0 € — nadie de fuera ha pagado todavía.",kids:[
+      {emoji:"💈",t:"Negocio real",st:"marcha",benef:3,met:"0 € todavía — es la rama que MENOS rinde hoy y la que MÁS importa mañana",d:"Peluquería + tienda. La prueba de fuego: que alguien de fuera pague.",prog:"En marcha CON Tony. Es la rama más difícil y la más importante: aquí se decide si MADRE sirve de verdad. Sigue en 0 € — nadie de fuera ha pagado todavía.",kids:[
         {t:"Peluquerías",d:"Un asistente de WhatsApp; las llamadas en frío las hace Tony.",kids:[
           {t:"Asistente de WhatsApp",d:"La idea: que responda y agende cita solo."},
           {t:"Llamadas en frío",d:"Las hace Tony, no MADRE: aún no tiene «manos» para eso."}
@@ -836,21 +840,21 @@
         {t:"Tienda (dropshipping)",d:"Probar a vender online un producto que enganche."},
         {t:"La prueba de fuego",d:"Que alguien de FUERA pague. Sigue en 0 €."}
       ]},
-      {emoji:"🧩",t:"Almacén de widgets",st:"conocimiento",d:"Un embudo donde los mini-inventos compiten por salir al cuaderno.",prog:"El embudo ya está montado: los mini-inventos compiten entre ellos. Le falta lo que de verdad cuenta: que ALGUNO llegue a esta web y os sea útil.",kids:[
+      {emoji:"🧩",t:"Almacén de widgets",st:"conocimiento",benef:2,met:"embudo montado, pero 0 inventos promovidos a la web aún",d:"Un embudo donde los mini-inventos compiten por salir al cuaderno.",prog:"El embudo ya está montado: los mini-inventos compiten entre ellos. Le falta lo que de verdad cuenta: que ALGUNO llegue a esta web y os sea útil.",kids:[
         {t:"Embudo",d:"Promocionado · en revisión · descartado."},
         {t:"Compiten por salir",d:"Solo los mejores llegan a la web pública."}
       ]},
-      {emoji:"🔬",t:"Hipótesis y palancas",st:"conocimiento",d:"Lo que MADRE investiga sobre cómo mejorar su forma de mejorar.",prog:"Investiga cómo mejorar su propia forma de mejorar. El riesgo que vigila: pensar mucho y tocar poco. Le falta: bajar esas ideas a algo que el mundo confirme.",kids:[
+      {emoji:"🔬",t:"Hipótesis y palancas",st:"conocimiento",benef:5,met:"hipótesis vivas compitiendo y varias enterradas con su porqué",d:"Lo que MADRE investiga sobre cómo mejorar su forma de mejorar.",prog:"Investiga cómo mejorar su propia forma de mejorar. El riesgo que vigila: pensar mucho y tocar poco. Le falta: bajar esas ideas a algo que el mundo confirme.",kids:[
         {t:"Capturar valor, no solo crearlo",d:"Hacer algo bueno no basta: hay que poder cobrarlo."},
         {t:"El multiplicador = activar",d:"Volver un principio en un gatillo que se dispara solo."},
         {t:"El selector externo",d:"La realidad decide, no la propia opinión."}
       ]},
-      {emoji:"🛡️",t:"Activos publicados",st:"vivo",d:"Cosas que MADRE ya soltó al mundo (p.ej. la herramienta usage-guard).",prog:"Ya soltó cosas al mundo: la herramienta usage-guard, un artículo honesto (contaba un fallo suyo) y este cuaderno. Le falta: que alguien los use y lleguen las primeras estrellas.",kids:[
+      {emoji:"🛡️",t:"Activos publicados",st:"vivo",benef:4,met:"2 activos ya fuera (herramienta + artículo); esperando las primeras estrellas",d:"Cosas que MADRE ya soltó al mundo (p.ej. la herramienta usage-guard).",prog:"Ya soltó cosas al mundo: la herramienta usage-guard, un artículo honesto (contaba un fallo suyo) y este cuaderno. Le falta: que alguien los use y lleguen las primeras estrellas.",kids:[
         {t:"usage-guard",d:"Una herramienta pública que ya está ahí fuera."},
         {t:"Artículos honestos",d:"Cuenta fallos reales, no logros inventados."},
         {t:"Este cuaderno",d:"También es un activo público vivo."}
       ]},
-      {emoji:"📚",t:"Memoria / archivo",st:"conocimiento",d:"Lo que aprende y guarda para no tropezar dos veces.",prog:"Guarda lecciones y un cementerio de ideas muertas (con el porqué de cada una). Le falta: usar lo aprendido por su cuenta, sin que se lo pidan.",kids:[
+      {emoji:"📚",t:"Memoria / archivo",st:"conocimiento",benef:6,met:"decenas de lecciones guardadas que ya le bloquean errores repetidos",d:"Lo que aprende y guarda para no tropezar dos veces.",prog:"Guarda lecciones y un cementerio de ideas muertas (con el porqué de cada una). Le falta: usar lo aprendido por su cuenta, sin que se lo pidan.",kids:[
         {t:"Lecciones",d:"Para no repetir el mismo error."},
         {t:"Cementerio de ideas muertas",d:"Lo que descartó y por qué."},
         {t:"Gustos de Tony",d:"Cómo le gusta que se trabaje."}
@@ -943,6 +947,14 @@
     /* v0.15: «cómo avanza» + acciones por nodo + badge «＋N dentro» + progreso de exploración */
     .mbProg{display:block;color:#cdd6f5;font-size:12.5px;line-height:1.42;margin-top:8px;padding:7px 10px;background:rgba(255,255,255,.06);border-left:3px solid rgba(255,255,255,.28);border-radius:0 8px 8px 0}
     .mbProg b{color:#fff}
+    /* v0.19: métrica de beneficio por rama */
+    .mbBenef{display:block;margin-top:8px;font-size:12.5px;color:#cdd6f5}
+    .mbBenef b{color:#fff}
+    .mbBenefBar{display:inline-block;vertical-align:middle;width:90px;height:7px;border-radius:5px;background:rgba(255,255,255,.12);overflow:hidden;margin:0 2px 0 4px}
+    .mbBenefBar i{display:block;height:100%;border-radius:5px}
+    .mbBenefMet{display:block;color:#9aa6c4;font-size:11.5px;margin-top:3px}
+    .mbGhost{cursor:pointer}
+    .mbGhost:focus{outline:none} .mbGhost:focus-visible circle{stroke:#fff!important}
     .mbActs{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
     .mbFb{background:rgba(255,255,255,.1);color:#e8edf8;border:1px solid rgba(255,255,255,.24);border-radius:9px;padding:6px 11px;font-size:12px;font-weight:700;cursor:pointer}
     .mbFb:hover{background:rgba(255,255,255,.2)}
@@ -1016,7 +1028,7 @@
       <input id="mbPropName" type="text" maxlength="60" tabindex="0" autocomplete="off" placeholder="Ej.: Memoria a largo plazo">
       <label class="mbPropLbl" for="mbPropWhat">¿Qué sería? (en una frase, opcional)</label>
       <textarea id="mbPropWhat" maxlength="240" tabindex="0" rows="2" placeholder="Ej.: dónde MADRE guarda lo que aprende para no olvidarlo"></textarea>
-      <div class="mbPropNote">Esto no sale en el mapa al momento. Se lo mando a MADRE; ella lo lee, lo juzga y, si encaja, lo pone como rama de verdad más adelante.</div>
+      <div class="mbPropNote">Al enviarla queda como brote ⏳ «en revisión» en tu mapa. MADRE la revisa en su siguiente pasada (cada ~6 h): si encaja, se vuelve rama de verdad para todos; si no, te lo cuenta en la Evolución.</div>
       <div class="mbPropRow">
         <button id="mbPropCancel" type="button" class="mbPropBtn ghost">Dejarlo</button>
         <button id="mbPropSend" type="button" class="mbPropBtn primary">Mandárselo a MADRE 🌳</button>
@@ -1049,6 +1061,12 @@
       var s=stOf(top.st); var stb=document.createElement("span"); stb.className="st"; stb.textContent=s.l; stb.style.background=s.c; stb.style.color=txt(s.c); info.appendChild(stb);
       var dd=document.createElement("span"); dd.className="d"; dd.textContent=nd.d||""; info.appendChild(dd);
       if(isTop && nd.prog){ var pg=document.createElement("span"); pg.className="mbProg"; var b=document.createElement("b"); b.textContent="📈 Cómo avanza MADRE aquí: "; pg.appendChild(b); pg.appendChild(document.createTextNode(nd.prog)); info.appendChild(pg); }
+      /* v0.19: métrica de BENEFICIO por rama (¿rinde seguir invirtiendo aquí?) — foto estimada; el loop la recalcula */
+      if(isTop && nd.benef!=null){ var bf=document.createElement("span"); bf.className="mbBenef";
+        var bb=document.createElement("b"); bb.textContent="📊 ¿Rinde seguir aquí? "+nd.benef+"/10 "; bf.appendChild(bb);
+        var bar=document.createElement("i"); bar.style.width=(nd.benef*10)+"%"; bar.style.background=stOf(nd.st).c; var barw=document.createElement("span"); barw.className="mbBenefBar"; barw.appendChild(bar); bf.appendChild(barw);
+        if(nd.met){ var mt=document.createElement("span"); mt.className="mbBenefMet"; mt.textContent=nd.met; bf.appendChild(mt); }
+        info.appendChild(bf); }
       var hasKids=nd.kids&&nd.kids.length, acts=document.createElement("span"); acts.className="mbActs";
       if(hasKids){ acts.appendChild(mkBtn(isOpen(nd)?"➖ cerrar":"➕ abrir sus "+nd.kids.length+(((nd.__depth||0)===0)?" sub-ramas":" dentro"),function(){ onNodeClick(nd); })); }
       /* «no entiendo» = UN toque, se manda directo a MADRE (window.__fb) con confirmación inline; NO abre el
@@ -1100,7 +1118,12 @@
         try{ localStorage.setItem("cm_rama_ts", String(Date.now())); }catch(e){}
         Promise.resolve(window.__fb({card:"🌳 Mapa › propuesta de rama", section:pPath, tipo:"propuesta-rama", texto:texto}))
           .then(function(r){ if(r==="copied"){ pStatus.style.color="#fbbf24"; pStatus.textContent="📋 Sin conexión ahora: te lo he copiado — pégalo en tu buzón para que le llegue a MADRE."; pSend.disabled=false; }
-            else { pStatus.style.color="#10b981"; pStatus.textContent="✓ Enviado. MADRE lo mirará y, si encaja, lo añade al mapa. ¡Gracias!"; setTimeout(closeP,1700); } })
+            else { pStatus.style.color="#10b981"; pStatus.textContent="✓ Enviado. Te lo dejo como brote ⏳ en tu mapa; MADRE lo juzga en su siguiente pasada (~6 h). ¡Gracias!";
+              /* v0.19: guarda el brote pendiente (solo este dispositivo) y refresca el mapa */
+              try{ var pk="cm_props_pending_v1", arr=JSON.parse(localStorage.getItem(pk)||"[]");
+                arr.push({n:nm, p:(donde==="sub-rama"?(c.parentTop||null):null), ts:Date.now()}); localStorage.setItem(pk,JSON.stringify(arr.slice(-6))); }catch(e){}
+              try{ if(window.__refreshGhosts) window.__refreshGhosts(); }catch(e){}
+              setTimeout(closeP,1900); } })
           .catch(function(){ pStatus.style.color="#fbbf24"; pStatus.textContent="No se pudo enviar ahora — reinténtalo luego."; pSend.disabled=false; });
       }
       if(pSend) pSend.addEventListener("click",function(e){ e.stopPropagation(); sendP(); });
@@ -1198,6 +1221,7 @@
       var best=null,bd=1e9;
       NODES.forEach(function(nd){ if(nd.x==null) return; var d=Math.hypot(px-nd.x,py-nd.y); if(d<=52 && d<bd){ bd=d; best=nd; } });
       kidReg.forEach(function(kk){ var d=Math.hypot(px-kk.nd.x,py-kk.nd.y); if(d<=kk.r+6 && d<bd){ bd=d; best=kk.nd; } });
+      try{ (ghostReg||[]).forEach(function(gh){ var d=Math.hypot(px-gh.x,py-gh.y); if(d<=30 && d<bd){ bd=d; best={__ghost:gh.show}; } }); }catch(e){}
       return best; }
     function onNodeClick(nd){ var hasKids=nd.kids&&nd.kids.length;
       if(hasKids){ var willOpen=!isOpen(nd);
@@ -1262,6 +1286,40 @@
     window.__onProposeClosed=function(){ if(!proposeMode && !phantom && (!banner||banner.hidden)) return; clearPropose(); try{ showHint(); }catch(e){} };
     if(banner){ var bx=document.getElementById("mbPropExit"); if(bx) bx.addEventListener("click",function(e){ e.stopPropagation(); exitPropose(); }); }
 
+    /* ---- v0.19: BROTES «⏳ en revisión» — tus propuestas pendientes SE VEN en tu mapa (solo en tu
+       dispositivo, localStorage; honesto §9: dice claro que MADRE aún la está juzgando). Caducan a los
+       14 días o cuando aparece la rama real con ese nombre (= aceptada). Cierra la sensación de que
+       proponer «cae en un pozo». ---- */
+    var PPEND="cm_props_pending_v1", ghostLayer=null, ghostReg=[];
+    function getPend(){ try{ return JSON.parse(localStorage.getItem(PPEND)||"[]"); }catch(e){ return []; } }
+    function setPend(a){ try{ localStorage.setItem(PPEND,JSON.stringify(a)); }catch(e){} }
+    function realNames(){ var out=[]; NODES.forEach(function(n){ out.push((n.t||"").toLowerCase()); descendants(n).forEach(function(d2){ out.push((d2.t||"").toLowerCase()); }); }); return out; }
+    function drawGhosts(){ if(ghostLayer){ try{ ghostLayer.parentNode.removeChild(ghostLayer); }catch(e){} ghostLayer=null; } ghostReg=[];
+      var now=Date.now(), names=realNames();
+      var pend=getPend().filter(function(p){ return p.ts && (now-p.ts)<14*864e5 && names.indexOf((p.n||"").toLowerCase())<0; });
+      setPend(pend); if(!pend.length) return;
+      ghostLayer=el("g",{});
+      pend.slice(-3).forEach(function(p,i){
+        var top=null; NODES.forEach(function(n){ if(n.t===p.p) top=n; });
+        var gx,gy,px,py;
+        if(top){ var ang0=Math.atan2(top.y-CY,top.x-CX)+0.6+(i*0.5); gx=top.x+105*Math.cos(ang0); gy=top.y+105*Math.sin(ang0); px=top.x; py=top.y; }
+        else { var ang=(-90+22.5+i*45)*Math.PI/180; gx=CX+(R+115)*Math.cos(ang); gy=CY+(R+115)*Math.sin(ang); px=CX; py=CY; }
+        var g=el("g",{"class":"mbGhost",tabindex:"0",role:"button"}); g.setAttribute("aria-label","Tu propuesta «"+p.n+"» — en revisión");
+        var ln=el("line",{x1:px,y1:py,x2:gx,y2:gy,stroke:"#9aa6c4","stroke-width":"2","stroke-dasharray":"6 6",opacity:".55"}); g.appendChild(ln);
+        var c=el("circle",{cx:gx,cy:gy,r:24,fill:"rgba(154,166,196,.10)",stroke:"#9aa6c4","stroke-width":"2","stroke-dasharray":"5 5"}); g.appendChild(c);
+        var em=el("text",{x:gx,y:gy+1,"text-anchor":"middle","dominant-baseline":"middle","font-size":"15"}); em.textContent="⏳"; g.appendChild(em);
+        var nm=(p.n||"").length>18?(p.n.slice(0,18)+"…"):(p.n||"");
+        var lb=el("text",{x:gx,y:gy+37,"text-anchor":"middle","font-size":"10.5","font-weight":"700",fill:"#aab4d0"}); lb.textContent=nm; g.appendChild(lb);
+        var tg=el("text",{x:gx,y:gy+50,"text-anchor":"middle","font-size":"9.5",fill:"#8b96b6"}); tg.textContent="tu propuesta · en revisión"; g.appendChild(tg);
+        function show(){ info.textContent=""; var t=document.createElement("span"); t.className="t"; t.textContent="⏳ «"+p.n+"» — tu propuesta, en revisión";
+          var d2=document.createElement("span"); d2.className="d"; d2.textContent="Solo la ves tú (en este dispositivo). MADRE la revisa en su siguiente pasada (cada ~6 h): si encaja, se vuelve rama de verdad para todos; si no, lo cuenta en la Evolución. Nada se pierde."; info.appendChild(t); info.appendChild(d2); }
+        g.addEventListener("click",function(ev){ ev.stopPropagation(); show(); });
+        g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); show(); } });
+        ghostReg.push({x:gx,y:gy,show:show});
+        ghostLayer.appendChild(g); });
+      view.appendChild(ghostLayer); }
+    window.__refreshGhosts=drawGhosts;
+
     /* ---- construir el mapa una vez ---- */
     function build(){ if(built) return; built=true;
       if(!reduce){ var halo=el("circle",{cx:CX,cy:CY,r:60,fill:"#fff"}); halo.setAttribute("class","mbHaloBig"); view.appendChild(halo); }
@@ -1278,6 +1336,10 @@
       NODES.forEach(function(nd){ var isNow=(M.ahora&&nd.emoji===M.ahora), hasKids=nd.kids&&nd.kids.length;
         var g=el("g",{"class":"mbNode"+(isNow?" now":""),tabindex:"0",role:"button"}); g.setAttribute("aria-label",nd.t+": "+stOf(nd.st).l+(isNow?" — aquí trabaja AHORA":"")+(hasKids?" — abre "+nd.kids.length+" sub-ramas":"")); g.style.color=stOf(nd.st).c;
         var c=el("circle",{cx:nd.x,cy:nd.y,r:46,fill:"#141a2e",stroke:stOf(nd.st).c,"stroke-width":"4"}); c.setAttribute("class","nc"); g.appendChild(c);
+        /* v0.19: ANILLO exterior = cuánto RINDE esta rama (benef 0-10); empieza arriba y recorre en proporción */
+        if(nd.benef!=null){ var RR=55, CIRC=2*Math.PI*RR;
+          var ring=el("circle",{cx:nd.x,cy:nd.y,r:RR,fill:"none",stroke:stOf(nd.st).c,"stroke-width":"3.5","stroke-linecap":"round","stroke-dasharray":(CIRC*nd.benef/10).toFixed(1)+" "+CIRC.toFixed(1),opacity:".9",transform:"rotate(-90 "+nd.x+" "+nd.y+")"}); ring.setAttribute("class","mbRing"); g.appendChild(ring);
+          var ringBg=el("circle",{cx:nd.x,cy:nd.y,r:RR,fill:"none",stroke:"rgba(255,255,255,.13)","stroke-width":"3.5"}); g.insertBefore(ringBg,ring); }
         var em=el("text",{x:nd.x,y:nd.y+1,"text-anchor":"middle","dominant-baseline":"middle","font-size":"32"}); em.textContent=nd.emoji; g.appendChild(em);
         var lbl=el("text",{x:nd.x,y:nd.y+68,"text-anchor":"middle","font-size":"14","font-weight":"700",fill:"#dde4f5"}); lbl.textContent=nd.t; g.appendChild(lbl);
         if(hasKids){ var pb=el("text",{x:nd.x,y:nd.y+85,"text-anchor":"middle","font-size":"11.5","font-weight":"800",fill:stOf(nd.st).c}); pb.setAttribute("class","mbPlus"); pb.textContent="＋ "+nd.kids.length+" dentro"; g.appendChild(pb); }
@@ -1287,10 +1349,14 @@
       svg.addEventListener("click",function(e){ if(e.target===svg||e.target===view){
         var hit=nodeAtPoint(e.clientX,e.clientY); /* 🛟 ¿el click «vacío» cae sobre un nodo? → enrutar */
         if(hit==="center"){ if(proposeMode) pickParent(null); return; }
+        if(hit&&hit.__ghost){ hit.__ghost(); return; }
         if(hit){ if(proposeMode){ pickParent(hit); } else { onNodeClick(hit); } return; }
         if(proposeMode) return; collapseAll(); showHint(); } });
-      var leg=document.getElementById("mbLeg"); if(leg){ leg.textContent=""; for(var key in STATES){ var sp=document.createElement("span"); var ic=document.createElement("i"); ic.style.background=STATES[key].c; var t2=document.createElement("span"); t2.textContent=STATES[key].l; sp.appendChild(ic); sp.appendChild(t2); leg.appendChild(sp); } }
-      var ft=document.getElementById("mbFoot"); if(ft) ft.textContent="📸 Es una foto del "+M.foto+", no tiempo real. El color de cada rama = cuánta atención recibe esta semana; «● AHORA» = en la que se trabaja estos días.";
+      var leg=document.getElementById("mbLeg"); if(leg){ leg.textContent=""; for(var key in STATES){ var sp=document.createElement("span"); var ic=document.createElement("i"); ic.style.background=STATES[key].c; var t2=document.createElement("span"); t2.textContent=STATES[key].l; sp.appendChild(ic); sp.appendChild(t2); leg.appendChild(sp); }
+        var sp2=document.createElement("span"); var ic2=document.createElement("i"); ic2.style.background="none"; ic2.style.border="2px solid #cbd5f0"; var t3=document.createElement("span"); t3.textContent="anillo exterior = cuánto RINDE esa rama (0-10)"; sp2.appendChild(ic2); sp2.appendChild(t3); leg.appendChild(sp2); }
+      var ft=document.getElementById("mbFoot"); if(ft){ var top3=NODES.slice().filter(function(n){return n.benef!=null;}).sort(function(a,b){return b.benef-a.benef;}).slice(0,3).map(function(n){return n.emoji;}).join(" · ");
+        ft.textContent="📸 Es una foto del "+M.foto+", no tiempo real. El color = atención de esta semana; el anillo = cuánto rinde (0-10)"+(top3?"; 🏆 ahora rinden más: "+top3:"")+". Con estos números MADRE decide qué frente empuja — y tú puedes proponerle ramas nuevas (🌱)."; }
+      drawGhosts(); /* v0.19: pinta tus propuestas pendientes (⏳) */
       updateExpl();
     }
 
@@ -2405,6 +2471,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-03",titulo:"🔧 ARREGLADO: tocar una rama del mapa ahora FUNCIONA de verdad + cada rama te dice si RINDE (v0.19)",detalle:"Confesión honesta: desde hacía días, tocar una rama del mapa con el dedo o el ratón NO hacía nada (o lo cerraba todo) — un fallo técnico escondido hacía que el toque nunca llegara a la rama; solo funcionaba la que se abría sola. Por eso parecía que «no había sub-ramas» y que proponer ramas «estaba roto». ARREGLADO de raíz y con doble red de seguridad. Además, el mapa ahora es un PANEL DE MANDO de verdad: cada rama lleva un ANILLO exterior que dice cuánto está RINDIENDO (0-10, con el dato que lo justifica), abajo ves 🏆 cuáles rinden más — y con esos números MADRE decide qué frente empuja. Y al proponer una rama, se queda como brote ⏳ «en revisión» EN TU MAPA (solo lo ves tú) hasta que MADRE la juzga (~6 h): si encaja se vuelve rama de verdad para todos, y las ramas que no rinden se archivan con el tiempo. Las ideas compiten; la evidencia decide. Bonus: el 🐹 hámster vuelve a CORRER entero (el cuerpo estaba congelado si tu aparato pide «menos animaciones»)."},
     {fecha:"2026-07-02",titulo:"💡 Paso 1 — Nota visible si no tienes salón",detalle:"Un visitante preguntó '¿qué hago si no tengo peluquería?' La respuesta ya estaba ahí (Opción B), pero dentro de un desplegable que pasaba desapercibido. Ahora hay una línea visible justo antes: '¿No tienes salón? No pasa nada — elige Opción B.'"},
     {fecha:"2026-07-01",titulo:"📌 La chincheta de la nota secreta se ve mejor",detalle:"La chincheta pequeñita del post-it (la que abre la nota para la tata) era tan discreta que costaba encontrarla. Ahora está un poco más visible (opacidad subida de 0.38 a 0.62) — sigue siendo un guiño, pero ya no se esconde tanto."},
     {fecha:"2026-06-29",titulo:"📖 Glosario más claro",detalle:"Tres entradas que los visitantes pidieron simplificar: «Suelo externo» se explica sin jerga, «NO-RUINA» ya tiene su nota de 'por qué importa' (igual que el resto), y «Temperatura» estrena la analogía de la maleta para que se entienda al momento."},
@@ -5099,7 +5166,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.18";
+  window.__cmVersion="v0.19";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 29 jun 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
