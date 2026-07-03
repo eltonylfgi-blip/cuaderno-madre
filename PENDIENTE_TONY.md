@@ -6,6 +6,26 @@ Tony lee esto y decide. (Lo grande SIEMPRE espera; lo pequeño y claro la rutina
 
 ---
 
+## 2026-07-03 — 3 decisiones AUTO-DECIDIDAS (plazo vencido el 2026-07-02, regla 1e)
+
+El panel ya las muestra como "🤖 Decidí yo (no contestaste a tiempo). Reversible: dime si lo cambio."  
+Si algo te parece mal, dime cuál cambiar y lo revierto.
+
+**#11 — ¿Publico un "changelog de lecciones" en el cuaderno?**  
+→ Auto-decidí: **Sí, arrancar con 3-5 ejemplos seguros y ver cómo cae.**  
+Implementación pendiente: es un cambio estructural (nueva sección en el cuaderno). Para ejecutarlo di "monta el changelog de lecciones" en una sesión de Claude Code o Cowork.
+
+**#18 — 🔄 Elegir el producto de Aurova por DEMANDA**  
+→ Auto-decidí: **Sí, hazlo.** MADRE debe correr una pasada de IA sobre foros/comentarios del nicho y traer tabla de dolores reales con lenguaje de compra. Lo ejecuta el loop (no yo, cuaderno-feedback); si el loop no lo recoge, pídelo tú en el buzón.
+
+**#19 — 🔄 Validar Aurova con PREVENTA real**  
+→ Auto-decidí: **Sí, monta el gate de preventa.** MADRE monta página de reserva con umbral antes de gastar en stock/fotos. Lo ejecuta el loop; si no lo recoge, pídelo tú en el buzón.
+
+**#20 — ¿Cómo subir imágenes desde el móvil al cuaderno?** (vence HOY 2026-07-03, aún pendiente)  
+→ Las 3 opciones siguen en pie: A) backend pequeño · B) Drive/Imgur con clave · C) móvil solo-texto por ahora. La rutina recomienda C (0 riesgo, reversible). Si no contestas hoy, lo auto-decidiré como C en la próxima pasada.
+
+---
+
 ## MODERACIÓN — 2026-06-30 (2 comentarios ocultados)
 
 Ocultados por la rutina automática. Puedes verlos en Supabase si quieres confirmar o restaurar.
