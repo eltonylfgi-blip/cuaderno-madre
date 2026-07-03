@@ -1,8 +1,32 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> Para retomar en un chat nuevo de Claude Code. **Estado a 2026-07-03, versión v0.20 (DESPLEGADA).**
+> Para retomar en un chat nuevo de Claude Code. **Estado a 2026-07-03, versión v0.22 (DESPLEGADA).**
 
-## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-07-03, tras v0.19+v0.20)
+## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-07-03, tras v0.21+v0.22)
+> **🔴🔴 v0.21 — EL BUG DEL MAPA, ARREGLADO DE VERDAD (2º intento; commit `b7f599d`).** El fix v0.19 NO bastó
+> en el navegador de Tony: seguía «no puedo abrir/reabrir ramas». CAUSA definitiva: depender del evento `click`
+> del DOM, que el navegador RETARGETEA de forma impredecible con pan/zoom+pointer-capture. **SOLUCIÓN: el tap se
+> resuelve en `pointerup`** (1 dedo, sin arrastre >10px) y se enruta al nodo por **GEOMETRÍA** (`nodeAtPoint`),
+> CERO click. Se mata el `click` dentro del SVG (captura) para no duplicar; teclado por keydown; zoom/propuesta
+> fuera del SVG. **v0.22 reforzó:** capturar el puntero en `pointerdown` (ya no rompe nada porque el tap va por
+> pointerup) → el `pointerup` SIEMPRE llega aunque el dedo salga del SVG (cero punteros colgados). **VENTAJA
+> CLAVE: ahora la verificación es FIEL** — el mecanismo es pointerup, así que los `PointerEvent` sintéticos
+> ejercitan el MISMO camino que el dedo real (a diferencia del click, que se enmascaraba). Verificado: abrir/
+> cerrar/reabrir, arrastre-pana-sin-abrir, pinch, tap-vacío, sub-ramas, propose, brotes, deep-link, teclado,
+> móvil-touch. **PENDIENTE: Tony confirma en su móvil real** (última milla que el harness no cubre — su
+> `preview_click` NO inyecta input, cazado con control positivo → lección).
+> **🌳 v0.22 — mapa REACTIVO (4 mejoras de la crítica de GPT, filtradas por §9):** (1) **anillos justificados**
+> (campo `porque[]` por nodo: líneas ↑/↓ con hechos reales → «el número no parece inventado»); (2) **MADRE
+> observa la sesión** (`#mbExpl` reactivo por ramas abiertas: «te estoy viendo llegar»→«casi nadie llega tan
+> lejos»); (3) **huella de visitante** (badge «🌱 nació de la propuesta de un visitante» si `porVisitante`; la
+> rutina lo pone al aceptar — SKILL actualizado); (4) **promesa** «no te prometo mejor, sí diferente». Antes,
+> v0.20: UNA historia arriba + evidencia real (commits 24h en `🔦 Hoy, de verdad`) + caos v2 aleatorio + re-secuencia.
+> **⬜ BACKLOG «organismo vivo» (ideas grandes de GPT diferidas, al buzón `DESDE_CLAUDE_2026-07-03_cuaderno-organismo-vivo-backlog.txt`):**
+> recordar-visita-con-parte-real, conversación-con-el-pasado por nodo, deslizador de tiempo, cosas-sin-clic (solo
+> con dato real), votar hipótesis, descubrimientos ocultos, métrica-imposible-de-manipular desglosada. **Principio
+> rector de GPT:** para CADA sección, *¿puede alimentarse sola con datos reales?* → panel vivo o reducir. **Lo más
+> barato para la PRÓXIMA sesión (sin loop): descubrimientos ocultos + desglose del 3/10.**
+>
 > **✅✅ v0.19+v0.20 (3-jul, commits `1a679c7`+`8329473`+`7e87fb0`) — LA TANDA DEL BUG REAL + POSICIONAMIENTO:**
 > 1. **🔴 BUG REAL CAZADO Y ARREGLADO (la causa de TODO lo del mapa):** `setPointerCapture` en `pointerdown` (pan/zoom, desde v0.13) hacía que el navegador RETARGETEARA/tragara el click → **tocar una rama con dedo/ratón REAL nunca llegaba al nodo** (solo se abría la auto-abierta; por eso Tony veía «1/8», «hay un problema al pulsar», «añadir ramas bugeado», y por eso hay **CERO** `propuesta-rama` en Supabase). Los tests con `dispatchEvent` lo enmascaraban (click sintético directo al `<g>` = verificación en falso). Doble fix: **captura solo con arrastre real** (umbral 6px / 2 dedos) + **rescate geométrico** (click que cae al SVG «vacío» pero dentro de un nodo → se enruta al nodo; cubre normal, proponer y brotes). ⚠️ El harness NO puede inyectar input real (su `preview_click` no mete eventos — cazado con control positivo) → **la verificación 100% real la da TONY tocando una rama en su móvil.**
 > 2. **🐹 Hámster corre ENTERO** (el cuerpo estaba congelado bajo `prefers-reduced-motion` — el navegador de Tony lo tiene ON; v0.15 solo giraba la rueda). Reglas CSS más específicas re-activan su animación completa.
