@@ -3,6 +3,12 @@
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
 Cada línea: fecha · qué cambió · por qué (qué feedback) · cómo revertir (`git revert <hash>`).
 
+## 2026-07-03 — v0.22: mapa reactivo (anillos justificados + MADRE observa + huella de visitante) + captura robusta
+- **Qué cambió:** aplicadas 4 mejoras de la crítica de GPT (filtradas por §9, nada fingido): (1) **anillos justificados** — cada rama muestra 2-3 líneas ↑/↓ con hechos reales de dónde sale su `benef` (campo `porque[]`; GPT: «que no parezca inventado»); (2) **MADRE observa la sesión** — `#mbExpl` da mensajes reactivos según ramas REALMENTE abiertas («te estoy viendo llegar» → «poca gente pasa de aquí» → «casi nadie llega tan lejos»); (3) **huella de visitante** — badge «🌱 nació de la propuesta de un visitante» cuando `porVisitante` (lo pone la rutina al aceptar; SKILL actualizado); (4) **promesa más fuerte** («no te prometo mejor, sí diferente»). + **Robustez del fix del tap**: ahora se captura el puntero en `pointerdown` (ya no rompe nada porque el tap va por pointerup+geometría, no por click) → el `pointerup` siempre llega aunque el dedo se levante fuera del SVG (cero punteros colgados).
+- **Por qué:** Tony pegó 2 críticas de GPT (posicionamiento + «organismo vivo»); elegidas las de más valor/§9-seguras.
+- **Verificación:** taps/toggle/drag/pinch/mobile-touch ✓, rangos reactivos por n (sembrando localStorage), huella con nodo de prueba, `node --check` 30/30, 0 errores. Diferido (no-fingible sin datos del sistema): deslizador de tiempo, «conversación con el pasado» por nodo, eventos aleatorios → anotados para el loop.
+- **Revertir:** `git revert <hash de esta tanda>`.
+
 ## 2026-07-03 — v0.21: FIX DEFINITIVO abrir/reabrir ramas (el tap ya no depende del click del DOM)
 - **Qué cambió:** el fix v0.19 (no capturar hasta arrastrar) no bastó en el navegador de Tony — seguía sin poder abrir/reabrir ramas. Rediseño de raíz: **el tap se resuelve en `pointerup`** (1 dedo, sin arrastre >10px) y se enruta al nodo por **geometría** (`nodeAtPoint`), CERO dependencia del evento `click` del DOM (que el navegador retargetea de forma impredecible con pan/zoom). El `click` dentro del SVG se neutraliza (fase captura) para que no haya doble disparo; teclado sigue por keydown; zoom/propuesta viven fuera del SVG.
 - **Por qué:** Tony (3-jul): «https://…/#mapa está bugueada, no puedo abrir y reabrir ramas del mapa».
