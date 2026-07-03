@@ -975,6 +975,11 @@
     .mbGhost{cursor:pointer}
     .mbGhost:focus{outline:none} .mbGhost:focus-visible circle{stroke:#fff!important}
     .mbActs{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+    /* v0.24: formulario inline «comentar esta rama» (vive DENTRO del panel info: sin modal externo) */
+    .mbCmt{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;width:100%}
+    .mbCmt textarea{flex:1 1 100%;box-sizing:border-box;font-size:16px;font-family:inherit;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);border-radius:10px;color:#e8edf8;padding:10px 12px;resize:vertical;min-height:46px}
+    .mbCmt textarea:focus{outline:none;border-color:#38bdf8;box-shadow:0 0 0 3px rgba(56,189,248,.25)}
+    .mbCmtSt{font-size:.86em;color:#9aa6c4;align-self:center;flex:1 1 auto}
     .mbFb{background:rgba(255,255,255,.1);color:#e8edf8;border:1px solid rgba(255,255,255,.24);border-radius:9px;padding:6px 11px;font-size:12px;font-weight:700;cursor:pointer}
     .mbFb:hover{background:rgba(255,255,255,.2)}
     .mbNode .mbPlus{pointer-events:none}
@@ -1106,6 +1111,37 @@
       if(window.__fb && window.__openPropose){ acts.appendChild(mkBtn("🌱 Proponer una sub-rama aquí",function(){
         window.__openPropose({donde:"sub-rama", parentT:nd.t, parentTop:top.t, parentEmoji:top.emoji, parentPath:path, depth:(nd.__depth||0), color:(nd.__color||stOf(top.st).c)});
       })); }
+      /* v0.24: «comentar esta rama» = crítica/sugerencia/pregunta SOBRE la rama (el frente de MADRE), no sobre la web.
+         Formulario INLINE dentro del panel info (nada de modal externo: pelea de z-index/inert). Viaja por el MISMO
+         window.__fb (tabla feedback) con tipo "comentario-rama" + texto clave:valor; la rutina cuaderno-feedback lo
+         RUTA al buzón de MADRE para que el loop lo juzgue. textContent en todo lo que pinta = anti-XSS. */
+      acts.appendChild(mkBtn("💬 Comentar esta rama",function(){
+        var old=info.querySelector(".mbCmt"); if(old){ old.remove(); return; }
+        var box=document.createElement("span"); box.className="mbCmt";
+        var ta=document.createElement("textarea"); ta.maxLength=280; ta.rows=2;
+        ta.placeholder="Critica, sugiere o pregunta sobre «"+nd.t+"» — le llega a MADRE tal cual";
+        var send=document.createElement("button"); send.type="button"; send.className="mbFb"; send.textContent="Enviar a MADRE";
+        var st=document.createElement("span"); st.className="mbCmtSt";
+        function sanC(s,max){ return (s||"").replace(/[\r\n\t]+/g," ").replace(/[\x00-\x1f]+/g,"").replace(/\s{2,}/g," ").trim().slice(0,max); }
+        send.addEventListener("click",function(e){ e.stopPropagation();
+          var v=sanC(ta.value,280);
+          if(!v||v.length<3){ st.textContent="Escribe algo primero 🙂"; return; }
+          try{ var last=+(localStorage.getItem("cm_cmt_ts")||0); if(Date.now()-last<5000){ st.textContent="Espera un momentito antes de mandar otro 🙂"; return; } }catch(err){}
+          if(!window.__fb){ st.textContent="Ahora mismo no puedo enviarlo; inténtalo en un momento."; return; }
+          send.disabled=true; st.textContent="Mandándoselo a MADRE…";
+          var texto="COMENTARIO-RAMA\nrama: "+sanC(path,100)+"\ntexto: "+v+"\norigen: mapa-cuaderno";
+          try{ localStorage.setItem("cm_cmt_ts",String(Date.now())); }catch(err){}
+          Promise.resolve(window.__fb({card:"🌳 Mapa › comentario", section:path, tipo:"comentario-rama", texto:texto}))
+            .then(function(r){ if(r==="copied"){ st.textContent="📋 Sin conexión ahora: te lo he copiado — pégalo en tu buzón."; send.disabled=false; }
+              else { st.textContent="✓ Enviado. MADRE lo lee en su siguiente pasada y lo lleva a su cerebro."; ta.value="";
+                setTimeout(function(){ try{ box.remove(); }catch(err){} },2600); } })
+            .catch(function(){ send.disabled=false; st.textContent="No se pudo enviar ahora — reinténtalo luego."; });
+        });
+        ["click","pointerdown"].forEach(function(ev){ box.addEventListener(ev,function(e){ e.stopPropagation(); }); });
+        ta.addEventListener("keydown",function(e){ e.stopPropagation(); });  /* escribir no dispara atajos del mapa */
+        box.appendChild(ta); box.appendChild(send); box.appendChild(st); info.appendChild(box);
+        setTimeout(function(){ try{ ta.focus(); }catch(err){} },30);
+      }));
       info.appendChild(acts); }
     function showHint(){ info.textContent=""; var t=document.createElement("span"); t.className="t"; t.textContent="👆 Toca una rama"; var d=document.createElement("span"); d.className="d"; d.textContent="La cámara ENTRA en ella y se abren sus sub-ramas. Arrastra para moverte; rueda o pellizco para acercar."; info.appendChild(t); info.appendChild(d); }
 
@@ -2538,6 +2574,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-04",titulo:"💬 Ahora puedes COMENTAR cualquier rama del mapa (v0.24)",detalle:"Abre el mapa 🌳, toca una rama y verás un botón nuevo: «💬 Comentar esta rama». Escribe tu crítica, sugerencia o pregunta sobre ESA parte de MADRE y dale a enviar — le llega tal cual a MADRE, que lo lleva a su cerebro en la siguiente pasada y lo juzga como cualquier otra idea (las ideas compiten; la evidencia decide). No hace falta cuenta ni nada. Es distinto del 🌱 (proponer una rama nueva): esto es opinar sobre lo que YA existe."},
     {fecha:"2026-07-03",titulo:"🌳 El mapa te responde: cada nota se justifica sola y MADRE nota que estás explorando (v0.22)",detalle:"Cuatro mejoras para que el mapa se sienta VIVO, no una web. (1) Los números de cada rama («¿rinde seguir aquí? 7/10») ahora enseñan DE DÓNDE salen: dos o tres líneas ↑ (lo que suma) y ↓ (lo que resta) con hechos reales — así el número deja de parecer inventado. (2) MADRE nota tu exploración: según cuántas ramas abres, te va diciendo cosas distintas («te estoy viendo llegar» → «poca gente pasa de aquí» → «casi nadie llega tan lejos»). Son tus datos reales, no un truco. (3) Cuando alguien propone una rama y MADRE la acepta, esa rama lleva una huella: «🌱 nació de la propuesta de un visitante» — si es tuya, ves que ayudaste a que MADRE creciera. (4) Promesa más honesta: «No te prometo que mañana esté mejor. Te prometo que estará diferente.»"},
     {fecha:"2026-07-03",titulo:"✅ ARREGLADO DE VERDAD: abrir y reabrir ramas del mapa (v0.21)",detalle:"El arreglo de ayer no bastaba en todos los móviles/navegadores: seguía costando abrir y REABRIR ramas. Ahora está cambiado de raíz — el toque ya no depende de una pieza del navegador que se portaba raro con el zoom; la rama se detecta directamente por DÓNDE tocas. Toca una rama y se abre; tócala otra vez y se cierra; otra vez y se reabre. Arrastrar mueve el mapa (no abre), pellizcar hace zoom, y tocar fuera lo cierra todo. Probado paso a paso simulando toques reales. Si aún te fallara en tu móvil, dímelo — pero esta vez el mecanismo es el correcto."},
     {fecha:"2026-07-03",titulo:"📖 El cuaderno ahora cuenta UNA historia + el caos por fin es CAÓTICO (v0.20)",detalle:"Dos cambios gordos. (1) LA HISTORIA: la página intentaba contarte demasiadas cosas a la vez y no sabías con qué quedarte. Ahora arriba hay UNA idea («estás viendo una IA que intenta mejorar sola durante años — ¿conseguirá demostrarlo en el mundo real?»), la prueba de que está viva HOY (sus cambios reales de las últimas 24 h, con hora), la promesa honesta de qué habrá si vuelves mañana, y el mapa 🌳 como puerta principal. Lo denso (comparativas, métricas, seguimiento en directo) sigue ahí, pero más abajo — primero la historia, luego la maquinaria. (2) EL CAOS: era demasiado suave y predecible… y encima, si tu aparato pide «menos animaciones», el modo entero quedaba congelado sin que lo supieras. Como el caos lo enciendes TÚ a propósito, ahora va con todo: travesuras al azar de verdad (nada de ritmo fijo), RÁFAGAS repentinas con temblor, calmas falsas para pillarte, lluvia de emojis 🍕⚡, pantallazos de color y tarjetas que se caen y rebotan. Apagable al instante, como siempre."},
@@ -5271,7 +5308,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.23";
+  window.__cmVersion="v0.24";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 3 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
