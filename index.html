@@ -291,15 +291,26 @@
     <div class="ttbub" id="madreTip">🤱🏻 <b>MADRE</b> es un sistema que intenta <b>decidir mejor</b>, <b>aprender de la realidad</b> y <b>generar valor en el mundo real</b> — no es un bot de dinero ni un almacén de notas. (Mantén pulsado / pasa el ratón para esto.)</div>
   </div>
   <!-- ===== ONBOARDING: un solo bloque (v0.11) — funde sub/promesa/feedback en uno ===== -->
+  <style>
+    /* v0.20: la cabecera cuenta UNA historia (crítica de posicionamiento: 1 idea, evidencia, promesa) */
+    .ob-big{font-size:19px;line-height:1.35;margin:10px 0 4px}
+    .ob-q{font-size:14.5px;color:var(--muted);margin:0 0 10px}
+    .ob-hoy{font-size:13px;background:var(--accent-soft,#eef2ff);border:1px solid #d9e3ff;border-radius:10px;padding:8px 11px;margin:10px 0 6px;overflow-wrap:break-word}
+    .ob-hoy[hidden]{display:none}
+    .ob-prom{font-size:13px;color:var(--muted);margin:6px 0 10px}
+    .qp-star{font-weight:800;border-width:2px}
+  </style>
   <div id="onboard">
-    <div class="ob-hi">👋 ¿Primera vez? Te lo resumo en 30 segundos.</div>
-    <p class="ob-lead">Estoy intentando construir una <b>IA que mejore sola</b> durante años. Esto es su <b>ventana en directo</b>: lo enseña todo — aciertos <i>y</i> fallos.</p>
-    <p class="ob-story">La pregunta que aún no tiene respuesta: <b>¿conseguirá que el mundo real le dé la razón?</b> Por eso vale la pena volver: los cambios de verdad los ves justo abajo, con su fecha.</p>
-    <div class="ob-row"><span class="ob-time">⏱ Se lee en 3-4 min</span> <span class="ob-dim">· léelo de arriba abajo</span></div>
+    <div class="ob-hi">👋 ¿Primera vez? Una sola idea:</div>
+    <p class="ob-big">Estás viendo una <b>IA que intenta mejorar sola</b>, durante años.</p>
+    <p class="ob-q">La única pregunta que importa: <b>¿conseguirá demostrarlo en el mundo real?</b> Todo lo que hay aquí abajo existe para responder eso — aciertos <i>y</i> fallos, sin maquillar.</p>
+    <p class="ob-hoy" id="hoyReal" hidden></p>
+    <p class="ob-prom">🌅 Si vuelves mañana, lo normal es que haya algo que hoy no existe: una regla nueva, una hipótesis muerta o un experimento acabado. Esta página se reescribe sola cada pocas horas.</p>
+    <div class="ob-row"><span class="ob-time">⏱ Lo esencial, en 1 min</span> <span class="ob-dim">· o explora a tu bola</span></div>
     <div id="quickPick">
-      <span class="qp-q">¿Qué quieres ver primero?</span>
+      <span class="qp-q">¿Por dónde entras?</span>
+      <button type="button" class="qp qp-star" id="qpMapa">🌳 El mapa (lo mejor)</button>
       <button type="button" class="qp" data-goto="1">🧠 Cómo piensa</button>
-      <button type="button" class="qp" data-goto="🌍">🌍 Qué ha conseguido</button>
       <button type="button" class="qp" data-goto="🙌">🙌 Cómo ayudar</button>
       <button type="button" class="qp" data-goto="2">🙋 Tu parte</button>
     </div>
@@ -484,6 +495,12 @@
         render(commits, initial);
         if(foot && !foot.textContent){ foot.textContent="Cada línea es un cambio real guardado. Unos los hago yo en bucle; otros, mientras me construyen. Vuelve y habrá más."; }
         box.hidden=false;
+        /* v0.20: alimenta el «🔦 HOY» de la cabecera con los MISMOS datos reales (evidencia, no relato) */
+        try{ var hr=document.getElementById("hoyReal");
+          if(hr){ var day=Date.now()-864e5, hoy=commits.filter(function(c){ return new Date(c.date).getTime()>day; }).length, last=commits[0];
+            hr.textContent = hoy>0 ? ("🔦 Hoy, de verdad: ✓ "+hoy+(hoy===1?" cambio real":" cambios reales")+" en 24 h — el último, "+hace(last.date)+": «"+clean(last.msg)+"»")
+                                   : ("🔦 Último cambio real, "+hace(last.date)+": «"+clean(last.msg)+"»");
+            hr.hidden=false; } }catch(e){}
         if(initial && !firstDone){ firstDone=true; lsSet(LV, new Date().toISOString()); if(!document.hidden) start(); }
       }).catch(function(){ /* silencio: si no hay datos, el bloque sigue oculto (degrada limpio) */ });
     }
@@ -2471,6 +2488,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-03",titulo:"📖 El cuaderno ahora cuenta UNA historia + el caos por fin es CAÓTICO (v0.20)",detalle:"Dos cambios gordos. (1) LA HISTORIA: la página intentaba contarte demasiadas cosas a la vez y no sabías con qué quedarte. Ahora arriba hay UNA idea («estás viendo una IA que intenta mejorar sola durante años — ¿conseguirá demostrarlo en el mundo real?»), la prueba de que está viva HOY (sus cambios reales de las últimas 24 h, con hora), la promesa honesta de qué habrá si vuelves mañana, y el mapa 🌳 como puerta principal. Lo denso (comparativas, métricas, seguimiento en directo) sigue ahí, pero más abajo — primero la historia, luego la maquinaria. (2) EL CAOS: era demasiado suave y predecible… y encima, si tu aparato pide «menos animaciones», el modo entero quedaba congelado sin que lo supieras. Como el caos lo enciendes TÚ a propósito, ahora va con todo: travesuras al azar de verdad (nada de ritmo fijo), RÁFAGAS repentinas con temblor, calmas falsas para pillarte, lluvia de emojis 🍕⚡, pantallazos de color y tarjetas que se caen y rebotan. Apagable al instante, como siempre."},
     {fecha:"2026-07-03",titulo:"🔧 ARREGLADO: tocar una rama del mapa ahora FUNCIONA de verdad + cada rama te dice si RINDE (v0.19)",detalle:"Confesión honesta: desde hacía días, tocar una rama del mapa con el dedo o el ratón NO hacía nada (o lo cerraba todo) — un fallo técnico escondido hacía que el toque nunca llegara a la rama; solo funcionaba la que se abría sola. Por eso parecía que «no había sub-ramas» y que proponer ramas «estaba roto». ARREGLADO de raíz y con doble red de seguridad. Además, el mapa ahora es un PANEL DE MANDO de verdad: cada rama lleva un ANILLO exterior que dice cuánto está RINDIENDO (0-10, con el dato que lo justifica), abajo ves 🏆 cuáles rinden más — y con esos números MADRE decide qué frente empuja. Y al proponer una rama, se queda como brote ⏳ «en revisión» EN TU MAPA (solo lo ves tú) hasta que MADRE la juzga (~6 h): si encaja se vuelve rama de verdad para todos, y las ramas que no rinden se archivan con el tiempo. Las ideas compiten; la evidencia decide. Bonus: el 🐹 hámster vuelve a CORRER entero (el cuerpo estaba congelado si tu aparato pide «menos animaciones»)."},
     {fecha:"2026-07-02",titulo:"💡 Paso 1 — Nota visible si no tienes salón",detalle:"Un visitante preguntó '¿qué hago si no tengo peluquería?' La respuesta ya estaba ahí (Opción B), pero dentro de un desplegable que pasaba desapercibido. Ahora hay una línea visible justo antes: '¿No tienes salón? No pasa nada — elige Opción B.'"},
     {fecha:"2026-07-01",titulo:"📌 La chincheta de la nota secreta se ve mejor",detalle:"La chincheta pequeñita del post-it (la que abre la nota para la tata) era tan discreta que costaba encontrarla. Ahora está un poco más visible (opacidad subida de 0.38 a 0.62) — sigue siendo un guiño, pero ya no se esconde tanto."},
@@ -4405,7 +4423,10 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 .chaosTip{position:fixed;z-index:9999;pointer-events:none;background:#111;color:#fff;font:800 13px/1.15 system-ui,-apple-system,Segoe UI,sans-serif;padding:6px 10px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.4);max-width:210px;animation:chArrow 3s ease forwards}
 .megaFlip{animation:chMegaFlip 1.1s ease !important}
 @keyframes chMegaFlip{0%{transform:rotateY(0)}50%{transform:rotateY(180deg) scale(1.05)}100%{transform:rotateY(360deg)}}
-@media(prefers-reduced-motion:reduce){body.chaos .card,.card>details:not([open])>summary .caret,#chaosFab.on,.chaosArrow,.chaosNote,.chaosAlert,.chaosShout,.chaosLasso,.chaosLasso ellipse,.chaosQuote,.chaosTip,.megaFlip,#chaosTint,body.chaos #chaosTint,body.chaosBig .wrap,.chaosJolt{animation:none}}
+/* v0.20: bajo reduced-motion SOLO se calma lo ambiental (FAB); el CAOS es OPT-IN con confirm — si el usuario
+   PIDE caos, capar sus animaciones mata su propia petición (era LA causa de «demasiado leve»: el navegador de
+   Tony pide menos animaciones y el modo entero quedaba congelado — mismo culpable que el hámster). */
+@media(prefers-reduced-motion:reduce){#chaosFab.on,.card>details:not([open])>summary .caret{animation:none}}
 </style>
 <script>
 (function(){ try{
@@ -4484,18 +4505,49 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   function megaFlip(){ if(MOBILE) return; var els=document.querySelectorAll(".card"); if(!els.length) return; var el=els[Math.floor(Math.random()*els.length)]; el.classList.add("megaFlip"); setTimeout(function(){ try{el.classList.remove("megaFlip");}catch(e){} },1100); }
   // sacudón fuerte de TODO el contenido (sensación de terremoto, puntual)
   function jolt(){ var w=document.querySelector(".wrap"); if(!w) return; w.classList.add("chaosJolt"); setTimeout(function(){ try{w.classList.remove("chaosJolt");}catch(e){} },520); }
+  /* ---- v0.20: travesuras NUEVAS (todas temporales, nada permanente) ---- */
+  var RAINSETS=[["🍃","🍂","🌿"],["✨","⭐","💫"],["😂","🤪","🫠"],["🐹","🐱","🌳"],["❓","❗","⁉️"],["💥","⚡","🔥"],["🍕","🍩","🧁"]];
+  function emojiRain(){ var set=rnd(RAINSETS), n=MOBILE?10:20;
+    for(var i=0;i<n;i++){ (function(){ var s=document.createElement("div"); s.className="chaos-el"; s.textContent=set[Math.floor(Math.random()*set.length)];
+      var x=Math.random()*100, size=(16+Math.random()*22), dur=(1400+Math.random()*1600), delay=Math.random()*600;
+      s.style.cssText="position:fixed;z-index:9996;left:"+x+"vw;top:-40px;font-size:"+size+"px;pointer-events:none;transition:transform "+dur+"ms linear,opacity "+dur+"ms linear;will-change:transform";
+      document.body.appendChild(s);
+      setTimeout(function(){ try{ s.style.transform="translateY("+(window.innerHeight+90)+"px) rotate("+(Math.random()*360-180).toFixed(0)+"deg)"; s.style.opacity="0.15"; }catch(e){} },delay+20);
+      setTimeout(function(){ try{s.remove();}catch(e){} },delay+dur+160); })(); } }
+  function hueFlash(){ var w=document.querySelector(".wrap"); if(!w||w.__hueOn) return;
+    var mb=document.getElementById("mapBig-ov"); if(mb&&!mb.hidden) return; /* filter rompería el overlay fixed anidado */
+    w.__hueOn=1; var tr0=w.style.transition; w.style.transition="filter .3s"; w.style.filter="hue-rotate("+(120+Math.random()*160).toFixed(0)+"deg) saturate(1.5)";
+    setTimeout(function(){ try{ w.style.filter=""; }catch(e){} },420+Math.random()*280);
+    setTimeout(function(){ try{ w.style.transition=tr0||""; w.__hueOn=0; }catch(e){} },1100); }
+  function gravityCard(){ if(MOBILE) return; var els=document.querySelectorAll(".card"); if(!els.length) return; var el2=els[Math.floor(Math.random()*els.length)];
+    var r=el2.getBoundingClientRect(); if(r.bottom<0||r.top>window.innerHeight||el2.__grav) return; el2.__grav=1;
+    var t0=el2.style.transform, tr0=el2.style.transition;
+    el2.style.transition="transform .55s cubic-bezier(.3,1.6,.4,1)"; el2.style.transform="translateY(26px) rotate("+(Math.random()*4-2).toFixed(1)+"deg)";
+    setTimeout(function(){ try{ el2.style.transform=t0||""; }catch(e){} },580);
+    setTimeout(function(){ try{ el2.style.transition=tr0||""; el2.__grav=0; }catch(e){} },1250); }
+  /* v0.20: DIRECTOR DE ORQUESTA aleatorio (Tony: «demasiado leve y poco random»). Nada de intervalos fijos:
+     cada tick elige una travesura al azar (ponderada), a veces RÁFAGA (5-9 golpes seguidos + temblor corto),
+     a veces CALMA FALSA (para que el siguiente golpe sorprenda). Impredecible de verdad. */
   function startTimers(){
-    timers.push(setInterval(function(){ burst(Math.max(3,Math.round(17*K))); }, MOBILE?1500:800));
-    timers.push(setInterval(spawnTargetArrow, MOBILE?2000:1000));
-    timers.push(setInterval(spawnNote,  MOBILE?2400:1300));
-    timers.push(setInterval(spawnAlert, MOBILE?3200:1700));
-    timers.push(setInterval(shout,      MOBILE?2800:1400));
-    timers.push(setInterval(spawnMischief, MOBILE?3600:2100));
-    timers.push(setInterval(spawnQuote, MOBILE?4600:2700));
-    timers.push(setInterval(spawnFact, MOBILE?5200:3000));
-    timers.push(setInterval(circleReal, MOBILE?2400:1100));
-    timers.push(setInterval(jolt, MOBILE?6000:3600));
-    if(!MOBILE) timers.push(setInterval(megaFlip, 9000));
+    var pranks=[
+      [function(){ burst(Math.max(4,Math.round((10+Math.random()*22)*K))); },18],
+      [spawnTargetArrow,14],[spawnNote,10],[spawnAlert,8],[shout,12],[spawnMischief,10],
+      [spawnQuote,7],[spawnFact,6],[circleReal,14],[jolt,7],[emojiRain,9],[hueFlash,4],
+      [gravityCard,MOBILE?0:8],[megaFlip,MOBILE?0:6]
+    ].filter(function(p){ return p[1]>0; });
+    var total=0; pranks.forEach(function(p){ total+=p[1]; });
+    function pick(){ var r=Math.random()*total; for(var i=0;i<pranks.length;i++){ r-=pranks[i][1]; if(r<=0) return pranks[i][0]; } return pranks[0][0]; }
+    function tickC(){ if(!on) return;
+      var roll=Math.random();
+      if(roll<0.11){ /* RÁFAGA */
+        var n=5+Math.floor(Math.random()*5);
+        for(var i=0;i<n;i++){ timers.push(setTimeout(pick(), i*(90+Math.random()*130))); }
+        if(!MOBILE && Math.random()<0.6){ document.body.classList.add("chaosBig"); timers.push(setTimeout(function(){ document.body.classList.remove("chaosBig"); },1200+Math.random()*900)); }
+        timers.push(setTimeout(tickC, 2200+Math.random()*1800));
+      } else if(roll<0.24){ /* calma falsa */
+        timers.push(setTimeout(tickC, 1600+Math.random()*2300));
+      } else { pick()(); timers.push(setTimeout(tickC, (MOBILE?520:330)+Math.random()*(MOBILE?750:540))); } }
+    tickC();
   }
   function clearTimers(){ timers.forEach(function(t){ clearInterval(t); }); timers=[]; }
   function stop(){ on=false; document.body.classList.remove("chaos"); document.body.classList.remove("chaosBig"); cfab.classList.remove("on"); clearTimers(); document.querySelectorAll(".chaos-el").forEach(function(p){ try{p.remove();}catch(e){} }); document.querySelectorAll(".chaosShout,.megaFlip").forEach(function(p){ try{p.classList.remove("chaosShout"); p.classList.remove("megaFlip");}catch(e){} }); }
@@ -4505,6 +4557,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
       on=true; document.body.classList.add("chaos"); cfab.classList.add("on"); loadQuotes(); /* v0.11: fuera el temblor CONSTANTE (chaosBig) — se notaba artificial (feedback Tony). El caos vive ahora en círculos que rodean cosas reales, flechas y travesuras; el sacudón es solo PUNTUAL */
       burst(Math.round(75*K)); startTimers();
       setTimeout(jolt,150); setTimeout(spawnTargetArrow,300); setTimeout(spawnNote,700); setTimeout(spawnAlert,1100); setTimeout(circleReal,400);
+      setTimeout(emojiRain,500); setTimeout(hueFlash,950); /* v0.20: arranque más bestia */
     } else { stop(); }
   };
   // Q3: pausa el caos si la pestaña no se ve (batería); al volver, lo reanuda si seguía activo
@@ -5166,7 +5219,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.19";
+  window.__cmVersion="v0.20";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 29 jun 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -5512,6 +5565,23 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   document.addEventListener('visibilitychange',function(){ if(document.hidden) stop(); else start(); });
   window.__hamSpin={isOn:function(){return !!iv;},angle:function(){return ang;}};
 }catch(e){ console.warn('hamSpin', e); } })();
+</script>
+<script>
+/* v0.20 — RE-SECUENCIA runtime (crítica de posicionamiento, 3-jul): la 1ª pantalla responde UNA pregunta
+   por bloque — (1) qué intenta (historia, #onboard) → (2) qué ha conseguido (hero, 1 métrica) → (3) el
+   panel de mando (🌳 mapa) → (4) qué cambió hoy (#diarioVivo) → (5) cómo ayudar → y LUEGO la profundidad
+   (vs/abiertas/envivo bajan). Reorden a RUNTIME = seguro: los scripts ya corrieron (lección v0.14), los
+   anclajes JS van por ID. */
+(function(){ try{
+  var hero=document.querySelector(".hero"); if(!hero) return;
+  var mapa=document.getElementById("mapaCard"), diario=document.getElementById("diarioVivo"),
+      envivo=document.getElementById("envivo"), vs=document.getElementById("vsCard"), ab=document.getElementById("abiertasCard");
+  var ayudaBtn=document.querySelector('[data-fb][data-card="🙌 Ayudar a MADRE"]');
+  var ayuda=ayudaBtn?ayudaBtn.closest(".card"):null;
+  var after=hero;
+  [mapa,diario,ayuda,vs,ab,envivo].forEach(function(el2){ if(el2){ after.insertAdjacentElement("afterend",el2); after=el2; } });
+  var qm=document.getElementById("qpMapa"); if(qm) qm.addEventListener("click",function(){ if(window.__openMapaBig) window.__openMapaBig(); else location.hash="#mapa"; });
+}catch(e){ console.warn("resec v0.20", e); } })();
 </script>
 </body>
 </html>
