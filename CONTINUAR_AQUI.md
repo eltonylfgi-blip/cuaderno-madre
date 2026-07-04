@@ -1,11 +1,22 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> Para retomar en un chat nuevo de Claude Code. **Estado a 2026-07-04, versión v0.25 (DESPLEGADA Y VERIFICADA).**
+> Para retomar en un chat nuevo de Claude Code. **Estado a 2026-07-04, versión v0.26 (DESPLEGADA Y VERIFICADA).**
 
-## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-07-04, tras v0.23+v0.24+v0.25)
+## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-07-04, tras v0.23→v0.26)
+> **✅ v0.26 (commit `8adabca`) — 2 ítems del backlog "organismo vivo" implementados (los marcados "barato/
+> honesto/próxima sesión" en la ronda anterior):** (1) **Descubrimientos ocultos** en el mapa (`#mbUnlock`,
+> reusa `cm_map_explored_v1`): al abrir ≥4 ramas se desbloquea un aviso real (el cementerio de ideas
+> muertas, con botón que cierra el mapa y abre esa tarjeta ya existente); al abrir las 8 se desbloquea un
+> 2º dato real (nº de cambios documentados + fecha del más antiguo, vía `window.__cmCambiosMeta` — expuesto
+> por el IIFE de la Evolución, que tenía el array `cambios` PRIVADO en un `(function(){"use strict";...})()`,
+> no global; cero llamadas nuevas). (2) **Chip `#chipSenales`** junto al "3/10" del hero → enlaza a
+> `#senalesCard` (la sección ya existente con los datos NO inflables: euros/estrellas/clientes) — conecta
+> el número resumen con su desglose real, que ya existía pero no estaba enlazado. Verificado con touch+jitter
+> real + regresión completa del tap, 0 errores, móvil OK. Ambos clones (A y B) sincronizados a `8adabca`.
+>
 > **⚠️ DOS CLONES del repo en este PC — anti-confusión:** `C:\Users\anton\repos\cuaderno-madre` (este) y
 > `C:\Users\anton\cuaderno-madre-pub` (otra sesión editó ahí). AMBOS apuntan al mismo `origin/main` y están
-> sincronizados a `97b3b9f` (v0.25) — no hay divergencia, pero **antes de editar, haz `git pull` en el clon que
+> sincronizados a `8adabca` (v0.26) — no hay divergencia, pero **antes de editar, haz `git pull` en el clon que
 > vayas a usar** (el otro puede ir un commit por delante si otra sesión trabajó en él). El preview config
 > "cuaderno" del workspace root (`PROYECTO MADRE\.claude\launch.json`) apunta hoy a `cuaderno-madre-pub` puerto
 > 8138; este repo tiene su PROPIO `launch.json` (puerto 8137) si prefieres editar aquí. Pendiente: consolidar en
