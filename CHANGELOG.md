@@ -3,6 +3,12 @@
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
 Cada línea: fecha · qué cambió · por qué (qué feedback) · cómo revertir (`git revert <hash>`).
 
+## 2026-07-04 — v0.26: descubrimientos ocultos en el mapa + enlace al desglose real
+- **Qué cambió:** (1) `#mbUnlock` en el mapa — al explorar ≥4 ramas se desbloquea un aviso real (el cementerio de ideas muertas ya existía en la página; ahora se anuncia y enlaza con un botón que cierra el mapa y abre esa tarjeta); al explorar las 8 ramas se desbloquea un segundo dato: cuántos cambios reales lleva el cuaderno y desde qué fecha (leído de `window.__cmCambiosMeta`, expuesto por el IIFE de la Evolución que ya tenía ese array — cero llamadas nuevas, cero datos inventados). (2) Chip nuevo `#chipSenales` junto al "3/10" del hero, enlaza a `#senalesCard` (la sección "Señales del mundo" ya existente, con los datos NO inflables: euros, estrellas, clientes) — conecta el número resumen con su desglose real, que ya existía pero no estaba enlazado.
+- **Por qué:** backlog "organismo vivo" de la crítica de GPT (ítem F "descubrimientos ocultos" + la métrica desglosada), marcados como "barato y honesto, próxima sesión, no necesita loop".
+- **Verificación:** umbrales 0/3/4/6/8 con localStorage sembrado (oculto hasta 4, primer aviso en 4-7, segundo aviso en 8), botón cementerio cierra el mapa y abre la tarjeta real, chip señales abre+desplaza a `#senalesCard`, regresión completa del tap (touch+jitter) intacta, móvil 375px sin overflow, `node --check` 30/30, 0 errores consola.
+- **Revertir:** `git revert <hash de esta tanda>`.
+
 ## 2026-07-04 — v0.25: abrir una rama ya no aleja el zoom (sesión paralela)
 - **Qué cambió:** Tony reportó que abrir una rama con sub-ramas hacía zoom OUT si ya estaba más cerca del zoom fijo (1.5/2.1). Fix: el objetivo de zoom pasa a `Math.max(zoomFijo, zoomActual)` — entrar en una rama NUNCA reduce el zoom, solo centra.
 - **Por qué:** feedback directo de Tony usando el mapa de verdad (evidencia indirecta de que v0.23 ya le dejaba tocar/reabrir ramas).
