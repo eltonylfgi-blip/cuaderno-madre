@@ -1,20 +1,41 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> Para retomar en un chat nuevo de Claude Code. **Estado a 2026-07-03, versión v0.22 (DESPLEGADA).**
+> Para retomar en un chat nuevo de Claude Code. **Estado a 2026-07-04, versión v0.25 (DESPLEGADA Y VERIFICADA).**
 
-## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-07-03, tras v0.21+v0.22)
-> **🔴🔴 v0.21 — EL BUG DEL MAPA, ARREGLADO DE VERDAD (2º intento; commit `b7f599d`).** El fix v0.19 NO bastó
-> en el navegador de Tony: seguía «no puedo abrir/reabrir ramas». CAUSA definitiva: depender del evento `click`
-> del DOM, que el navegador RETARGETEA de forma impredecible con pan/zoom+pointer-capture. **SOLUCIÓN: el tap se
-> resuelve en `pointerup`** (1 dedo, sin arrastre >10px) y se enruta al nodo por **GEOMETRÍA** (`nodeAtPoint`),
-> CERO click. Se mata el `click` dentro del SVG (captura) para no duplicar; teclado por keydown; zoom/propuesta
-> fuera del SVG. **v0.22 reforzó:** capturar el puntero en `pointerdown` (ya no rompe nada porque el tap va por
-> pointerup) → el `pointerup` SIEMPRE llega aunque el dedo salga del SVG (cero punteros colgados). **VENTAJA
-> CLAVE: ahora la verificación es FIEL** — el mecanismo es pointerup, así que los `PointerEvent` sintéticos
-> ejercitan el MISMO camino que el dedo real (a diferencia del click, que se enmascaraba). Verificado: abrir/
-> cerrar/reabrir, arrastre-pana-sin-abrir, pinch, tap-vacío, sub-ramas, propose, brotes, deep-link, teclado,
-> móvil-touch. **PENDIENTE: Tony confirma en su móvil real** (última milla que el harness no cubre — su
-> `preview_click` NO inyecta input, cazado con control positivo → lección).
+## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-07-04, tras v0.23+v0.24+v0.25)
+> **⚠️ DOS CLONES del repo en este PC — anti-confusión:** `C:\Users\anton\repos\cuaderno-madre` (este) y
+> `C:\Users\anton\cuaderno-madre-pub` (otra sesión editó ahí). AMBOS apuntan al mismo `origin/main` y están
+> sincronizados a `97b3b9f` (v0.25) — no hay divergencia, pero **antes de editar, haz `git pull` en el clon que
+> vayas a usar** (el otro puede ir un commit por delante si otra sesión trabajó en él). El preview config
+> "cuaderno" del workspace root (`PROYECTO MADRE\.claude\launch.json`) apunta hoy a `cuaderno-madre-pub` puerto
+> 8138; este repo tiene su PROPIO `launch.json` (puerto 8137) si prefieres editar aquí. Pendiente: consolidar en
+> un solo clon cuando haya un hueco (no urgente, ninguno se ha corrompido).
+>
+> **✅✅✅ v0.23/v0.24/v0.25 (3-4 jul, otra sesión en paralelo, commits `01ff0d3`+`2d86732`+`97b3b9f`) — EL BUG
+> DEL TAP, RESUELTO DE VERDAD (3er intento) + 2 features nuevas. RE-VERIFICADO por esta sesión con eventos
+> táctiles realistas (jitter de pulgar 12-18px, viewport móvil 390×844) el 4-jul: TODO pasa.**
+> - **v0.23 — causa REAL encontrada con un HUD de diagnóstico en el móvil de Tony:** el fix v0.21/v0.22
+>   (pointerup+geometría) mejoró mucho pero **seguía fallando en su móvil real** aunque "pasaba" en preview
+>   — señal de que el test sintético no recorría lo del dedo de verdad. Causa: **el umbral tap-vs-arrastre
+>   (10px) era demasiado fino para un pulgar real**, que se mueve 10-20px al tocar → se contaba como ARRASTRE
+>   y el tap se perdía (el ratón/sintético se mueve 0px, por eso "pasaba" en preview). Fix: **slop 10→20** +
+>   **hit-test NATIVO** (`document.elementFromPoint`, cada nodo con ref `g.__node`) en vez de solo geometría
+>   (`nodeAtPoint` queda de red de seguridad) + **HUD opt-in** `?tapdbg` en la URL (por si aún fallara, Tony
+>   pega los números `dist/moved/hit` reales — cero adivinar a ciegas) + reset de `svg.pointerEvents` al abrir.
+> - **v0.24 — botón "💬 Comentar esta rama"** en el panel de info: formulario inline (sin modal), tipo
+>   `comentario-rama` por `window.__fb`. La rutina `cuaderno-feedback` (SKILL PASO 2, ya actualizado) lo
+>   **ruta al buzón del loop** (NO edita el cuaderno por esto — es opinión sobre un FRENTE de MADRE, no sobre
+>   la web).
+> - **v0.25 — abrir una rama ya NO hace zoom OUT:** Tony reportó que si ya estabas más cerca que el zoom fijo
+>   (1.5/2.1), abrir otra rama te alejaba. Fix: `focusBranch(nd, Math.max(zoomFijo, k))` — nunca reduce tu zoom
+>   actual, solo centra. **(Esto lo reportó Tony usándolo de verdad → es la confirmación implícita de que YA
+>   podía tocar/abrir ramas en v0.23; no hay confirmación EXPLÍCITA tipo "sí, ya funciona" en el traspaso.)**
+> - **RE-VERIFICADO por esta sesión (4-jul, en `cuaderno-madre-pub`, sincronizado a v0.25):** toggle
+>   abrir→cerrar→reabrir con jitter de pulgar real (12-18px) ✓, arrastre 80px pana sin abrir ✓, zoom a tope
+>   (3.4) + abrir rama = NO se aleja ✓, botón comentar → payload `comentario-rama` correcto ✓, 0 errores de
+>   consola, viewport móvil real 390×844. **Backlog de inmersión de GPT** filtrado por honestidad quedó en
+>   `BUZON_ENTRANTE\DESDE_CLAUDE_2026-07-03_mapa-inmersion-backlog.txt` (unlocks primero, nada de la lista B
+>   sin datos reales). Detalle completo con diffs: `TRASPASOS\TRASPASO_2026-07-03_mapa-tap-v023.md`.
 > **🌳 v0.22 — mapa REACTIVO (4 mejoras de la crítica de GPT, filtradas por §9):** (1) **anillos justificados**
 > (campo `porque[]` por nodo: líneas ↑/↓ con hechos reales → «el número no parece inventado»); (2) **MADRE
 > observa la sesión** (`#mbExpl` reactivo por ramas abiertas: «te estoy viendo llegar»→«casi nadie llega tan

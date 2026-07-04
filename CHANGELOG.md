@@ -3,6 +3,24 @@
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
 Cada línea: fecha · qué cambió · por qué (qué feedback) · cómo revertir (`git revert <hash>`).
 
+## 2026-07-04 — v0.25: abrir una rama ya no aleja el zoom (sesión paralela)
+- **Qué cambió:** Tony reportó que abrir una rama con sub-ramas hacía zoom OUT si ya estaba más cerca del zoom fijo (1.5/2.1). Fix: el objetivo de zoom pasa a `Math.max(zoomFijo, zoomActual)` — entrar en una rama NUNCA reduce el zoom, solo centra.
+- **Por qué:** feedback directo de Tony usando el mapa de verdad (evidencia indirecta de que v0.23 ya le dejaba tocar/reabrir ramas).
+- **Verificación:** con zoom a tope (3.4), abrir otra rama mantiene 3.4 y solo centra; desde zoom bajo sigue entrando. Re-verificado por sesión posterior (4-jul) con `PointerEvent` táctiles reales.
+- **Revertir:** `git revert 97b3b9f`.
+
+## 2026-07-04 — v0.24: botón "💬 Comentar esta rama" (sesión paralela)
+- **Qué cambió:** formulario inline en el panel de cada rama — crítica/sugerencia/pregunta SOBRE esa rama (no sobre la web), tipo `comentario-rama` por `window.__fb`. La rutina `cuaderno-feedback` (SKILL PASO 2) lo RUTA a un fichero nuevo del buzón para que el loop lo juzgue; NO edita el cuaderno por esto.
+- **Por qué:** Tony pidió poder opinar sobre partes concretas de MADRE directamente desde el mapa.
+- **Verificación:** E2E en preview (POST a `feedback` 201, payload `COMETARIO-RAMA` con rama+texto+origen); re-verificado por sesión posterior con captura del payload real.
+- **Revertir:** `git revert 2d86732`.
+
+## 2026-07-03 — v0.23: FIX definitivo del tap en móvil real (3er intento, sesión paralela) — causa REAL encontrada
+- **Qué cambió:** el fix v0.21/v0.22 (pointerup+geometría) seguía fallando en el móvil REAL de Tony aunque pasaba en preview. Causa hallada con un HUD de diagnóstico en su propio navegador: el umbral tap-vs-arrastre (10px) era demasiado fino para un pulgar real (se mueve 10-20px al tocar) → se contaba como arrastre y el tap se perdía; el ratón/evento sintético se mueve 0px, por eso "pasaba" en preview. Fix: **slop 10→20** + **hit-test nativo** (`document.elementFromPoint`, con la geometría manual como red de seguridad) + **HUD opt-in `?tapdbg`** en la URL + reset de `svg.pointerEvents` al abrir el mapa.
+- **Por qué:** Tony seguía reportando que no podía abrir/reabrir ramas pese a los fixes v0.19/v0.21/v0.22.
+- **Verificación:** E2E con `pointerType:"touch"` — taps de 0/12/18px abren; 24px y arrastre de 200px panean sin abrir; toggle abrir↔cerrar↔reabrir; sub-rama multinivel; tap-vacío-colapsa; pinch; teclado; ratón; deep-link `#mapa`. Consola limpia. Re-verificado por sesión posterior (4-jul) con jitter de pulgar realista en viewport móvil 390×844: sigue funcionando.
+- **Revertir:** `git revert 01ff0d3`. (Detalle completo con diffs y HUD: `TRASPASOS\TRASPASO_2026-07-03_mapa-tap-v023.md`.)
+
 ## 2026-07-03 — v0.22: mapa reactivo (anillos justificados + MADRE observa + huella de visitante) + captura robusta
 - **Qué cambió:** aplicadas 4 mejoras de la crítica de GPT (filtradas por §9, nada fingido): (1) **anillos justificados** — cada rama muestra 2-3 líneas ↑/↓ con hechos reales de dónde sale su `benef` (campo `porque[]`; GPT: «que no parezca inventado»); (2) **MADRE observa la sesión** — `#mbExpl` da mensajes reactivos según ramas REALMENTE abiertas («te estoy viendo llegar» → «poca gente pasa de aquí» → «casi nadie llega tan lejos»); (3) **huella de visitante** — badge «🌱 nació de la propuesta de un visitante» cuando `porVisitante` (lo pone la rutina al aceptar; SKILL actualizado); (4) **promesa más fuerte** («no te prometo mejor, sí diferente»). + **Robustez del fix del tap**: ahora se captura el puntero en `pointerdown` (ya no rompe nada porque el tap va por pointerup+geometría, no por click) → el `pointerup` siempre llega aunque el dedo se levante fuera del SVG (cero punteros colgados).
 - **Por qué:** Tony pegó 2 críticas de GPT (posicionamiento + «organismo vivo»); elegidas las de más valor/§9-seguras.
