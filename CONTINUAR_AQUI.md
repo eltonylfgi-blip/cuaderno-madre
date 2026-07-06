@@ -16,8 +16,15 @@
 > eval/inspect van perfectos — verifica por DOM+estilos, no pierdas tiempo con capturas.
 > **⏭️ Siguientes naturales del mapa (cuando haya datos, no antes):** marcar ✅/❌ en la tarjeta según
 > caigan los veredictos (10/15-jul los trae el watcher/medidor); si el loop hornea `MAPA_RAMAS.tsv`, que
-> incluya `juicio` (el render ya lo soporta); GPT también pidió «radar» y «embudo cognitivo» — DIFERIDOS
-> por falta de números reales agregados (no inventar).
+> incluya `juicio` y `para` (el render ya soporta ambos); GPT también pidió «radar» y «embudo cognitivo» —
+> DIFERIDOS por falta de números reales agregados (no inventar).
+> **⏭️ v0.28 dejó hechos** (misma noche): tour guiado 90s (`#tourBtn`/`#tourOv`), frase-clic, `para` por
+> rama, promesa «~30 min» corregida. **Ronda 2 de GPT sobre el mapa, clasificada:** los 3 que «más moverían»
+> (grafo de dependencias entre ramas · vista de flujo «idea→regla→realidad» · edad/estabilidad por rama +
+> latido de ramas recién cambiadas) quedan como LA evolución natural del mapa, PERO exigen (a) datos por
+> rama que nadie registra aún (edades, cambios/mes, dependencias declaradas) y (b) tocar en profundidad el
+> SVG endurecido del tap — NO hacerlos «a ojo» ni deprisa; si se abordan, empezar por declarar dependencias
+> reales en `__MAPA` (campo `deps:[emojis]`) y pintarlas como líneas finas, que es lo único barato y honesto.
 
 ## 🧵 HILOS ANTERIORES (2026-07-04, tras v0.23→v0.26)
 > **✅ v0.26 (commit `8adabca`) — 2 ítems del backlog "organismo vivo" implementados (los marcados "barato/
