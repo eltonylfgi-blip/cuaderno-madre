@@ -1,5 +1,16 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **🧊 CONGELADOR (7-jul → ~21-jul, crítica externa adoptada por sesión Fable final): PROHIBIDO
+> mejorar esta web "porque sí" durante ~2 semanas.** La web ya es suficientemente buena para
+> recibir realidad; ahora el roadmap lo empuja LA REALIDAD, no el razonamiento interno. Solo se
+> toca si pasa UNA de estas tres cosas (evidencia de visitante real): (1) un visitante se PIERDE,
+> (2) un visitante NO ENTIENDE algo, (3) un visitante hace algo INESPERADO. Fuente de esas señales:
+> comentarios/feedback de Supabase (los trae la rutina cuaderno-feedback) o Tony observando a
+> alguien usarla. Excepción única: marcar ✅/❌ los veredictos fechados de la tarjeta 🔮 cuando
+> caigan (eso es la parte VIVA, no una mejora). Si una idea brillante aparece sin señal → backlog,
+> no código. Falsador del congelador: si el 21-jul no llegó NINGUNA señal externa pese a ≥1 post
+> publicado, el congelador no era el problema — revisar distribución, no la web.
+>
 > **⚙️ REGLA OPERATIVA (Tony, 7-jul — "que lo que tenemos SE USE"):** toda tanda VISUAL/UX de esta web
 > usa el arsenal PROPIO antes de improvisar: **(1)** skill `ui-ux-pro-max` (instalada globalmente — motor
 > de diseño: estilos/paletas/tipografías/accesibilidad), **(2)** `DISEÑO_HEURISTICAS.md` (este repo),
