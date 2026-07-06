@@ -1117,7 +1117,7 @@
       acts.appendChild(mkBtn("🤔 No entiendo esto",function(btn){
         if(!window.__fb){ if(window.__openFb) window.__openFb("🌳 Mapa › "+path,"","no-entiendo"); return; }
         if(btn){ btn.disabled=true; btn.textContent="…"; }
-        Promise.resolve(window.__fb({card:"🌳 Mapa › "+path, section:path, tipo:"no-entiendo", texto:"No entiendo esta parte del mapa: "+path})).then(function(r){ if(btn) btn.textContent=(r==="copied")?"📋 copiado — pégalo en tu buzón":"✓ apuntado, MADRE lo verá"; }).catch(function(){ if(btn){ btn.disabled=false; btn.textContent="🤔 No entiendo esto"; } });
+        Promise.resolve(window.__fb({card:"🌳 Mapa › "+path, section:path, tipo:"no-entiendo", texto:"No entiendo esta parte del mapa: "+path})).then(function(r){ if(btn) btn.textContent=(r==="copied")?"📋 sin conexión — reinténtalo luego":"✓ apuntado, MADRE lo verá"; }).catch(function(){ if(btn){ btn.disabled=false; btn.textContent="🤔 No entiendo esto"; } });
       }));
       /* «proponer una sub-rama aquí» = abre el panel propio del overlay (sub-rama bajo este nodo) */
       if(window.__fb && window.__openPropose){ acts.appendChild(mkBtn("🌱 Proponer una sub-rama aquí",function(){
@@ -1144,7 +1144,7 @@
           var texto="COMENTARIO-RAMA\nrama: "+sanC(path,100)+"\ntexto: "+v+"\norigen: mapa-cuaderno";
           try{ localStorage.setItem("cm_cmt_ts",String(Date.now())); }catch(err){}
           Promise.resolve(window.__fb({card:"🌳 Mapa › comentario", section:path, tipo:"comentario-rama", texto:texto}))
-            .then(function(r){ if(r==="copied"){ st.textContent="📋 Sin conexión ahora: te lo he copiado — pégalo en tu buzón."; send.disabled=false; }
+            .then(function(r){ if(r==="copied"){ st.textContent="📋 Sin conexión ahora — reinténtalo cuando vuelva la red."; send.disabled=false; }
               else { st.textContent="✓ Enviado. MADRE lo lee en su siguiente pasada y lo lleva a su cerebro."; ta.value="";
                 setTimeout(function(){ try{ box.remove(); }catch(err){} },2600); } })
             .catch(function(){ send.disabled=false; st.textContent="No se pudo enviar ahora — reinténtalo luego."; });
@@ -1191,7 +1191,7 @@
         pSend.disabled=true; pStatus.style.color="#9aa6c4"; pStatus.textContent="Mandándoselo a MADRE…";
         try{ localStorage.setItem("cm_rama_ts", String(Date.now())); }catch(e){}
         Promise.resolve(window.__fb({card:"🌳 Mapa › propuesta de rama", section:pPath, tipo:"propuesta-rama", texto:texto}))
-          .then(function(r){ if(r==="copied"){ pStatus.style.color="#fbbf24"; pStatus.textContent="📋 Sin conexión ahora: te lo he copiado — pégalo en tu buzón para que le llegue a MADRE."; pSend.disabled=false; }
+          .then(function(r){ if(r==="copied"){ pStatus.style.color="#fbbf24"; pStatus.textContent="📋 Sin conexión ahora — reinténtalo cuando vuelva la red."; pSend.disabled=false; }
             else { pStatus.style.color="#10b981"; pStatus.textContent="✓ Enviado. Te lo dejo como brote ⏳ en tu mapa; MADRE lo juzga en su siguiente pasada (~6 h). ¡Gracias!";
               /* v0.19: guarda el brote pendiente (solo este dispositivo) y refresca el mapa */
               try{ var pk="cm_props_pending_v1", arr=JSON.parse(localStorage.getItem(pk)||"[]");
@@ -2030,8 +2030,8 @@
       <button type="button" class="tbtn" data-tipo="pedir-funcion">Pedir una función</button>
       <button type="button" class="tbtn" data-tipo="opinion">Mi opinión</button>
     </div>
-    <label>Imagen (opcional) — pégala con Ctrl/Cmd+V, o súbela</label>
-    <div id="fbPasteZone" tabindex="0" style="border:1px dashed var(--line);border-radius:9px;padding:12px;text-align:center;color:var(--muted);font-size:12.5px;background:#fcfdff;cursor:text">📋 Haz clic aquí y pega (Ctrl/Cmd+V)</div>
+    <label>Imagen (opcional) — en PC pégala con Ctrl/Cmd+V; en móvil usa el botón de subir ↓</label>
+    <div id="fbPasteZone" tabindex="0" style="border:1px dashed var(--line);border-radius:9px;padding:12px;text-align:center;color:var(--muted);font-size:12.5px;background:#fcfdff;cursor:text">📋 PC: haz clic aquí y pega (Ctrl/Cmd+V) · Móvil: usa el botón de subir ↓</div>
     <img id="fbPreview" alt="" style="display:none;max-width:100%;max-height:170px;margin-top:8px;border-radius:8px;border:1px solid var(--line)">
     <div id="fbImgInfo" class="small" style="margin-top:5px"></div>
     <input type="file" id="fbImg" accept="image/*" style="width:100%;margin-top:6px">
@@ -2254,7 +2254,7 @@ window.__cmCorpus = {
       if(sent){ toast("Enviado ✓ — MADRE lo verá en su próxima pasada"); return "sent"; }
       var copiado=false;
       try{ await navigator.clipboard.writeText(body); copiado=true; }catch(e){}
-      if(copiado) toast("Copiado ✓ — pégalo en tu BUZÓN"); else window.prompt("Copia este texto y pégalo en tu BUZÓN:", body);
+      if(copiado) toast("Sin conexión — reinténtalo cuando vuelva la red"); else window.prompt("Sin conexión. Copia el texto para enviarlo más tarde:", body);
       return "copied";
     }
     try{
@@ -2623,6 +2623,7 @@ window.__cmCorpus = {
   var cambios=[
     {fecha:"2026-07-04",titulo:"🔓 El mapa esconde descubrimientos + un enlace directo a la evidencia real (v0.26)",detalle:"Dos cosas nuevas, las dos con datos 100% reales (nada inventado). (1) Explora el mapa 🌳 un poco (4 ramas o más) y desbloqueas un descubrimiento: que MADRE también tiene un cementerio real de ideas que descartó — con un botón para verlo directamente. Explóralo entero (las 8 ramas) y desbloqueas otro: cuántos cambios reales lleva registrados el cuaderno y desde cuándo (hoy: decenas, desde finales de junio). (2) Arriba, junto al número «3/10», hay un enlace nuevo «Ver el desglose (nada inflable)» que te lleva directo a las Señales del mundo — los datos crudos (euros, estrellas, clientes) que explican ese número, sin adornos."},
     {fecha:"2026-07-04",titulo:"🔎 Abrir una rama ya no te ALEJA (v0.25)",detalle:"Bug real que reportó Tony: tocabas una rama para entrar en ella y el mapa hacía zoom HACIA FUERA en vez de hacia dentro. Pasaba porque al abrir, la cámara iba siempre a un nivel de zoom fijo — y si tú ya estabas más cerca, «ir al nivel fijo» era alejarse. Ahora entrar en una rama nunca reduce tu zoom: como mínimo se queda donde estás y se centra en lo que tocaste."},
+    {fecha:"2026-07-06",titulo:"📱 Texto más claro para móvil: imágenes y sin-conexión",detalle:"Dos arreglos de UX para móvil. (1) El campo de imagen del formulario de opinión decía «pégala con Ctrl/Cmd+V» — eso no funciona en móvil; ahora dice claramente que en móvil hay que usar el botón de subir. (2) Cuando el formulario no llega a enviarse (sin conexión), el mensaje decía «pégalo en tu BUZÓN» — un concepto interno de MADRE que ningún visitante entiende. Ahora dice simplemente «Sin conexión — reinténtalo cuando vuelva la red»."},
     {fecha:"2026-07-04",titulo:"💬 Ahora puedes COMENTAR cualquier rama del mapa (v0.24)",detalle:"Abre el mapa 🌳, toca una rama y verás un botón nuevo: «💬 Comentar esta rama». Escribe tu crítica, sugerencia o pregunta sobre ESA parte de MADRE y dale a enviar — le llega tal cual a MADRE, que lo lleva a su cerebro en la siguiente pasada y lo juzga como cualquier otra idea (las ideas compiten; la evidencia decide). No hace falta cuenta ni nada. Es distinto del 🌱 (proponer una rama nueva): esto es opinar sobre lo que YA existe."},
     {fecha:"2026-07-03",titulo:"🌳 El mapa te responde: cada nota se justifica sola y MADRE nota que estás explorando (v0.22)",detalle:"Cuatro mejoras para que el mapa se sienta VIVO, no una web. (1) Los números de cada rama («¿rinde seguir aquí? 7/10») ahora enseñan DE DÓNDE salen: dos o tres líneas ↑ (lo que suma) y ↓ (lo que resta) con hechos reales — así el número deja de parecer inventado. (2) MADRE nota tu exploración: según cuántas ramas abres, te va diciendo cosas distintas («te estoy viendo llegar» → «poca gente pasa de aquí» → «casi nadie llega tan lejos»). Son tus datos reales, no un truco. (3) Cuando alguien propone una rama y MADRE la acepta, esa rama lleva una huella: «🌱 nació de la propuesta de un visitante» — si es tuya, ves que ayudaste a que MADRE creciera. (4) Promesa más honesta: «No te prometo que mañana esté mejor. Te prometo que estará diferente.»"},
     {fecha:"2026-07-03",titulo:"✅ ARREGLADO DE VERDAD: abrir y reabrir ramas del mapa (v0.21)",detalle:"El arreglo de ayer no bastaba en todos los móviles/navegadores: seguía costando abrir y REABRIR ramas. Ahora está cambiado de raíz — el toque ya no depende de una pieza del navegador que se portaba raro con el zoom; la rama se detecta directamente por DÓNDE tocas. Toca una rama y se abre; tócala otra vez y se cierra; otra vez y se reabre. Arrastrar mueve el mapa (no abre), pellizcar hace zoom, y tocar fuera lo cierra todo. Probado paso a paso simulando toques reales. Si aún te fallara en tu móvil, dímelo — pero esta vez el mecanismo es el correcto."},
