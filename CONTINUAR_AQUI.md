@@ -1,5 +1,12 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **⚙️ REGLA OPERATIVA (Tony, 7-jul — "que lo que tenemos SE USE"):** toda tanda VISUAL/UX de esta web
+> usa el arsenal PROPIO antes de improvisar: **(1)** skill `ui-ux-pro-max` (instalada globalmente — motor
+> de diseño: estilos/paletas/tipografías/accesibilidad), **(2)** `DISEÑO_HEURISTICAS.md` (este repo),
+> **(3)** `MADRE_UI_REFERENCIAS.md` + `UI_REFS_INBOX.txt` (referencias capturadas), **(4)** memoria
+> [[efecto-wow-factor-visual-madre]] (test: «¿se ve de app o de formulario del 2000?»). Si haces UI sin
+> pasar por (1)-(4), estás re-inventando lo que ya tenemos — el fallo exacto que Tony cazó el 7-jul.
+
 > Para retomar en un chat nuevo de Claude Code. **Estado a 2026-07-06, versión v0.27 (verificada en preview; detalle en CHANGELOG).**
 
 ## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-07-06, tras v0.27)

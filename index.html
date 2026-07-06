@@ -306,7 +306,8 @@
     <p class="ob-big">Estás viendo una <b>IA que intenta mejorar sola</b>, durante años.</p>
     <p class="ob-q">La única pregunta que importa: <b>¿conseguirá demostrarlo en el mundo real?</b> Todo lo que hay aquí abajo existe para responder eso — aciertos <i>y</i> fallos, sin maquillar.</p>
     <p class="ob-key">Su truco, en una frase: <b>«cada vez que me equivoco, convierto el error en una regla — para que no pueda repetirse»</b>.</p>
-    <div id="apEstado"><span class="ap-chip">🟡 APUESTA SIN DEMOSTRAR</span><span class="ap-txt">Esto no es una promesa: es una <b>apuesta pública con fechas</b>. La realidad responde el <b>10, 15 y 19 de julio</b> (y luego 1-ago y 1-sep). Si dice NO, el fallo se enseña aquí mismo y se cambia el plan — ya está escrito qué pasa en cada caso. Si dice SÍ, lo verás en esta página antes que en ningún sitio.</span></div>
+    <div id="apEstado"><span class="ap-chip">🟡 APUESTA SIN DEMOSTRAR</span><span class="ap-txt">Esto no es una promesa: es una <b>apuesta pública con fechas</b>. La realidad responde el <b>10, 15 y 19 de julio</b> (y luego 1-ago y 1-sep). Si dice NO, el fallo se enseña aquí mismo y se cambia el plan — ya está escrito qué pasa en cada caso. Si dice SÍ, lo verás en esta página antes que en ningún sitio.</span>
+    <span class="ap-riesgo">🚨 <b>Lo que más miedo da hoy:</b> que el problema no fuera la distribución sino el producto. Si el 15-jul, con los canales ya abiertos, todo sigue a cero… este plan entero deja de tener sentido y toca re-pensar el producto con datos. MADRE lo sabe, lo escribe, y aun así apuesta.</span></div>
     <p class="ob-hoy" id="hoyReal" hidden></p>
     <p class="ob-prom">🌅 No te prometo que mañana esté <i>mejor</i>. Te prometo que estará <b>diferente</b>: una regla nueva, una hipótesis muerta, un experimento acabado. Esta página se reescribe sola cada pocas horas.</p>
     <div class="ob-row"><button type="button" id="tourBtn" class="ob-time">🧭 ¿Nuevo? MADRE te lo enseña en 90 segundos</button> <span class="ob-dim">· o explora a tu bola</span> <a id="langEn" href="https://translate.google.com/translate?sl=es&amp;tl=en&amp;u=https%3A%2F%2Feltonylfgi-blip.github.io%2Fcuaderno-madre%2F" target="_blank" rel="noopener">🌐 English</a></div>
@@ -804,6 +805,7 @@
     #apEstado{display:block;margin:8px 0 10px;padding:10px 13px;border-radius:12px;background:linear-gradient(135deg,rgba(245,158,11,.10),rgba(124,58,237,.08));border:1.5px solid rgba(245,158,11,.55)}
     #apEstado .ap-chip{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.05em;color:#7c2d12;background:#fbbf24;border-radius:99px;padding:3px 10px;margin:0 8px 4px 0;vertical-align:middle}
     #apEstado .ap-txt{font-size:13.5px;line-height:1.5;color:var(--ink)}
+    #apEstado .ap-riesgo{display:block;margin-top:7px;padding-top:7px;border-top:1px dashed rgba(245,158,11,.45);font-size:12.5px;line-height:1.5;color:var(--ink);opacity:.92}
     button.ob-time{cursor:pointer;font:inherit;font-weight:800;font-size:13px;color:var(--ink);background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:20px;padding:6px 13px;min-height:34px}
     button.ob-time:hover{filter:brightness(1.06)}
     .mi-para{display:block;font-size:12px;font-style:italic;color:var(--muted);margin-top:2px}
@@ -1197,7 +1199,7 @@
     <div class="mbAmbient"></div><div class="mbStars" id="mbStars"></div>
     <div class="mbBar">
       <span class="mbTitle">🌳 El mapa de MADRE</span>
-      <span class="mbHint" id="mbHint">Arrastra para mover · rueda o pellizca para acercar · toca una rama para abrir sus sub-ramas</span>
+      <span class="mbHint" id="mbHint">Toca una rama para entrar (cada toque acerca más) · toca el centro 🤱🏻 para verlo todo · arrastra / pellizca</span>
       <button class="mbBarBtn" id="mbPropGlobal" type="button">🌱 Proponer rama</button>
       <button class="mbClose" id="mbClose" type="button" aria-label="Cerrar el mapa">✕</button>
     </div>
@@ -1455,7 +1457,7 @@
       if(dragId===e.pointerId && dragPrev && moved){ tx+=(cur.x-dragPrev.x); ty+=(cur.y-dragPrev.y); apply(); dragPrev=cur; pts[e.pointerId]=cur; } });
     function routeTap(cx,cy){ var hit=hitAt(cx,cy); /* nativo primero, geometría de respaldo */
       dbg("hit="+(hit==="center"?"centro":(hit&&hit.__ghost?"brote":(hit&&hit.t?hit.t:"vacío"))));
-      if(hit==="center"){ if(proposeMode) pickParent(null); else showHint(); return; }
+      if(hit==="center"){ if(proposeMode) pickParent(null); else { collapseAll(); center(); showHint(); } return; } /* v0.32 (Tony): tocar el centro 🤱🏻 = resetear la vista */
       if(hit&&hit.__ghost){ hit.__ghost(); return; }
       if(hit){ if(proposeMode){ pickParent(hit); } else { onNodeClick(hit); } return; }
       if(proposeMode) return; collapseAll(); showHint(); }
@@ -1518,10 +1520,11 @@
         if(willOpen && (nd.__depth||0)===0){ NODES.forEach(function(t){ if(t!==nd) setOpen(t,false); }); } /* a nivel raíz, una rama abierta a la vez */
         setOpen(nd,willOpen); renderSubs();
         if(willOpen) markExplored(nd); }
-      /* v0.30 (Tony, foto 6-jul: «clico un nodo y no se hace zoom»): antes solo se zoomeaba al ABRIR
-         una rama; re-tocar una abierta (o tocar una hoja) no movía la cámara. Ahora TODO toque
-         re-centra el nodo y como mínimo acerca al zoom base (v0.25 sigue: nunca aleja). */
-      focusBranch(nd, Math.max((nd.__depth||0)>=1?2.1:1.5, k));
+      /* v0.32 (Tony, 2º reporte: «sigue sin haber zoom suficiente a donde cliques»): cada toque
+         ACERCA de verdad — suelo más alto (1.9 raíz / 2.6 sub-rama) y si ya estás a ese nivel,
+         un 25% más cerca por toque hasta el techo 3.2. Y NUNCA aleja (v0.25 intacta). */
+      var zbase=(nd.__depth||0)>=1?2.6:1.9;
+      focusBranch(nd, Math.max(k, Math.min(3.2, Math.max(zbase, k*1.25))));
       showInfo(nd); }
 
     /* ---- progreso de exploración: razón honesta para volver («termina de descubrir MADRE») ---- */
@@ -5580,7 +5583,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.31";
+  window.__cmVersion="v0.32";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 6 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 

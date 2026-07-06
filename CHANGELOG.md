@@ -3,6 +3,11 @@
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
 Cada línea: fecha · qué cambió · por qué (qué feedback) · cómo revertir (`git revert <hash>`).
 
+## 2026-07-07 — v0.32: zoom de verdad al tocar + centro resetea + riesgo actual
+- **Qué cambió:** (1) **Zoom (2º reporte de Tony: «sigue sin haber zoom suficiente donde cliques»)** — suelos subidos (raíz 1.5→1.9, sub-rama 2.1→2.6) y AHORA CADA TOQUE ACERCA un 25% más (techo 3.2; nunca aleja — v0.25 intacta). Fórmula verificada: 0.7→1.9→2.38→2.96. (2) **El centro 🤱🏻 resetea la vista** al tocarlo (colapsa ramas + encuadre general; en modo proponer conserva su papel de "rama nueva grande"). Hint actualizado. (3) **«🚨 Lo que más miedo da hoy»** dentro de la apuesta pública: el riesgo real escrito (que el problema no fuera la distribución sino el producto — se sabe el 15-jul). (4) Regla operativa en CONTINUAR: toda tanda visual usa el arsenal propio (ui-ux-pro-max + heurísticas + referencias) antes de improvisar.
+- **Verificación:** 0 errores consola; v0.32; fórmula de zoom ejecutada en vivo con 5 casos (incluye no-alejar desde 3.4); riesgo renderiza; hint nuevo. El toque real en móvil lo valida Tony (siempre).
+- **Revertir:** `git revert <hash de esta tanda>`.
+
 ## 2026-07-07 — v0.31: LA APUESTA PÚBLICA en la cabecera
 - **Qué cambió:** bloque `#apEstado` dentro del onboard (sin tarjeta nueva — consolidar): chip ámbar «🟡 APUESTA SIN DEMOSTRAR» + texto que reencuadra toda la web como **apuesta pública con fechas** (10/15/19-jul · 1-ago · 1-sep) y con condición de derrota escrita («si la realidad dice NO, el fallo se enseña aquí y se cambia el plan»). Es el ítem nº1 de la última ronda externa («que la web sea un experimento con condiciones de victoria y derrota, no una promesa abierta»), en versión honesta: solo fechas y consecuencias que YA existían escritas en el sistema. La propuesta del externo de un «veredicto final 1-ene-2027» se RECORTÓ al siguiente juez real (regla nueva de Tony: horizonte ≤3 días, tope 2,5 semanas; los jueces fechados son citas, no planes).
 - **Verificación:** 0 errores consola; v0.31; bloque presente con chip visible.
