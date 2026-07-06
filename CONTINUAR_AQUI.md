@@ -18,6 +18,16 @@
 > caigan los veredictos (10/15-jul los trae el watcher/medidor); si el loop hornea `MAPA_RAMAS.tsv`, que
 > incluya `juicio` y `para` (el render ya soporta ambos); GPT también pidió «radar» y «embudo cognitivo» —
 > DIFERIDOS por falta de números reales agregados (no inventar).
+> **⏭️ v0.29-v0.31 dejaron hechos** (misma noche, con permiso total de Tony): comentarios wow + 👍 chip,
+> 🌐 English fijo, muro de misiones, mapa (panel 30vh + re-centrado en todo toque), ASMR re-ON + cristal/slime,
+> más caos clicable (bolas/globos), chip cuenta-atrás del veredicto, saludo de visita, APUESTA PÚBLICA en cabecera.
+> **⏭️ BACKLOG «momentos virales» (última ronda GPT, filtrado — para un sprint futuro con el criterio
+> «no añadir sin eliminar/fusionar algo antes»):** (1) feed «Hoy MADRE cambió de opinión» (necesita fuente
+> real: podría salir de PREGUNTAS CERRADAS/decisiones del loop — NO inventar); (2) replay «últimos 7 días
+> en 30 s» (fuente real: CHANGELOG/cambios); (3) marcador de CREDIBILIDAD (sube con predicciones acertadas,
+> baja con falladas — computable de la tarjeta 🔮 cuando haya ≥6-8 resueltas; hoy solo hay 4); (4) votación
+> «MADRE duda» (posible vía Supabase feedback, pero OJO moat+gates: la decisión real la toman los datos, el
+> voto sería CONSULTIVO y hay que decirlo). La regla de Tony aplica: horizonte ≤3 días — hacer UNO cuando toque, no los 4.
 > **⏭️ v0.28 dejó hechos** (misma noche): tour guiado 90s (`#tourBtn`/`#tourOv`), frase-clic, `para` por
 > rama, promesa «~30 min» corregida. **Ronda 2 de GPT sobre el mapa, clasificada:** los 3 que «más moverían»
 > (grafo de dependencias entre ramas · vista de flujo «idea→regla→realidad» · edad/estabilidad por rama +
