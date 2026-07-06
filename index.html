@@ -811,8 +811,10 @@
     #tourBox .tbtns .tskip{margin-left:auto;background:transparent;border:none;color:var(--muted);font-weight:600}
     .tourGlow{outline:3px solid var(--accent) !important;outline-offset:4px;border-radius:14px}
     /* v0.29: idioma + muro de misiones */
-    #langEn{font-size:12px;font-weight:700;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 10px;margin-left:6px;white-space:nowrap}
+    /* v0.30 (Tony: «el idioma debería ser de lo primero»): pastilla FIJA arriba a la derecha, visible al aterrizar */
+    #langEn{position:fixed;top:10px;right:12px;z-index:55;font-size:12px;font-weight:800;color:var(--ink);text-decoration:none;border:1.5px solid var(--line);border-radius:99px;padding:6px 12px;white-space:nowrap;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.14)}
     #langEn:hover{color:var(--accent);border-color:var(--accent)}
+    body:has(.ov.on) #langEn,body:has(.mbOv:not([hidden])) #langEn{display:none}
     .misTop{font-size:14px;line-height:1.5;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:9px 12px;margin:0 0 10px}
     .misChip{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.05em;color:#fff;background:linear-gradient(135deg,var(--accent,#7c3aed),#a855f7);border-radius:99px;padding:2.5px 9px;margin-right:8px;vertical-align:middle}
     .misCard{transition:transform .15s,box-shadow .15s}
@@ -866,6 +868,38 @@
     }
     btn.addEventListener("click",start);
   }catch(e){ console.warn("tour",e); } })();
+
+  /* v0.30: MOTIVO PARA VOLVER + MADRE TE MIRA (revisión externa, filtrado honesto):
+     (a) contador al próximo VEREDICTO real (fechas fijas del sistema, las mismas de la tarjeta 🔮);
+     (b) saludo de visita por localStorage (primera vez / volviste tras N días) — datos del propio
+     navegador del visitante, cero servidor, cero inventos. */
+  (function(){ try{
+    var VERE=[["2026-07-10","el catálogo oficial responde sobre las 2 herramientas"],
+              ["2026-07-15","se juzga si el cuello era la distribución"],
+              ["2026-07-19","re-evaluación del producto con datos"],
+              ["2026-08-01","las «chuletas» automáticas demuestran su valor o se degradan"],
+              ["2026-09-01","el registro de capacidades pasa su examen"]];
+    var hoy=new Date(); hoy.setHours(0,0,0,0);
+    var next=null; for(var i=0;i<VERE.length;i++){ var d=new Date(VERE[i][0]+"T00:00:00"); if(d>=hoy){ next=[d,VERE[i][1]]; break; } }
+    if(next){ var dias=Math.round((next[0]-hoy)/864e5);
+      var chip=document.createElement("span"); chip.className="chip"; chip.id="chipVeredicto"; chip.setAttribute("role","button"); chip.tabIndex=0;
+      chip.textContent="⏳ Próximo veredicto: "+(dias===0?"HOY":("en "+dias+" día"+(dias===1?"":"s")))+" — "+next[1]+" ›";
+      function goPred(){ var c=document.getElementById("prediccionesCard"); if(c){ try{ c.querySelector("details").open=true; }catch(e){} c.scrollIntoView({behavior:"smooth",block:"start"}); } }
+      chip.addEventListener("click",goPred); chip.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); goPred(); } });
+      var chips=document.querySelector(".chips"); if(chips) chips.insertBefore(chip, chips.firstChild);
+    }
+    var K="cm_visitas_v1", st={n:0,last:0};
+    try{ st=JSON.parse(localStorage.getItem(K)||"{}")||{}; }catch(e){}
+    var nVis=(st.n||0)+1, prev=st.last||0;
+    try{ localStorage.setItem(K, JSON.stringify({n:nVis,last:Date.now()})); }catch(e){}
+    var ob=document.getElementById("onboard");
+    if(ob){ var vl=document.createElement("p"); vl.id="visitLine";
+      vl.style.cssText="margin:6px 0 0;font-size:12px;font-weight:700;color:var(--muted)";
+      if(nVis<=1){ vl.textContent="👀 MADRE también te ve: es tu primera visita. Bienvenido al experimento."; }
+      else { var dd=prev?Math.round((Date.now()-prev)/864e5):0;
+        vl.textContent="👀 MADRE también te ve: visita nº "+nVis+(dd>=1?(" — volviste después de "+dd+" día"+(dd===1?"":"s")+"."):" — hoy otra vez.")+" Desde la última vez, algo ha cambiado: mira 🔦 arriba."; }
+      ob.appendChild(vl); }
+  }catch(e){ console.warn("volver",e); } })();
   </script>
 
   <div class="card key" id="caminoCard"><details open>
@@ -1069,7 +1103,9 @@
     .mbLeg span{display:inline-flex;align-items:center;gap:5px} .mbLeg i{width:11px;height:11px;border-radius:50%;display:inline-block}
     .mbFoot{position:relative;z-index:3;margin:0 14px 12px;font-size:11.5px;color:#8b96b6}
     /* v0.14 BUGFIX: el bloque inferior (info+leyenda+pie) se ACOTA y SCROLLEA → en ventanas cortas ni aplasta el mapa ni se corta */
-    .mbBottom{position:relative;z-index:3;flex:0 0 auto;max-height:42vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+    /* v0.30 (Tony, foto: «el texto de abajo ocupa mucho y no me deja ver el nodo»): el bloque inferior
+       se comía hasta 42vh y ROBABA altura al mapa (parecía des-zoom). Tope 30vh; el detalle se scrollea. */
+    .mbBottom{position:relative;z-index:3;flex:0 0 auto;max-height:30vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
     @media(max-width:560px){ .mbHint{display:none} }
     /* v0.14 BUGFIX: en ventanas BAJAS, barra compacta + controles de zoom en FILA (no se salían del mapa y tapaban la barra) */
     @media(max-height:480px){
@@ -1078,7 +1114,7 @@
       .mbInfo{margin:0 12px 6px;padding:8px 12px;font-size:13px} .mbLeg{margin:0 12px 5px} .mbFoot{margin:0 12px 8px}
     }
     /* v0.14: en pantallas MUY cortas, acotar más el bloque inferior para que el mapa conserve altura usable */
-    @media(max-height:400px){ .mbBottom{max-height:34vh} }
+    @media(max-height:400px){ .mbBottom{max-height:26vh} }
     @media(prefers-reduced-motion:reduce){ .mbStars,.mbNode.now .nc,.mbSubIn,.mbHaloBig{animation:none} .mbOv{transition:none} }
     /* v0.15: «cómo avanza» + acciones por nodo + badge «＋N dentro» + progreso de exploración */
     .mbProg{display:block;color:#cdd6f5;font-size:12.5px;line-height:1.42;margin-top:8px;padding:7px 10px;background:rgba(255,255,255,.06);border-left:3px solid rgba(255,255,255,.28);border-radius:0 8px 8px 0}
@@ -1475,10 +1511,11 @@
       if(hasKids){ var willOpen=!isOpen(nd);
         if(willOpen && (nd.__depth||0)===0){ NODES.forEach(function(t){ if(t!==nd) setOpen(t,false); }); } /* a nivel raíz, una rama abierta a la vez */
         setOpen(nd,willOpen); renderSubs();
-        /* v0.25 (Tony, 4-jul: «abrir una rama hacía zoom OUT»): el objetivo de zoom era FIJO (1.5/2.1);
-           si ya estabas MÁS cerca, «ir a 1.5» = alejarse. ENTRAR nunca aleja: como mínimo conserva tu
-           zoom actual y solo CENTRA la rama tocada. */
-        if(willOpen){ focusBranch(nd, Math.max((nd.__depth||0)>=1?2.1:1.5, k)); markExplored(nd); } }
+        if(willOpen) markExplored(nd); }
+      /* v0.30 (Tony, foto 6-jul: «clico un nodo y no se hace zoom»): antes solo se zoomeaba al ABRIR
+         una rama; re-tocar una abierta (o tocar una hoja) no movía la cámara. Ahora TODO toque
+         re-centra el nodo y como mínimo acerca al zoom base (v0.25 sigue: nunca aleja). */
+      focusBranch(nd, Math.max((nd.__depth||0)>=1?2.1:1.5, k));
       showInfo(nd); }
 
     /* ---- progreso de exploración: razón honesta para volver («termina de descubrir MADRE») ---- */
@@ -4815,6 +4852,24 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     el2.style.transition="transform .55s cubic-bezier(.3,1.6,.4,1)"; el2.style.transform="translateY(26px) rotate("+(Math.random()*4-2).toFixed(1)+"deg)";
     setTimeout(function(){ try{ el2.style.transform=t0||""; }catch(e){} },580);
     setTimeout(function(){ try{ el2.style.transition=tr0||""; el2.__grav=0; }catch(e){} },1250); }
+  /* v0.30: MÁS caos (Tony: «más cosas rodándose, más interactivas») — 2 travesuras nuevas, ambas CLICABLES
+     (son <button> → el click suave del ASMR les pone sonido gratis; explotan al tocarlas). */
+  function rollBall(){ var b=document.createElement("button"); b.type="button"; b.className="chaos-el"; b.textContent=rnd(["⚽","🎾","🏀","🪩","🍊","😵‍💫","🧶"]);
+    var fromLeft=Math.random()<0.5, dur=3200+Math.random()*2600, size=26+Math.random()*22;
+    b.style.cssText="position:fixed;z-index:9996;bottom:"+(6+Math.random()*40)+"px;left:"+(fromLeft?"-60px":"100vw")+";font-size:"+size+"px;background:none;border:none;cursor:pointer;padding:4px;transition:transform "+dur+"ms linear;will-change:transform;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))";
+    b.setAttribute("aria-hidden","true"); b.tabIndex=-1;
+    b.addEventListener("click",function(e){ e.stopPropagation(); try{ b.style.transition="transform .25s, opacity .25s"; b.style.transform+=" scale(2.2)"; b.style.opacity="0"; burst(Math.round(6*K)||3); }catch(_){} setTimeout(function(){ try{b.remove();}catch(_){} },260); });
+    document.body.appendChild(b);
+    requestAnimationFrame(function(){ var dx=(vw()+140)*(fromLeft?1:-1); b.style.transform="translateX("+dx+"px) rotate("+(fromLeft?1:-1)*(720+Math.random()*720)+"deg)"; });
+    setTimeout(function(){ try{b.remove();}catch(e){} },dur+300); }
+  function balloonRise(){ var n=MOBILE?2:4; for(var i=0;i<n;i++){ (function(){ var b=document.createElement("button"); b.type="button"; b.className="chaos-el"; b.textContent="🎈";
+      var dur=3800+Math.random()*2400, x=5+Math.random()*88;
+      b.style.cssText="position:fixed;z-index:9996;top:100vh;left:"+x+"vw;font-size:"+(24+Math.random()*18)+"px;background:none;border:none;cursor:pointer;padding:4px;transition:transform "+dur+"ms linear;will-change:transform";
+      b.setAttribute("aria-hidden","true"); b.tabIndex=-1;
+      b.addEventListener("click",function(e){ e.stopPropagation(); try{ b.textContent="💥"; b.style.transition="opacity .2s"; b.style.opacity="0"; }catch(_){} setTimeout(function(){ try{b.remove();}catch(_){} },210); });
+      document.body.appendChild(b);
+      requestAnimationFrame(function(){ b.style.transform="translateY(-"+(vh()+160)+"px) translateX("+(Math.random()*60-30).toFixed(0)+"px)"; });
+      setTimeout(function(){ try{b.remove();}catch(e){} },dur+300); })(); } }
   /* v0.20: DIRECTOR DE ORQUESTA aleatorio (Tony: «demasiado leve y poco random»). Nada de intervalos fijos:
      cada tick elige una travesura al azar (ponderada), a veces RÁFAGA (5-9 golpes seguidos + temblor corto),
      a veces CALMA FALSA (para que el siguiente golpe sorprenda). Impredecible de verdad. */
@@ -4823,14 +4878,15 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
       [function(){ burst(Math.max(4,Math.round((10+Math.random()*22)*K))); },18],
       [spawnTargetArrow,14],[spawnNote,10],[spawnAlert,8],[shout,12],[spawnMischief,10],
       [spawnQuote,7],[spawnFact,6],[circleReal,14],[jolt,7],[emojiRain,9],[hueFlash,4],
-      [gravityCard,MOBILE?0:8],[megaFlip,MOBILE?0:6]
+      [gravityCard,MOBILE?0:8],[megaFlip,MOBILE?0:6],
+      [rollBall,12],[balloonRise,9]   /* v0.30: más caos, y clicable */
     ].filter(function(p){ return p[1]>0; });
     var total=0; pranks.forEach(function(p){ total+=p[1]; });
     function pick(){ var r=Math.random()*total; for(var i=0;i<pranks.length;i++){ r-=pranks[i][1]; if(r<=0) return pranks[i][0]; } return pranks[0][0]; }
     function tickC(){ if(!on) return;
       var roll=Math.random();
-      if(roll<0.11){ /* RÁFAGA */
-        var n=5+Math.floor(Math.random()*5);
+      if(roll<0.16){ /* RÁFAGA (v0.30: más frecuente y más gorda — Tony pidió MÁS caos) */
+        var n=6+Math.floor(Math.random()*6);
         for(var i=0;i<n;i++){ timers.push(setTimeout(pick(), i*(90+Math.random()*130))); }
         if(!MOBILE && Math.random()<0.6){ document.body.classList.add("chaosBig"); timers.push(setTimeout(function(){ document.body.classList.remove("chaosBig"); },1200+Math.random()*900)); }
         timers.push(setTimeout(tickC, 2200+Math.random()*1800));
@@ -5070,7 +5126,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
    REVIENTAN/CRUJEN al click (satisfactorio). Sonido sintetizado (Web Audio, sin ficheros). ON por defecto.
    Control en el HUB (window.__asmr). */
 (function(){ try{
-  var KEY="cm_asmr_v2", enabled=true;   /* v0.11: bump v1->v2 para re-activar ON por defecto (Tony lo pidió); respeta a quien lo apague EN ESTA versión */
+  var KEY="cm_asmr_v3", enabled=true;   /* v0.30: bump v2->v3 — Tony reportó "no viene encendido"; un apagado antiguo quedaba pegado para siempre. Re-ON por defecto; respeta a quien lo apague EN ESTA versión */
   try{ var pref=localStorage.getItem(KEY); if(pref==="0") enabled=false; else if(pref==="1") enabled=true; }catch(e){}
   var reduce=false, canHover=false, MOBILE=false;
   try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; canHover=matchMedia("(hover:hover)").matches; MOBILE=matchMedia("(max-width:640px)").matches; }catch(e){}
@@ -5131,7 +5187,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
      sin clipping). Fix de raíz: arena/burbujas/pana NO por filtro que mata su fuente (marrón+highpass
      o bandpass estrecho dejaban casi silencio). Timbre fino lo valida Tony por oído (asmr-test.html). */
   var MODELS={
-    burbujas:{ brush:function(t,sp){ var f0=240+sp*150+rr(0,90); tone(t,{type:"sine",f:f0,f1:f0*(1.7+sp*0.9),dur:0.03+0.02*sp,peak:0.05+sp*0.22}); if(sp>0.5) grain(t,{src:"white",type:"highpass",f:3200,q:0.7,dur:0.007,peak:0.05+sp*0.08}); },   /* pop/squeak con TONO = burbujeante (no roce sordo); pitch aleatorio para no sonar a alarma */
+    burbujas:{ brush:function(t,sp){ var f0=240+sp*150+rr(0,90); tone(t,{type:"sine",f:f0,f1:f0*(1.7+sp*0.9),dur:0.035+0.02*sp,peak:0.16+sp*0.26}); if(sp>0.25) grain(t,{src:"white",type:"highpass",f:3200,q:0.7,dur:0.008,peak:0.07+sp*0.10}); },   /* v0.30 (Tony: «las burbujas no suenan al rozarse»): el suelo era 0.05 = inaudible; ahora 0.16 + chispa desde sp>0.25 */
                hit:function(t){ tone(t,{type:"sine",f:360,f1:820+rr(0,160),dur:0.11,peak:0.6}); grain(t,{src:"white",type:"highpass",f:2600,q:0.7,dur:0.012,peak:0.34}); } },
     madera:{   brush:function(t,sp){ grain(t,{src:"brown",type:"lowpass",f:420+sp*1000,q:1.2,dur:0.045,peak:0.24+sp*0.42}); if(sp>0.65) grain(t,{src:"white",type:"bandpass",f:1400,q:2,dur:0.02,peak:0.05+sp*0.10}); },   /* raspado leñoso CÁLIDO (marrón+lowpass = madera, confirmado por tu oído); chispa extra al rozar fuerte */
                hit:function(t){ modal(t,[{f:210,decay:0.16,gain:0.42},{f:560,decay:0.10,gain:0.26},{f:1450,decay:0.05,gain:0.13}],3200); } },
@@ -5146,7 +5202,12 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     cremallera:{ brush:function(t,sp){ buzz(t,{dur:0.05+0.03*sp,f0:1600,f1:2200+sp*1400,teeth0:50+sp*120,teeth1:70+sp*170,q:1.4,peak:0.18+sp*0.18}); },   /* zip CONTINUO (buzz con dientes) -> smooth; rápido = más agudo + dientes más rápidos */
                hit:function(t){ buzz(t,{dur:0.26,f0:1500,f1:3400,teeth0:55,teeth1:150,q:1.4,peak:0.32}); } },   /* "zzzip" de abrir la cremallera entera */
     muelle:{   brush:function(t,sp){ tone(t,{type:"triangle",f:520+sp*480,f1:300,dur:0.05,peak:0.10+sp*0.12}); },
-               hit:function(t){ tone(t,{type:"triangle",f:660,f1:150,dur:0.34,peak:0.42,fm:{f:18,depth:55}}); grain(t,{src:"white",type:"highpass",f:3000,q:0.6,dur:0.01,peak:0.28}); } }
+               hit:function(t){ tone(t,{type:"triangle",f:660,f1:150,dur:0.34,peak:0.42,fm:{f:18,depth:55}}); grain(t,{src:"white",type:"highpass",f:3000,q:0.6,dur:0.01,peak:0.28}); } },
+    /* v0.30: 2 texturas nuevas (Tony: «faltan más sonidos que suenen rico») — mismos motores, timbre a validar por SU oído en sounds/asmr-test.html */
+    cristal:{  brush:function(t,sp){ var f0=1900+sp*900+rr(0,400); tone(t,{type:"sine",f:f0,f1:f0*1.02,dur:0.05,peak:0.07+sp*0.15}); if(sp>0.45) tone(t+0.015,{type:"sine",f:f0*1.5,dur:0.04,peak:0.05+sp*0.07}); },   /* tink-tink fino de copa */
+               hit:function(t){ modal(t,[{f:1560,decay:0.5,gain:0.30},{f:2340,decay:0.38,gain:0.22},{f:3900,decay:0.24,gain:0.13},{f:5200,decay:0.14,gain:0.07}],6200); } },   /* campanilla de cristal con cola larga */
+    slime:{    brush:function(t,sp){ var f0=190+sp*120+rr(0,60); tone(t,{type:"sine",f:f0,f1:f0*0.55,dur:0.05+0.04*sp,peak:0.12+sp*0.22,fm:{f:11,depth:22}}); if(Math.random()<0.35) grain(t+0.012,{src:"brown",type:"lowpass",f:900,q:1.1,dur:0.03,peak:0.10+sp*0.10}); },   /* squish húmedo (glide hacia abajo + wobble) */
+               hit:function(t){ tone(t,{type:"sine",f:330,f1:95,dur:0.22,peak:0.5,fm:{f:13,depth:40}}); grain(t+0.02,{src:"brown",type:"lowpass",f:700,q:1.2,dur:0.09,peak:0.26}); tone(t+0.1,{type:"sine",f:210,f1:70,dur:0.12,peak:0.2}); } }   /* plof gordo satisfactorio */
   };
   function modelFor(p){ return MODELS[p]||MODELS.burbujas; }
   // ROCE: un grano/parcial corto por tick de movimiento (ticks rápidos = textura más densa)
@@ -5174,6 +5235,8 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     ".tex-hojas{background:radial-gradient(circle,rgba(40,140,80,.16) 1px,transparent 2px) 0 0/9px 9px,#eef7ec}"+
     ".tex-muelle{background:repeating-radial-gradient(circle at 12px 50%,rgba(40,140,110,.16) 0 5px,transparent 5px 11px),#eef9f4}"+
     ".tex-cremallera{background:repeating-linear-gradient(45deg,rgba(90,90,120,.18) 0 4px,transparent 4px 8px),#f1f1f6}"+
+    ".tex-cristal{background:linear-gradient(115deg,rgba(140,200,255,.14) 0 12px,transparent 12px 26px),linear-gradient(#f4faff,#eef6ff)}"+
+    ".tex-slime{background:radial-gradient(circle at 14px 8px,rgba(90,200,120,.22) 4px,transparent 5px) 0 0/26px 18px,#f0fbf2}"+
     ".cmBub{width:21px;height:21px;border-radius:50%;border:none;flex:0 0 auto;cursor:pointer;padding:0;background:radial-gradient(circle at 35% 30%,#fff,rgba(124,58,237,.55) 68%,rgba(80,40,160,.7));box-shadow:0 1px 3px rgba(0,0,0,.25),inset 0 -2px 3px rgba(0,0,0,.18);transition:transform .08s}"+
     ".cmBub:hover{transform:scale(1.18)}"+
     ".cmBub.popped{background:radial-gradient(circle at 50% 50%,rgba(124,58,237,.14),rgba(124,58,237,.05));box-shadow:inset 0 1px 2px rgba(0,0,0,.3);cursor:default;transform:scale(.82)}"+
@@ -5193,7 +5256,9 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     {k:"madera",    lbl:"madera",         bits:["🪵","🌰"], hit:"madera"},
     {k:"hojas",     lbl:"hojas secas",    bits:["🍃","🍂"], hit:"hojas"},
     {k:"muelle",    lbl:"muelle",         bits:["🌀","🍥"], hit:"muelle"},
-    {k:"cremallera",lbl:"cremallera",     bits:["🤐","🔗"], hit:"cremallera"}
+    {k:"cremallera",lbl:"cremallera",     bits:["🤐","🔗"], hit:"cremallera"},
+    {k:"cristal",   lbl:"cristal",        bits:["🔔","✨"], hit:"cristal"},
+    {k:"slime",     lbl:"slime",          bits:["🫧","🧪"], hit:"slime"}
   ];
   function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
   var queue=[], lastKey=null;
@@ -5509,7 +5574,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.29";
+  window.__cmVersion="v0.30";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 6 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
