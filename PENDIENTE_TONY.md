@@ -6,6 +6,35 @@ Tony lee esto y decide. (Lo grande SIEMPRE espera; lo pequeño y claro la rutina
 
 ---
 
+## DERIVA (revisar) — 2026-07-06
+
+**Control de deriva: 8 días desde el último informe (2026-06-28). Resumen desde el baseline `8d5f6d4`:**
+
+- **index.html**: +3319 líneas netas. Lo más gordo desde el último informe (v0.19 → v0.26): mapa interactivo (anillos de beneficio, tap fiable en móvil real, abrir/reabrir ramas, comentar ramas, proponer ramas, brotes pendientes en revisión), detector de exploración ("MADRE observa cuántas ramas abres"), descubrimientos desbloqueables al explorar el mapa, chip de señales reales enlazado al desglose, panel "MADRE te dice" mejorado. Hoy: TSV baked + fix UX móvil (hint imagen + mensajes sin-conexión).
+- **Docs nuevos desde el último informe**: `PANEL_MADRE_TE_DICE.md`, 13 entradas nuevas en `CHANGELOG.md`, `DESARROLLO_CUADERNO.md` actualizado.
+- **~33 commits** desde el baseline; **4 cambios de feedback** aplicados por la rutina (CONTADOR = 4).
+- **No hay secciones desaparecidas** ni cambios en la lógica de privacidad/moat.
+
+¿Quieres avanzar el baseline? Di "deriva ok" o "baseline al día" y la rutina lo resetea.
+
+---
+
+## 2026-07-06 — PARKING: botón ASMR tapa el enviar en móvil
+
+**Feedback** `639bc1a8` (2026-07-04, tipo auto→bug-layout):  
+*"En la parte de texto no me sale para pegar imágenes desde móvil, y el botón de ASMR en móvil tapa el de enviar el feedback"*
+
+**Lo que ya se arregló (commit 23c1cbe):** el hint del campo de imagen ya no dice "Ctrl/Cmd+V" — ahora aclara que en móvil hay que usar el botón de subir.
+
+**Lo que queda en PARKING:** el botón flotante del cuaderno (alguno de los FABs del hub ✦ o el botón de sonidos 🔊) cubre el botón "Enviar" del formulario de feedback en ciertos móviles. En la captura de pantalla el solapamiento no era visible directamente, por lo que no se puede saber sin ver el layout real cuál FAB es y con qué z-index. Opciones:
+- A) Aumentar el z-index del modal de feedback para que esté por encima de todos los FABs
+- B) Al abrir el modal de feedback, ocultar temporalmente los FABs
+- C) Añadir un `padding-bottom` al modal que deje espacio al FAB
+
+¿Quieres que lo investigue en la siguiente sesión de Code? Si ves cuál FAB es el que molesta, dímelo y lo arreglo.
+
+---
+
 ## 2026-07-03 — 3 decisiones AUTO-DECIDIDAS (plazo vencido el 2026-07-02, regla 1e)
 
 El panel ya las muestra como "🤖 Decidí yo (no contestaste a tiempo). Reversible: dime si lo cambio."  
