@@ -131,6 +131,7 @@
 
   .ov{position:fixed;inset:0;background:rgba(20,25,40,.42);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0}
   .ov.on{display:flex}
+  body:has(.ov.on) #likeFab,body:has(.ov.on) #lapizFab,body:has(.ov.on) #cmtFab,body:has(.ov.on) #chaosFab{display:none!important}
   .sheet{background:#fff;width:100%;max-width:560px;border-radius:16px 16px 0 0;padding:16px 16px 20px;box-shadow:0 -8px 40px rgba(20,30,50,.25)}
   @media(min-width:620px){ .ov{align-items:center} .sheet{border-radius:16px} }
   .sheet h3{margin:0 0 3px;font-size:16px}
@@ -2621,6 +2622,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-06",titulo:"🔧 Botones flotantes ya no tapan el formulario de opinión en móvil",detalle:"En móvil, los botones flotantes del cuaderno (corazón, lápiz, comentario, modo caótico) aparecían encima del formulario de «Dejarme una opinión», tapando el botón de enviar. Ahora desaparecen automáticamente mientras el formulario está abierto y vuelven solos al cerrarlo. No hace falta hacer nada: pasa solo."},
     {fecha:"2026-07-04",titulo:"🔓 El mapa esconde descubrimientos + un enlace directo a la evidencia real (v0.26)",detalle:"Dos cosas nuevas, las dos con datos 100% reales (nada inventado). (1) Explora el mapa 🌳 un poco (4 ramas o más) y desbloqueas un descubrimiento: que MADRE también tiene un cementerio real de ideas que descartó — con un botón para verlo directamente. Explóralo entero (las 8 ramas) y desbloqueas otro: cuántos cambios reales lleva registrados el cuaderno y desde cuándo (hoy: decenas, desde finales de junio). (2) Arriba, junto al número «3/10», hay un enlace nuevo «Ver el desglose (nada inflable)» que te lleva directo a las Señales del mundo — los datos crudos (euros, estrellas, clientes) que explican ese número, sin adornos."},
     {fecha:"2026-07-04",titulo:"🔎 Abrir una rama ya no te ALEJA (v0.25)",detalle:"Bug real que reportó Tony: tocabas una rama para entrar en ella y el mapa hacía zoom HACIA FUERA en vez de hacia dentro. Pasaba porque al abrir, la cámara iba siempre a un nivel de zoom fijo — y si tú ya estabas más cerca, «ir al nivel fijo» era alejarse. Ahora entrar en una rama nunca reduce tu zoom: como mínimo se queda donde estás y se centra en lo que tocaste."},
     {fecha:"2026-07-06",titulo:"📱 Texto más claro para móvil: imágenes y sin-conexión",detalle:"Dos arreglos de UX para móvil. (1) El campo de imagen del formulario de opinión decía «pégala con Ctrl/Cmd+V» — eso no funciona en móvil; ahora dice claramente que en móvil hay que usar el botón de subir. (2) Cuando el formulario no llega a enviarse (sin conexión), el mensaje decía «pégalo en tu BUZÓN» — un concepto interno de MADRE que ningún visitante entiende. Ahora dice simplemente «Sin conexión — reinténtalo cuando vuelva la red»."},
