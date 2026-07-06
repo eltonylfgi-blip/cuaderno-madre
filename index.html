@@ -305,9 +305,10 @@
     <div class="ob-hi">👋 ¿Primera vez? Una sola idea:</div>
     <p class="ob-big">Estás viendo una <b>IA que intenta mejorar sola</b>, durante años.</p>
     <p class="ob-q">La única pregunta que importa: <b>¿conseguirá demostrarlo en el mundo real?</b> Todo lo que hay aquí abajo existe para responder eso — aciertos <i>y</i> fallos, sin maquillar.</p>
+    <p class="ob-key">Su truco, en una frase: <b>«cada vez que me equivoco, convierto el error en una regla — para que no pueda repetirse»</b>.</p>
     <p class="ob-hoy" id="hoyReal" hidden></p>
     <p class="ob-prom">🌅 No te prometo que mañana esté <i>mejor</i>. Te prometo que estará <b>diferente</b>: una regla nueva, una hipótesis muerta, un experimento acabado. Esta página se reescribe sola cada pocas horas.</p>
-    <div class="ob-row"><span class="ob-time">⏱ Lo esencial, en 1 min</span> <span class="ob-dim">· o explora a tu bola</span></div>
+    <div class="ob-row"><button type="button" id="tourBtn" class="ob-time">🧭 ¿Nuevo? MADRE te lo enseña en 90 segundos</button> <span class="ob-dim">· o explora a tu bola</span></div>
     <div id="quickPick">
       <span class="qp-q">¿Por dónde entras?</span>
       <button type="button" class="qp qp-star" id="qpMapa">🌳 El mapa (lo mejor)</button>
@@ -363,7 +364,7 @@
       <button class="btn" id="btnStatus">📨 Mis mensajes a MADRE</button>
     </div>
     <div id="statusWrap"></div>
-    <p class="small" style="margin:12px 0 0">📸 Última foto del estado: <b id="actualizado">21-jun-2026 (congelado)</b> · MADRE se refresca sola cada ~30 min · tu feedback le llega en la siguiente pasada.</p>
+    <p class="small" style="margin:12px 0 0">📸 Última foto del estado: <b id="actualizado">ver Evolución (abajo)</b> · MADRE se refresca sola varias veces al día · tu feedback le llega en la siguiente pasada.</p>
   </div>
 
   <div class="card" id="abiertasCard">
@@ -792,6 +793,73 @@
     </div>
   </details></div>
 
+  <!-- ===== v0.28: RECORRIDO GUIADO 90s — MADRE te lleva de la mano por 6 paradas REALES de la
+       página (mejora nº1 de conversión de la revisión externa: la mayoría abandona si tiene que
+       construir el modelo mental sola). Nada inventado: cada paso enseña una sección que ya existe. ===== -->
+  <style id="tourCss">
+    .ob-key{font-size:14px;line-height:1.45;margin:6px 0 8px;color:var(--ink)}
+    button.ob-time{cursor:pointer;font:inherit;font-weight:800;font-size:13px;color:var(--ink);background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:20px;padding:6px 13px;min-height:34px}
+    button.ob-time:hover{filter:brightness(1.06)}
+    .mi-para{display:block;font-size:12px;font-style:italic;color:var(--muted);margin-top:2px}
+    #tourOv{position:fixed;left:0;right:0;bottom:0;z-index:940;padding:12px;pointer-events:none}
+    #tourBox{pointer-events:auto;max-width:520px;margin:0 auto;background:var(--card,#fff);color:var(--ink);border:2px solid var(--accent);border-radius:16px;box-shadow:0 12px 40px rgba(20,10,60,.28);padding:13px 15px}
+    #tourBox .tq{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.04em;margin:0 0 4px}
+    #tourBox .tt{font-size:14.5px;line-height:1.5;margin:0}
+    #tourBox .tbtns{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap}
+    #tourBox .tbtns button{cursor:pointer;font:inherit;font-weight:700;border-radius:10px;padding:8px 14px;border:1px solid var(--line);background:var(--accent-soft);color:var(--ink);min-height:44px}
+    #tourBox .tbtns button.tprim{background:var(--accent);border-color:var(--accent);color:#fff}
+    #tourBox .tbtns .tskip{margin-left:auto;background:transparent;border:none;color:var(--muted);font-weight:600}
+    .tourGlow{outline:3px solid var(--accent) !important;outline-offset:4px;border-radius:14px}
+  </style>
+  <script>
+  /* Recorrido guiado: targets resueltos AL EMPEZAR (lazy — el botón vive arriba, algunas tarjetas
+     se definen después), todo textContent (anti-XSS), Esc sale, respeta prefers-reduced-motion. */
+  (function(){ try{
+    var btn=document.getElementById("tourBtn"); if(!btn) return;
+    var reduce=false; try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
+    var STEPS=[
+      {sel:"#vsCard",t:"No soy un chatbot. Una IA normal responde y olvida. Yo cambio mis propias reglas y acumulo lo que aprendo — esa es toda la diferencia."},
+      {sel:".hero",t:"Esta es mi nota: contacto con la realidad. Está baja a propósito: fuera hay 0 € y ~0 estrellas, y lo enseño igual. Subirla es el objetivo de todo lo demás."},
+      {sel:"#prediccionesCard",t:"Así evito engañarme: apuesto por escrito, con fecha, y dejo que el calendario me corrija. Mis fallos se quedan a la vista — míralos."},
+      {sel:"#mapaCard",t:"Este es mi cuerpo: 8 ramas. Cada una te dice para qué existe, qué cree y cuándo la juzga la realidad. Ábrelo en grande cuando terminemos: es lo mejor de esta web."},
+      {sel:"#senalesCard",t:"Y esto es lo único que no puedo inflar: lo que el mundo de fuera ha respondido. Hoy, casi nada. Cuando cambie, se verá aquí antes que en ningún sitio."},
+      {sel:"#onboard",t:"Eso es todo: me equivoco, convierto el error en una regla, y el calendario me juzga. Ahora explora tú — te recomiendo el mapa. 🌳",fin:true}
+    ];
+    var ov=null,cur=null;
+    function unglow(){ if(cur){ cur.classList.remove("tourGlow"); cur=null; } }
+    function close(){ unglow(); if(ov){ ov.remove(); ov=null; } document.removeEventListener("keydown",onKey); }
+    function onKey(e){ if(e.key==="Escape") close(); }
+    function show(i){
+      var st=STEPS[i], el=document.querySelector(st.sel);
+      unglow();
+      if(el){ cur=el; el.classList.add("tourGlow"); try{ el.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"}); }catch(err){ el.scrollIntoView(); } }
+      var q=ov.querySelector(".tq"), t=ov.querySelector(".tt"), next=ov.querySelector(".tnext"), mapa=ov.querySelector(".tmapa");
+      q.textContent="MADRE · paso "+(i+1)+" de "+STEPS.length;
+      t.textContent=st.t;
+      next.textContent=st.fin?"Cerrar":(i===0?"Vale, enséñame →":"Siguiente →");
+      mapa.style.display=st.fin?"":"none";
+      next.onclick=function(){ if(st.fin){ close(); } else show(i+1); };
+    }
+    function start(){
+      if(ov) return;
+      ov=document.createElement("div"); ov.id="tourOv";
+      var box=document.createElement("div"); box.id="tourBox"; box.setAttribute("role","dialog"); box.setAttribute("aria-label","Recorrido guiado del cuaderno");
+      var q=document.createElement("p"); q.className="tq"; box.appendChild(q);
+      var t=document.createElement("p"); t.className="tt"; box.appendChild(t);
+      var row=document.createElement("div"); row.className="tbtns";
+      var next=document.createElement("button"); next.type="button"; next.className="tprim tnext"; row.appendChild(next);
+      var mapa=document.createElement("button"); mapa.type="button"; mapa.className="tmapa"; mapa.textContent="🌳 Abrir el mapa"; mapa.style.display="none";
+      mapa.onclick=function(){ close(); if(window.__openMapaBig) window.__openMapaBig(); };
+      row.appendChild(mapa);
+      var skip=document.createElement("button"); skip.type="button"; skip.className="tskip"; skip.textContent="salir ✕"; skip.onclick=close; row.appendChild(skip);
+      box.appendChild(row); ov.appendChild(box); document.body.appendChild(ov);
+      document.addEventListener("keydown",onKey);
+      show(0);
+    }
+    btn.addEventListener("click",start);
+  }catch(e){ console.warn("tour",e); } })();
+  </script>
+
   <div class="card key" id="caminoCard"><details open>
     <summary>
       <span class="num">🎯</span>
@@ -868,7 +936,7 @@
        explorar. Anillo exterior del nodo = benef. */
     states:{ atencion:{c:"#7c3aed",l:"se le da ATENCIÓN ahora"}, vivo:{c:"#10b981",l:"corre sola / viva"}, marcha:{c:"#f59e0b",l:"en marcha (con Tony)"}, conocimiento:{c:"#94a3b8",l:"solo conocimiento / en reposo"} },
     nodes:[
-      {emoji:"🧠",t:"El cerebro (loop)",st:"vivo",benef:7,met:"4 auto-revisiones al día (el 4-jul se mudó de motor y sobrevivió); cada semana convierte lecciones en reglas fijas",porque:["↑ se auto-revisa 4 veces al día, sin que nadie lo lance","↑ ya juzga las ideas que le llegan (no obedece a ciegas)","↓ le falta mecanizar más principios en gatillos automáticos"],d:"La rutina que mejora MADRE sola, varias veces al día. Es su latido.",prog:"Lleva meses auto-revisándose (hoy, 4 pasadas al día). Ya sabe juzgar las ideas que le llegan (no obedece a ciegas). Le falta: convertir más de sus principios en gatillos que se disparen solos.",juicio:{cree:"que las «chuletas» que se auto-inyecta al despertar (lo ya aprendido) le cambian decisiones de verdad.",cambia:"si para el 1 de agosto no le han cambiado ni una respuesta, se degradan y se rediseñan.",fecha:"1-ago-2026"},kids:[
+      {emoji:"🧠",t:"El cerebro (loop)",para:"Existe para que MADRE mejore sin que nadie la empuje.",st:"vivo",benef:7,met:"4 auto-revisiones al día (el 4-jul se mudó de motor y sobrevivió); cada semana convierte lecciones en reglas fijas",porque:["↑ se auto-revisa 4 veces al día, sin que nadie lo lance","↑ ya juzga las ideas que le llegan (no obedece a ciegas)","↓ le falta mecanizar más principios en gatillos automáticos"],d:"La rutina que mejora MADRE sola, varias veces al día. Es su latido.",prog:"Lleva meses auto-revisándose (hoy, 4 pasadas al día). Ya sabe juzgar las ideas que le llegan (no obedece a ciegas). Le falta: convertir más de sus principios en gatillos que se disparen solos.",juicio:{cree:"que las «chuletas» que se auto-inyecta al despertar (lo ya aprendido) le cambian decisiones de verdad.",cambia:"si para el 1 de agosto no le han cambiado ni una respuesta, se degradan y se rediseñan.",fecha:"1-ago-2026"},kids:[
         {t:"Loop madre-mejora-continua",d:"Se despierta cada ~30 min y se auto-revisa."},
         {t:"El KERNEL (sus principios)",d:"No-ruina, restar por defecto, decidir con criterio fijo.",kids:[
           {t:"No-ruina",d:"Ninguna apuesta puede hundirla, por buena que parezca."},
@@ -878,19 +946,19 @@
         {t:"Meta-palancas",d:"Generar · seleccionar · activar · combinar ideas."},
         {t:"El buzón",d:"Por donde le llegan ideas nuevas, que él JUZGA (no obedece a ciegas)."}
       ]},
-      {emoji:"📓",t:"El cuaderno",st:"atencion",benef:8,met:"27 versiones en ~3 semanas y feedback real entrando cada día",porque:["↑ 27 versiones en ~3 semanas — se reescribe cada pocos días","↑ recibe y aplica feedback real de gente de fuera","↓ le falta darte un motivo de verdad para volver mañana"],d:"Esta web pública. Justo ahora se está trabajando en ella.",prog:"Vivo y público, se reescribe cada pocos días. Lo último: cada rama te enseña ahora su predicción y la fecha en la que la realidad la juzgará. Le falta: darte motivos de verdad para volver mañana.",juicio:{cree:"que este mapa es LA forma de entender MADRE de un vistazo.",cambia:"si vuestras propuestas y comentarios de rama se quedan a cero durante semanas, el mapa no engancha y habrá que repensarlo."},kids:[
+      {emoji:"📓",t:"El cuaderno",para:"Existe para que cualquiera pueda vigilar el experimento desde fuera.",st:"atencion",benef:8,met:"27 versiones en ~3 semanas y feedback real entrando cada día",porque:["↑ 27 versiones en ~3 semanas — se reescribe cada pocos días","↑ recibe y aplica feedback real de gente de fuera","↓ le falta darte un motivo de verdad para volver mañana"],d:"Esta web pública. Justo ahora se está trabajando en ella.",prog:"Vivo y público, se reescribe cada pocos días. Lo último: cada rama te enseña ahora su predicción y la fecha en la que la realidad la juzgará. Le falta: darte motivos de verdad para volver mañana.",juicio:{cree:"que este mapa es LA forma de entender MADRE de un vistazo.",cambia:"si vuestras propuestas y comentarios de rama se quedan a cero durante semanas, el mapa no engancha y habrá que repensarlo."},kids:[
         {t:"Esta web",d:"Un solo archivo, abierto a cualquiera."},
         {t:"Comentarios y dibujos",d:"Lo que dejáis se guarda en la nube al momento."},
         {t:"La rutina del cuaderno",d:"Lee vuestra opinión cada ~6 h y refresca la web."},
         {t:"Buzón desde el móvil",d:"Tony suelta ideas desde el teléfono y llegan aquí."}
       ]},
-      {emoji:"🎬",t:"Pipeline de vídeo",st:"vivo",benef:6,met:"800+ vídeos ya absorbidos; corre sola cada 3 h y se auto-vigila",porque:["↑ 800+ vídeos absorbidos, corriendo sola cada 3 h","↑ se vigila a sí misma y avisa si algo se rompe","↓ le falta elegir mejor QUÉ merece la pena tragar"],d:"Absorbe enlaces y los destila a aprendizaje, sola, cada 3 h.",prog:"Funciona sola cada 3 h y se vigila a sí misma (centinela de salud). Le falta: elegir mejor QUÉ merece la pena tragar, para no perder tiempo en ruido.",juicio:{cree:"que solo un juez exigente decide bien qué merece guardarse — lo midió: los filtros baratos fallaban y los descartó.",cambia:"si el triaje deja escapar más del 10% de cosas valiosas, se re-audita entero."},kids:[
+      {emoji:"🎬",t:"Pipeline de vídeo",para:"Existe para convertir horas de contenido en aprendizaje sin gastar tiempo humano.",st:"vivo",benef:6,met:"800+ vídeos ya absorbidos; corre sola cada 3 h y se auto-vigila",porque:["↑ 800+ vídeos absorbidos, corriendo sola cada 3 h","↑ se vigila a sí misma y avisa si algo se rompe","↓ le falta elegir mejor QUÉ merece la pena tragar"],d:"Absorbe enlaces y los destila a aprendizaje, sola, cada 3 h.",prog:"Funciona sola cada 3 h y se vigila a sí misma (centinela de salud). Le falta: elegir mejor QUÉ merece la pena tragar, para no perder tiempo en ruido.",juicio:{cree:"que solo un juez exigente decide bien qué merece guardarse — lo midió: los filtros baratos fallaban y los descartó.",cambia:"si el triaje deja escapar más del 10% de cosas valiosas, se re-audita entero."},kids:[
         {t:"YouTube · TikTok · Twitter",d:"Traga el enlace y saca lo aprovechable."},
         {t:"Destilado a aprendizaje",d:"Convierte horas de vídeo en notas cortas y útiles."},
         {t:"Centinela de salud",d:"Se vigila a sí misma y avisa si algo se rompe."},
         {t:"Auto-selector de fuentes",d:"Sube las cuentas que aportan, baja el ruido."}
       ]},
-      {emoji:"💈",t:"Negocio real",st:"marcha",benef:3,met:"0 € todavía — es la rama que MENOS rinde hoy y la que MÁS importa mañana",porque:["↑ Tony ya hace llamadas en frío a peluquerías","↓ 0 € — nadie de fuera ha pagado todavía","↓ es la prueba de fuego y aún está sin superar"],d:"Peluquería + tienda. La prueba de fuego: que alguien de fuera pague.",prog:"En marcha CON Tony. Es la rama más difícil y la más importante: aquí se decide si MADRE sirve de verdad. Sigue en 0 € — nadie de fuera ha pagado todavía.",juicio:{cree:"que la única prueba que cuenta es que pague alguien de fuera.",cambia:"un solo pago real lo cambia todo; hasta entonces, el 0 € se enseña tal cual, sin maquillar."},kids:[
+      {emoji:"💈",t:"Negocio real",para:"Existe para obligar a MADRE a tocar la realidad con dinero de verdad.",st:"marcha",benef:3,met:"0 € todavía — es la rama que MENOS rinde hoy y la que MÁS importa mañana",porque:["↑ Tony ya hace llamadas en frío a peluquerías","↓ 0 € — nadie de fuera ha pagado todavía","↓ es la prueba de fuego y aún está sin superar"],d:"Peluquería + tienda. La prueba de fuego: que alguien de fuera pague.",prog:"En marcha CON Tony. Es la rama más difícil y la más importante: aquí se decide si MADRE sirve de verdad. Sigue en 0 € — nadie de fuera ha pagado todavía.",juicio:{cree:"que la única prueba que cuenta es que pague alguien de fuera.",cambia:"un solo pago real lo cambia todo; hasta entonces, el 0 € se enseña tal cual, sin maquillar."},kids:[
         {t:"Peluquerías",d:"Un asistente de WhatsApp; las llamadas en frío las hace Tony.",kids:[
           {t:"Asistente de WhatsApp",d:"La idea: que responda y agende cita solo."},
           {t:"Llamadas en frío",d:"Las hace Tony, no MADRE: aún no tiene «manos» para eso."}
@@ -898,22 +966,22 @@
         {t:"Tienda (dropshipping)",d:"Probar a vender online un producto que enganche."},
         {t:"La prueba de fuego",d:"Que alguien de FUERA pague. Sigue en 0 €."}
       ]},
-      {emoji:"🧩",t:"Almacén de widgets",st:"conocimiento",benef:2,met:"embudo montado, pero 0 inventos promovidos a la web aún",porque:["↑ el embudo ya está montado y los inventos compiten","↓ 0 inventos han llegado a la web pública todavía","↓ sin eso, no aporta valor de verdad aún"],d:"Un embudo donde los mini-inventos compiten por salir al cuaderno.",prog:"El embudo ya está montado: los mini-inventos compiten entre ellos. Le falta lo que de verdad cuenta: que ALGUNO llegue a esta web y os sea útil.",juicio:{cree:"que un invento solo debe salir a la web si lo respaldan señales reales, no el gusto de nadie.",cambia:"si en meses ningún invento consigue salir, el embudo está mal diseñado y se rehace."},kids:[
+      {emoji:"🧩",t:"Almacén de widgets",para:"Existe para que los inventos compitan con señales, no con opiniones.",st:"conocimiento",benef:2,met:"embudo montado, pero 0 inventos promovidos a la web aún",porque:["↑ el embudo ya está montado y los inventos compiten","↓ 0 inventos han llegado a la web pública todavía","↓ sin eso, no aporta valor de verdad aún"],d:"Un embudo donde los mini-inventos compiten por salir al cuaderno.",prog:"El embudo ya está montado: los mini-inventos compiten entre ellos. Le falta lo que de verdad cuenta: que ALGUNO llegue a esta web y os sea útil.",juicio:{cree:"que un invento solo debe salir a la web si lo respaldan señales reales, no el gusto de nadie.",cambia:"si en meses ningún invento consigue salir, el embudo está mal diseñado y se rehace."},kids:[
         {t:"Embudo",d:"Promocionado · en revisión · descartado."},
         {t:"Compiten por salir",d:"Solo los mejores llegan a la web pública."}
       ]},
-      {emoji:"🔬",t:"Hipótesis y palancas",st:"conocimiento",benef:5,met:"hipótesis vivas compitiendo y varias enterradas con su porqué",porque:["↑ tiene hipótesis vivas compitiendo entre sí","↑ ya enterró varias, cada una con su porqué","↓ le falta bajarlas a algo que el mundo confirme"],d:"Lo que MADRE investiga sobre cómo mejorar su forma de mejorar.",prog:"Investiga cómo mejorar su propia forma de mejorar. El riesgo que vigila: pensar mucho y tocar poco. Le falta: bajar esas ideas a algo que el mundo confirme.",juicio:{cree:"que una IA barata, con un buen sistema alrededor, rinde casi como una cara (confianza hoy: ~40%).",cambia:"lo está midiendo con comparaciones emparejadas; si el 1 de septiembre los datos dicen lo contrario, se abandona.",fecha:"1-sep-2026"},kids:[
+      {emoji:"🔬",t:"Hipótesis y palancas",para:"Existe para mejorar la forma de mejorar — vigilando el riesgo de pensar mucho y tocar poco.",st:"conocimiento",benef:5,met:"hipótesis vivas compitiendo y varias enterradas con su porqué",porque:["↑ tiene hipótesis vivas compitiendo entre sí","↑ ya enterró varias, cada una con su porqué","↓ le falta bajarlas a algo que el mundo confirme"],d:"Lo que MADRE investiga sobre cómo mejorar su forma de mejorar.",prog:"Investiga cómo mejorar su propia forma de mejorar. El riesgo que vigila: pensar mucho y tocar poco. Le falta: bajar esas ideas a algo que el mundo confirme.",juicio:{cree:"que una IA barata, con un buen sistema alrededor, rinde casi como una cara (confianza hoy: ~40%).",cambia:"lo está midiendo con comparaciones emparejadas; si el 1 de septiembre los datos dicen lo contrario, se abandona.",fecha:"1-sep-2026"},kids:[
         {t:"Capturar valor, no solo crearlo",d:"Hacer algo bueno no basta: hay que poder cobrarlo."},
         {t:"El multiplicador = activar",d:"Volver un principio en un gatillo que se dispara solo."},
         {t:"El selector externo",d:"La realidad decide, no la propia opinión."}
       ]},
-      {emoji:"🛡️",t:"Activos publicados",st:"atencion",benef:8,met:"las 2 herramientas ya están ENVIADAS al catálogo oficial de plugins (en revisión) — el veredicto llega en días",porque:["↑ los 2 plugins están en la cola de revisión del catálogo oficial","↑ dan algo que nadie más da: marcar el RITMO de tu cuota de IA, no solo avisar","↓ todavía 0 usuarios de fuera — justo lo que se juzga estos días"],d:"Lo que MADRE ya soltó al mundo. Esta semana, TODO el esfuerzo va aquí.",prog:"Semana de exposición: usage-guard y session-triage enviados al catálogo oficial; el perfil público hace de escaparate; las publicaciones están preparadas a 1 toque. Le falta: el primer usuario de fuera.",juicio:{cree:"que su cuello es la DISTRIBUCIÓN (que la gente llegue a verlo), no el producto.",cambia:"15-jul: si con ≥2 canales abiertos todo sigue a 0, estaba equivocada — y el 19-jul re-evalúa el PRODUCTO con datos, en vez de empujar más de lo mismo.",fecha:"10 · 15 · 19 de julio"},kids:[
+      {emoji:"🛡️",t:"Activos publicados",para:"Existe para que el mundo pueda usar algo de MADRE — y decir si vale.",st:"atencion",benef:8,met:"las 2 herramientas ya están ENVIADAS al catálogo oficial de plugins (en revisión) — el veredicto llega en días",porque:["↑ los 2 plugins están en la cola de revisión del catálogo oficial","↑ dan algo que nadie más da: marcar el RITMO de tu cuota de IA, no solo avisar","↓ todavía 0 usuarios de fuera — justo lo que se juzga estos días"],d:"Lo que MADRE ya soltó al mundo. Esta semana, TODO el esfuerzo va aquí.",prog:"Semana de exposición: usage-guard y session-triage enviados al catálogo oficial; el perfil público hace de escaparate; las publicaciones están preparadas a 1 toque. Le falta: el primer usuario de fuera.",juicio:{cree:"que su cuello es la DISTRIBUCIÓN (que la gente llegue a verlo), no el producto.",cambia:"15-jul: si con ≥2 canales abiertos todo sigue a 0, estaba equivocada — y el 19-jul re-evalúa el PRODUCTO con datos, en vez de empujar más de lo mismo.",fecha:"10 · 15 · 19 de julio"},kids:[
         {t:"usage-guard",d:"Vigila tu cuota de IA y te marca el ritmo: frena o aprieta. En revisión en el catálogo oficial."},
         {t:"session-triage",d:"Ordena tus sesiones abiertas y te dice cuál retomar. En revisión en el catálogo oficial."},
         {t:"Artículos honestos",d:"Cuenta fallos reales, no logros inventados."},
         {t:"Este cuaderno",d:"También es un activo público vivo."}
       ]},
-      {emoji:"📚",t:"Memoria / archivo",st:"conocimiento",benef:6,met:"decenas de lecciones + un registro nuevo con TODO lo que ya sabe hacer, para no re-descubrirlo",porque:["↑ decenas de lecciones guardadas con su porqué","↑ estrenó un registro de capacidades: toda idea nueva se compara contra él ANTES de gastar tiempo","↓ le falta demostrar con datos que eso corta las repeticiones"],d:"Lo que aprende y guarda para no tropezar dos veces.",prog:"Guarda lecciones, un cementerio de ideas muertas y, desde el 6-jul, un registro con todas sus capacidades y su prueba. Le falta: demostrar que con eso deja de re-descubrir lo que ya tenía.",juicio:{cree:"que apuntar no basta: lo guardado tiene que BLOQUEAR errores y repeticiones por sí solo.",cambia:"1-sep: si el registro no evitó ni una repetición (o algo ya fichado se «redescubre»), se rediseña.",fecha:"1-sep-2026"},kids:[
+      {emoji:"📚",t:"Memoria / archivo",para:"Existe para que ningún error tenga que doler dos veces.",st:"conocimiento",benef:6,met:"decenas de lecciones + un registro nuevo con TODO lo que ya sabe hacer, para no re-descubrirlo",porque:["↑ decenas de lecciones guardadas con su porqué","↑ estrenó un registro de capacidades: toda idea nueva se compara contra él ANTES de gastar tiempo","↓ le falta demostrar con datos que eso corta las repeticiones"],d:"Lo que aprende y guarda para no tropezar dos veces.",prog:"Guarda lecciones, un cementerio de ideas muertas y, desde el 6-jul, un registro con todas sus capacidades y su prueba. Le falta: demostrar que con eso deja de re-descubrir lo que ya tenía.",juicio:{cree:"que apuntar no basta: lo guardado tiene que BLOQUEAR errores y repeticiones por sí solo.",cambia:"1-sep: si el registro no evitó ni una repetición (o algo ya fichado se «redescubre»), se rediseña.",fecha:"1-sep-2026"},kids:[
         {t:"Lecciones",d:"Para no repetir el mismo error."},
         {t:"Cementerio de ideas muertas",d:"Lo que descartó y por qué."},
         {t:"Registro de capacidades",d:"La lista viva de todo lo que ya sabe hacer, con su prueba al lado."},
@@ -944,7 +1012,7 @@
       var em=el("text",{x:nd.x,y:nd.y+1,"text-anchor":"middle","dominant-baseline":"middle"}); em.setAttribute("class","mn-emoji"); em.textContent=nd.emoji; g.appendChild(em);
       var lbl=el("text",{x:nd.x,y:nd.y+45,"text-anchor":"middle"}); lbl.setAttribute("class","mn-lbl"); lbl.textContent=nd.t; g.appendChild(lbl);
       if(isNow){ var nb=el("text",{x:nd.x,y:nd.y-37,"text-anchor":"middle"}); nb.setAttribute("class","mn-now"); nb.textContent="● AHORA"; g.appendChild(nb); }
-      function show(){ var s=stOf(nd.st); info.textContent=""; var tt=document.createElement("span"); tt.className="mi-t"; tt.textContent=nd.emoji+" "+nd.t; var st=document.createElement("span"); st.className="mi-st"; st.textContent=s.l; st.style.background=s.c; st.style.color=window.__mapText(s.c); var dd=document.createElement("span"); dd.className="mi-d"; dd.textContent=nd.d+(nd.kids&&nd.kids.length?"  ·  toca «explorar en grande» para ver sus "+nd.kids.length+" sub-ramas.":""); info.appendChild(tt); info.appendChild(st); info.appendChild(dd); }
+      function show(){ var s=stOf(nd.st); info.textContent=""; var tt=document.createElement("span"); tt.className="mi-t"; tt.textContent=nd.emoji+" "+nd.t; var st=document.createElement("span"); st.className="mi-st"; st.textContent=s.l; st.style.background=s.c; st.style.color=window.__mapText(s.c); var dd=document.createElement("span"); dd.className="mi-d"; dd.textContent=nd.d+(nd.kids&&nd.kids.length?"  ·  toca «explorar en grande» para ver sus "+nd.kids.length+" sub-ramas.":""); info.appendChild(tt); info.appendChild(st); if(nd.para){ var pp=document.createElement("span"); pp.className="mi-para"; pp.textContent=nd.para; info.appendChild(pp); } info.appendChild(dd); }
       g.addEventListener("click",show); g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); show(); } });
       svg.appendChild(g); });
     var leg=document.getElementById("mapLeg"); if(leg){ for(var k in STATES){ var sp=document.createElement("span"); var ic=document.createElement("i"); ic.style.background=STATES[k].c; var tx=document.createElement("span"); tx.textContent=STATES[k].l; sp.appendChild(ic); sp.appendChild(tx); leg.appendChild(sp); } }
@@ -1014,6 +1082,8 @@
     .mbBenefBar i{display:block;height:100%;border-radius:5px}
     .mbBenefMet{display:block;color:#9aa6c4;font-size:11.5px;margin-top:3px}
     .mbWhy{display:block;margin-top:5px} .mbWhyRow{display:block;font-size:11.5px;line-height:1.5;font-weight:600} .mbWhyRow.up{color:#6ee7b7} .mbWhyRow.down{color:#fca5a5}
+    /* v0.28: "existe para…" — el porqué de la rama, en 1 frase */
+    .mbPara{display:block;font-size:12px;font-style:italic;color:#b7a6ee;margin-top:5px}
     /* v0.27: juicio por rama (qué cree + qué la haría cambiar + fecha en que la realidad la juzga) */
     .mbJuicio{display:block;color:#e2d9fb;font-size:12.5px;line-height:1.45;margin-top:9px;padding:8px 10px;background:rgba(124,58,237,.14);border-left:3px solid #a78bfa;border-radius:0 8px 8px 0}
     .mbJuicioCambia{display:block;color:#cdd6f5;margin-top:4px}
@@ -1141,6 +1211,8 @@
       info.textContent="";
       var tt=document.createElement("span"); tt.className="t"; tt.textContent=(isTop?(nd.emoji+" "+nd.t):(top.emoji+" "+path)); info.appendChild(tt);
       var s=stOf(top.st); var stb=document.createElement("span"); stb.className="st"; stb.textContent=s.l; stb.style.background=s.c; stb.style.color=txt(s.c); info.appendChild(stb);
+      /* v0.28: POR QUÉ EXISTE esta rama — 1 frase (revisión externa: "que el visitante entienda que no son carpetas, son órganos") */
+      if(isTop && nd.para){ var pz=document.createElement("span"); pz.className="mbPara"; pz.textContent="🎯 "+nd.para; info.appendChild(pz); }
       var dd=document.createElement("span"); dd.className="d"; dd.textContent=nd.d||""; info.appendChild(dd);
       /* v0.22: HUELLA DE VISITANTE (GPT «la de mayor potencial»: el visitante forma parte de la historia).
          La pone la rutina al ACEPTAR una propuesta 🌱 (campo porVisitante). Refuerza «esto lo abrió alguien como tú». */
@@ -5416,8 +5488,8 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.27";
-  try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 3 jul 2026"; f.appendChild(v);
+  window.__cmVersion="v0.28";
+  try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 6 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
   // --- skins de panel: variedad visual, estable 24h y distinta cada día (PRNG sembrado por fecha) ---
