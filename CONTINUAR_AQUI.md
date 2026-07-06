@@ -1,8 +1,25 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> Para retomar en un chat nuevo de Claude Code. **Estado a 2026-07-04, versión v0.26 (DESPLEGADA Y VERIFICADA).**
+> Para retomar en un chat nuevo de Claude Code. **Estado a 2026-07-06, versión v0.27 (verificada en preview; detalle en CHANGELOG).**
 
-## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-07-04, tras v0.23→v0.26)
+## 🧵 HILOS ABIERTOS — EMPIEZA POR AQUÍ (2026-07-06, tras v0.27)
+> **✅ v0.27 (6-jul noche, sesión Fable, en el clon `cuaderno-madre-pub`) — el mapa APUESTA POR ESCRITO:**
+> (1) `__MAPA` refrescado a la foto real del 6-jul (AHORA=🛡️ semana de exposición: 2 plugins en revisión
+> en el catálogo oficial; loop=4 pasadas/día, ya no «cada 30 min»; benef 🛡️ 4→8; kid session-triage; kid
+> «Registro de capacidades» en 📚). (2) Campo `juicio:{cree,cambia,fecha}` en las 8 ramas + render `.mbJuicio`
+> en el panel del mapa grande (⚖️ qué cree / 🔮 qué la haría cambiar / 📅 cuándo la juzga la realidad —
+> SOLO falsadores reales ya escritos en MADRE, cero inventos; horneable por el loop). (3) Tarjeta nueva
+> `#prediccionesCard` «🔮 Se juzga solo» tras Señales: 8 predicciones reales con estado (3 ❌ + 1 ✅ + 4 ⏳,
+> fechas 10-jul/15-jul/1-ago/1-sep) — los fallos a la vista a propósito (es el ítem nº1 de la revisión
+> externa del cuaderno, aplicado en versión honesta). Verificación: 0 errores consola, inspect de estilos,
+> móvil 375 sin overflow. GOTCHA del instrumento: `preview_screenshot` se CUELGA con esta página (timeout);
+> eval/inspect van perfectos — verifica por DOM+estilos, no pierdas tiempo con capturas.
+> **⏭️ Siguientes naturales del mapa (cuando haya datos, no antes):** marcar ✅/❌ en la tarjeta según
+> caigan los veredictos (10/15-jul los trae el watcher/medidor); si el loop hornea `MAPA_RAMAS.tsv`, que
+> incluya `juicio` (el render ya lo soporta); GPT también pidió «radar» y «embudo cognitivo» — DIFERIDOS
+> por falta de números reales agregados (no inventar).
+
+## 🧵 HILOS ANTERIORES (2026-07-04, tras v0.23→v0.26)
 > **✅ v0.26 (commit `8adabca`) — 2 ítems del backlog "organismo vivo" implementados (los marcados "barato/
 > honesto/próxima sesión" en la ronda anterior):** (1) **Descubrimientos ocultos** en el mapa (`#mbUnlock`,
 > reusa `cm_map_explored_v1`): al abrir ≥4 ramas se desbloquea un aviso real (el cementerio de ideas
