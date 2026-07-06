@@ -19,20 +19,6 @@ Tony lee esto y decide. (Lo grande SIEMPRE espera; lo pequeño y claro la rutina
 
 ---
 
-## 2026-07-06 — PARKING: botón ASMR tapa el enviar en móvil
-
-**Feedback** `639bc1a8` (2026-07-04, tipo auto→bug-layout):  
-*"En la parte de texto no me sale para pegar imágenes desde móvil, y el botón de ASMR en móvil tapa el de enviar el feedback"*
-
-**Lo que ya se arregló (commit 23c1cbe):** el hint del campo de imagen ya no dice "Ctrl/Cmd+V" — ahora aclara que en móvil hay que usar el botón de subir.
-
-**Lo que queda en PARKING:** el botón flotante del cuaderno (alguno de los FABs del hub ✦ o el botón de sonidos 🔊) cubre el botón "Enviar" del formulario de feedback en ciertos móviles. En la captura de pantalla el solapamiento no era visible directamente, por lo que no se puede saber sin ver el layout real cuál FAB es y con qué z-index. Opciones:
-- A) Aumentar el z-index del modal de feedback para que esté por encima de todos los FABs
-- B) Al abrir el modal de feedback, ocultar temporalmente los FABs
-- C) Añadir un `padding-bottom` al modal que deje espacio al FAB
-
-¿Quieres que lo investigue en la siguiente sesión de Code? Si ves cuál FAB es el que molesta, dímelo y lo arreglo.
-
 ---
 
 ## 2026-07-03 — 3 decisiones AUTO-DECIDIDAS (plazo vencido el 2026-07-02, regla 1e)
