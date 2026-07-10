@@ -1,5 +1,10 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **▶️ PLAN ACTIVO (10-jul, Fase 2 pendiente):** el ejercicio «20 sistemas» de Fable está hecho y
+> verificado contra v0.49 — 34 candidatos → 17 descartados → 17 supervivientes con su primer
+> incremento anclado línea a línea. El ejecutor (Sonnet 5) trabaja desde
+> **`PLAN_INCREMENTOS_20_SISTEMAS.md`** (este repo), en su orden, mínimo 40 min sin parar.
+
 > **✅ v0.37→v0.48 HECHO Y EN VIVO (10-jul, sesión Sonnet larga — protocolo "no pares, busca el
 > siguiente efecto" pedido explícitamente por Tony).** 12 versiones, cada una: EFECTO deseado →
 > ~5-10 caminos generados → el más barato y seguro → verificado (node --check + browser real,
