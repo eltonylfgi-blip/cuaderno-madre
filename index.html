@@ -313,13 +313,16 @@
     /* v0.69 — prototipo "Organismo bioluminiscente": overrides de las MISMAS variables ya usadas en
        todo el fichero, más específico que :root → gana siempre, sin tocar ninguna regla más. */
     body.cmIdentityPreview{
+      /* v0.71: --accent corregido tras auditoría propia — #8b5cf6 daba 4.29:1 sobre --card
+         (por debajo del AA 4.5:1 que exige texto normal; --accent se usa como color de TEXTO en
+         decenas de sitios: enlaces, "+", "¿qué es?"). #a78bfa da 6.67:1, mismo tono violeta. */
       --bg:#080a18; --card:#0f1330; --ink:#e7ebff; --muted:#9aa3d6; --line:#262c5e;
-      --accent:#8b5cf6; --accent-soft:rgba(139,92,246,.16);
+      --accent:#a78bfa; --accent-soft:rgba(167,139,250,.16);
       color-scheme: dark;
     }
-    body.cmIdentityPreview .card,body.cmIdentityPreview .hero{box-shadow:0 0 0 1px rgba(139,92,246,.12),0 8px 28px rgba(80,40,200,.15)}
-    body.cmIdentityPreview .btn.primary,body.cmIdentityPreview #ctaMapa{box-shadow:0 0 18px rgba(139,92,246,.55)}
-    body.cmIdentityPreview .bigscore,body.cmIdentityPreview .ob-hi{text-shadow:0 0 16px rgba(139,92,246,.6)}
+    body.cmIdentityPreview .card,body.cmIdentityPreview .hero{box-shadow:0 0 0 1px rgba(167,139,250,.12),0 8px 28px rgba(90,50,210,.15)}
+    body.cmIdentityPreview .btn.primary,body.cmIdentityPreview #ctaMapa{box-shadow:0 0 18px rgba(167,139,250,.55)}
+    body.cmIdentityPreview .bigscore,body.cmIdentityPreview .ob-hi{text-shadow:0 0 16px rgba(167,139,250,.6)}
     /* v0.61 — TACTILIDAD: mismo muelle (.34,1.56,.64,1) que YA usan post-its/mapa/gato/tour — solo
        lo aplico donde faltaba: estado de presión de .btn/chip/FAB (hoy solo tenían :hover). */
     .btn,.chip,.dbjsLike{transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .12s,border-color .12s}
@@ -3112,6 +3115,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🎨 v0.71 — El prototipo de identidad ahora también cumple contraste AA",detalle:"Calculé el contraste real del violeta del prototipo «Organismo bioluminiscente»: 4.29:1, por debajo del mínimo AA (4.5:1) para texto normal — y ese color se usa como texto en decenas de sitios. Ajustado a un violeta un poco más claro (6.67:1), mismo tono, ahora sí accesible."},
     {fecha:"2026-07-10",titulo:"♿ v0.70 — Auditoría de accesibilidad de lo nuevo de hoy",detalle:"Revisé, sin que nadie me lo pidiera, si los paneles que construí hoy (modo película, logros) tenían el mismo nivel de accesibilidad que el resto de la web — y no lo tenían: les faltaba foco inicial, restaurar el foco al cerrar y que el tabulador no se escape hacia el fondo. Arreglado con el mismo patrón ya probado en el mapa desde v0.13."},
     {fecha:"2026-07-10",titulo:"🎨 v0.69 — Prueba una identidad visual nueva, en vivo (prototipo)",detalle:"En vez de pedirte que eligieras leyendo texto, construí un prototipo real: botón «Probar identidad nueva» que enciende «Organismo bioluminiscente» (fondo casi negro, halos violeta) en la web de verdad, con un solo toque, 100% reversible. Es UNA de las 3 direcciones que te propuse — si te gusta la dirección pero no los colores exactos, lo afino; si prefieres otra, la prototipamos igual."},
     {fecha:"2026-07-10",titulo:"🗣️ v0.68 — Preparado para tu voz real, no la robótica",detalle:"Dijiste que la voz sonaba artificial — tenías razón. El botón «Escúchalo» ya prefiere un audio real (grabado o clonado con Voicebox, la herramienta que tú mismo priorizaste) si existe, y solo usa la voz del navegador como respaldo. Falta un único paso tuyo: grabar 10-15s con Voicebox — instrucciones exactas en DESARROLLO_CUADERNO.md §voz."},
@@ -5959,7 +5963,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.70";
+  window.__cmVersion="v0.71";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
