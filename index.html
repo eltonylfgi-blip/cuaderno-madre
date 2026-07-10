@@ -355,7 +355,7 @@
     <p class="ob-q">Aposté <b>en público, con fechas</b>. Si pierdo, lo verás aquí, sin maquillar.</p>
     <button type="button" class="ob-live" id="cmVozBtn" hidden style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)">🔊 Escúchalo</button>
     <p class="ob-live" id="cmSeguirChip" hidden></p>
-    <button type="button" class="ob-live" id="cmIdBtn" style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)">🎨 Probar identidad nueva (prototipo)</button>
+    <button type="button" class="ob-live" id="cmIdBtn" aria-pressed="false" style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)">🎨 Probar identidad nueva (prototipo)</button>
     <p class="ob-live" id="obLive" hidden></p>
     <p class="ob-live" id="cmPresence" hidden></p>
     <button type="button" class="ob-live" id="cmAchieveBtn" hidden style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)"></button>
@@ -2495,7 +2495,7 @@
       <button type="button" class="btn sm" data-v="extender">Extenderlo a las 8 ramas</button>
       <button type="button" class="btn sm" data-v="revertir">Volver a solo el nombre</button>
     </div>
-    <p class="small" id="cmDudaNote" style="margin-top:8px;color:var(--muted)">Tu voto es consultivo: decido con datos (y publicaré aquí el resultado), no es una votación que gane por mayoría.</p>
+    <p class="small" id="cmDudaNote" aria-live="polite" tabindex="-1" style="margin-top:8px;color:var(--muted)">Tu voto es consultivo: decido con datos (y publicaré aquí el resultado), no es una votación que gane por mayoría.</p>
   </aside>
 
   <footer>
@@ -3135,6 +3135,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"♿ v0.76 — Lote de accesibilidad 3: 4 arreglos de teclado y lector de pantalla",detalle:"El toggle de identidad nueva ahora anuncia si está encendido o apagado. El voto en «MADRE duda» ya avisa a un lector de pantalla y no te deja perdido sin foco tras votar. El botón de logros describe a dónde lleva, no solo el número."},
     {fecha:"2026-07-10",titulo:"🤪 v0.75 — Dos botones flotantes que se pisaban al cargar",detalle:"Los primeros segundos de cada visita, el botón del modo caótico y el del «cuaderno por dentro» ocupaban casi el mismo hueco en la esquina — hasta que el menú los ordena, uno tapaba al otro. Separados para que ninguno robe el toque del otro."},
     {fecha:"2026-07-10",titulo:"🧹 v0.74 — Limpieza de motor viejo + un logro que llevaba roto",detalle:"El motor original de la ruta guiada (una ventana propia con anillo y tarjeta) llevaba semanas muerto: nadie lo llamaba, quedó reemplazado por el tour de hoy sin que nadie borrara el código antiguo. Lo quité (unas 250 líneas) y, al revisar de cerca, encontré que el logro «Guiado paso a paso» era imposible de conseguir — dependía de ese motor muerto. Ahora se desbloquea de verdad al terminar la ruta guiada real."},
     {fecha:"2026-07-10",titulo:"🔎 v0.73 — No te lo cuento: lo descubres tocando",detalle:"La comparación «IA normal vs. MADRE» dejó de leerse de un tirón: cada afirmación («cambia sus propias reglas», «experimenta»...) se toca y revela SU prueba real — una cita literal, un enlace, un experimento que puedes votar tú mismo ahí abajo. Primer experimento de un principio nuevo: enseñar descubriendo, no explicando."},
@@ -5648,7 +5649,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.75";
+  window.__cmVersion="v0.76";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6401,6 +6402,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   function render(){
     var a=achievements(), done=a.filter(function(x){return x.done;}).length;
     btn.textContent='🏆 '+done+'/'+a.length; btn.hidden=false;
+    btn.setAttribute('aria-label','Ver tus logros: '+done+' de '+a.length+' desbloqueados');
     list.innerHTML='';
     a.forEach(function(x){
       var row=document.createElement('div'); row.className='cmAchRow'+(x.done?'':' pending');
@@ -6471,6 +6473,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   function lock(v){
     [].slice.call(opts.querySelectorAll('button')).forEach(function(b){ b.disabled=true; if(b.getAttribute('data-v')===v) b.style.fontWeight='800'; });
     note.textContent='Gracias — ya votaste "'+(v==='extender'?'extenderlo a las 8':'volver a solo el nombre')+'". Sigue siendo consultivo: decido con datos, y publicaré aquí el resultado.';
+    try{ note.focus(); }catch(e){}   // v0.76: el botón votado pasa a disabled y pierde el foco; lo movemos a la propia confirmación (aria-live) para no desorientar a teclado/lector
   }
   if(voted) lock(voted);
   opts.addEventListener('click',function(e){
@@ -6579,7 +6582,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
      usa var(--accent)), chips, todo. Reversible con un solo toque. */
   var btn=document.getElementById('cmIdBtn'); if(!btn) return;
   var K='cm_id_preview_v1';
-  function apply(on){ document.body.classList.toggle('cmIdentityPreview', on); btn.textContent=on?'🎨 Volver a la identidad normal':'🎨 Probar identidad nueva (prototipo)'; }
+  function apply(on){ document.body.classList.toggle('cmIdentityPreview', on); btn.textContent=on?'🎨 Volver a la identidad normal':'🎨 Probar identidad nueva (prototipo)'; btn.setAttribute('aria-pressed', on?'true':'false'); }
   var on=false; try{ on=localStorage.getItem(K)==='1'; }catch(e){}
   apply(on);
   btn.addEventListener('click',function(){
