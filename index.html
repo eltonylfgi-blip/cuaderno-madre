@@ -2364,6 +2364,7 @@
     <div class="body">
       <p class="small" style="margin:10px 0 4px"><b>📜 Cómo va mejorando MADRE (como las actualizaciones de una app):</b></p>
       <div id="changelog"><div class="small">Cargando…</div></div>
+      <button type="button" class="btn sm" id="cmMovieBtn">▶ Ver los últimos 30 días en 30 segundos</button>
       <p class="small" style="margin:16px 0 4px"><b>🔬 En qué investiga y cómo evolucionan sus conclusiones:</b></p>
       <div id="investig"><div class="small">Cargando…</div></div>
       <p class="small" style="margin:16px 0 4px"><b>🧪 Hipótesis vivas vs muertas:</b></p>
@@ -2973,6 +2974,9 @@ window.__cmCorpus = {
     });
   }
   function renderCambios(list){
+    /* v0.52: expone SIEMPRE la lista que se está pintando de verdad (baked o la de Supabase si llegó
+       después) — evita que el modo película muestre datos desincronizados de lo que el visitante ve. */
+    try{ window.__cmCambios=list; }catch(e){}
     var el=document.getElementById("changelog"); if(!el) return; el.innerHTML="";
     list.forEach(function(c){
       var d=document.createElement("div"); d.style.cssText="border-left:3px solid var(--accent);padding:3px 0 3px 10px;margin:9px 0";
@@ -3031,6 +3035,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🎬 v0.52 — Los últimos 30 días, en 30 segundos",detalle:"Botón nuevo en Evolución: reproduce mi changelog real como una pequeña película, un cambio tras otro, con fecha y barra de progreso. Se puede pausar, ir atrás/adelante o cerrar en cualquier momento. Con «menos animaciones» no avanza sola: la pasas tú, a tu ritmo."},
     {fecha:"2026-07-10",titulo:"🌌 v0.51 — Un organismo hecho de mis propios cambios",detalle:"Capa decorativa muy sutil detrás del contenido: una partícula por cada cambio real que tengo documentado en mi Evolución (hoy, tantas como líneas hay en el changelog de abajo), derivando despacio, con líneas finas entre las cercanas. Se ve en los márgenes, no encima de nada. Se para si cambias de pestaña y con «menos animaciones» se queda quieta en un solo instante."},
     {fecha:"2026-07-10",titulo:"🤱 v0.50 — La primera vez, MADRE se construye delante de ti",detalle:"Solo en tu PRIMERA visita: la historia de arriba se escribe letra a letra y el marcador aparece en cascada, como si el cuaderno naciera mientras lo miras. Un botón «saltar» siempre visible por si prefieres ir directo. En tu segunda visita (o si tu sistema pide menos movimiento) todo se ve normal, al instante — no hay nada que repetir."},
     {fecha:"2026-07-10",titulo:"🔗 v0.49 — Las conexiones entre ramas ya no son líneas quietas: fluyen",detalle:"Idea de una segunda opinión externa (2 modelos gratis, verificada antes de aplicar): el patrón discontinuo de las líneas violeta ahora se desplaza despacio, como si algo viajara entre las ramas conectadas. Antes aparecían y se quedaban quietas; ahora se sienten activas. Apagado con «menos animaciones»."},
@@ -5855,7 +5860,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.51";
+  window.__cmVersion="v0.52";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6411,6 +6416,92 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   document.addEventListener('visibilitychange',function(){ if(document.hidden) stop(); else start(); });
   window.__cmOrganism={particles:function(){return pts.length;},isOn:function(){return !!raf;}};
 }catch(e){ console.warn('organism v0.51',e); } })();
+</script>
+
+<style>
+/* v0.52 — MODO PELÍCULA: overlay propio (no reutiliza #ov, es otra cosa) para reproducir el
+   changelog REAL como secuencia. Tokens del tema (var(--card)/--ink/--line/--accent) → respeta dark mode. */
+.cmMovieOv{position:fixed;inset:0;z-index:100060;background:rgba(10,12,20,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+.cmMovieOv[hidden]{display:none}
+.cmMovieCard{background:var(--card);color:var(--ink);border-radius:16px;max-width:440px;width:100%;padding:18px 20px;box-shadow:0 12px 40px rgba(0,0,0,.4);position:relative}
+.cmMovieClose{position:absolute;top:10px;right:10px;width:34px;height:34px;border:none;border-radius:999px;background:var(--accent-soft);color:var(--ink);font-size:16px;cursor:pointer}
+.cmMovieBar{height:4px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 14px}
+.cmMovieBar i{display:block;height:100%;background:var(--accent);transition:width .25s linear}
+.cmMovieDate{font-size:12px;color:var(--muted);font-weight:700}
+.cmMovieTitle{font-size:16px;font-weight:700;margin:4px 0 6px}
+.cmMovieDetail{font-size:13.5px;color:var(--muted);min-height:40px}
+.cmMovieCtrls{display:flex;gap:8px;margin-top:16px;align-items:center}
+.cmMovieCtrls button{border:none;border-radius:999px;padding:9px 14px;font:700 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer;background:var(--accent-soft);color:var(--ink)}
+.cmMovieCtrls .cmMoviePlay{background:var(--accent);color:#fff;padding:9px 18px}
+.cmMovieCount{margin-left:auto;font-size:12px;color:var(--muted)}
+</style>
+<div class="cmMovieOv" id="cmMovieOv" hidden>
+  <div class="cmMovieCard" role="dialog" aria-modal="true" aria-labelledby="cmMovieTitle">
+    <button type="button" class="cmMovieClose" id="cmMovieClose" aria-label="Cerrar">✕</button>
+    <div class="cmMovieBar"><i id="cmMovieBarI" style="width:0%"></i></div>
+    <div class="cmMovieDate" id="cmMovieDate">—</div>
+    <div class="cmMovieTitle" id="cmMovieTitle">—</div>
+    <div class="cmMovieDetail" id="cmMovieDetail"></div>
+    <div class="cmMovieCtrls">
+      <button type="button" id="cmMoviePrev">⏮</button>
+      <button type="button" class="cmMoviePlay" id="cmMoviePlay">⏸ Pausa</button>
+      <button type="button" id="cmMovieNext">⏭</button>
+      <span class="cmMovieCount" id="cmMovieCount"></span>
+    </div>
+  </div>
+</div>
+<script>
+/* v0.52 — MODO PELÍCULA: reproduce el changelog REAL (window.__cmCambios, expuesto por renderCambios
+   — siempre sincronizado con lo que el visitante ve, sea el bake o los datos de Supabase) de los
+   últimos 30 días, en secuencia, con barra de progreso. reduced-motion => sin autoplay, solo manual. */
+(function(){ try{
+  var btn=document.getElementById('cmMovieBtn'); if(!btn) return;
+  var ov=document.getElementById('cmMovieOv'), closeBtn=document.getElementById('cmMovieClose');
+  var dateEl=document.getElementById('cmMovieDate'), titleEl=document.getElementById('cmMovieTitle'), detEl=document.getElementById('cmMovieDetail');
+  var barI=document.getElementById('cmMovieBarI'), countEl=document.getElementById('cmMovieCount');
+  var prevBtn=document.getElementById('cmMoviePrev'), nextBtn=document.getElementById('cmMovieNext'), playBtn=document.getElementById('cmMoviePlay');
+  var reduce=false; try{ reduce=matchMedia('(prefers-reduced-motion:reduce)').matches; }catch(e){}
+
+  var list=[], idx=0, timer=null, playing=false;
+
+  function fmtDate(f){ try{ var d=new Date(f+'T00:00:00'); return d.toLocaleDateString('es-ES',{day:'numeric',month:'short'}); }catch(e){ return f; } }
+
+  function render(){
+    if(!list.length){ titleEl.textContent='(sin cambios en los últimos 30 días)'; detEl.textContent=''; dateEl.textContent=''; return; }
+    var c=list[idx];
+    dateEl.textContent=fmtDate(c.fecha); titleEl.textContent=c.titulo||''; detEl.textContent=c.detalle||'';
+    barI.style.width=(((idx+1)/list.length)*100)+'%';
+    countEl.textContent=(idx+1)+' / '+list.length;
+    prevBtn.disabled=(idx===0); nextBtn.disabled=(idx===list.length-1);
+  }
+
+  function stop(){ if(timer){ clearTimeout(timer); timer=null; } playing=false; playBtn.textContent='▶ Reproducir'; }
+  function scheduleNext(){
+    if(reduce) return; /* manual únicamente */
+    timer=setTimeout(function(){
+      if(idx<list.length-1){ idx++; render(); scheduleNext(); } else { stop(); }
+    },1000);
+  }
+  function play(){ if(!list.length||idx>=list.length-1) return; playing=true; playBtn.textContent='⏸ Pausa'; scheduleNext(); }
+
+  function open2(){
+    var src=(window.__cmCambios&&window.__cmCambios.length)?window.__cmCambios:[];
+    var cutoff=Date.now()-30*86400000;
+    list=src.filter(function(c){ var t=Date.parse((c.fecha||'')+'T00:00:00'); return isNaN(t)||t>=cutoff; }).slice().reverse(); /* orden cronológico: más viejo primero */
+    idx=0; render();
+    ov.hidden=false; document.addEventListener('keydown',onKey);
+    if(!reduce) play(); else { playBtn.textContent='▶ (paso a paso)'; playBtn.disabled=true; }
+  }
+  function close2(){ stop(); ov.hidden=true; document.removeEventListener('keydown',onKey); playBtn.disabled=false; }
+  function onKey(e){ if(e.key==='Escape') close2(); }
+
+  btn.addEventListener('click',open2);
+  closeBtn.addEventListener('click',close2);
+  ov.addEventListener('click',function(e){ if(e.target===ov) close2(); });
+  prevBtn.addEventListener('click',function(){ stop(); if(idx>0){ idx--; render(); } });
+  nextBtn.addEventListener('click',function(){ stop(); if(idx<list.length-1){ idx++; render(); } });
+  playBtn.addEventListener('click',function(){ if(reduce) return; if(playing) stop(); else play(); });
+}catch(e){ console.warn('pelicula v0.52',e); } })();
 </script>
 </body>
 </html>
