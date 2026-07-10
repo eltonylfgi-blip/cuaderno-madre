@@ -32,6 +32,14 @@
 >    del marcador (quitar class wait, poner ok/ko + pr-res con el resultado). El estado "⚖️ vencida — pendiente de
 >    anotar" sale AUTOMÁTICO mientras tanto (máquina de estados nueva, honesta pero fea si dura semanas).
 > 10. **Dead code**: STEP_DEFS/ring/card del tour viejo quedaron neutralizados pero no borrados (~150 líneas inofensivas).
+> 11. **(dump GPT 10-jul, clasificado — solo lo NO cubierto ya):** (a) barrido "honesto/real/de verdad"
+>    (aparece ~15-20x; presupuesto: 1 por pantalla, sustituir por el DATO); (b) renombrar los nodos del mapa
+>    como PREGUNTAS ("¿cómo pienso?" en vez de "El cerebro") — probar en 2 nodos y medir; (c) 1 línea de "voz"
+>    por rama al tocarla ("esta rama aún me avergüenza") — SOLO si sale de datos reales (benef/porque ya
+>    existentes), no inventada; (d) vídeo/GIF 30-60s arriba — Tony-gated (producción); (e) barra "objetivo:
+>    primer euro X%" DESCARTADA (el % sería inventado — viola honestidad §9).
+>    YA CUBIERTO por v0.33 (no rehacer): titular-resultado, portada -60%, CTA único, pruebas-antes-que-teoría,
+>    3/10 en una frase, errores protagonistas, continuidad de visita, secretos, IA-normal-vs-MADRE arriba.
 > **Reglas al continuar:** git pull antes de editar · protocolo anti-colisión (git status: si hay uncommitted ajeno, NO editar) ·
 > las 4 tandas de verificación de siempre (node --check, consola, 375px, tap táctil con jitter) · commit pronto.
 
