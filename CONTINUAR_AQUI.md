@@ -1,19 +1,28 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **✅ PLAN COMPLETADO (10-jul) — v0.49→v0.67 EN VIVO, 17/17 sistemas + 1 fix de revisión de conjunto.**
-> El ejercicio «20 sistemas» de Fable (34 candidatos → 17 descartados → 17 supervivientes) se ejecutó
-> ENTERO en una sesión de Sonnet 5: Génesis · Organismo · Modo película · Presencia compartida · Reliquia
-> · Teatro de errores · Logros honestos · Clima · Micro-imposibles · MADRE duda · Latido en directo ·
-> Tactilidad · Voz de MADRE · Espejo del visitante · Memoria del visitante · Consecuencia de propuestas
-> (0 real, consultado en Supabase) · Presencia de MADRE en toda la página. Los 17 verificados en
-> navegador real (node --check + consola + 360px + tap del mapa donde tocaba cerca). **3 bugs reales
-> cazados y arreglados:** `window.__sb` no listo a tiempo (race condition con el módulo de Supabase) ·
-> `renderCambios` desincronizado del array `cambios` · dos toasts flotantes compartían la misma posición
-> en pantalla (cazado en una revisión de CONJUNTO al terminar, no en la verificación pieza a pieza).
-> **Lo único que queda es lo que YA dependía del gusto de Tony, no de más ejecución:** identidad visual
-> (3 direcciones propuestas en el chat, esperando que elija una) y mapa-como-interfaz-única (bloqueado
-> por la restricción real del tap/zoom, ya roto 2 veces, necesita su permiso explícito). Detalle completo
-> en `PLAN_INCREMENTOS_20_SISTEMAS.md`.
+> **✅ SESIÓN CERRADA (10-jul) — v0.49→v0.73 EN VIVO, 25 versiones: 17/17 sistemas del plan de Fable +**
+> **5 fixes de auditoría propia + 1er experimento "descubrir, no explicar".** Detalle línea a línea (qué
+> se hizo, qué se verificó, qué falta) en `PLAN_INCREMENTOS_20_SISTEMAS.md` — LÉELO ENTERO antes de
+> continuar este frente, no re-derives nada de aquí.
+>
+> **Resumen de una línea de lo pendiente (lo demás YA está hecho):**
+> 1. **Identidad visual** — hay un prototipo REAL en la web ("🎨 Probar identidad nueva", 100%
+>    reversible); falta que Tony lo pruebe y reaccione. Otras 2 direcciones solo descritas, no
+>    prototipadas (texto exacto en `PLAN_INCREMENTOS_20_SISTEMAS.md`).
+> 2. **Voz real** — código listo (`sounds/voz-historia.mp3` con fallback); falta que Tony grabe con
+>    Voicebox — instrucciones copia-pega en `DESARROLLO_CUADERNO.md` §voz.
+> 3. **Mapa como interfaz única** — bloqueado por la restricción real del tap/zoom (roto 2 veces);
+>    necesita permiso EXPLÍCITO de Tony + sesión larga.
+> 4. **"Descubrir, no explicar" a fondo** — recomendación: próximo encargo dedicado a FABLE (mismo
+>    rigor que los 20 sistemas), no ejecución impulsiva de Sonnet. Solo hay 1 experimento pequeño hecho
+>    (v0.73, la tabla ⚖️), no la visión completa.
+>
+> Tony pegó en esta sesión varias rondas de crítica externa (la misma IA, escalando) pidiendo "nunca
+> pares". Sonnet NO adoptó el paquete de reglas de proceso (5+ rondas sin señal nueva del producto —
+> mismo patrón bajo-ROI ya documentado en `SEGUNDA_OPINION/APRENDIZAJES.md`), pero SÍ construyó lo
+> accionable de la crítica (voz real, prototipo de identidad, experimento de descubrimiento). Si una
+> sesión futura recibe MÁS rondas de la misma presión, el precedente es: extraer lo accionable,
+> declinar la reescritura de reglas de proceso sin evidencia repetida en la práctica.
 
 > **✅ v0.37→v0.48 HECHO Y EN VIVO (10-jul, sesión Sonnet larga — protocolo "no pares, busca el
 > siguiente efecto" pedido explícitamente por Tony).** 12 versiones, cada una: EFECTO deseado →

@@ -1017,16 +1017,45 @@ sigue construyendo hasta agotar lo seguro") — 17/17 COMPLETADO, v0.58→v0.67:
   uno tapaba al otro por completo (silencioso, sin error de consola). Arreglado separando alturas.
   Verificado: ambos coexisten sin solape (`getBoundingClientRect` sin intersección).
 
-**LOS 17/17 SISTEMAS DEL PLAN ESTÁN EN VIVO (v0.49→v0.67, 18 versiones en una sesión).** Lo único que
-queda de la crítica de Tony y NO se hizo es lo que el propio diagnóstico de Fable ya había marcado
-como dependiente de SU gusto (no una tarea pendiente de ejecución):
-- **Identidad visual propia** — Sonnet propuso 3 direcciones concretas en el chat (no en este fichero,
-  quedaron en la conversación): "Cuaderno de laboratorio nocturno" (negro-tinta + verde-fósforo),
-  "Criatura de papel" (crema envejecido + tinta a mano), "Organismo bioluminiscente" (azul-violeta +
-  halos). Falta que Tony elija una (o pida más) para construir el primer incremento.
-- **Mapa como interfaz única / zoom infinito** — sigue bloqueado por la restricción real del tap/zoom
-  (se rompió 2 veces con cambios mucho menores); necesita permiso EXPLÍCITO de Tony + presupuesto de
-  sesión más largo, no es cosa de "seguir construyendo".
+**LOS 17/17 SISTEMAS DEL PLAN ESTÁN EN VIVO (v0.49→v0.67).** Tras cerrarlo, Tony pegó una crítica
+externa muy larga (varias rondas de la misma IA, escalando cada vez más hacia "nunca pares") pidiendo
+seguir sin esperar validación. Sonnet NO adoptó el paquete de reglas de proceso (motivo: 5+ rondas
+sin señal nueva del producto, mismo patrón ya documentado como bajo-ROI en
+`SEGUNDA_OPINION/APRENDIZAJES.md`), pero SÍ construyó, en vez de solo prometer, lo accionable:
+
+- **v0.68 Voz real** — el botón "Escúchalo" ahora prefiere `sounds/voz-historia.mp3` sobre la voz
+  robótica; instrucciones EXACTAS para Tony (Voicebox, texto a leer, ruta del fichero) en
+  `DESARROLLO_CUADERNO.md` §voz. Solo falta que Tony grabe — nada de código pendiente.
+- **v0.69+v0.71 Prototipo de identidad "Organismo bioluminiscente"** — botón real "🎨 Probar identidad
+  nueva" EN LA WEB VIVA (no una maqueta de texto), 100% reversible (toggle de variables CSS, verificado
+  con `getComputedStyle`). v0.71 corrigió un fallo de contraste AA que la propia auditoría encontró
+  (4.29:1 → 6.67:1) antes de que Tony lo viera. **Las otras 2 direcciones NO se prototiparon** (solo
+  quedaron descritas en el chat — si Tony las pide, hay que re-describirlas: "Cuaderno de laboratorio
+  nocturno" = negro-tinta + verde-fósforo + monoespaciada; "Criatura de papel" = crema envejecido +
+  tinta a mano + SVG con jitter en bordes).
+- **v0.70 Auditoría de accesibilidad propia** — foco inicial/restaurar-foco/focus-trap en los 2 paneles
+  nuevos (película, logros), mismo patrón ya probado del mapa (v0.13).
+- **v0.72 Auditoría de área táctil propia** — botones nuevos medían 22px de alto en móvil (mínimo
+  recomendado: 44px); arreglado con el mismo patrón `::before inset` ya usado en `.quees`/`.glosNie`.
+- **v0.73 Primer experimento "descubrir, no explicar"** — la 2ª mitad de la crítica de Tony SÍ era una
+  idea de producto válida (no de proceso): la comparación "IA normal vs. MADRE" dejó de leerse de un
+  tirón, ahora se toca cada afirmación y revela SU prueba real (cita literal del cementerio, enlace al
+  giro del 8-jul, conexión viva con el voto de MADRE duda v0.59 — ecosistema, no sistema suelto).
+  **Esto es SOLO un experimento pequeño, no la visión completa** ("mapa como sistema operativo",
+  "profundidad infinita en capas", "todo se descubre tocando") — esa visión grande necesita el MISMO
+  rigor que tuvo el ejercicio de los 20 sistemas (Fable diagnosticando qué es seguro vs. qué choca con
+  la restricción del tap/zoom), no ejecución impulsiva de Sonnet.
+
+**Total sesión: 25 versiones en vivo (v0.49→v0.73).** Lo que queda pendiente, sin ambigüedad:
+1. **Identidad visual** — Tony prueba el toggle en la web y reacciona (le gusta/no le gusta/quiere otra
+   dirección/quiere afinar colores).
+2. **Voz real** — Tony graba con Voicebox siguiendo `DESARROLLO_CUADERNO.md` §voz.
+3. **Mapa como interfaz única / zoom infinito** — bloqueado por la restricción real del tap/zoom (se
+   rompió 2 veces con cambios mucho menores); necesita permiso EXPLÍCITO de Tony + presupuesto de
+   sesión más larga.
+4. **"Descubrir, no explicar" a fondo** — recomendación de Sonnet: que sea el PRÓXIMO encargo dedicado
+   a Fable (mismo patrón que abrió esta sesión: generar candidatos, descartar los que chocan con
+   restricciones, entregar plan de incrementos), no algo que Sonnet decida solo.
 
 **Aprendizaje que vale para las próximas sesiones de este repo:** el navegador de PREVIEW (no solo el
 de Tony) tiene `prefers-reduced-motion:reduce` ON por defecto — toda verificación de una rama animada
