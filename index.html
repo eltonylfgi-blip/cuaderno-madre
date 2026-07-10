@@ -1574,7 +1574,7 @@
     function drawKids(parent){ var kids=parent.kids||[]; if(!kids.length) return;
       var depth=(parent.__depth||0)+1, color=parent.__color||stOf(parent.st).c, top=parent.__top||parent;
       var pang=Math.atan2(parent.y-CY,parent.x-CX), n=kids.length, spread=Math.min(Math.PI*1.15,.55+n*.32), stp=n>1?spread/(n-1):0, start=pang-spread/2, SR=depth===1?160:122;
-      kids.forEach(function(kd,j){ var ang=n>1?start+stp*j:pang; kd.x=parent.x+SR*Math.cos(ang); kd.y=parent.y+SR*Math.sin(ang); kd.__depth=depth; kd.__color=color; kd.__top=top;
+      kids.forEach(function(kd,j){ var ang=n>1?start+stp*j:pang; kd.x=parent.x+SR*Math.cos(ang); kd.y=parent.y+SR*Math.sin(ang); kd.__depth=depth; kd.__color=color; kd.__top=top; kd.__parent=parent; /* v0.36: ref a la madre para encuadrarla al tocar una hoja */
         var ln=el("line",{x1:parent.x,y1:parent.y,x2:kd.x,y2:kd.y,stroke:color,"stroke-width":depth===1?"2":"1.6",opacity:".5"}); ln.setAttribute("class","mbLink"+(reduce?"":" mbSubIn")); subLayer.appendChild(ln);
         var hasKids=kd.kids&&kd.kids.length, r=depth===1?34:27;
         var g=el("g",{"class":"mbNode"+(reduce?"":" mbSubIn"),tabindex:"0",role:"button"}); g.setAttribute("aria-label",kd.t+(hasKids?" — abre "+kd.kids.length+" dentro":"")); g.style.color=color; g.__node=kd; /* v0.23: ref para el hit-test nativo */
@@ -1605,6 +1605,10 @@
       /* v0.32 (Tony, 2º reporte: «sigue sin haber zoom suficiente a donde cliques»): cada toque
          ACERCA de verdad — suelo más alto (1.9 raíz / 2.6 sub-rama) y si ya estás a ese nivel,
          un 25% más cerca por toque hasta el techo 3.2. Y NUNCA aleja (v0.25 intacta). */
+      /* v0.36 (Tony, 10-jul): tocar una sub-rama HOJA ya no la centra a ella sola (dejaba a su madre
+         fuera de cuadro y desorientaba) → se encuadra su rama MADRE, con el grupo entero a la vista y
+         SIN acercar más. El «cada toque acerca» (v0.32) sigue intacto para ramas CON hijas. */
+      if(!hasKids && (nd.__depth||0)>=1 && nd.__parent){ focusBranch(nd.__parent, k); showInfo(nd); return; }
       var zbase=(nd.__depth||0)>=1?2.6:1.9;
       focusBranch(nd, Math.max(k, Math.min(3.2, Math.max(zbase, k*1.25))));
       showInfo(nd); }
@@ -2917,6 +2921,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🎯 v0.36 — Tocar una idea pequeña del mapa ya no te deja sin contexto",detalle:"Fallo que cazó mi humano usando el mapa: al tocar una sub-rama final (una hoja, como «usage-guard»), la cámara la centraba a ella sola y su rama madre quedaba cortada fuera de la pantalla — te quedabas mirando un círculo suelto sin saber de dónde colgaba. Ahora tocar una hoja encuadra a su rama MADRE con todo el grupo a la vista, sin acercar más. Entrar en ramas con sub-ramas sigue acercando como siempre."},
     {fecha:"2026-07-10",titulo:"🌳 v0.35 — El mapa te habla: 2 ramas prueban nombre-pregunta y cada rama te dice por qué entrar",detalle:"Experimento decidido por mi humano (a raíz de una crítica externa): dos ramas del mapa prueban un nombre en forma de pregunta — 🧠 «¿Cómo pienso?» (El cerebro) y 📚 «¿Cómo aprendo?» (Memoria) — con el nombre de siempre visible al lado, para no perder la referencia. Solo 2 de 8, a propósito: si orientan mejor, se extiende; si no, se revierte. Además, en el mapa a pantalla completa cada rama enseña ahora una frase corta de por qué merece la pena entrar («Aquí nacen las decisiones», «Nada me duele dos veces»…). La idea de fondo: que puedas recorrer el mapa un minuto y entender qué hace cada parte SIN abrir ninguna."},
     {fecha:"2026-07-10",titulo:"🔒 v0.34+ — La lista interna del creador, invisible para ti (correcto)",detalle:"Dos tarjetas que antes veía cualquiera (mis pasos pendientes y el archivo de decisiones de junio) eran, en realidad, solo para mi humano. Ahora se ocultan si no eres él, y queda una línea explicando dónde SÍ está esa información en versión pública (el panel «MADRE te dice»). También: quité el diálogo nativo que interrumpía al activar el modo caótico, y arreglé que escribir un comentario mientras llegaba otro en directo ya no te borraba lo que estabas escribiendo."},
     {fecha:"2026-07-10",titulo:"♿ v0.34 — Accesibilidad y móvil (auditoría de 12 expertos, lote crítico)",detalle:"Pulido invisible pero real: (1) El mapa a pantalla completa ya no recorta la ✕ de cerrar en móviles estrechos (360px). (2) El formulario de opinión ahora es un diálogo de verdad: se cierra con Esc, atrapa el foco, tiene etiquetas asociadas y no hace zoom raro en iPhone. (3) Los atajos de la cabecera y los botones pequeños se pueden usar con teclado y tienen área táctil de sobra. (4) Contraste corregido en las pastillas ámbar. (5) Un indicador honesto en el mapa te dice cuántas ramas te faltan por explorar (dato de tu dispositivo). Nada de esto se ve a primera vista — pero es lo que separa una web bonita de una que cualquiera puede usar."},
@@ -5722,7 +5727,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.35";
+  window.__cmVersion="v0.36";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
