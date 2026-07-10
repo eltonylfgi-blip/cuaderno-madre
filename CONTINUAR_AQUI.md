@@ -19,12 +19,35 @@
 > respeta reduced-motion · aria-live quitado de #evNow · glint honesto en la tarjeta pequeña del mapa (N/8 ramas).
 > Verificado: node --check 34/34, 360px sin overflow, ✕ del mapa dentro, modal Esc+foco OK, chips teclado OK.
 >
+> **✅ v0.35 HECHO Y EN VIVO (10-jul, decisión de Tony sobre E):** experimento nodos-pregunta en SOLO 2 nodos
+> con etiqueta DOBLE (opción de Tony: pregunta + nombre, no sustituir): 🧠 «¿Cómo pienso?»/El cerebro y
+> 📚 «¿Cómo aprendo?»/Memoria (campo `q` en __MAPA.nodes; mapa pequeño = nombre debajo y+58, mapa grande =
+> nombre encima y-64) + campo `frase` en las 8 ramas (curiosidad, solo mapa grande, y+86; badge ＋ baja a
+> y+103; ● AHORA sube a y-82 si hay q). NO se tocó el motor del tap. Verificado: node --check 38/38 · 0
+> errores consola · tap OK (🧠 abre 8→12 nodos) · bboxes sin solape (mapa grande 0; pequeño solo el roce
+> intencionado pregunta/nombre) · 360px sin overflow y ✕ dentro. **Juez: Tony mira la web y dice si el
+> experimento se extiende a más nodos o se revierte.**
+>
+> **📋 TRIAJE de las 18 ideas ⭐ del dump externo (10-jul, juzgadas por Fable contra lo que YA existe — NO re-evaluar):**
+> - **Ya existen (total/parcial):** #2 zoom multinivel ✅ · #7 modo explorador (contador + 2 descubrimientos) ·
+>   #10 huella visitante (propuestas ⏳/comentarios/dibujos) · #16 el árbol recuerda (ramas exploradas persisten) ·
+>   #1 mapa vivo (estado/AHORA/anillo/halo) · #5 estados (leyenda 4 estados). La "mejora más importante" de Tony
+>   (3 preguntas visuales por rama) quedó COMPLETA en v0.35: icono+estado ya existían, faltaba la frase.
+> - **Cola corta (baratas, SOLO si Tony pide seguir puliendo):** #16-completo «la última vez llegaste hasta aquí»
+>   (localStorage) · #13 tinte nocturno sutil por hora local (ojo reduced-motion) · #11 mini-historia por rama
+>   (reusar prog/juicio como capítulos, sin datos nuevos).
+> - **Backlog con GATILLO (fase PRIMER EURO — nada de esto mueve TTF€):** #3 conexiones entre ramas · #4 «te
+>   observa» · #6 reorganización · #8 IA integrada (coste API recurrente + moat) · #9 física · #12 cinemáticas ·
+>   #14 modo niño · #15 modo investigador · #17 estaciones · #18 más secretos. **Gatillo de reapertura = el
+>   falsador del propio nodo 📓: señal sostenida de visitantes reales (comentarios/propuestas > 0). Sin esa
+>   señal, más pulido = pulir una máquina que nadie mira.**
+>
 > **⬜ TODO QUIRÚRGICO RESTANTE (sesión Sonnet barata — cada punto = script Python con reps exactas, uno a uno + verificar + commit):**
 > A. **Barrido "honesto/real/de verdad"** (~15-20 apariciones, tell de IA): presupuesto 1 por pantalla, sustituir por el DATO. `grep -n "honest\|de verdad\|nada inventado\|real" index.html`.
 > B. ✅ HECHO (v0.34) — Tarjeta 2 "Tu parte" → display:none en modo lectura (hoy solo se mueve al final por el re-secuenciador; el público la ve). Añadir regla `body:not(.tony) .card.tony#... {display:none}` o gating en JS; dejar línea-resumen pública.
 > C. ✅ HECHO (v0.34) — window.confirm() del modo caos (l.~4911) → ráfaga suave inmediata + chip "parar ✕" (anti-patrón §5 del propio repo).
 > D. ✅ HECHO (v0.34) — Realtime comentarios re-renderiza todo el DOM (destruye replies a medio escribir): mínimo = guardar los reply-boxes abiertos con su texto antes de renderAll y restaurarlos.
-> E. ⏸️ ESPERA CRITERIO DE TONY (preguntado 10-jul) — Nodos del mapa como PREGUNTAS (idea GPT): probar en 2 nodos ("El cerebro"→"¿cómo pienso?") y que Tony juzgue; NO tocar el motor del tap.
+> E. ✅ HECHO (v0.35) — Tony decidió: etiqueta DOBLE (pregunta+nombre) en solo 2 nodos + frase de curiosidad en las 8 (mapa grande). Pendiente su veredicto al VERLA: extender o revertir.
 > F. **Fusiones Acto II** (riesgo medio, opcional): 8+9, 5+6, ⚙️+🔁+11. Mover contenido a details, no borrar. Re-verificar anclas de 💗 (nth-of-type) tras cualquier reorden.
 > G. **Dead code**: STEP_DEFS/ring/card del tour viejo (~150 líneas) neutralizados pero no borrados.
 
