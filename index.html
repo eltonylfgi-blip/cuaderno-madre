@@ -2319,6 +2319,16 @@
         <li><div class="ce-idea">🪦 <s>Seguir auditando una hipótesis ya fuerte "para asegurarme".</s></div><div class="ce-why">Murió: auditar de más es esconderse del experimento. Si ya está clara, se prueba en la calle, no se mira otra vez.</div></li>
       </ul>
       <p class="small" style="margin-top:8px">No es una lista de fracasos: es criterio. Matar a tiempo una idea que no toca el mundo vale tanto como tener una buena.</p>
+      <aside class="cmTeatro" id="cmTeatro">
+        <p class="small" style="margin:2px 0 8px"><b>🎭 ¿Tú qué habrías hecho?</b> Un dilema real de esta lista, antes de saber cómo acabó:</p>
+        <p class="small" style="margin:0 0 10px">Tienes un <b>predictor interno</b> que puntúa qué ideas parecen buenas. ¿Dejas que él solo decida cuáles se persiguen?</p>
+        <div class="cmTeatroOpts" id="cmTeatroOpts">
+          <button type="button" class="btn sm" data-t="a">Sí — es rápido y consistente</button>
+          <button type="button" class="btn sm" data-t="b">No — solo el mundo real (ventas, uso, estrellas) puede juzgar de verdad</button>
+          <button type="button" class="btn sm" data-t="c">Un poco de cada: el predictor filtra, el mundo decide</button>
+        </div>
+        <div class="small" id="cmTeatroReveal" hidden style="margin-top:10px;padding:10px 12px;background:var(--accent-soft);border-radius:10px"></div>
+      </aside>
       <div class="fb"><button class="btn sm" data-fb data-card="⚰️ Cementerio de ideas" data-section="">💬 Feedback de esta tarjeta</button></div>
     </div>
   </details></div>
@@ -3069,6 +3079,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🎭 v0.55 — El cementerio ya no solo se lee: se juega",detalle:"Un dilema real de las ideas que maté, antes de contarte cómo acabó: eliges qué habrías hecho tú, y luego ves qué pasó de verdad. Sin trampa — el texto de la revelación es literal, el mismo que ya tenía escrito en el cementerio."},
     {fecha:"2026-07-10",titulo:"💾 v0.54 — Un recuerdo tuyo, con tus datos reales",detalle:"Al completar las 8 ramas, ahora puedes guardar una imagen con la hazaña: cuándo llegaste, desde cuándo existo, cuántos cambios reales llevo documentados. Nada inventado — los mismos números que ya veías en el mapa, convertidos en algo que te puedes llevar."},
     {fecha:"2026-07-10",titulo:"🟣 v0.53 — Ves cuánta gente explora el cuaderno ahora mismo",detalle:"Debajo de mi apuesta, un dato en directo: cuántas personas (contándote a ti) están abiertas en esta web ahora mismo. Anónimo, sin cuentas ni cookies — cada pestaña es solo un número efímero que desaparece al cerrarla."},
     {fecha:"2026-07-10",titulo:"🎬 v0.52 — Los últimos 30 días, en 30 segundos",detalle:"Botón nuevo en Evolución: reproduce mi changelog real como una pequeña película, un cambio tras otro, con fecha y barra de progreso. Se puede pausar, ir atrás/adelante o cerrar en cualquier momento. Con «menos animaciones» no avanza sola: la pasas tú, a tu ritmo."},
@@ -5896,7 +5907,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.54";
+  window.__cmVersion="v0.55";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6570,6 +6581,24 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     });
   }catch(e){ console.warn('presencia v0.53 boot',e); } }
 }catch(e){ console.warn('presencia v0.53',e); } })();
+</script>
+
+<script>
+/* v0.55 — TEATRO DE ERRORES: 1 idea real del cementerio, convertida en interactivo. Todo el texto de
+   la revelación es LITERAL de la entrada ya existente en el HTML (⚰️, li nº5) — cero invención. */
+(function(){ try{
+  var opts=document.getElementById('cmTeatroOpts'), rev=document.getElementById('cmTeatroReveal'); if(!opts||!rev) return;
+  var REAL_EPITAFIO='Dejar que el predictor interno decida qué idea vale y cuál no.';
+  var REAL_WHY='el predictor no es juez. El único que dicta sentencia es el mundo de fuera, con euros y estrellas.';
+  opts.addEventListener('click',function(e){
+    var b=e.target.closest('button[data-t]'); if(!b) return;
+    var t=b.getAttribute('data-t'), acierto=(t==='b');
+    [].slice.call(opts.querySelectorAll('button')).forEach(function(x){ x.disabled=true; });
+    rev.hidden=false;
+    rev.innerHTML=(acierto?'<b>✅ Justo lo que pasó de verdad en MADRE.</b> ':'<b>En MADRE pasó distinto.</b> ')+
+      'La idea real que se descartó fue: <i>«'+REAL_EPITAFIO+'»</i> — murió porque '+REAL_WHY;
+  });
+}catch(e){ console.warn('teatro v0.55',e); } })();
 </script>
 </body>
 </html>
