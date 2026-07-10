@@ -877,6 +877,7 @@
     button.ob-time{cursor:pointer;font:inherit;font-weight:800;font-size:13px;color:var(--ink);background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:20px;padding:6px 13px;min-height:34px}
     button.ob-time:hover{filter:brightness(1.06)}
     .mi-para{display:block;font-size:12px;font-style:italic;color:var(--muted);margin-top:2px}
+    .mi-nace{display:block;font-size:12px;font-weight:600;color:#3d9b7f;margin-top:2px}
     #tourOv{position:fixed;left:0;right:0;bottom:0;z-index:940;padding:12px;pointer-events:none}
     #tourBox{pointer-events:auto;max-width:520px;margin:0 auto;background:var(--card,#fff);color:var(--ink);border:2px solid var(--accent);border-radius:16px;box-shadow:0 12px 40px rgba(20,10,60,.28);padding:13px 15px}
     #tourBox .tq{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.04em;margin:0 0 4px}
@@ -1159,7 +1160,7 @@
       /* v0.35: experimento (decisión de Tony 10-jul) — en 2 nodos la etiqueta es una PREGUNTA y el nombre de siempre queda debajo, más pequeño */
       if(nd.q){ var subq=el("text",{x:nd.x,y:nd.y+58,"text-anchor":"middle","font-size":"9.5",fill:"var(--muted)"}); subq.textContent=nd.t; g.appendChild(subq); }
       if(isNow){ var nb=el("text",{x:nd.x,y:nd.y-37,"text-anchor":"middle"}); nb.setAttribute("class","mn-now"); nb.textContent="● AHORA"; g.appendChild(nb); }
-      function show(){ var s=stOf(nd.st); info.textContent=""; var tt=document.createElement("span"); tt.className="mi-t"; tt.textContent=nd.emoji+" "+nd.t; var st=document.createElement("span"); st.className="mi-st"; st.textContent=s.l; st.style.background=s.c; st.style.color=window.__mapText(s.c); var dd=document.createElement("span"); dd.className="mi-d"; dd.textContent=nd.d+(nd.kids&&nd.kids.length?"  ·  toca «explorar en grande» para ver sus "+nd.kids.length+" sub-ramas.":""); info.appendChild(tt); info.appendChild(st); if(nd.para){ var pp=document.createElement("span"); pp.className="mi-para"; pp.textContent=nd.para; info.appendChild(pp); } info.appendChild(dd); }
+      function show(){ var s=stOf(nd.st); info.textContent=""; var tt=document.createElement("span"); tt.className="mi-t"; tt.textContent=nd.emoji+" "+nd.t; var st=document.createElement("span"); st.className="mi-st"; st.textContent=s.l; st.style.background=s.c; st.style.color=window.__mapText(s.c); var dd=document.createElement("span"); dd.className="mi-d"; dd.textContent=nd.d+(nd.kids&&nd.kids.length?"  ·  toca «explorar en grande» para ver sus "+nd.kids.length+" sub-ramas.":""); info.appendChild(tt); info.appendChild(st); if(nd.nace){ var nn=document.createElement("span"); nn.className="mi-nace"; nn.textContent="🌱 "+nd.nace; info.appendChild(nn); } if(nd.para){ var pp=document.createElement("span"); pp.className="mi-para"; pp.textContent=nd.para; info.appendChild(pp); } info.appendChild(dd); }
       g.addEventListener("click",show); g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); show(); } });
       svg.appendChild(g); });
     var leg=document.getElementById("mapLeg"); if(leg){ for(var k in STATES){ var sp=document.createElement("span"); var ic=document.createElement("i"); ic.style.background=STATES[k].c; var tx=document.createElement("span"); tx.textContent=STATES[k].l; sp.appendChild(ic); sp.appendChild(tx); leg.appendChild(sp); } }
@@ -2993,6 +2994,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🌱 v0.44 — El origen de cada rama, también en el mapa pequeño de portada",detalle:"Coherencia: el mapa pequeño (el que ves antes de abrir nada) ahora enseña también «🌱 Nació para...» al tocar una rama, igual que el mapa grande desde v0.43. Los dos mapas cuentan la misma historia."},
     {fecha:"2026-07-10",titulo:"🌱 v0.43 — Cada rama ahora empieza contando cómo nació",detalle:"Cuando tocas una rama, lo primero que lees ya no es una definición: es cómo nació. «🌱 Nació para soltar algo al mundo y ver si aguantaba de pie — el 8 de julio, por primera vez, el mundo respondió con una estrella.» Nada inventado: son los mismos hechos que ya vivían en la web, puestos como el arranque de un relato en vez de como una ficha técnica."},
     {fecha:"2026-07-10",titulo:"🔴 v0.42 — Antes de hacer scroll, ya sabes que MADRE está viva AHORA",detalle:"Nueva línea en la cabecera, con un punto que late: «Ahora mismo: 🛡️ Activos publicados — se le da atención». Es el mismo dato real que ya usaba el mapa (M.ahora), pero puesto donde nadie lo veía: lo primero, antes de bajar. La web deja de sentirse una foto fija desde el segundo 1."},
     {fecha:"2026-07-10",titulo:"🕸️ v0.41 — El primer vistazo (antes de tocar nada) ya se ve un ecosistema",detalle:"El mapa pequeño de la portada — lo primero que ve cualquiera, sin haber pulsado nada — ahora también respira y muestra 6 conexiones reales entre ramas (2 más que el mapa grande: «🧩→🛡️ el ganador se vuelve activo público», «📚→🔬 aquí archiva lo que descartó»). Ya no parece un menú de 8 botones: parece que las partes de MADRE se hablan entre sí."},
@@ -5809,7 +5811,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.43";
+  window.__cmVersion="v0.44";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
