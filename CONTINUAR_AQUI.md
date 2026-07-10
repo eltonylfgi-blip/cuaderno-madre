@@ -1,5 +1,41 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v0.33 DESPLEGADA Y VERIFICADA EN VIVO (10-jul-2026, sesión Fable "reconstrucción total").**
+> Auditoría de 12 lentes (3,7M tokens) + panel de 3 arquitecturas + juez → blueprint «EL GIRO» (película
+> en 3 actos + marcador de apuestas + disciplina organismo). Hecho y EN VIVO (commits 6e3cbc6+69dbdc0):
+> coherencia total (peluquería purgada→frente real distribución; fechas/cifras reconciliadas; fix bug
+> parseEstado builds), portada 3 frases + CTA héroe al mapa, El Marcador (palmarés + estados por fecha
+> ⏳/🔔HOY/⚖️vencida + notario git + .ics/RSS), tarjeta ⭐ El Giro (1ª señal 8-jul VERIFICADA por API:
+> 1 estrella usage-guard + 1 fork usage-pacer), un solo tour (modal 700ms y tour viejo neutralizados),
+> re-secuencia en 3 actos con separadores, og-image.png + favicon + twitter:card large, evidencia cruda
+> enlazada, señales del island refrescadas (verificadas). Verificado: 0 errores consola, node --check
+> 32/32, tap del mapa con touch+jitter (toggle 12→8→12), 375px sin overflow, web viva v0.33 + og 200.
+>
+> **⬜ TODO QUIRÚRGICO RESTANTE (para una sesión SONNET barata — ir uno a uno, verificar, commit):**
+> La síntesis completa de la auditoría (200 hallazgos): pedirla a Tony o re-derivar; los pendientes accionables:
+> 1. **A11y lote 1:** modal #ov (role=dialog+aria-modal+Esc+focus-trap+restaurar foco+labels for/id+inputs 16px);
+>    chips estáticos del hero → role=button+tabindex+keydown (patrón #chipVeredicto ya en el fichero);
+>    .pr-chip .wait blanco sobre #f59e0b = 2.15:1 → texto oscuro (usar window.__mapText); targets <44px
+>    (.nieBtn/.glosNie/.mbFb/.quees/acts de comentarios) → min-height o ::before inset:-10px;
+>    tabIndex=-1 en cmBub/cmCrumb (están dentro de aria-hidden); títulos .ctitle .t → h2 (estilos van por clase).
+> 2. **.mbBar del mapa desborda a ≤390px** (nowrap: título+🌱Proponer+✕ ≈390px) → @media(max-width:420px):
+>    título "🌳 Mapa" + botón solo "🌱" con aria-label. ¡La ✕ puede quedar fuera en iPhone SE!
+> 3. **Fusiones Acto II pendientes** (opcional, riesgo medio): 8+9 (construye+aprende), 5+6 (riesgos+salud),
+>    ⚙️+🔁+11 (rutinas+metapalancas+mecanismos con glosario al pie). Patrón: mover contenido a details, no borrar.
+> 4. **Focus-trap del mapa cuenta botones ocultos de #mbPropose** → filtrar visibles (1 línea, l.~1719).
+> 5. **Realtime comentarios re-renderiza todo el DOM** (destruye replies a medio escribir) → mínimo: preservar
+>    reply-boxes abiertos antes de renderAll.
+> 6. **Tarjeta 2 "Tu parte"** → display:none en modo lectura (hoy solo se mueve al final); línea-resumen pública.
+> 7. **window.confirm() del caos** → ráfaga suave inmediata + chip "parar ✕".
+> 8. **Bloque estático en INGLÉS** (hero+apuesta+mapa) dentro de Evidencia.
+> 9. **Cuando la rutina/loop anote el veredicto del marketplace (10-jul)**: marcar ✅/❌ en el <li data-fecha="2026-07-10">
+>    del marcador (quitar class wait, poner ok/ko + pr-res con el resultado). El estado "⚖️ vencida — pendiente de
+>    anotar" sale AUTOMÁTICO mientras tanto (máquina de estados nueva, honesta pero fea si dura semanas).
+> 10. **Dead code**: STEP_DEFS/ring/card del tour viejo quedaron neutralizados pero no borrados (~150 líneas inofensivas).
+> **Reglas al continuar:** git pull antes de editar · protocolo anti-colisión (git status: si hay uncommitted ajeno, NO editar) ·
+> las 4 tandas de verificación de siempre (node --check, consola, 375px, tap táctil con jitter) · commit pronto.
+
+
 > **🧊 CONGELADOR (7-jul → ~21-jul, crítica externa adoptada por sesión Fable final): PROHIBIDO
 > mejorar esta web "porque sí" durante ~2 semanas.** La web ya es suficientemente buena para
 > recibir realidad; ahora el roadmap lo empuja LA REALIDAD, no el razonamiento interno. Solo se

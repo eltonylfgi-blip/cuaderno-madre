@@ -1,3 +1,12 @@
+## v0.33 — 2026-07-10 · Reconstrucción total: "la película en 3 actos"
+- Auditoría 12 lentes + panel 3 arquitecturas + juez (sesión Fable, uso ilimitado de Tony).
+- Coherencia: purga peluquería (frente real: distribución/Aurova/activos), fix parseEstado (builds de junio congelados), "Hoy (28 jun)"→fechas absolutas, 79→800+ vídeos, cadencias reales, decisiones=archivo.
+- Portada 3 frases + CTA héroe al mapa; re-secuencia en 3 actos (ACTO I apuesta / ACTO II construcción / EL GIRO / ACTO III presente).
+- El Marcador: palmarés, estados por fecha (⏳/🔔 HOY/⚖️ vencida automática), notario git por apuesta, 🔔 veredictos.ics + RSS.
+- ⭐ El Giro: 1ª señal externa (8-jul, verificada por API) con enlaces comprobables.
+- Un solo tour (modal 700ms + tour viejo + quickPick, muertos); citas del caos etiquetadas 🃏.
+- og-image.png 1200×630 + favicon + twitter:card large + evidencia cruda enlazada.
+
 # CHANGELOG — Cuaderno MADRE
 
 Registro de cambios aplicados al cuaderno por la rutina **cuaderno-feedback** (y a mano).
