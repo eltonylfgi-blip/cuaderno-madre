@@ -1,9 +1,16 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **▶️ PLAN ACTIVO (10-jul, Fase 2 pendiente):** el ejercicio «20 sistemas» de Fable está hecho y
-> verificado contra v0.49 — 34 candidatos → 17 descartados → 17 supervivientes con su primer
-> incremento anclado línea a línea. El ejecutor (Sonnet 5) trabaja desde
-> **`PLAN_INCREMENTOS_20_SISTEMAS.md`** (este repo), en su orden, mínimo 40 min sin parar.
+> **▶️ PLAN ACTIVO (10-jul) — v0.49→v0.58 EN VIVO, 9/17 sistemas hechos.** El ejercicio «20 sistemas»
+> de Fable (34 candidatos → 17 descartados → 17 supervivientes, cada uno con su primer incremento
+> anclado línea a línea) sigue en **`PLAN_INCREMENTOS_20_SISTEMAS.md`** (este repo). Sonnet 5 ejecutó
+> la 1ª tanda (~1h40, sin parar): Génesis · Organismo · Modo película · Presencia compartida · Reliquia
+> · Teatro de errores · Logros honestos · Clima · Micro-imposibles — los 9 verificados en navegador real
+> (node --check + consola + 360px + tap del mapa donde tocaba cerca), con **2 bugs de carrera reales**
+> cazados y arreglados (`window.__sb` no listo a tiempo; `renderCambios` desincronizado del array
+> `cambios`). **Quedan 8** (MADRE duda · Latido · Memoria del visitante · Tactilidad · Voz · Consecuencia
+> de propuestas · Espejo · Presencia de MADRE en la página) — su plan YA está escrito y verificado,
+> listo para retomar sin releer nada. Bitácora completa con lo cazado y lo pendiente al final del propio
+> `PLAN_INCREMENTOS_20_SISTEMAS.md`.
 
 > **✅ v0.37→v0.48 HECHO Y EN VIVO (10-jul, sesión Sonnet larga — protocolo "no pares, busca el
 > siguiente efecto" pedido explícitamente por Tony).** 12 versiones, cada una: EFECTO deseado →

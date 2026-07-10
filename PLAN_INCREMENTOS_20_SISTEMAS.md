@@ -950,4 +950,51 @@ CAVEATS (no bloqueantes, para que el ejecutor no se sorprenda):
 
 ## BITÁCORA del ejecutor (append-only: qué se hizo, qué se saltó y por qué)
 
-- (Sonnet: escribe aquí una línea por incremento: versión, hecho/saltado, motivo si saltado.)
+**Sesión 1 (Sonnet 5, 10-jul-2026, ~1h40 reales, 9/17 incrementos, v0.49→v0.58, sin parar entre uno y
+otro salvo para verificar):**
+
+- **v0.50 Génesis** — HECHO. Typewriter+cascada en 1ª visita, botón saltar, guard reduce+one-shot.
+  Verificado: node --check, 2ª visita instantánea, 360px sin overflow, consola limpia.
+- **v0.51 Organismo** — HECHO. Canvas fixed z-index:-1, N=cambios.length partículas, ~11fps (no 60fps,
+  ahorro CPU). Verificado: canvas creado con estilos correctos, 65 partículas reales, 0 errores.
+- **v0.52 Modo película** — HECHO. Overlay propio, changelog real en secuencia. **Bug real cazado
+  ANTES de shippearlo** (el verificador lo predijo): `loadCambios()` puede sustituir el array `cambios`
+  con datos de Supabase sin tocar la variable original → `renderCambios()` ahora expone SIEMPRE
+  `window.__cmCambios` = la lista REALMENTE pintada (fix aplicado en la propia función, no solo en mi
+  incremento). Verificado: 66 entradas reales, navegación manual OK, Esc cierra, 360px OK.
+- **v0.53 Presencia compartida** — HECHO. **Bug real de carrera cazado y arreglado**: mi script (regular,
+  corre síncrono durante el parseo) intentaba usar `window.__sb` ANTES de que el `<script type=module>`
+  con el import remoto de Supabase hubiera corrido (los módulos son deferred, corren DESPUÉS). Solución:
+  mismo patrón poll ya usado en el hub (`#cmtFab`, 200ms/25 intentos) esperando a `window.__sb` en vez de
+  a un elemento del DOM. Verificado con test REAL de Presence contra Supabase (SUBSCRIBED+tracked+synced)
+  antes de escribir nada, y tras el fix: "🟣 explorando ahora: tú" aparece correctamente.
+- **v0.54 Reliquia** — HECHO. Botón "💾 Guardar recuerdo" en la celebración de las 8 ramas → canvas
+  1080×1080 con datos reales (meta.count, meta.oldest, fecha de hoy) → descarga PNG + share si existe.
+  Verificado: blob real de ~700KB generado, botón aparece solo con las 8 ramas exploradas, tap del mapa
+  intacto (12 nodos, cero toque a onNodeClick/routeTap/focusBranch).
+- **v0.55 Teatro de errores** — HECHO. La idea del cementerio "dejar que el predictor interno decida"
+  se volvió interactiva (3 opciones → revelación literal del texto ya existente). Verificado: acierto y
+  fallo ambos revelan el texto correcto, botones se deshabilitan tras elegir, 360px OK.
+- **v0.56 Logros honestos** — HECHO. 6 hitos reales (explorar 4+/8 ramas cuenta como 2 logros distintos
+  —parcial/completo—, no 3 como advertía el verificador; comentar y dibujar necesitaron 2 hooks nuevos
+  de 1 línea cada uno colgados en `post()` y en el `.then(ins)` del envío de dibujos). Verificado: panel
+  reactivo (1/6→3/6 al simular logros), oculto-con-"???" para lo no conseguido, 360px OK.
+- **v0.57 Clima** — HECHO. Tinte nocturno 21-07h hora local, capa fija z-index:-2 (detrás del organismo,
+  nunca sobre texto → cero riesgo de contraste, mismo patrón que v0.51). Verificado con hora simulada.
+- **v0.58 Micro-imposibles** — HECHO. Favicon vivo (3 frames/4s, pausa oculto), título que llama al irte
+  y se restaura EXACTO al volver, easter egg de consola con dato real (72 cambios). Verificado: título
+  hidden/visible correcto, favicon cambia de encoding (confirma tick), consola sin errores.
+
+**PENDIENTES (8/17, no tocados esta sesión — el plan de cada uno sigue arriba, listo para retomar sin
+releer nada):** MADRE duda (#9) · Latido en directo (#10) · Memoria del visitante (#11) · Tactilidad
+premium (#12) · Voz de MADRE (#15) · Consecuencia visible de propuestas (#16, requiere MCP Supabase) ·
+Espejo del visitante (#17) · Presencia de MADRE en toda la página (#8 — el más delicado de los que
+faltan: el verificador corrigió 3 anclas falsas, revisar sus notas con calma antes de tocarlo).
+
+**Aprendizaje que vale para las próximas sesiones de este repo:** el navegador de PREVIEW (no solo el
+de Tony) tiene `prefers-reduced-motion:reduce` ON por defecto — toda verificación de una rama animada
+necesita una réplica manual inyectada por eval con `reduce` forzado a false (patrón usado en v0.50), no
+basta con mirar la ejecución real. Y **`window.__sb` (Supabase) puede no existir aún** cuando corre un
+`<script>` normal cerca del final del body, porque el módulo que lo crea es deferred y corre después —
+cualquier incremento nuevo que use `window.__sb`/`window.__identity` debe envolver su arranque en el
+mismo poll de 200ms que ya usa `#cmtFab` (línea ~5853), NUNCA asumir que ya está listo.
