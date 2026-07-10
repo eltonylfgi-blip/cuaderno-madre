@@ -310,6 +310,16 @@
     @keyframes obLiveDot{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
     .ob-live .dot.cmPulseStrong{animation:cmPulseStrong 1.4s ease-in-out 1}
     @keyframes cmPulseStrong{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.9)}}
+    /* v0.69 — prototipo "Organismo bioluminiscente": overrides de las MISMAS variables ya usadas en
+       todo el fichero, más específico que :root → gana siempre, sin tocar ninguna regla más. */
+    body.cmIdentityPreview{
+      --bg:#080a18; --card:#0f1330; --ink:#e7ebff; --muted:#9aa3d6; --line:#262c5e;
+      --accent:#8b5cf6; --accent-soft:rgba(139,92,246,.16);
+      color-scheme: dark;
+    }
+    body.cmIdentityPreview .card,body.cmIdentityPreview .hero{box-shadow:0 0 0 1px rgba(139,92,246,.12),0 8px 28px rgba(80,40,200,.15)}
+    body.cmIdentityPreview .btn.primary,body.cmIdentityPreview #ctaMapa{box-shadow:0 0 18px rgba(139,92,246,.55)}
+    body.cmIdentityPreview .bigscore,body.cmIdentityPreview .ob-hi{text-shadow:0 0 16px rgba(139,92,246,.6)}
     /* v0.61 — TACTILIDAD: mismo muelle (.34,1.56,.64,1) que YA usan post-its/mapa/gato/tour — solo
        lo aplico donde faltaba: estado de presión de .btn/chip/FAB (hoy solo tenían :hover). */
     .btn,.chip,.dbjsLike{transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .12s,border-color .12s}
@@ -334,6 +344,7 @@
     <p class="ob-q">Aposté <b>en público, con fechas</b>. Si pierdo, lo verás aquí, sin maquillar.</p>
     <button type="button" class="ob-live" id="cmVozBtn" hidden style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)">🔊 Escúchalo</button>
     <p class="ob-live" id="cmSeguirChip" hidden></p>
+    <button type="button" class="ob-live" id="cmIdBtn" style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)">🎨 Probar identidad nueva (prototipo)</button>
     <p class="ob-live" id="obLive" hidden></p>
     <p class="ob-live" id="cmPresence" hidden></p>
     <button type="button" class="ob-live" id="cmAchieveBtn" hidden style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)"></button>
@@ -3101,6 +3112,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🎨 v0.69 — Prueba una identidad visual nueva, en vivo (prototipo)",detalle:"En vez de pedirte que eligieras leyendo texto, construí un prototipo real: botón «Probar identidad nueva» que enciende «Organismo bioluminiscente» (fondo casi negro, halos violeta) en la web de verdad, con un solo toque, 100% reversible. Es UNA de las 3 direcciones que te propuse — si te gusta la dirección pero no los colores exactos, lo afino; si prefieres otra, la prototipamos igual."},
     {fecha:"2026-07-10",titulo:"🗣️ v0.68 — Preparado para tu voz real, no la robótica",detalle:"Dijiste que la voz sonaba artificial — tenías razón. El botón «Escúchalo» ya prefiere un audio real (grabado o clonado con Voicebox, la herramienta que tú mismo priorizaste) si existe, y solo usa la voz del navegador como respaldo. Falta un único paso tuyo: grabar 10-15s con Voicebox — instrucciones exactas en DESARROLLO_CUADERNO.md §voz."},
     {fecha:"2026-07-10",titulo:"🔍 v0.67 — Autocrítica real: cacé un choque entre 2 avisos flotantes",detalle:"Al terminar los 17 sistemas del plan, revisé si funcionaban BIEN JUNTOS (no solo cada uno por separado): el aviso de \"llegaste a esta sección\" y el aviso de \"alguien comentó\" usaban exactamente la misma posición en pantalla — si coincidían, uno tapaba al otro entero. Arreglado separándolos. Nada visible se rompió; era un fallo silencioso que solo aparecería si dos cosas pasaban a la vez."},
     {fecha:"2026-07-10",titulo:"🤱 v0.66 — Ahora te hablo también fuera del mapa",detalle:"Al llegar de verdad a ciertas secciones (Señales del mundo, El marcador, el final de la página) te dejo un comentario corto y honesto, una sola vez por visita. Es la misma idea que ya tenía dentro del mapa, llevada al resto de la web — con su propio estilo, sin invadir."},
@@ -5946,7 +5958,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.68";
+  window.__cmVersion="v0.69";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6849,6 +6861,23 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   btn.addEventListener('click',function(){ if(speaking) stop(); else speak(); });
   document.addEventListener('visibilitychange',function(){ if(document.hidden&&speaking) stop(); });
 }catch(e){ console.warn('voz v0.68',e); } })();
+(function(){ try{
+  /* v0.69 — PROTOTIPO REVERSIBLE DE IDENTIDAD VISUAL "Organismo bioluminiscente" (una de las 3
+     direcciones propuestas a Tony, 10-jul; NO se aplica por defecto a nadie — 100% opt-in, toggle en
+     1 clic, localStorage solo recuerda tu propia preferencia de prueba). Reutiliza el sistema de
+     variables CSS YA existente (var(--bg)/--card/--ink/--accent...) — al sobrescribirlas en
+     body.cmIdentityPreview (más específico que :root), TODO lo que ya usa esas variables cambia de
+     color solo, sin tocar una sola regla más: tarjetas, botones, el organismo de partículas (v0.51,
+     usa var(--accent)), chips, todo. Reversible con un solo toque. */
+  var btn=document.getElementById('cmIdBtn'); if(!btn) return;
+  var K='cm_id_preview_v1';
+  function apply(on){ document.body.classList.toggle('cmIdentityPreview', on); btn.textContent=on?'🎨 Volver a la identidad normal':'🎨 Probar identidad nueva (prototipo)'; }
+  var on=false; try{ on=localStorage.getItem(K)==='1'; }catch(e){}
+  apply(on);
+  btn.addEventListener('click',function(){
+    on=!on; apply(on); try{ localStorage.setItem(K,on?'1':'0'); }catch(e){}
+  });
+}catch(e){ console.warn('identidad v0.69',e); } })();
 (function(){ try{
   /* v0.63 — ESPEJO: dónde te paraste más en ESTA sesión. Puro local (ni localStorage, ni servidor —
      se muestra una vez, al llegar al final, y desaparece si recargas). Muestreo por scroll, no toca
