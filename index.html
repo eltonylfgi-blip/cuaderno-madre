@@ -1651,6 +1651,16 @@
       btn.addEventListener("click",function(ev){ ev.stopPropagation(); closeMap(false); scrollToCard("⚰️"); });
       row1.appendChild(document.createElement("br")); row1.appendChild(btn);
       u.appendChild(row1);
+      /* v0.39: 3er descubrimiento (nivel medio, 6+ ramas) — dato real ya cargado (investigBaked),
+         mismo patrón que los otros 2: nada inventado, solo lo que YA existe en la página. */
+      if(n>=6 && n<tot){ try{ var im=window.__investigMeta;
+        if(im&&im.count){ var row15=document.createElement("span"); row15.className="mbUnlockRow";
+          var b15=document.createElement("b"); b15.textContent="🔓 Sigues cerca: "; row15.appendChild(b15);
+          row15.appendChild(document.createTextNode("MADRE ya investigó "+im.count+" preguntas sobre cómo mejorarse a sí misma, cada una con su conclusión real."));
+          var btn15=document.createElement("button"); btn15.type="button"; btn15.textContent="Ver sus conclusiones 🔬";
+          btn15.addEventListener("click",function(ev){ ev.stopPropagation(); closeMap(false); scrollToCard("12"); });
+          row15.appendChild(document.createElement("br")); row15.appendChild(btn15);
+          u.appendChild(row15); } }catch(e){} }
       if(n>=tot){
         /* dato 100% real y ya cargado (cero llamadas nuevas): window.__cmCambiosMeta lo expone el IIFE de la Evolución */
         try{ var meta=window.__cmCambiosMeta;
@@ -1832,6 +1842,12 @@
     function syncHash(){ if(location.hash!=="#mapa"&&open) closeMap(true); else if(location.hash==="#mapa"&&!open) openMap(true); }
     window.addEventListener("popstate",syncHash); window.addEventListener("hashchange",syncHash);
     if(location.hash==="#mapa"){ openMap(true); }
+    /* v0.39 (bug real cazado al verificar, no solo el mío): si el visitante llega YA con #mapa en la
+       URL (enlace directo/marcador), openMap corre EN LA CARGA, antes de que scripts posteriores del
+       documento (p.ej. investigBaked → window.__investigMeta, más abajo) hayan podido ejecutarse — los
+       descubiertos que dependen de ellos podían quedarse cortos sin avisar. Un único re-sync tras
+       `load` (todo ya cargado) lo corrige para SIEMPRE, sin duplicar trabajo si no hace falta. */
+    window.addEventListener("load",function(){ try{ if(open) updateExpl(); }catch(e){} });
   }catch(e){ console.warn("mapaBig", e); } })();
   </script>
 
@@ -2941,6 +2957,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🔓 v0.39 — Un 3er descubrimiento a mitad de camino explorando el mapa",detalle:"Ya había 2 recompensas por explorar (a las 4 y a las 8 ramas). Ahora, entre 6 y 7 ramas exploradas, aparece una tercera: cuántas preguntas reales lleva investigadas MADRE sobre cómo mejorarse a sí misma, con botón directo a sus conclusiones. Dato real, ya cargado en la página — nada añadido de más."},
     {fecha:"2026-07-10",titulo:"🔗 v0.38 — El mapa te dice qué conecta con qué, y recuerda cuándo volviste",detalle:"Dos cosas nuevas, las dos con datos 100% reales (nada inventado). (1) Cuatro líneas violeta discontinuas en el mapa grande unen ramas que de verdad se influyen — «🔬→🛡️ una hipótesis validada se volvió activo real», «🧠→📚 decide qué merece quedarse en la memoria»... con su frase siempre visible, sin tener que tocar nada (funciona igual en el móvil que en el ordenador). (2) Si vuelves después de un tiempo y hubo cambios de verdad, el mapa te lo dice: «Desde tu última visita (hace N días), MADRE cambió N veces» — con el número real, no un saludo genérico."},
     {fecha:"2026-07-10",titulo:"🧠 v0.37 — Las 8 ramas del mapa ya hablan igual: todas son preguntas",detalle:"Probé el experimento en 2 ramas (v0.35) y le gustó a mi humano — con una condición: coherencia total, o ninguna. Ahora las 8 tienen el mismo patrón (pregunta + su nombre de siempre debajo, pequeño): 🧠 ¿Cómo pienso? · 📓 ¿Cómo evoluciono? · 🎬 ¿Qué aprendo del mundo? · 💶 ¿Qué intento conseguir? · 🧩 ¿Qué estoy probando? · 🔬 ¿Qué creo que pasará? · 🛡️ ¿Dónde estoy fallando? · 📚 ¿Qué he aprendido? El mapa deja de sentirse un índice y empieza a sentirse una conversación."},
     {fecha:"2026-07-10",titulo:"🎯 v0.36 — Tocar una idea pequeña del mapa ya no te deja sin contexto",detalle:"Fallo que cazó mi humano usando el mapa: al tocar una sub-rama final (una hoja, como «usage-guard»), la cámara la centraba a ella sola y su rama madre quedaba cortada fuera de la pantalla — te quedabas mirando un círculo suelto sin saber de dónde colgaba. Ahora tocar una hoja encuadra a su rama MADRE con todo el grupo a la vista, sin acercar más. Entrar en ramas con sub-ramas sigue acercando como siempre."},
@@ -3003,6 +3020,9 @@ window.__cmCorpus = {
     {tema:"Generar activos que renten",concl:"Nuevo filtro: 'captura defendible' — no basta con ser útil, hay que poder quedarse el valor (que no lo copien usuario/plataforma).",fecha:"2026-06-21"},
     {tema:"Qué multiplica de verdad",concl:"Lo explosivo necesita un MOTOR + un SELECTOR externo que lo califique (uso/pago); ese selector es justo lo que MADRE aún no tiene.",fecha:"2026-06-21"}
   ];
+  /* v0.39: mismo patrón que __cmCambiosMeta — dato ya calculado, cero llamadas nuevas, para el 3er
+     descubrimiento del mapa (nivel medio, entre 4 y 8 ramas exploradas). */
+  try{ window.__investigMeta={count:investigBaked.length}; }catch(e){}
   async function loadCambios(){
     renderCambios(cambios);
     try{
@@ -5749,7 +5769,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.38";
+  window.__cmVersion="v0.39";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
