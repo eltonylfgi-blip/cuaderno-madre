@@ -1122,3 +1122,69 @@ voz real (esperando que Tony grabe), mapa como interfaz única (bloqueado, permi
 `CALIDAD_FINAL_WEB.md` sigue con su propio gate objetivo sin cumplir (señal sostenida de visitantes
 reales) — no se tocó, es una decisión ya tomada por Tony+Fable con contexto completo, no algo para
 reabrir por presión de una sesión con poco contexto de madrugada.
+
+---
+
+**Sesión 3 (Sonnet 5, 10/11-jul-2026 madrugada, tras el traspaso de la sesión 2). Cambio real de
+protocolo esta sesión: Tony corrigió en vivo el patrón "detecto un límite → explico por qué → espero
+permiso" y pidió explícitamente autonomía total en lo reversible + no tratar un workflow en background
+como excusa para parar. Ese modo de trabajo quedó persistido en `CLAUDE.md` (nuevo en este repo).**
+
+- **Bug real reportado y reproducido por Tony:** el botón "🌐 English" daba `ERR_CONNECTION_REFUSED`
+  en su propio navegador. Diagnóstico: `translate.google.com` redirige a un dominio `*.translate.goog`
+  que su red/Brave Shields bloquea por DNS (confirmado con varios subdominios al azar, bloqueo por
+  comodín). **v0.81** solo avisó del fallo (toast honesto) — Tony, con razón, no lo aceptó como
+  arreglo real ("avisar de que falla no es arreglarlo"). **v0.82** lo quitó de raíz: la intro del
+  hero se traduce EN EL SITIO vía atributos `data-en`, texto escrito a mano, cero llamada de red —
+  funciona pase lo que pase en la red del visitante. Google Translate queda como opción secundaria
+  honesta ("puede fallar").
+- **Workflow 1 — mejora continua (`w4e8tj5bd`, 36 agentes, ~96 min, 3 rondas, 0 errores):** 6
+  filosofías de diseño distintas por nombre (videojuegos AAA, museo interactivo, producto premium,
+  narrativa, psicología de la curiosidad, accesibilidad/rendimiento) + filtro obligatorio "¿lo
+  notaría un visitante nuevo en 3 min sin que se lo señalen?" + autocrítica de ronda. Construyó
+  **v0.83** (3/10 cuenta 0→3), **v0.84** (3 botones ceden al tocar), **v0.85** (tarjetas entran en
+  pantalla), **v0.86** (Acto II con cifra real de cambios), **v0.88** (barra de progreso con marcas
+  de acto). Ronda 3 se fue a 0 implementados — no por falta de ideas (12 crudos, 4 aprobados) sino
+  por **colisión de versión/escritura con esta misma sesión trabajando en paralelo** (v0.87 y v0.89
+  míos); el protocolo de anti-colisión funcionó exactamente como debía: 6 candidatos frenados a
+  tiempo, git status limpio en todos, cero corrupción. **Autocrítica real (no ritual) del propio
+  workflow, en la Ronda 1 y 2:** encontró DOS regresiones que su propia verificación inicial había
+  dado por buenas — (a) v0.85 rompía el `:hover` de tarjetas ya "vistas" en escritorio (empate de
+  especificidad CSS, medido con prueba de control A/B); (b) v0.87/v0.88 prometía marcas de acto
+  legibles pero el contraste real (calculado a mano, blanco 70% sobre lavanda) daba ~1:1, invisibles.
+  Su síntesis final NO fue "ya está" — dio un cuello de botella real (orientación narrativa en una
+  página larga) y un siguiente frente concreto (arreglar exactamente esas 2 regresiones).
+- **Workflow 2 — scorecard de 5 jueces independientes (`w7y73do3x`, en paralelo al anterior, cero
+  contacto con el fichero):** UX/producto, diseño visual, game designer, narrador, visitante
+  totalmente nuevo — cada uno navegó la web viva de verdad (get_page_text + interacción real, nunca
+  screenshot) y puntuó 10 categorías con evidencia obligatoria + intento explícito de bajarse su
+  propia nota. Síntesis con el criterio MÁS BAJO de los 5, no una media. Resultado: **Claridad
+  visual = 3/10** (la peor, confirmada por 3 jueces con conteo exacto de hasta 6 CTAs compitiendo en
+  el primer tramo), Comprensión = 6/10 (métricas crudas antes de su explicación). También señaló 2
+  cosas que se verificaron y se DESCARTARON antes de tocar nada (regla ya conocida: la auditoría
+  puede equivocarse) — "🔊 Escúchalo → 404" resultó ser el fallback a voz sintética de v0.68
+  funcionando exactamente como se diseñó, no un bug; "hace un momento estático" resultó ser un
+  ticker que SÍ se recalcula cada 3 min, y la "foto de hace 5 días" es honestidad real sobre datos
+  de otro sistema (el loop de MADRE), no algo que debiera falsearse.
+- **v0.87** (hallazgo propio, sin depender de ningún workflow): lectura completa de la web como
+  visitante nuevo, sin tocar el fichero mientras los workflows corrían; encontró que el "3/10" se
+  repetía 3 veces en la misma pantalla antes de explicarse — arreglado quitando la repetición de la
+  tira "de un vistazo" (el hero grande + su caption ya lo explican mejor 2 líneas más abajo).
+- **v0.89** (directo del hallazgo del scorecard): "🔊 Escúchalo" y "🎨 Probar identidad nueva" —
+  opcionales por definición — movidos a un `<details class="x">` cerrado por defecto, mismo patrón
+  ya usado ~57 veces en el fichero. Mapa/tour/inglés siguen a un toque.
+- **v0.90** (directo de la autocrítica del workflow 1): las 2 regresiones reales arregladas —
+  contraste de las marcas de acto (color sólido + halo blanco + tooltip real) y el empate de
+  especificidad CSS del hover (nueva regla `.card.cmRise.cmSeen:hover` con más especificidad).
+
+**Total sesión 3: v0.81→v0.90, 10 versiones, todas commiteadas y pusheadas una a una, verificadas con
+el mismo protocolo de siempre (node --check, consola limpia, 375px sin overflow, mapa 12 nodos).**
+
+**Los 4 pendientes de siempre siguen exactamente igual** (identidad visual, voz real, mapa como
+interfaz única, descubrir-no-explicar a fondo) — nadie los tocó, todos gateados por lo mismo de
+siempre. **Lo que sí cambió: el modo de trabajo del repo.** Antes de esta sesión, cualquier duda
+sobre "¿toco esto o pregunto?" se resolvía preguntando. Ahora, per `CLAUDE.md`: solo 2 cosas siguen
+gateadas de verdad (identidad/marca nueva, internals del mapa) — todo lo demás reversible se
+construye sin pedir permiso. Y el aviso más importante de la propia sesión, que vale para cualquier
+sesión futura: **no acumular más reglas de proceso** — el riesgo real no es parar demasiado pronto,
+es gastar más tiempo evaluando/puntuando/documentando que construyendo.

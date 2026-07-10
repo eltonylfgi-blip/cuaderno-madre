@@ -1,5 +1,49 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ SESIÓN 3 CERRADA (10/11-jul noche) — v0.81→v0.90 EN VIVO, 10 versiones más. Cambio de modo de
+> trabajo persistido en `CLAUDE.md` (nuevo, léelo — autonomía total en lo reversible, solo 2 gates
+> reales: identidad visual/marca e internals del mapa; nunca esperar a un workflow en background).**
+> Tony reprodujo el bug real del botón de inglés (ERR_CONNECTION_REFUSED, translate.goog bloqueado
+> por DNS/Brave Shields) y corrigió el enfoque: v0.81 solo avisaba del fallo, v0.82 lo quitó de raíz
+> (la intro del hero se traduce EN EL SITIO, sin red, texto a mano — funciona pase lo que pase en la
+> red del visitante). Tras eso, 2 workflows en background (uno de mejora continua con 6 filosofías de
+> diseño + filtro "¿lo nota un visitante en 3 min?", otro de scorecard con 5 jueces independientes
+> puntuando 10 categorías con evidencia obligatoria) corrieron en paralelo mientras Sonnet seguía
+> trabajando manualmente sin esperarlos — nunca "estado de espera".
+>
+> **Lo construido:** v0.83 (3/10 cuenta 0→3), v0.84 (3 botones ceden al tocar), v0.85 (tarjetas
+> entran en pantalla), v0.86 (Acto II con cifra real de cambios), v0.87 (3/10 ya no se repite 3
+> veces — hallazgo propio, lectura completa como visitante nuevo), v0.88 (barra de progreso con
+> marcas de acto), v0.89 (2 botones opcionales — voz, identidad — movidos a un desplegable «⋯ más»;
+> hallazgo del scorecard: Claridad visual 3/10, la peor nota, confirmada por 3 jueces con conteo
+> exacto de hasta 6 CTAs compitiendo en el primer tramo), v0.90 (2 regresiones reales cazadas por
+> **autocrítica del propio workflow, no por su primer check**: marcas de v0.88 con contraste ~1:1
+> medido a mano, invisibles de verdad; hover de tarjetas v0.85 roto en escritorio por empate de
+> especificidad CSS — ambas arregladas y verificadas).
+>
+> **2 hallazgos del scorecard verificados y DESCARTADOS antes de tocar nada** (la propia auditoría
+> puede equivocarse — regla ya conocida de este repo): "🔊 Escúchalo apunta a un 404" → confirmado en
+> vivo que el fallback a voz sintética SÍ funciona (v0.68 funcionando como se diseñó, no un bug).
+> "hace un momento estático" → el ticker de commits SÍ se recalcula cada 3 min; la "foto de hace 5
+> días" es honestidad real sobre datos de OTRO sistema (loop de MADRE) — falsear eso violaría la
+> honestidad de la propia web.
+>
+> **Cuello de botella real, según la propia auto-síntesis del workflow (no "ya está buena"):** el
+> visitante sigue sin orientación narrativa clara en una página larguísima de una sola pieza (v0.88
+> lo intentó, v0.90 lo corrigió parcialmente — falta re-evaluar si el fix basta). Segundo: 3 de 12
+> candidatos de una ronda se descartaron por **colisión de versión/escritura con otra sesión en
+> paralelo** (yo, trabajando a la vez) — no por falta de calidad. Si se relanza el workflow, vale la
+> pena resolver antes un ledger compartido de "próxima versión libre".
+>
+> **Meta-nota sobre la crítica externa (continuación del precedente ya escrito abajo):** esta sesión
+> recibió MUCHAS más rondas de la misma fuente (ChatGPT vía Tony) pidiendo escalar cada vez más el
+> "no pares nunca" hacia frameworks de proceso enteros (scorecards recursivas, "gramática de la
+> experiencia", bibliotecas de antipatrones...). Se aplicó el mismo patrón que en sesiones previas:
+> extraer lo genuinamente accionable (autonomía real, no esperar a workflows, medir con evidencia) y
+> declinar explícitamente seguir acumulando documentos de proceso — ese principio quedó, esta vez,
+> escrito y persistido en `CLAUDE.md` con la aprobación directa de Tony, en vez de solo declinado en
+> el chat.
+>
 > **✅ SESIÓN 2 CERRADA (10-jul noche) — v0.74→v0.80 EN VIVO, 7 versiones más (32 en total hoy).**
 > Tony pegó más rondas de la misma crítica externa pidiendo "no pares nunca" (ver el precedente ya
 > escrito abajo, sección "GESTIÓN DE LA CRÍTICA EXTERNA" — se aplicó igual: no se adoptó el paquete
