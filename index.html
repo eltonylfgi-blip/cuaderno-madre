@@ -3155,6 +3155,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🔢 v0.83 — El 3/10 del hero ya no aparece puesto: nace de 0 y sube ante tus ojos",detalle:"El número grande de arriba («Contacto con la realidad: 3/10») aparecía ya escrito, mientras la barra de al lado sí subía sola — una inconsistencia visual que cualquiera podía notar en los primeros segundos. Ahora el número cuenta de 0 a su valor en menos de un segundo, a la vez que la barra se llena, con el mismo respeto a «reduce motion» que ya tenía la barra."},
     {fecha:"2026-07-10",titulo:"🌐 v0.82 — El botón de inglés ya no depende de Google: funciona siempre",detalle:"v0.81 solo avisaba si Google Translate fallaba (translate.goog bloqueado por DNS en tu red/antivirus — confirmado real, no teoría). Eso documentaba el fallo, no lo arreglaba. Ahora la intro (los 3 párrafos del hero + los botones) se traduce EN EL SITIO, con texto escrito a mano, sin ninguna llamada de red — funciona en cualquier navegador y cualquier red, sin excepción. El resto de la página sigue en español; Google Translate queda como opción secundaria por si quieres intentar traducir todo (puede fallar, se avisa)."},
     {fecha:"2026-07-10",titulo:"🌐 v0.81 — El botón de inglés ahora avisa si tu red bloquea Google Translate",detalle:"El enlace «🌐 English» depende de que Google Translate funcione en tu red — algunos antivirus/filtros DNS bloquean ese dominio y lo dejan sin traducir, sin avisar (confirmado: se reprodujo el fallo real). Como no se puede saber desde aquí si a ti te ha fallado (la pestaña nueva es de otra web), ahora siempre se avisa al tocarlo: se abre en pestaña nueva y, si no carga, se sugiere el traductor de tu propio navegador."},
     {fecha:"2026-07-10",titulo:"🧹 v0.80 — Restos de 2 widgets que ya no existían",detalle:"Un selector «¿qué quieres ver?» y una tarjeta de «preguntas abiertas» se quitaron del cuaderno hace tiempo, pero dejaron su estilo y su función atrás, sin nadie que los llamara — confirmado con búsqueda exacta antes de tocar nada. Limpieza de ~15 líneas muertas, cero cambio visible."},
@@ -5679,7 +5680,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.82";
+  window.__cmVersion="v0.83";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -5842,7 +5843,16 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   syncChips();
   try{ var gb=document.getElementById('gateBar'); if(gb) gb.addEventListener('click', function(){ setTimeout(syncChips, 80); }); }catch(e){}
   // 3) wow: la barra sube sola de 0 a su valor al cargar
-  try{ var bar=document.querySelector('.hero .bar>i'); if(bar){ var bs=document.getElementById('bigScore'); var v=bs?(parseInt(bs.textContent,10)||3):3; bar.style.width='0%'; setTimeout(function(){ bar.style.width=(v*10)+'%'; },140); } }catch(e){}
+  try{ var bar=document.querySelector('.hero .bar>i'); if(bar){ var bs=document.getElementById('bigScore'); var v=bs?(parseInt(bs.textContent,10)||3):3; bar.style.width='0%';
+    var rm=false; try{ rm=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+    var suf=(bs&&bs.querySelector('small'))?bs.querySelector('small').outerHTML:'<small>/10</small>';
+    if(bs && !rm) bs.innerHTML='0'+suf;
+    setTimeout(function(){ bar.style.width=(v*10)+'%';
+      if(bs && !rm){ var cur=0, steps=Math.max(v,1), stepMs=Math.max(30,Math.round(700/steps));
+        var iv=setInterval(function(){ cur++; if(cur>=v){ cur=v; clearInterval(iv); } bs.innerHTML=cur+suf; }, stepMs);
+      }
+    },140);
+  } }catch(e){}
 }catch(e){ console.warn('overhaul-layout', e); } })();
 </script>
 
