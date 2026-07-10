@@ -367,6 +367,19 @@
     b.addEventListener("click",function(){ b.classList.remove("callme"); if(window.__openMapaBig) window.__openMapaBig(); else location.hash="#mapa"; });
     document.addEventListener("pointerdown",function once(){ b.classList.remove("callme"); document.removeEventListener("pointerdown",once); },{once:true});
   }catch(e){} })();
+  /* v0.81: el enlace de Google Translate depende de translate.goog, que algunas redes/antivirus
+     bloquean por DNS (confirmado: Tony lo probó y da ERR_CONNECTION_REFUSED) — no podemos detectar
+     ese fallo desde JS (pestaña de otro origen), así que avisamos SIEMPRE de la alternativa real. */
+  (function(){ try{
+    var le=document.getElementById("langEn"); if(!le) return;
+    le.addEventListener("click",function(){
+      var t=document.getElementById("toast"); if(!t) return;
+      t.textContent="🌐 Se abre Google Translate en una pestaña nueva. Si tu red lo bloquea (pantalla en blanco o error de conexión), usa el traductor de tu propio navegador: icono 🌐 en la barra de direcciones, o clic derecho → Traducir.";
+      t.classList.add("on");
+      clearTimeout(le.__toastT);
+      le.__toastT=setTimeout(function(){ t.classList.remove("on"); },5200);
+    });
+  }catch(e){} })();
   </script>
 
   <!-- línea secundaria pequeña: modo creador (antes "Soy Tony", parecía login) -->
@@ -3127,6 +3140,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🌐 v0.81 — El botón de inglés ahora avisa si tu red bloquea Google Translate",detalle:"El enlace «🌐 English» depende de que Google Translate funcione en tu red — algunos antivirus/filtros DNS bloquean ese dominio y lo dejan sin traducir, sin avisar (confirmado: se reprodujo el fallo real). Como no se puede saber desde aquí si a ti te ha fallado (la pestaña nueva es de otra web), ahora siempre se avisa al tocarlo: se abre en pestaña nueva y, si no carga, se sugiere el traductor de tu propio navegador."},
     {fecha:"2026-07-10",titulo:"🧹 v0.80 — Restos de 2 widgets que ya no existían",detalle:"Un selector «¿qué quieres ver?» y una tarjeta de «preguntas abiertas» se quitaron del cuaderno hace tiempo, pero dejaron su estilo y su función atrás, sin nadie que los llamara — confirmado con búsqueda exacta antes de tocar nada. Limpieza de ~15 líneas muertas, cero cambio visible."},
     {fecha:"2026-07-10",titulo:"🔋 v0.79 — 3 relojes internos que nunca se apagaban, ahora sí",detalle:"Tres funciones que miden por dónde vas en la página (tu recorrido, dónde te quedaste, cuándo aparezco a saludarte) seguían comprobando la posición cada 1,5 segundos para siempre, incluso mucho después de que ya no hubiera nada nuevo que detectar. Ahora se apagan solas al llegar al final. Un cuarto reloj (el botón flotante del mapa) tampoco descansaba con la pestaña en segundo plano — ya lo hace."},
     {fecha:"2026-07-10",titulo:"👆 v0.78 — El área de toque de 3 botones le robaba taps al vecino de arriba",detalle:"El arreglo de área táctil de hace unas versiones (v0.72) hacía que un toque cerca del borde inferior del chip «seguir donde lo dejaste» cayera en el botón de identidad de más abajo en vez de en el chip. Medido con coordenadas reales: el hueco entre ambos (8px) era menor que el área invisible del botón (11px). Ahora el hueco es mayor que el área invisible, así que cada uno se queda con sus propios toques."},
@@ -5649,7 +5663,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.80";
+  window.__cmVersion="v0.81";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
