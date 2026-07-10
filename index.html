@@ -3571,7 +3571,17 @@ function renderAll(){
   if(panelListEl){ renderListInto(panelListEl, true); var p=document.getElementById("cmtPanel"); if(p && p.classList.contains("on")) p.scrollTop=p.scrollHeight; }
 }
 build(); load();
-sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", table:"comments" },()=>load()).subscribe();
+/* v0.34: si el visitante esta ESCRIBIENDO (un comentario o una respuesta), un evento de realtime NO debe
+   re-renderizar y borrarle el texto; se aplaza hasta que suelte el foco. Bug real cazado en auditoria. */
+function liveReload(){
+  var a=document.activeElement;
+  var panel=document.getElementById("cmtPanel");
+  var typing = a && (a.tagName==="TEXTAREA"||a.tagName==="INPUT") && a.value &&
+               ((root&&root.contains(a)) || (panel&&panel.contains(a)));
+  if(typing){ a.addEventListener("blur", function once(){ a.removeEventListener("blur",once); load(); }, {once:true}); return; }
+  load();
+}
+sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", table:"comments" },()=>liveReload()).subscribe();
 </script>
 
 <!-- ===== WIDGETS VIVOS (nota-secreta, gato, tour, dibujos, lapiz) ===== -->
@@ -5018,8 +5028,10 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   function stop(){ on=false; document.body.classList.remove("chaos"); document.body.classList.remove("chaosBig"); cfab.classList.remove("on"); clearTimers(); document.querySelectorAll(".chaos-el").forEach(function(p){ try{p.remove();}catch(e){} }); document.querySelectorAll(".chaosShout,.megaFlip").forEach(function(p){ try{p.classList.remove("chaosShout"); p.classList.remove("megaFlip");}catch(e){} }); }
   cfab.onclick=function(){
     if(!on){
-      if(!window.confirm("¿Activar MODO CAÓTICO? 🤪\nFlechas que señalan, círculos dibujados rodeando cosas reales, notas, citas y travesuras por toda la pantalla (lo puedes apagar).")) return;
-      on=true; document.body.classList.add("chaos"); cfab.classList.add("on"); loadQuotes(); /* v0.11: fuera el temblor CONSTANTE (chaosBig) — se notaba artificial (feedback Tony). El caos vive ahora en círculos que rodean cosas reales, flechas y travesuras; el sacudón es solo PUNTUAL */
+      /* v0.34: fuera el confirm() nativo (anti-patron §5) — tocaste el 🤪, eso ES el consentimiento.
+         Arranque inmediato + aviso claro de como pararlo (reversible al instante). */
+      on=true; document.body.classList.add("chaos"); cfab.classList.add("on"); loadQuotes();
+      try{ if(typeof toast==="function") toast("🤪 modo caótico ON — toca el 🤪 otra vez para parar"); }catch(e){} /* v0.11: fuera el temblor CONSTANTE (chaosBig) — se notaba artificial (feedback Tony). El caos vive ahora en círculos que rodean cosas reales, flechas y travesuras; el sacudón es solo PUNTUAL */
       burst(Math.round(75*K)); startTimers();
       setTimeout(jolt,150); setTimeout(spawnTargetArrow,300); setTimeout(spawnNote,700); setTimeout(spawnAlert,1100); setTimeout(circleReal,400);
       setTimeout(emojiRain,500); setTimeout(hueFlash,950); /* v0.20: arranque más bestia */

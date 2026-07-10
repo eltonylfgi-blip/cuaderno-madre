@@ -22,8 +22,8 @@
 > **⬜ TODO QUIRÚRGICO RESTANTE (sesión Sonnet barata — cada punto = script Python con reps exactas, uno a uno + verificar + commit):**
 > A. **Barrido "honesto/real/de verdad"** (~15-20 apariciones, tell de IA): presupuesto 1 por pantalla, sustituir por el DATO. `grep -n "honest\|de verdad\|nada inventado\|real" index.html`.
 > B. **Tarjeta 2 "Tu parte" → display:none en modo lectura** (hoy solo se mueve al final por el re-secuenciador; el público la ve). Añadir regla `body:not(.tony) .card.tony#... {display:none}` o gating en JS; dejar línea-resumen pública.
-> C. **window.confirm() del modo caos** (l.~4911) → ráfaga suave inmediata + chip "parar ✕" (anti-patrón §5 del propio repo).
-> D. **Realtime comentarios re-renderiza todo el DOM** (destruye replies a medio escribir): mínimo = guardar los reply-boxes abiertos con su texto antes de renderAll y restaurarlos.
+> C. ✅ HECHO (v0.34) — window.confirm() del modo caos (l.~4911) → ráfaga suave inmediata + chip "parar ✕" (anti-patrón §5 del propio repo).
+> D. ✅ HECHO (v0.34) — Realtime comentarios re-renderiza todo el DOM (destruye replies a medio escribir): mínimo = guardar los reply-boxes abiertos con su texto antes de renderAll y restaurarlos.
 > E. **Nodos del mapa como PREGUNTAS** (idea GPT): probar en 2 nodos ("El cerebro"→"¿cómo pienso?") y que Tony juzgue; NO tocar el motor del tap.
 > F. **Fusiones Acto II** (riesgo medio, opcional): 8+9, 5+6, ⚙️+🔁+11. Mover contenido a details, no borrar. Re-verificar anclas de 💗 (nth-of-type) tras cualquier reorden.
 > G. **Dead code**: STEP_DEFS/ring/card del tour viejo (~150 líneas) neutralizados pero no borrados.
