@@ -3031,6 +3031,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🤱 v0.50 — La primera vez, MADRE se construye delante de ti",detalle:"Solo en tu PRIMERA visita: la historia de arriba se escribe letra a letra y el marcador aparece en cascada, como si el cuaderno naciera mientras lo miras. Un botón «saltar» siempre visible por si prefieres ir directo. En tu segunda visita (o si tu sistema pide menos movimiento) todo se ve normal, al instante — no hay nada que repetir."},
     {fecha:"2026-07-10",titulo:"🔗 v0.49 — Las conexiones entre ramas ya no son líneas quietas: fluyen",detalle:"Idea de una segunda opinión externa (2 modelos gratis, verificada antes de aplicar): el patrón discontinuo de las líneas violeta ahora se desplaza despacio, como si algo viajara entre las ramas conectadas. Antes aparecían y se quedaban quietas; ahora se sienten activas. Apagado con «menos animaciones»."},
     {fecha:"2026-07-10",titulo:"😉 v0.48 — MADRE te guiña el ojo (de vez en cuando)",detalle:"Un detalle pequeño y sin ninguna pretensión: el emoji 🤱🏻 del centro del mapa parpadea muy de vez en cuando, como un guiño real, no un tic nervioso. Cero riesgo: es puramente decorativo, no toca ni un byte de cómo se abren las ramas. Se apaga con «menos animaciones»."},
     {fecha:"2026-07-10",titulo:"👀 v0.47 — El mapa deja de repetirse: te dice EXACTAMENTE qué rama te falta",detalle:"Antes, si tocabas el centro del mapa, siempre veías el mismo «👆 toca una rama». Ahora, si ya llevas algunas exploradas (pero no todas), te señala una en concreto que aún no has visto: «👀 Aún no has visto 📚 Memoria / archivo». Dato 100% tuyo, real, de tu propia sesión — no es un truco, es MADRE prestando atención de verdad a por dónde vas."},
@@ -5853,7 +5854,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.49";
+  window.__cmVersion="v0.50";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6274,6 +6275,78 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
      solo mientras la pestaña está abierta, insignificante. */
   setInterval(checkFab,900);
 }catch(e){} })();
+</script>
+
+<style>
+/* v0.50 — GÉNESIS: la web se ensambla delante de ti, SOLO en la 1ª visita (~4-6s, botón saltar
+   siempre visible). Reduced-motion o visitas siguientes: todo visible al instante, cero coste. */
+#cmGenSkip{position:fixed;right:14px;top:14px;z-index:99999;padding:8px 14px;border:none;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font:700 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.3);-webkit-tap-highlight-color:transparent}
+#cmGenSkip:hover{background:rgba(0,0,0,.75)}
+.cmGenHidden{opacity:0;transform:translateY(8px)}
+.cmGenIn{transition:opacity .5s ease,transform .5s ease}
+</style>
+<script>
+(function(){ try{
+  var reduce=false; try{ reduce=matchMedia('(prefers-reduced-motion:reduce)').matches; }catch(e){}
+  var already=false; try{ already=!!localStorage.getItem('cm_genesis_v1'); }catch(e){}
+  try{ localStorage.setItem('cm_genesis_v1','1'); }catch(e){}
+  if(reduce||already) return; /* todo visible al instante: nada que animar */
+
+  var hi=document.querySelector('.ob-hi'), big=document.querySelector('.ob-big'), q=document.querySelector('.ob-q');
+  var scoreRow=document.querySelector('.hero .scoreRow'), chips=[].slice.call(document.querySelectorAll('.chips .chip'));
+  if(!hi||!big||!q||!scoreRow) return; /* faltan anclas: no arriesgar, se ve normal */
+
+  var origHi=hi.innerHTML, origBig=big.innerHTML, origQ=q.innerHTML;
+  var t1=hi.textContent, t2=big.textContent, t3=q.textContent;
+  var timers=[], done=false;
+
+  function finishNow(){
+    if(done) return; done=true;
+    timers.forEach(clearTimeout); timers=[];
+    hi.innerHTML=origHi; big.innerHTML=origBig; q.innerHTML=origQ;
+    [hi,big,q,scoreRow].concat(chips).forEach(function(el){ el.classList.remove('cmGenHidden'); });
+    var skip=document.getElementById('cmGenSkip'); if(skip) skip.remove();
+    document.removeEventListener('pointerdown',finishNow);
+  }
+
+  [hi,big,q,scoreRow].concat(chips).forEach(function(el){ el.classList.add('cmGenHidden','cmGenIn'); });
+  var skip=document.createElement('button');
+  skip.type='button'; skip.id='cmGenSkip'; skip.textContent='saltar ⏭';
+  skip.addEventListener('click',finishNow);
+  document.body.appendChild(skip);
+  document.addEventListener('pointerdown',finishNow);
+
+  function typeInto(el,text,cb){
+    el.classList.remove('cmGenHidden'); el.textContent='';
+    var i=0;
+    function step(){
+      if(done) return;
+      el.textContent=text.slice(0,i); i++;
+      if(i<=text.length) timers.push(setTimeout(step,22)); else if(cb) cb();
+    }
+    step();
+  }
+
+  timers.push(setTimeout(function(){
+    typeInto(hi,t1,function(){ hi.innerHTML=origHi;
+      timers.push(setTimeout(function(){
+        typeInto(big,t2,function(){ big.innerHTML=origBig;
+          timers.push(setTimeout(function(){
+            typeInto(q,t3,function(){ q.innerHTML=origQ;
+              timers.push(setTimeout(function(){
+                scoreRow.classList.remove('cmGenHidden');
+                chips.forEach(function(c,idx){ timers.push(setTimeout(function(){
+                  c.classList.remove('cmGenHidden');
+                  if(idx===chips.length-1) finishNow();
+                },150*idx)); });
+              },300));
+            });
+          },200));
+        });
+      },200));
+    });
+  },200));
+}catch(e){ console.warn('genesis v0.50',e); } })();
 </script>
 </body>
 </html>
