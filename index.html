@@ -3101,6 +3101,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🔍 v0.67 — Autocrítica real: cacé un choque entre 2 avisos flotantes",detalle:"Al terminar los 17 sistemas del plan, revisé si funcionaban BIEN JUNTOS (no solo cada uno por separado): el aviso de \"llegaste a esta sección\" y el aviso de \"alguien comentó\" usaban exactamente la misma posición en pantalla — si coincidían, uno tapaba al otro entero. Arreglado separándolos. Nada visible se rompió; era un fallo silencioso que solo aparecería si dos cosas pasaban a la vez."},
     {fecha:"2026-07-10",titulo:"🤱 v0.66 — Ahora te hablo también fuera del mapa",detalle:"Al llegar de verdad a ciertas secciones (Señales del mundo, El marcador, el final de la página) te dejo un comentario corto y honesto, una sola vez por visita. Es la misma idea que ya tenía dentro del mapa, llevada al resto de la web — con su propio estilo, sin invadir."},
     {fecha:"2026-07-10",titulo:"🌱 v0.65 — El panel de proponer rama dice la verdad, incluido el 0",detalle:"Consulté la base de datos real antes de escribir este número: hasta hoy, 0 personas han propuesto una rama nueva. Lo digo tal cual, sin maquillar, con la fecha — y con una invitación honesta a ser la primera."},
     {fecha:"2026-07-10",titulo:"↩️ v0.64 — Si vuelves, te recuerdo dónde lo dejaste",detalle:"En tu 2ª visita o más, un aviso arriba te ofrece volver directamente a la sección más profunda a la que llegaste la última vez, con un toque. Solo avanza, nunca hacia atrás — y desaparece en cuanto lo usas."},
@@ -5944,7 +5945,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.66";
+  window.__cmVersion="v0.67";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6905,7 +6906,9 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   ];
   var el=document.createElement('div');
   el.id='cmMadreHabla2'; el.setAttribute('role','status'); el.setAttribute('aria-live','polite');
-  el.style.cssText='position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);z-index:100062;max-width:min(88vw,420px);background:var(--card);color:var(--ink);border:1px solid var(--line);padding:10px 16px;border-radius:12px;font:600 12.5px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;opacity:0;transition:opacity .3s ease,transform .3s ease;box-shadow:0 6px 20px rgba(0,0,0,.18);pointer-events:none';
+  /* v0.67 (fix cazado en revisión de conjunto): bottom:78px, NO 20px — el toast del latido (v0.60) y
+     el .toast original YA usan esa franja; si dos avisos coinciden, uno tapaba al otro por completo. */
+  el.style.cssText='position:fixed;left:50%;bottom:78px;transform:translate(-50%,20px);z-index:100062;max-width:min(88vw,420px);background:var(--card);color:var(--ink);border:1px solid var(--line);padding:10px 16px;border-radius:12px;font:600 12.5px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;opacity:0;transition:opacity .3s ease,transform .3s ease;box-shadow:0 6px 20px rgba(0,0,0,.18);pointer-events:none';
   document.body.appendChild(el);
   var shown={}, hideT=null;
   function say(txt){
