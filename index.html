@@ -3141,6 +3141,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🔋 v0.79 — 3 relojes internos que nunca se apagaban, ahora sí",detalle:"Tres funciones que miden por dónde vas en la página (tu recorrido, dónde te quedaste, cuándo aparezco a saludarte) seguían comprobando la posición cada 1,5 segundos para siempre, incluso mucho después de que ya no hubiera nada nuevo que detectar. Ahora se apagan solas al llegar al final. Un cuarto reloj (el botón flotante del mapa) tampoco descansaba con la pestaña en segundo plano — ya lo hace."},
     {fecha:"2026-07-10",titulo:"👆 v0.78 — El área de toque de 3 botones le robaba taps al vecino de arriba",detalle:"El arreglo de área táctil de hace unas versiones (v0.72) hacía que un toque cerca del borde inferior del chip «seguir donde lo dejaste» cayera en el botón de identidad de más abajo en vez de en el chip. Medido con coordenadas reales: el hueco entre ambos (8px) era menor que el área invisible del botón (11px). Ahora el hueco es mayor que el área invisible, así que cada uno se queda con sus propios toques."},
     {fecha:"2026-07-10",titulo:"🥊 v0.77 — El modo 💗 y el modo 🤔 se pisaban entre sí",detalle:"Con el modo «marca lo que te gusta» encendido, tocar el botón 🤔 de una tarjeta (o el del glosario) se registraba como un «me gusta» en vez de abrir «qué no entiendes» — el 🤔 vive dentro de la misma zona que el modo captura. Y al revés: si estabas señalando qué no entiendes y tocabas el corazón, el toque se perdía sin encender nada. Ahora cada botón hace lo suyo y, si cambias de modo, el anterior se apaga solo."},
     {fecha:"2026-07-10",titulo:"♿ v0.76 — Lote de accesibilidad 3: 4 arreglos de teclado y lector de pantalla",detalle:"El toggle de identidad nueva ahora anuncia si está encendido o apagado. El voto en «MADRE duda» ya avisa a un lector de pantalla y no te deja perdido sin foco tras votar. El botón de logros describe a dónde lleva, no solo el número."},
@@ -5661,7 +5662,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.78";
+  window.__cmVersion="v0.79";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6080,7 +6081,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   /* red de seguridad barata: por si algún navegador/gesto no dispara 'scroll' de forma fiable
      (scroll programático, algunos gestos táctiles) — coste real: 1 getBoundingClientRect cada 900ms,
      solo mientras la pestaña está abierta, insignificante. */
-  setInterval(checkFab,900);
+  setInterval(function(){ if(!document.hidden) checkFab(); },900);   // v0.79: unico setInterval de red-de-seguridad del fichero sin guard de pestana oculta (el resto SI lo lleva); ahora igualado
 }catch(e){} })();
 </script>
 
@@ -6683,7 +6684,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     }
   }
 
-  var maxTop=-1, best=null;
+  var maxTop=-1, best=null, ivMem=null;
   function tick(){
     if(document.hidden) return;
     Object.keys(NAMES).forEach(function(id){
@@ -6692,8 +6693,10 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
       if(r.top<=innerHeight*0.6 && el.offsetTop>maxTop){ maxTop=el.offsetTop; best=id; }
     });
     if(best){ try{ localStorage.setItem(K, JSON.stringify({id:best,ts:Date.now()})); }catch(e){} }
+    // v0.79: al llegar al fondo ya no hay "mas profundo" que alcanzar -- para el timer (mismo criterio que ya usa el espejo v0.63)
+    var footer=document.querySelector('footer'); if(footer){ var fr=footer.getBoundingClientRect(); if(fr.top<innerHeight && ivMem){ clearInterval(ivMem); ivMem=null; } }
   }
-  setInterval(tick,1500);
+  ivMem=setInterval(tick,1500);
 }catch(e){ console.warn('memoria v0.64',e); } })();
 (function(){ try{
   /* v0.66 — PRESENCIA DE MADRE EN LA PÁGINA: voz contextual, 1 sola vez por hito, al llegar de verdad
@@ -6718,6 +6721,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     if(hideT) clearTimeout(hideT);
     hideT=setTimeout(function(){ el.style.opacity='0'; el.style.transform='translate(-50%,20px)'; },5000);
   }
+  var ivPresencia=null;
   function tick(){
     if(document.hidden) return;
     var vh=innerHeight;
@@ -6731,8 +6735,9 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
       var footer=document.querySelector('footer'); if(footer){ var fr=footer.getBoundingClientRect();
         if(fr.top<=vh){ shown.__final=true; say('🤱 Llegaste hasta el final. La mayoría no lo hace — gracias por la curiosidad.'); } }
     }
+    if(shown.__final && ivPresencia){ clearInterval(ivPresencia); ivPresencia=null; }   // v0.79: ya no queda ningun hito por descubrir -- para el timer
   }
-  setInterval(tick,1500);
+  ivPresencia=setInterval(tick,1500);
 }catch(e){ console.warn('presencia-madre v0.66',e); } })();
 (function(){ try{
   var orig=document.title;
