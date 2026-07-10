@@ -3158,6 +3158,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🧵 v0.88 — El hilo de la película: barra de progreso arriba",detalle:"No había forma de saber, de un vistazo, cuánto quedaba de cuaderno ni en qué momento de la historia estabas. Ahora una línea fina arriba se va llenando según haces scroll, con marcas discretas donde arrancan ACTO I, ACTO II, EL GIRO y ACTO III — solo lee las posiciones que ya existen, no mueve ni añade nada más."},
     {fecha:"2026-07-11",titulo:"👀 v0.87 — El 3/10 ya no se repite 3 veces antes de explicarse",detalle:"Nada más entrar, el número aparecía en la tira «de un vistazo» y, unas líneas después, otra vez en grande y otra vez en la frase de debajo — el mismo dato 3 veces antes de que el visitante entienda por qué. La tira de arriba ya no repite el número (que enseguida se ve en grande, con contexto real); sigue diciendo lo que de verdad es nuevo ahí: el hueco principal, tu turno y si el dato está al día."},
     {fecha:"2026-07-10",titulo:"🔢 v0.86 — La cifra real del silencio",detalle:"En «ACTO II · Los días en que nadie miraba» solo había atmósfera, sin dato. Ahora la frase lleva pegado el número real de cambios que hice sola antes de que alguien mirara — el mismo dato que ya usaba la consola (F12), movido a un sitio que cualquiera ve sin abrir las 8 ramas. Cero número inventado: es cambios.length, el mismo array de aquí abajo."},
     {fecha:"2026-07-10",titulo:"🪄 v0.85 — Las tarjetas llegan, no aparecen ya puestas",detalle:"Al bajar por el cuaderno, las más de 20 tarjetas estaban todas ahí desde el principio, sin más gesto que aparecer. Ahora cada una sube un poco y se asienta justo cuando entra en pantalla — con más de 20 repeticiones en una sola visita, el patrón se fija solo, sin que nadie lo explique. El mapa (#mapaCard) queda fuera a propósito: no se toca. Respeta «reduce motion»: si tu sistema pide menos movimiento, no se anima nada."},
@@ -5687,7 +5688,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.87";
+  window.__cmVersion="v0.88";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6079,6 +6080,47 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   var after=hero;
   seq.forEach(function(el2){ if(el2){ after.insertAdjacentElement("afterend",el2); after=el2; } });
 }catch(e){ console.warn("resec v0.33", e); } })();
+</script>
+
+<style>
+/* v0.88 — EL HILO DE LA PELICULA: barra fina de progreso de lectura arriba de todo, con marcas
+   discretas donde arrancan ACTO I / ACTO II / EL GIRO / ACTO III (lee las .tonySep ya insertadas
+   por el re-secuenciador de arriba, no crea texto nuevo). Capa 100% aditiva: fixed, z-index bajo
+   (39 — por debajo de .ov/langEn/cualquier overlay a pantalla completa), pointer-events:none. */
+#tonyProgWrap{position:fixed;top:0;left:0;right:0;height:3px;z-index:39;background:rgba(124,92,214,.14);pointer-events:none}
+#tonyProgFill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent,#3b5bdb),#e0568a);transition:width .12s linear}
+.tonyProgMark{position:absolute;top:0;width:2px;height:100%;background:rgba(255,255,255,.7)}
+</style>
+<div id="tonyProgWrap"><div id="tonyProgFill"></div></div>
+<script>
+(function(){ try{
+  var wrap=document.getElementById("tonyProgWrap"), fill=document.getElementById("tonyProgFill");
+  if(!wrap||!fill) return;
+  function docH(){ return document.documentElement.scrollHeight - window.innerHeight; }
+  function clearMarks(){ var ex=wrap.querySelectorAll(".tonyProgMark"); for(var i=0;i<ex.length;i++) ex[i].remove(); }
+  function placeMarks(){
+    var h=docH(); if(h<=0) return;
+    var seps=document.querySelectorAll(".tonySep"); if(!seps.length) return;
+    clearMarks();
+    seps.forEach(function(s){
+      var top=s.getBoundingClientRect().top + window.scrollY;
+      var pct=Math.max(0,Math.min(100,(top/h)*100));
+      var m=document.createElement("div"); m.className="tonyProgMark"; m.style.left=pct+"%";
+      wrap.appendChild(m);
+    });
+  }
+  var ticking=false;
+  function update(){ ticking=false; var h=docH(); var pct= h>0 ? Math.max(0,Math.min(100,(window.scrollY/h)*100)) : 0; fill.style.width=pct+"%"; }
+  window.addEventListener("scroll",function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } },{passive:true});
+  update();
+  placeMarks();
+  window.addEventListener("load",placeMarks);
+  var rTO=null;
+  window.addEventListener("resize",function(){ clearTimeout(rTO); rTO=setTimeout(placeMarks,200); });
+  /* red de seguridad barata, mismo patrón ya usado en checkFab (líneas 6105-6107 de esta versión):
+     por si 'scroll' no dispara de forma fiable (scroll programático, algunos gestos táctiles). */
+  setInterval(function(){ if(!document.hidden) update(); },900);
+}catch(e){ console.warn("tonyProg v0.88", e); } })();
 </script>
 
 <style>
