@@ -1,5 +1,29 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v0.37→v0.40 HECHO Y EN VIVO (10-jul, sesión Sonnet — Tony RE-SCOPEÓ explícitamente: mientras se
+> trabaje en ESTE repo, el criterio es calidad percibida, no TTF€; ver CALIDAD_FINAL_WEB.md).**
+> Incrementos de 30-90min, sin rediseño total, reutilizando datos ya existentes en cada nodo:
+> - **v0.37**: las 8 ramas (no solo 2) llevan etiqueta pregunta+nombre, mismo patrón, coherente.
+> - **v0.38**: 4 conexiones REALES entre ramas (grafo, líneas discontinuas + etiqueta SIEMPRE visible,
+>   no depende de hover → funciona en móvil) + "Desde tu última visita, MADRE cambió N veces" (delta
+>   real vía window.__cmCambiosMeta, ya cargado).
+> - **v0.39**: 3er nivel de descubrimiento (6-7 ramas exploradas) + **bug real cazado y arreglado**:
+>   condición de carrera si alguien abre con `#mapa` ya en la URL (enlace directo) — los scripts
+>   posteriores del documento (investigBaked) aún no habían corrido. Fix: re-sync tras `load`. Este
+>   bug también afectaba silenciosamente al descubrimiento de v0.26 (window.__cmCambiosMeta) — se
+>   corrigió para los dos a la vez.
+> - **v0.40**: el mapa respira (pulso sutil 6s en radios+centro; guard reduced-motion, mismo patrón
+>   ya probado en el archivo).
+> Verificado en cada paso: node --check 38/38, 0 solapes (chequeo numérico getBBox, no screenshot —
+> preview_screenshot cuelga en esta página, ver PLAYBOOKS), tap intacto (8→12 nodos tras click),
+> consola limpia, 360px sin overflow.
+>
+> **PENDIENTE — paso 0 antes de seguir a Nivel 3 (zoom infinito/historia por rama/IA presente/
+> identidad visual propia, ver CALIDAD_FINAL_WEB.md):** que Tony enseñe la web a 5-10 personas reales
+> y traiga las respuestas. Nivel 3 exige autoría de contenido nuevo (historias, más conexiones,
+> presencia proactiva) — caro en tokens/tiempo; con datos reales de gente se sabe si hace falta o si
+> el Nivel 2 ya basta. Sin ese dato, seguir construyendo es adivinar.
+
 > **✅ v0.33 DESPLEGADA Y VERIFICADA EN VIVO (10-jul-2026, sesión Fable "reconstrucción total").**
 > Auditoría de 12 lentes (3,7M tokens) + panel de 3 arquitecturas + juez → blueprint «EL GIRO» (película
 > en 3 actos + marcador de apuestas + disciplina organismo). Hecho y EN VIVO (commits 6e3cbc6+69dbdc0):
