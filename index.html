@@ -323,6 +323,14 @@
     body.cmIdentityPreview .card,body.cmIdentityPreview .hero{box-shadow:0 0 0 1px rgba(167,139,250,.12),0 8px 28px rgba(90,50,210,.15)}
     body.cmIdentityPreview .btn.primary,body.cmIdentityPreview #ctaMapa{box-shadow:0 0 18px rgba(167,139,250,.55)}
     body.cmIdentityPreview .bigscore,body.cmIdentityPreview .ob-hi{text-shadow:0 0 16px rgba(167,139,250,.6)}
+    /* v0.72 — auditoría propia: #cmVozBtn/#cmIdBtn/#cmAchieveBtn medían 22px de alto en móvil, muy
+       por debajo del mínimo táctil de 44px. Misma técnica ya usada en .nieBtn/.glosNie/.quees (hit-area
+       invisible con ::before) — aquí SÍ con position:relative explícito, para no depender de que el
+       <button> ya esté posicionado. */
+    #cmVozBtn,#cmIdBtn,#cmAchieveBtn{position:relative}
+    #cmVozBtn::before,#cmIdBtn::before,#cmAchieveBtn::before{content:"";position:absolute;inset:-11px}
+    #cmDudaOpts button{position:relative;min-height:32px}
+    #cmDudaOpts button::before{content:"";position:absolute;inset:-8px}
     /* v0.61 — TACTILIDAD: mismo muelle (.34,1.56,.64,1) que YA usan post-its/mapa/gato/tour — solo
        lo aplico donde faltaba: estado de presión de .btn/chip/FAB (hoy solo tenían :hover). */
     .btn,.chip,.dbjsLike{transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .12s,border-color .12s}
@@ -3115,6 +3123,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"👆 v0.72 — Los botones nuevos ya se pueden tocar bien en el móvil",detalle:"Medí los botones que construí hoy en pantalla pequeña: 22px de alto, muy por debajo del mínimo táctil recomendado (44px) — el mismo problema que ya se había arreglado antes en otras partes de la web. Aplicada la misma solución: área de toque invisible más grande, sin cambiar cómo se ven."},
     {fecha:"2026-07-10",titulo:"🎨 v0.71 — El prototipo de identidad ahora también cumple contraste AA",detalle:"Calculé el contraste real del violeta del prototipo «Organismo bioluminiscente»: 4.29:1, por debajo del mínimo AA (4.5:1) para texto normal — y ese color se usa como texto en decenas de sitios. Ajustado a un violeta un poco más claro (6.67:1), mismo tono, ahora sí accesible."},
     {fecha:"2026-07-10",titulo:"♿ v0.70 — Auditoría de accesibilidad de lo nuevo de hoy",detalle:"Revisé, sin que nadie me lo pidiera, si los paneles que construí hoy (modo película, logros) tenían el mismo nivel de accesibilidad que el resto de la web — y no lo tenían: les faltaba foco inicial, restaurar el foco al cerrar y que el tabulador no se escape hacia el fondo. Arreglado con el mismo patrón ya probado en el mapa desde v0.13."},
     {fecha:"2026-07-10",titulo:"🎨 v0.69 — Prueba una identidad visual nueva, en vivo (prototipo)",detalle:"En vez de pedirte que eligieras leyendo texto, construí un prototipo real: botón «Probar identidad nueva» que enciende «Organismo bioluminiscente» (fondo casi negro, halos violeta) en la web de verdad, con un solo toque, 100% reversible. Es UNA de las 3 direcciones que te propuse — si te gusta la dirección pero no los colores exactos, lo afino; si prefieres otra, la prototipamos igual."},
@@ -5963,7 +5972,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.71";
+  window.__cmVersion="v0.72";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
