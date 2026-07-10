@@ -3158,6 +3158,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🪄 v0.85 — Las tarjetas llegan, no aparecen ya puestas",detalle:"Al bajar por el cuaderno, las más de 20 tarjetas estaban todas ahí desde el principio, sin más gesto que aparecer. Ahora cada una sube un poco y se asienta justo cuando entra en pantalla — con más de 20 repeticiones en una sola visita, el patrón se fija solo, sin que nadie lo explique. El mapa (#mapaCard) queda fuera a propósito: no se toca. Respeta «reduce motion»: si tu sistema pide menos movimiento, no se anima nada."},
     {fecha:"2026-07-10",titulo:"👇 v0.84 — Los 3 primeros botones ya ceden al tocarlos",detalle:"El CTA «🌳 Entra en mis 8 ramas», «🧭 Mejor guíame» y «🌐 English» — literalmente los 3 primeros botones que ve cualquiera al aterrizar — se pulsaban en plano: ni un gesto de confirmar el toque, sobre todo en móvil, que es donde ocurre casi toda primera visita. Ahora se hunden un poco al tocarlos y vuelven a su sitio, como un botón físico, con el mismo patrón ya usado en otros botones de la web."},
     {fecha:"2026-07-10",titulo:"🔢 v0.83 — El 3/10 del hero ya no aparece puesto: nace de 0 y sube ante tus ojos",detalle:"El número grande de arriba («Contacto con la realidad: 3/10») aparecía ya escrito, mientras la barra de al lado sí subía sola — una inconsistencia visual que cualquiera podía notar en los primeros segundos. Ahora el número cuenta de 0 a su valor en menos de un segundo, a la vez que la barra se llena, con el mismo respeto a «reduce motion» que ya tenía la barra."},
     {fecha:"2026-07-10",titulo:"🌐 v0.82 — El botón de inglés ya no depende de Google: funciona siempre",detalle:"v0.81 solo avisaba si Google Translate fallaba (translate.goog bloqueado por DNS en tu red/antivirus — confirmado real, no teoría). Eso documentaba el fallo, no lo arreglaba. Ahora la intro (los 3 párrafos del hero + los botones) se traduce EN EL SITIO, con texto escrito a mano, sin ninguna llamada de red — funciona en cualquier navegador y cualquier red, sin excepción. El resto de la página sigue en español; Google Translate queda como opción secundaria por si quieres intentar traducir todo (puede fallar, se avisa)."},
@@ -5684,7 +5685,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.84";
+  window.__cmVersion="v0.85";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6772,6 +6773,26 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   console.log('%c🤱 Cuaderno MADRE','font-size:16px;font-weight:700;color:#3b6ef5');
   console.log('Llevo '+n+' cambios reales documentados, todos con fecha y motivo. Si algo te falta o te sobra, hay un botón 💬 en cada tarjeta — o proponme una rama nueva en el mapa.');
 }catch(e){} })();
+(function(){ try{
+  // v0.85: las tarjetas llegan subiendo y asentandose al entrar en pantalla (no ya puestas desde el principio).
+  // Excluye #mapaCard a proposito (cero contacto con el mapa/SVG). No reordena el DOM, asi que el sistema de
+  // 💗 basado en posicion sigue intacto. Si el navegador pide "reduce motion", no se toca nada.
+  var reduce=false; try{ reduce=matchMedia('(prefers-reduced-motion:reduce)').matches; }catch(e){}
+  if(reduce) return;
+  var cards=document.querySelectorAll('.card:not(#mapaCard)');
+  if(!cards.length) return;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add('cmSeen'); io.unobserve(en.target); }
+    });
+  },{threshold:.12, rootMargin:"0px 0px -40px 0px"});
+  var st=document.createElement('style');
+  st.textContent=
+    ".cmRise{opacity:0;transform:translateY(22px)}"+
+    ".cmRise.cmSeen{opacity:1;transform:translateY(0);transition:opacity .6s ease, transform .6s cubic-bezier(.16,.8,.42,1)}";
+  document.head.appendChild(st);
+  cards.forEach(function(c){ c.classList.add('cmRise'); io.observe(c); });
+}catch(e){ console.warn('cards-entrada v0.85',e); } })();
 </script>
 </body>
 </html>
