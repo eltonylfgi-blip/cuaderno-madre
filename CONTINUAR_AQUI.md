@@ -1,5 +1,42 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v0.37→v0.48 HECHO Y EN VIVO (10-jul, sesión Sonnet larga — protocolo "no pares, busca el
+> siguiente efecto" pedido explícitamente por Tony).** 12 versiones, cada una: EFECTO deseado →
+> ~5-10 caminos generados → el más barato y seguro → verificado (node --check + browser real,
+> nunca screenshot — cuelga en esta página) → commit. Resumen por versión en el propio changelog
+> (`cambios[]` dentro de `index.html`, buscar "v0.37" a "v0.48"). Highlights: grafo de 6 conexiones
+> reales entre ramas (2 mapas) con fade-in, memoria de visitante ("desde tu última visita, N
+> cambios"), 3 niveles de descubrimiento, respiración sutil, indicador vivo en la cabecera, cada
+> rama cuenta su origen (`nace:`, hechos reales reordenados, no inventados), celebración única al
+> completar las 8 ramas, botón "volver al mapa" siempre a un toque, sugerencia de exploración
+> inteligente (rama concreta que falta, no contador genérico), guiño decorativo del emoji central.
+>
+> **3 bugs reales cazados y arreglados de paso** (no solo features): (1) condición de carrera en
+> `#mapa` por enlace directo — scripts posteriores del documento aún no habían corrido; (2) el MISMO
+> patrón de carrera rompía la celebración (se auto-borraba); (3) `IntersectionObserver`/evento
+> `scroll` no se disparan vía `scrollTo()` en el preview de Claude Code (documentado en PLAYBOOKS del
+> creador) — el código de producción usa scroll-listener + `setInterval` de respaldo, SÍ verificado
+> de extremo a extremo.
+>
+> **Búsqueda honesta por 14 dimensiones (Visual/Narrativa/Interacción/Animación/Comprensión/Mapa/
+> Curiosidad/Personalidad/Feedback/Accesibilidad/Rendimiento/Descubrimiento/Diversión/Memoria):**
+> Accesibilidad y Rendimiento ya estaban sólidos (verificado, no tocado). Diversión seguía débil tras
+> agotar lo demás — se probaron 3 implementaciones, 2 descartadas por RIESGO REAL rastreado en
+> código (no por pereza): tap-rápido-tambalea tocaría `onNodeClick` (ya roto 2 veces esta sesión);
+> parallax con ratón chocaría con la cadena de transformación pan/zoom del tap. Se implementó la 3ª
+> (guiño decorativo, cero contacto con la lógica de rutas).
+>
+> **LO QUE QUEDA — cada uno necesita algo que SOLO Tony puede dar (no pereza, dependencia real):**
+> - **Identidad visual propia** (colores/motion irreconocibles como "de cualquier web") → gusto, no
+>   ingeniería. Yo puedo proponer 2-3 direcciones si Tony dice que sí.
+> - **Mapa como interfaz única / reordenar tarjetas** → riesgo ya documentado en este mismo fichero
+>   (los 💗 dependen de `nth-of-type`); solo con luz verde explícita y más presupuesto de sesión.
+> - **Enganchar sonido (ASMR) o modo caótico al mapa** → son subsistemas grandes y separados; mismo
+>   veredicto que el parallax (confirmado por lectura de código, no intuición).
+> Antes de invertir en cualquiera de los tres: la prueba que el propio Tony propuso — enseñar la web
+> a 5-10 personas reales, 2 minutos, sin explicar nada, y traer las respuestas. Sin esa señal, seguir
+> construyendo es adivinar su gusto con tokens.
+
 > **✅ v0.37→v0.40 HECHO Y EN VIVO (10-jul, sesión Sonnet — Tony RE-SCOPEÓ explícitamente: mientras se
 > trabaje en ESTE repo, el criterio es calidad percibida, no TTF€; ver CALIDAD_FINAL_WEB.md).**
 > Incrementos de 30-90min, sin rediseño total, reutilizando datos ya existentes en cada nodo:
