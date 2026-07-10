@@ -1005,6 +1005,9 @@
     .mapNode .mn-lbl{font:600 11px system-ui,-apple-system,Segoe UI,sans-serif;fill:var(--ink)}
     .mn-emoji{font-size:20px}
     .map-link{stroke-width:2;opacity:.45}
+    .map-link.mapBreathe{animation:mapLinkBreathe 6s ease-in-out infinite}
+    @keyframes mapLinkBreathe{0%,100%{opacity:.3}50%{opacity:.55}}
+    .map-rel{stroke-dasharray:2 5;pointer-events:none}
     .mapCenter .cc{filter:drop-shadow(0 0 10px rgba(124,58,237,.5))}
     @keyframes mapPulse{0%,100%{r:44px;opacity:.22}50%{r:58px;opacity:.04}}
     @keyframes mapFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
@@ -1095,7 +1098,7 @@
         {t:"El producto de pago",d:"Listo y con página de venta. Falta un clic del humano: «publicar»."},
         {t:"La prueba de fuego",d:"Que alguien de FUERA pague. Sigue en 0 €."}
       ]},
-      {emoji:"🧩",t:"Almacén de widgets",q:"¿Qué estoy probando?",frase:"Inventos que compiten por salir.",para:"Existe para que los inventos compitan con señales, no con opiniones.",st:"conocimiento",benef:2,met:"embudo montado, pero 0 inventos promovidos a la web aún",porque:["↑ el embudo ya está montado y los inventos compiten","↓ 0 inventos han llegado a la web pública todavía","↓ sin eso, no aporta valor de verdad aún"],d:"Un embudo donde los mini-inventos compiten por salir al cuaderno.",prog:"El embudo ya está montado: los mini-inventos compiten entre ellos. Le falta lo que de verdad cuenta: que ALGUNO llegue a esta web y os sea útil.",juicio:{cree:"que un invento solo debe salir a la web si lo respaldan señales reales, no el gusto de nadie.",cambia:"si en meses ningún invento consigue salir, el embudo está mal diseñado y se rehace."},kids:[
+      {emoji:"🧩",t:"Almacén de widgets",q:"¿Qué estoy probando?",frase:"Inventos que compiten por salir.",rel:[{to:"🛡️",why:"el ganador se vuelve activo público"}],para:"Existe para que los inventos compitan con señales, no con opiniones.",st:"conocimiento",benef:2,met:"embudo montado, pero 0 inventos promovidos a la web aún",porque:["↑ el embudo ya está montado y los inventos compiten","↓ 0 inventos han llegado a la web pública todavía","↓ sin eso, no aporta valor de verdad aún"],d:"Un embudo donde los mini-inventos compiten por salir al cuaderno.",prog:"El embudo ya está montado: los mini-inventos compiten entre ellos. Le falta lo que de verdad cuenta: que ALGUNO llegue a esta web y os sea útil.",juicio:{cree:"que un invento solo debe salir a la web si lo respaldan señales reales, no el gusto de nadie.",cambia:"si en meses ningún invento consigue salir, el embudo está mal diseñado y se rehace."},kids:[
         {t:"Embudo",d:"Promocionado · en revisión · descartado."},
         {t:"Compiten por salir",d:"Solo los mejores llegan a la web pública."}
       ]},
@@ -1110,7 +1113,7 @@
         {t:"Artículos honestos",d:"Cuenta fallos reales, no logros inventados."},
         {t:"Este cuaderno",d:"También es un activo público vivo."}
       ]},
-      {emoji:"📚",t:"Memoria / archivo",q:"¿Qué he aprendido?",frase:"Nada me duele dos veces.",para:"Existe para que ningún error tenga que doler dos veces.",st:"conocimiento",benef:6,met:"decenas de lecciones + un registro nuevo con TODO lo que ya sabe hacer, para no re-descubrirlo",porque:["↑ decenas de lecciones guardadas con su porqué","↑ estrenó un registro de capacidades: toda idea nueva se compara contra él ANTES de gastar tiempo","↓ le falta demostrar con datos que eso corta las repeticiones"],d:"Lo que aprende y guarda para no tropezar dos veces.",prog:"Guarda lecciones, un cementerio de ideas muertas y, desde el 6-jul, un registro con todas sus capacidades y su prueba. Le falta: demostrar que con eso deja de re-descubrir lo que ya tenía.",juicio:{cree:"que apuntar no basta: lo guardado tiene que BLOQUEAR errores y repeticiones por sí solo.",cambia:"1-sep: si el registro no evitó ni una repetición (o algo ya fichado se «redescubre»), se rediseña.",fecha:"1-sep-2026"},kids:[
+      {emoji:"📚",t:"Memoria / archivo",q:"¿Qué he aprendido?",frase:"Nada me duele dos veces.",rel:[{to:"🔬",why:"aquí archiva lo que descartó"}],para:"Existe para que ningún error tenga que doler dos veces.",st:"conocimiento",benef:6,met:"decenas de lecciones + un registro nuevo con TODO lo que ya sabe hacer, para no re-descubrirlo",porque:["↑ decenas de lecciones guardadas con su porqué","↑ estrenó un registro de capacidades: toda idea nueva se compara contra él ANTES de gastar tiempo","↓ le falta demostrar con datos que eso corta las repeticiones"],d:"Lo que aprende y guarda para no tropezar dos veces.",prog:"Guarda lecciones, un cementerio de ideas muertas y, desde el 6-jul, un registro con todas sus capacidades y su prueba. Le falta: demostrar que con eso deja de re-descubrir lo que ya tenía.",juicio:{cree:"que apuntar no basta: lo guardado tiene que BLOQUEAR errores y repeticiones por sí solo.",cambia:"1-sep: si el registro no evitó ni una repetición (o algo ya fichado se «redescubre»), se rediseña.",fecha:"1-sep-2026"},kids:[
         {t:"Lecciones",d:"Para no repetir el mismo error."},
         {t:"Cementerio de ideas muertas",d:"Lo que descartó y por qué."},
         {t:"Registro de capacidades",d:"La lista viva de todo lo que ya sabe hacer, con su prueba al lado."},
@@ -1131,7 +1134,15 @@
     function el(n,a){ var e=document.createElementNS(NS,n); for(var k in a) e.setAttribute(k,a[k]); return e; }
     if(!reduce){ var halo=el("circle",{cx:CX,cy:CY,r:44,fill:"var(--accent)"}); halo.setAttribute("class","mapHalo"); svg.appendChild(halo); }
     NODES.forEach(function(nd,i){ var ang=(-90+i*(360/NODES.length))*Math.PI/180; nd.x=CX+R*Math.cos(ang); nd.y=CY+R*Math.sin(ang);
-      var ln=el("line",{x1:CX,y1:CY,x2:nd.x,y2:nd.y,stroke:stOf(nd.st).c}); ln.setAttribute("class","map-link"); svg.appendChild(ln); });
+      var ln=el("line",{x1:CX,y1:CY,x2:nd.x,y2:nd.y,stroke:stOf(nd.st).c}); ln.setAttribute("class","map-link"+(reduce?"":" mapBreathe")); svg.appendChild(ln); });
+    /* v0.41: mismo grafo de conexiones reales que el mapa grande, en miniatura (sin etiqueta de texto —
+       no cabe a esta escala; el porqué va en el <title>, y el mapa grande ya lo enseña siempre visible
+       para móvil). Primer vistazo de la portada, antes de tocar nada, ya se ve un ecosistema conectado. */
+    NODES.forEach(function(nd){ (nd.rel||[]).forEach(function(r){ var other=null; NODES.forEach(function(o){ if(o.emoji===r.to) other=o; }); if(!other) return;
+      var mx=(nd.x+other.x)/2, my=(nd.y+other.y)/2, dx=mx-CX, dy=my-CY, dl=Math.hypot(dx,dy)||1, push=26, cx=mx+dx/dl*push, cy=my+dy/dl*push;
+      var rl=el("path",{d:"M"+nd.x+","+nd.y+" Q"+cx+","+cy+" "+other.x+","+other.y,fill:"none",stroke:"#b9a6ff","stroke-width":"1.3",opacity:".4"}); rl.setAttribute("class","map-rel");
+      var ttl=document.createElementNS(NS,"title"); ttl.textContent=nd.emoji+" → "+other.emoji+": "+r.why; rl.appendChild(ttl);
+      svg.appendChild(rl); }); });
     var cg=el("g",{"class":"mapCenter"}); var cc=el("circle",{cx:CX,cy:CY,r:40,fill:"var(--accent)"}); cc.setAttribute("class","cc"); cg.appendChild(cc);
     var ce=el("text",{x:CX,y:CY+1,"text-anchor":"middle","dominant-baseline":"middle","font-size":"26"}); ce.textContent="🤱🏻"; cg.appendChild(ce);
     var cl=el("text",{x:CX,y:CY+60,"text-anchor":"middle","font-size":"13","font-weight":"800",fill:"var(--ink)"}); cl.textContent="MADRE"; cg.appendChild(cl); svg.appendChild(cg);
@@ -1771,7 +1782,10 @@
          por completo, cero riesgo para el motor. */
       NODES.forEach(function(nd){ (nd.rel||[]).forEach(function(r){ var other=null; NODES.forEach(function(o){ if(o.emoji===r.to) other=o; }); if(!other) return;
         var idxA=NODES.indexOf(nd), idxB=NODES.indexOf(other), ringGap=Math.min(Math.abs(idxA-idxB),NODES.length-Math.abs(idxA-idxB));
-        var mx=(nd.x+other.x)/2, my=(nd.y+other.y)/2, dx=mx-CX, dy=my-CY, dl=Math.hypot(dx,dy)||1, push=(ringGap<=1?128:68), cx=mx+dx/dl*push, cy=my+dy/dl*push;
+        /* gap==2: el nodo A MITAD DE CAMINO angular tiene su propio texto justo en esa dirección — pushar
+           MÁS AFUERA no escapa (mismo rayo). En vez de eso, se curva HACIA DENTRO (push negativo): pasa
+           por debajo del anillo, lejos de cualquier texto de nodo (todos los textos apuntan hacia fuera). */
+        var mx=(nd.x+other.x)/2, my=(nd.y+other.y)/2, dx=mx-CX, dy=my-CY, dl=Math.hypot(dx,dy)||1, push=(ringGap<=1?128:(ringGap===2?-60:68)), cx=mx+dx/dl*push, cy=my+dy/dl*push;
         var rl=el("path",{d:"M"+nd.x+","+nd.y+" Q"+cx+","+cy+" "+other.x+","+other.y,fill:"none",stroke:"#b9a6ff","stroke-width":"1.6"}); rl.setAttribute("class","mbRel"); view.appendChild(rl);
         var lbl=wrapText(nd.emoji+"→"+other.emoji+" "+r.why,cx,cy,9,"#c9bdfa",24); lbl.setAttribute("class","mbRelLbl"); view.appendChild(lbl); }); });
       var cg=el("g",reduce?{}:{"class":"mbBreathe"}); var cc=el("circle",{cx:CX,cy:CY,r:54,fill:"#7c3aed",stroke:"#b794ff","stroke-width":"2"}); cg.appendChild(cc);
@@ -2964,6 +2978,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🕸️ v0.41 — El primer vistazo (antes de tocar nada) ya se ve un ecosistema",detalle:"El mapa pequeño de la portada — lo primero que ve cualquiera, sin haber pulsado nada — ahora también respira y muestra 6 conexiones reales entre ramas (2 más que el mapa grande: «🧩→🛡️ el ganador se vuelve activo público», «📚→🔬 aquí archiva lo que descartó»). Ya no parece un menú de 8 botones: parece que las partes de MADRE se hablan entre sí."},
     {fecha:"2026-07-10",titulo:"🫀 v0.40 — El mapa respira",detalle:"Los radios que unen el centro con cada rama, y el propio centro 🤱🏻, suben y bajan de brillo muy despacio — casi no se nota mirándolo fijo, pero deja de sentirse una web quieta. Se apaga entera si tu móvil tiene «menos animaciones» activado (no todo el mundo quiere movimiento, y MADRE lo respeta)."},
     {fecha:"2026-07-10",titulo:"🔓 v0.39 — Un 3er descubrimiento a mitad de camino explorando el mapa",detalle:"Ya había 2 recompensas por explorar (a las 4 y a las 8 ramas). Ahora, entre 6 y 7 ramas exploradas, aparece una tercera: cuántas preguntas reales lleva investigadas MADRE sobre cómo mejorarse a sí misma, con botón directo a sus conclusiones. Dato real, ya cargado en la página — nada añadido de más."},
     {fecha:"2026-07-10",titulo:"🔗 v0.38 — El mapa te dice qué conecta con qué, y recuerda cuándo volviste",detalle:"Dos cosas nuevas, las dos con datos 100% reales (nada inventado). (1) Cuatro líneas violeta discontinuas en el mapa grande unen ramas que de verdad se influyen — «🔬→🛡️ una hipótesis validada se volvió activo real», «🧠→📚 decide qué merece quedarse en la memoria»... con su frase siempre visible, sin tener que tocar nada (funciona igual en el móvil que en el ordenador). (2) Si vuelves después de un tiempo y hubo cambios de verdad, el mapa te lo dice: «Desde tu última visita (hace N días), MADRE cambió N veces» — con el número real, no un saludo genérico."},
@@ -5777,7 +5792,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.40";
+  window.__cmVersion="v0.41";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
