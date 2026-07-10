@@ -1064,3 +1064,61 @@ basta con mirar la ejecución real. Y **`window.__sb` (Supabase) puede no existi
 `<script>` normal cerca del final del body, porque el módulo que lo crea es deferred y corre después —
 cualquier incremento nuevo que use `window.__sb`/`window.__identity` debe envolver su arranque en el
 mismo poll de 200ms que ya usa `#cmtFab` (línea ~5853), NUNCA asumir que ya está listo.
+
+---
+
+**Sesión 2 (Sonnet 5, 10-jul-2026 noche, tras el traspaso de la sesión 1 — Tony pegó varias rondas
+más de la misma crítica externa pidiendo "no pares nunca"; ver `TRASPASOS/TRASPASO_2026-07-10_
+cuaderno-25-versiones-cierre-sesion.md` para el precedente ya escrito sobre cómo se gestiona esa
+presión). v0.74→v0.80, 7 versiones, workflow multi-agente de auditoría (6 lentes en paralelo:
+código muerto, bugs de interacción entre features, gaps de accesibilidad, integridad de datos,
+edge cases móviles, rendimiento) + implementación secuencial una a una:**
+
+- **Primero, un bug de infraestructura (no versionado, commit aparte):** el propio `launch.json` de
+  este repo apuntaba al clon STALE `C:\Users\anton\repos\cuaderno-madre` (~40 versiones atrás,
+  pre-v0.33) en vez de a sí mismo — cualquier preview futuro habría verificado contra contenido
+  muerto sin avisar. Verificado y arreglado antes de tocar nada más.
+- **v0.74** — motor viejo del tour (STEP_DEFS/backdrop/ring/card/welcome, ~250 líneas) confirmado
+  100% muerto (0 llamadas reales desde v0.33) y retirado; de paso se encontró que el logro "Guiado
+  paso a paso" dependía de una localStorage key que SOLO ese código muerto escribía — era
+  imposible de conseguir. Arreglado: el tour real la marca al llegar al último paso.
+- **v0.75** — `#chaosFab`/`#cmvFab` se solapaban ~2px de diferencia en `bottom` durante los primeros
+  segundos de carga (antes de que el hub de FABs oculte el primero). Un valor CSS.
+- **v0.76** — lote de accesibilidad 3 (4 gaps no cubiertos por v0.34/v0.70): aria-pressed en el
+  toggle de identidad, aria-live en el voto de "MADRE duda", foco perdido tras votar (el botón
+  votado queda disabled y el navegador retira el foco sin avisar), aria-label en el botón de logros.
+- **v0.77** — el más interesante: "me gusta" y "no entiendo" se pisaban en LAS DOS direcciones
+  (verificado en vivo, no solo leído en el código). Con "me gusta" activo, tocar 🤔 nunca llegaba a
+  su propio handler — el listener de likeMode en `document` intercepta cualquier click dentro de un
+  `<summary>`, y 🤔 vive ahí dentro. Al revés: con "no entiendo" activo, tocar el corazón se perdía
+  sin encender nada (el capture-listener de nieSelect se come cualquier click fuera de la tarjeta).
+  Arreglado en ambas direcciones + expuesto `window.__exitNieSelect` (mismo patrón que
+  `__exitLike`/`__exitLapiz` ya existentes).
+- **v0.78** — el área táctil ampliada de v0.72 (`::before` inset:-11px) se comía ~3px del vecino de
+  arriba porque los márgenes verticales de hermanos en flujo normal se COLAPSAN al mayor, no se
+  suman (primer intento con margin-top:4px no cambió nada, medido; con 12px en ambos lados el
+  colapso siempre supera el inset).
+- **v0.79** — 3 pollers de posición (v0.63 ya se auto-limpiaba; v0.64 y v0.66 no) seguían escaneando
+  el DOM cada 1.5s para siempre incluso después de que ya no quedara nada nuevo que detectar. Mismo
+  criterio que v0.63 (parar al llegar al pie / al agotar los hitos). + `checkFab` (mapa) era el único
+  `setInterval` del fichero sin guard de `document.hidden`.
+- **v0.80** — limpieza de CSS/JS huérfano de 2 widgets ya retirados (`#quickPick`, `#abiertasCard`,
+  `.notecard` + 5 clases sueltas). **Nota de proceso:** la propia auditoría se equivocó en un punto
+  (dijo que `goto()` seguía viva citando selectores que en realidad usa un bloque JS DISTINTO en el
+  mismo `<script>`) — se verificó con grep antes de actuar y se corrigió el veredicto antes de tocar
+  nada. Ejemplo vivo de por qué la salida de un agente/auditoría es HIPÓTESIS, no orden (regla 9d).
+
+**Cada versión verificada con el mismo protocolo que la sesión 1** (node --check de los 46 bloques
+`<script>` reales, consola limpia, 360-390px sin overflow, tap del mapa con jitter real
+toggle 12→8→12) + al cerrar, una revisión de conjunto (patrón v0.67): sweep de interacción completo
+tocando las 7 versiones juntas (tour, identidad, voto, logros, ambos modos cruzados, mapa) — 0
+fallos nuevos — y un barrido final de enlaces externos (7/7 HTTP 200) + meta tags/og:image (200),
+ninguno tocado en esta sesión pero nunca antes verificado.
+
+**Los 4 pendientes siguen exactamente igual que al cierre de la sesión 1** (nadie los tocó, todos
+siguen gateados en el mismo sitio): identidad visual (esperando reacción de Tony al prototipo),
+voz real (esperando que Tony grabe), mapa como interfaz única (bloqueado, permiso explícito), y
+"descubrir no explicar" a fondo (reservado para un encargo dedicado a Fable). El paradigma-shift de
+`CALIDAD_FINAL_WEB.md` sigue con su propio gate objetivo sin cumplir (señal sostenida de visitantes
+reales) — no se tocó, es una decisión ya tomada por Tony+Fable con contexto completo, no algo para
+reabrir por presión de una sesión con poco contexto de madrugada.

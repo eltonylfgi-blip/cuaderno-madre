@@ -1,5 +1,23 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ SESIÓN 2 CERRADA (10-jul noche) — v0.74→v0.80 EN VIVO, 7 versiones más (32 en total hoy).**
+> Tony pegó más rondas de la misma crítica externa pidiendo "no pares nunca" (ver el precedente ya
+> escrito abajo, sección "GESTIÓN DE LA CRÍTICA EXTERNA" — se aplicó igual: no se adoptó el paquete
+> de reglas de proceso, sí se construyó lo accionable). Como los 4 pendientes de la sesión 1 seguían
+> genuinamente bloqueados por Tony (nada nuevo que construir ahí), esta sesión corrió un **workflow
+> de auditoría multi-agente** (6 lentes en paralelo: código muerto, bugs de interacción entre
+> features, accesibilidad, integridad de datos, edge cases móviles, rendimiento) sobre el código YA
+> shippeado, y arregló TODO lo que encontró de real y seguro, uno a uno, mismo protocolo riguroso de
+> siempre (verificado en navegador real, nunca solo leído). Detalle línea a línea en
+> `PLAN_INCREMENTOS_20_SISTEMAS.md` (bitácora "Sesión 2", al final del fichero) — LÉELO antes de
+> continuar este frente. Resumen: 1 bug de infraestructura (preview servía contenido de hace 40
+> versiones sin avisar), ~250 líneas de código muerto confirmado y retirado (+ 1 logro que llevaba
+> roto, arreglado de paso), 1 bug visual real (2 botones solapados al cargar), 4 gaps de
+> accesibilidad, 1 bug de interacción confirmado EN LAS DOS DIRECCIONES (dos modos se pisaban), 1 bug
+> de área táctil medido con coordenadas reales, 3 timers que nunca se apagaban, y limpieza de CSS/JS
+> huérfano. Cerrado con una revisión de conjunto (0 fallos nuevos) + barrido de enlaces/meta (0
+> problemas). **Los 4 pendientes de abajo NO cambiaron — nadie los tocó, siguen esperando lo mismo.**
+>
 > **✅ SESIÓN CERRADA (10-jul) — v0.49→v0.73 EN VIVO, 25 versiones: 17/17 sistemas del plan de Fable +**
 > **5 fixes de auditoría propia + 1er experimento "descubrir, no explicar".** Detalle línea a línea (qué
 > se hizo, qué se verificó, qué falta) en `PLAN_INCREMENTOS_20_SISTEMAS.md` — LÉELO ENTERO antes de
