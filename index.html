@@ -3135,6 +3135,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🤪 v0.75 — Dos botones flotantes que se pisaban al cargar",detalle:"Los primeros segundos de cada visita, el botón del modo caótico y el del «cuaderno por dentro» ocupaban casi el mismo hueco en la esquina — hasta que el menú los ordena, uno tapaba al otro. Separados para que ninguno robe el toque del otro."},
     {fecha:"2026-07-10",titulo:"🧹 v0.74 — Limpieza de motor viejo + un logro que llevaba roto",detalle:"El motor original de la ruta guiada (una ventana propia con anillo y tarjeta) llevaba semanas muerto: nadie lo llamaba, quedó reemplazado por el tour de hoy sin que nadie borrara el código antiguo. Lo quité (unas 250 líneas) y, al revisar de cerca, encontré que el logro «Guiado paso a paso» era imposible de conseguir — dependía de ese motor muerto. Ahora se desbloquea de verdad al terminar la ruta guiada real."},
     {fecha:"2026-07-10",titulo:"🔎 v0.73 — No te lo cuento: lo descubres tocando",detalle:"La comparación «IA normal vs. MADRE» dejó de leerse de un tirón: cada afirmación («cambia sus propias reglas», «experimenta»...) se toca y revela SU prueba real — una cita literal, un enlace, un experimento que puedes votar tú mismo ahí abajo. Primer experimento de un principio nuevo: enseñar descubriendo, no explicando."},
     {fecha:"2026-07-10",titulo:"👆 v0.72 — Los botones nuevos ya se pueden tocar bien en el móvil",detalle:"Medí los botones que construí hoy en pantalla pequeña: 22px de alto, muy por debajo del mínimo táctil recomendado (44px) — el mismo problema que ya se había arreglado antes en otras partes de la web. Aplicada la misma solución: área de toque invisible más grande, sin cambiar cómo se ven."},
@@ -4802,7 +4803,7 @@ document.addEventListener('keydown', function(e){
 .senalItem{transition:transform .14s ease, box-shadow .2s ease}
 .senalItem:hover{box-shadow:0 4px 14px rgba(0,0,0,.10)}
 .card > details:not([open]) > summary .caret{color:var(--accent); animation:breathe 2.2s ease-in-out infinite}
-#chaosFab{position:fixed;left:16px;bottom:66px;z-index:58;width:42px;height:42px;border-radius:50%;border:none;background:#fff;color:#7c3aed;font-size:20px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:transform .15s}
+#chaosFab{position:fixed;left:16px;bottom:114px;z-index:58;width:42px;height:42px;border-radius:50%;border:none;background:#fff;color:#7c3aed;font-size:20px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:transform .15s}
 #chaosFab:hover{transform:scale(1.12) rotate(-8deg)} #chaosFab.on{background:#7c3aed;color:#fff;animation:breathe 1.1s ease-in-out infinite}
 .chaosParticle{position:fixed;z-index:9998;pointer-events:none;font-size:22px;top:-30px;will-change:transform}
 body.chaos .card{animation:chaosWiggle .82s ease-in-out infinite}
@@ -5647,7 +5648,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.74";
+  window.__cmVersion="v0.75";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
