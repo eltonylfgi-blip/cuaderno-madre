@@ -4,7 +4,7 @@
     {
       "name": "cuaderno",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8137", "--directory", "C:/Users/anton/repos/cuaderno-madre"],
+      "runtimeArgs": ["-m", "http.server", "8137", "--directory", "C:/Users/anton/cuaderno-madre-pub"],
       "port": 8137
     }
   ]
