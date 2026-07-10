@@ -3170,6 +3170,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🩹 v0.90 — 2 regresiones reales, cazadas por autocrítica y arregladas",detalle:"El propio workflow de mejora continua se auditó a sí mismo (no se dio por bueno con el primer check) y encontró 2 fallos reales que su primera verificación no vio: (1) las marcas de acto en la barra de progreso (v0.88) tenían un contraste de ~1:1 — invisibles a ojo humano, medido de verdad, no a ojo — ahora son un trazo sólido oscuro con halo blanco y avisan con un tooltip qué acto empieza ahí. (2) las tarjetas que ya habían «llegado» (v0.85) perdían el efecto de elevación al pasar el ratón por encima en escritorio, porque su regla nueva empataba en especificidad CSS con el hover de siempre y ganaba por estar más abajo en el fichero — una línea con más especificidad lo arregla para siempre, sin tocar nada más."},
     {fecha:"2026-07-11",titulo:"🎈 v0.89 — El hero respira: 2 botones opcionales se guardan en «⋯ más»",detalle:"Una auditoría con 5 jueces independientes (UX, diseño, game design, narrativa, visitante nuevo) coincidió en algo concreto y medible: el primer tramo apilaba hasta 6 botones/CTA antes del primer dato real — la nota más baja de toda la evaluación fue Claridad visual, 3/10. «Escúchalo» y «Probar identidad nueva» son opcionales por definición (la propia identidad se etiqueta «prototipo»); ahora viven en un desplegable «⋯ más», mismo patrón de acordeón que ya usa el resto de la web. El mapa y el tour siguen a un toque, igual que siempre."},
     {fecha:"2026-07-11",titulo:"🧵 v0.88 — El hilo de la película: barra de progreso arriba",detalle:"No había forma de saber, de un vistazo, cuánto quedaba de cuaderno ni en qué momento de la historia estabas. Ahora una línea fina arriba se va llenando según haces scroll, con marcas discretas donde arrancan ACTO I, ACTO II, EL GIRO y ACTO III — solo lee las posiciones que ya existen, no mueve ni añade nada más."},
     {fecha:"2026-07-11",titulo:"👀 v0.87 — El 3/10 ya no se repite 3 veces antes de explicarse",detalle:"Nada más entrar, el número aparecía en la tira «de un vistazo» y, unas líneas después, otra vez en grande y otra vez en la frase de debajo — el mismo dato 3 veces antes de que el visitante entienda por qué. La tira de arriba ya no repite el número (que enseguida se ve en grande, con contexto real); sigue diciendo lo que de verdad es nuevo ahí: el hueco principal, tu turno y si el dato está al día."},
@@ -5701,7 +5702,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.89";
+  window.__cmVersion="v0.90";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6102,7 +6103,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
    (39 — por debajo de .ov/langEn/cualquier overlay a pantalla completa), pointer-events:none. */
 #tonyProgWrap{position:fixed;top:0;left:0;right:0;height:3px;z-index:39;background:rgba(124,92,214,.14);pointer-events:none}
 #tonyProgFill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent,#3b5bdb),#e0568a);transition:width .12s linear}
-.tonyProgMark{position:absolute;top:0;width:2px;height:100%;background:rgba(255,255,255,.7)}
+.tonyProgMark{position:absolute;top:-1px;width:3px;height:6px;border-radius:1px;background:var(--ink,#1a1a2e);box-shadow:0 0 0 1px rgba(255,255,255,.85);cursor:help}
 </style>
 <div id="tonyProgWrap"><div id="tonyProgFill"></div></div>
 <script>
@@ -6119,6 +6120,11 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
       var top=s.getBoundingClientRect().top + window.scrollY;
       var pct=Math.max(0,Math.min(100,(top/h)*100));
       var m=document.createElement("div"); m.className="tonyProgMark"; m.style.left=pct+"%";
+      /* v0.90 fix: contraste real medido ~1:1 (blanco 70% sobre el relleno lavanda) -> invisibles.
+         Ahora color solido + halo blanco (visible sobre claro Y sobre el degradado) + tooltip real
+         con el nombre del acto (antes la marca no decia QUE era, solo estaba ahi). */
+      var txt=(s.childNodes[0]?s.childNodes[0].nodeValue:s.textContent||"").trim();
+      if(txt){ m.title=txt; m.setAttribute("aria-label",txt); }
       wrap.appendChild(m);
     });
   }
@@ -6849,7 +6855,12 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   var st=document.createElement('style');
   st.textContent=
     ".cmRise{opacity:0;transform:translateY(22px)}"+
-    ".cmRise.cmSeen{opacity:1;transform:translateY(0);transition:opacity .6s ease, transform .6s cubic-bezier(.16,.8,.42,1)}";
+    ".cmRise.cmSeen{opacity:1;transform:translateY(0);transition:opacity .6s ease, transform .6s cubic-bezier(.16,.8,.42,1)}"+
+    /* v0.90 fix: .cmRise.cmSeen empataba en especificidad con .card:hover (misma, 2 clases) y ganaba
+       por orden de aparicion (esta hoja se inyecta al final) -> el hover dejaba de elevar la tarjeta
+       en escritorio una vez "vista". Regla mas especifica (3 clases + :hover) para que el hover gane
+       siempre, la vea o no la vea el visitante todavia. */
+    ".card.cmRise.cmSeen:hover{transform:translateY(-2px)}";
   document.head.appendChild(st);
   cards.forEach(function(c){ c.classList.add('cmRise'); io.observe(c); });
 }catch(e){ console.warn('cards-entrada v0.85',e); } })();
