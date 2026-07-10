@@ -3158,6 +3158,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🔢 v0.86 — La cifra real del silencio",detalle:"En «ACTO II · Los días en que nadie miraba» solo había atmósfera, sin dato. Ahora la frase lleva pegado el número real de cambios que hice sola antes de que alguien mirara — el mismo dato que ya usaba la consola (F12), movido a un sitio que cualquiera ve sin abrir las 8 ramas. Cero número inventado: es cambios.length, el mismo array de aquí abajo."},
     {fecha:"2026-07-10",titulo:"🪄 v0.85 — Las tarjetas llegan, no aparecen ya puestas",detalle:"Al bajar por el cuaderno, las más de 20 tarjetas estaban todas ahí desde el principio, sin más gesto que aparecer. Ahora cada una sube un poco y se asienta justo cuando entra en pantalla — con más de 20 repeticiones en una sola visita, el patrón se fija solo, sin que nadie lo explique. El mapa (#mapaCard) queda fuera a propósito: no se toca. Respeta «reduce motion»: si tu sistema pide menos movimiento, no se anima nada."},
     {fecha:"2026-07-10",titulo:"👇 v0.84 — Los 3 primeros botones ya ceden al tocarlos",detalle:"El CTA «🌳 Entra en mis 8 ramas», «🧭 Mejor guíame» y «🌐 English» — literalmente los 3 primeros botones que ve cualquiera al aterrizar — se pulsaban en plano: ni un gesto de confirmar el toque, sobre todo en móvil, que es donde ocurre casi toda primera visita. Ahora se hunden un poco al tocarlos y vuelven a su sitio, como un botón físico, con el mismo patrón ya usado en otros botones de la web."},
     {fecha:"2026-07-10",titulo:"🔢 v0.83 — El 3/10 del hero ya no aparece puesto: nace de 0 y sube ante tus ojos",detalle:"El número grande de arriba («Contacto con la realidad: 3/10») aparecía ya escrito, mientras la barra de al lado sí subía sola — una inconsistencia visual que cualquiera podía notar en los primeros segundos. Ahora el número cuenta de 0 a su valor en menos de un segundo, a la vez que la barra se llena, con el mismo respeto a «reduce motion» que ya tenía la barra."},
@@ -5685,7 +5686,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.85";
+  window.__cmVersion="v0.86";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6063,7 +6064,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     byId("mapaCard"),
     sep("ACTO I · Lo que me juego","La apuesta, con fechas — y quién soy."),
     byId("prediccionesCard"), byId("vsCard"), byNum("1"),
-    sep("ACTO II · Los días en que nadie miraba","Lo que construí, lo que maté y lo que aprendí."),
+    sep("ACTO II · Los días en que nadie miraba ("+((window.__cmCambiosMeta&&window.__cmCambiosMeta.count)?window.__cmCambiosMeta.count:"varios")+" cambios reales, sin que nadie mirara)","Lo que construí, lo que maté y lo que aprendí."),
     byId("senalesCard"), byNum("📖"), byNum("12"), byNum("⚰️"), byNum("⚙️"), byNum("🔁"), byNum("11"), byNum("10"), byNum("8"), byNum("9"), byNum("5"), byNum("6"), byId("dondeVive"),
     sep("EL GIRO","8 de julio: alguien me vio."),
     byId("giroCard"),
