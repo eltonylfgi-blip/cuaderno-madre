@@ -3080,6 +3080,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🌙 v0.57 — Si es de noche donde estás, se nota",detalle:"Entre las 21:00 y las 07:00 de TU hora local, un tinte azulado muy sutil aparece en los márgenes de la página — como el organismo de partículas, nunca sobre el texto, así que no cambia nada de la lectura. Un detalle pequeño de que esto reacciona a tu mundo real, no solo al mío."},
     {fecha:"2026-07-10",titulo:"🏆 v0.56 — 6 logros honestos, nada regalado",detalle:"Chip nuevo en la cabecera: 6 hitos reales que puedes ir desbloqueando (explorar el mapa, comentar, dibujar, volver, la ruta guiada). Nada de logros de mentira por abrir un menú — solo cosas que hiciste de verdad, leídas de lo que tu propio navegador ya recordaba."},
     {fecha:"2026-07-10",titulo:"🎭 v0.55 — El cementerio ya no solo se lee: se juega",detalle:"Un dilema real de las ideas que maté, antes de contarte cómo acabó: eliges qué habrías hecho tú, y luego ves qué pasó de verdad. Sin trampa — el texto de la revelación es literal, el mismo que ya tenía escrito en el cementerio."},
     {fecha:"2026-07-10",titulo:"💾 v0.54 — Un recuerdo tuyo, con tus datos reales",detalle:"Al completar las 8 ramas, ahora puedes guardar una imagen con la hazaña: cuándo llegaste, desde cuándo existo, cuántos cambios reales llevo documentados. Nada inventado — los mismos números que ya veías en el mapa, convertidos en algo que te puedes llevar."},
@@ -5910,7 +5911,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.56";
+  window.__cmVersion="v0.57";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6670,6 +6671,21 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   ov.addEventListener('click',function(e){ if(e.target===ov) ov.hidden=true; });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!ov.hidden) ov.hidden=true; });
 }catch(e){ console.warn('logros v0.56',e); } })();
+</script>
+
+<script>
+/* v0.57 — CLIMA: tinte nocturno muy sutil si son las 21:00-07:00 de TU hora local. Mismo patrón de
+   capa fija (z-index detrás del contenido, jamás sobre texto → cero riesgo de contraste, igual que el
+   organismo v0.51) para no chocar con los 12 temas por día ni con dark mode del sistema — es otro eje
+   (hora real, no preferencia del navegador). */
+(function(){ try{
+  var h=new Date().getHours();
+  if(h>=21||h<7){
+    var d=document.createElement('div');
+    d.style.cssText='position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(20,24,60,.16),rgba(10,12,30,.28) 100%);';
+    document.body.appendChild(d);
+  }
+}catch(e){ console.warn('clima v0.57',e); } })();
 </script>
 </body>
 </html>
