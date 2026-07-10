@@ -3135,6 +3135,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🥊 v0.77 — El modo 💗 y el modo 🤔 se pisaban entre sí",detalle:"Con el modo «marca lo que te gusta» encendido, tocar el botón 🤔 de una tarjeta (o el del glosario) se registraba como un «me gusta» en vez de abrir «qué no entiendes» — el 🤔 vive dentro de la misma zona que el modo captura. Y al revés: si estabas señalando qué no entiendes y tocabas el corazón, el toque se perdía sin encender nada. Ahora cada botón hace lo suyo y, si cambias de modo, el anterior se apaga solo."},
     {fecha:"2026-07-10",titulo:"♿ v0.76 — Lote de accesibilidad 3: 4 arreglos de teclado y lector de pantalla",detalle:"El toggle de identidad nueva ahora anuncia si está encendido o apagado. El voto en «MADRE duda» ya avisa a un lector de pantalla y no te deja perdido sin foco tras votar. El botón de logros describe a dónde lleva, no solo el número."},
     {fecha:"2026-07-10",titulo:"🤪 v0.75 — Dos botones flotantes que se pisaban al cargar",detalle:"Los primeros segundos de cada visita, el botón del modo caótico y el del «cuaderno por dentro» ocupaban casi el mismo hueco en la esquina — hasta que el menú los ordena, uno tapaba al otro. Separados para que ninguno robe el toque del otro."},
     {fecha:"2026-07-10",titulo:"🧹 v0.74 — Limpieza de motor viejo + un logro que llevaba roto",detalle:"El motor original de la ruta guiada (una ventana propia con anillo y tarjeta) llevaba semanas muerto: nadie lo llamaba, quedó reemplazado por el tour de hoy sin que nadie borrara el código antiguo. Lo quité (unas 250 líneas) y, al revisar de cerca, encontré que el logro «Guiado paso a paso» era imposible de conseguir — dependía de ese motor muerto. Ahora se desbloquea de verdad al terminar la ruta guiada real."},
@@ -3457,7 +3458,7 @@ window.__cmCorpus = {
   var layer=document.createElement("div"); layer.id="likeHearts";
   document.body.appendChild(fab); document.body.appendChild(hint); document.body.appendChild(layer);
   var likeMode=false, hearts=[];
-  function setLike(v){ if(v){ try{ if(window.__exitLapiz) window.__exitLapiz(); }catch(_){ } } likeMode=v; document.body.classList.toggle("likeMode",v); fab.classList.toggle("on",v); }
+  function setLike(v){ if(v){ try{ if(window.__exitLapiz) window.__exitLapiz(); }catch(_){ } try{ if(window.__exitNieSelect) window.__exitNieSelect(); }catch(_){ } } likeMode=v; document.body.classList.toggle("likeMode",v); fab.classList.toggle("on",v); }
   try{ window.__exitLike=function(){ setLike(false); }; }catch(_){}
   document.addEventListener("keydown",function(e){ if(e.key==="Escape" && likeMode) setLike(false); });
   fab.addEventListener("click",function(e){ e.stopPropagation(); setLike(!likeMode); });
@@ -3529,6 +3530,7 @@ window.__cmCorpus = {
 
   document.addEventListener("click",function(e){
     if(!likeMode || e.target.closest("#likeFab") || e.target.closest("#likeAsk")) return;
+    if(e.target.closest(".nieBtn,.glosNie,.quees,.mbFb")) return;   // v0.77: botones de accion propios (viven DENTRO de summary/.card) no deben "convertirse" en un like de la zona
     var el=e.target.closest(".senalItem,.card,.hero,.body p,.body li,.ctitle .t,summary,h1,.sub,.postit,#gateBar,footer,.heronote,.dec,.alert,.step,.chip,#senalesCard,#comentarios,.cmTex"); if(!el){ return; }
     e.preventDefault(); e.stopPropagation();
     var label="(zona)", t=el.querySelector?el.querySelector(".ctitle .t"):null;
@@ -5447,7 +5449,9 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   function sendNieZone(card, section){ try{ if(window.__fb) window.__fb({card:cardTitle(card), section:section||"", tipo:"no-entiendo", texto:""}); }catch(e){} }
   var curCard=null, curBtn=null, nieHint=null;
   function endNieSelect(){ D.body.classList.remove("nieSelect"); if(nieHint){ try{nieHint.remove();}catch(e){} nieHint=null; } if(curCard){ try{curCard.classList.remove("nieScope");}catch(e){} } curCard=null; curBtn=null; }
-  function startNieSelect(card, btn){ endNieSelect(); curCard=card; curBtn=btn; D.body.classList.add("nieSelect"); try{card.classList.add("nieScope");}catch(e){}
+  try{ window.__exitNieSelect=endNieSelect; }catch(_){}
+  function startNieSelect(card, btn){ try{ if(window.__exitLike) window.__exitLike(); }catch(_){}   // modos mutuamente exclusivos (mismo patron que activate() del lapiz, linea ~4770)
+    endNieSelect(); curCard=card; curBtn=btn; D.body.classList.add("nieSelect"); try{card.classList.add("nieScope");}catch(e){}
     nieHint=D.createElement("div"); nieHint.id="nieSelHint"; nieHint.textContent="👆 Toca la PARTE que no entiendes · (toca fuera o Esc para salir)"; D.body.appendChild(nieHint);
     try{ card.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){} }
   function askNie(btn, card){
@@ -5465,6 +5469,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   D.addEventListener("click", function(e){
     if(!D.body.classList.contains("nieSelect")) return;
     if(e.target.closest && e.target.closest("#nieSelHint")) return;
+    if(e.target.closest && e.target.closest("#likeFab,#lapizFab,#chaosFab,#cmtFab,#fabHubBtn,#fabHubMenu,#fabHubActive")) return;   // v0.77: tocar OTRO boton de modo debe cambiar de modo, no quedar comido por este capture
     var card=curCard, btn=curBtn; if(!card){ endNieSelect(); return; }
     e.preventDefault(); e.stopPropagation();
     var el=e.target.closest(".body p,.body li,.xb p,.d,.ctitle .t,summary,.dec,.alert,.step,p,li");
@@ -5649,7 +5654,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.76";
+  window.__cmVersion="v0.77";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
