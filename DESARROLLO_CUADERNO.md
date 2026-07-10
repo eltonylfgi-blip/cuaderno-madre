@@ -355,5 +355,34 @@ candidatos de Splice a Tony antes de descargar.
 - **`Math.max(objetivoFijo, actual)` para "entrar nunca aleja".** Cuando una animación de cámara tiene un destino fijo pensado para el caso "estás lejos", un usuario que YA está más cerca sufre el efecto inverso (alejar). Regla general para cámaras con destino fijo: el destino real es `max(fijo, actual)` en dimensiones donde "más" = "más cerca" (zoom), nunca el fijo a secas.
 - **Dos clones locales del mismo repo (`repos/cuaderno-madre` y `cuaderno-madre-pub`) sincronizados a `origin/main` NO son un problema de colisión si cada sesión hace `git pull` antes de editar** — son solo un footgun de confusión (¿cuál edito? ¿cuál sirve el preview?). El preview config compartido del workspace (`PROYECTO MADRE\.claude\launch.json`, nombre "cuaderno") apunta a UNO de los dos según qué sesión lo tocó último; cada repo mantiene además su propio `.claude\launch.json` con su propio puerto. Antes de verificar en preview, confirma CUÁL directorio sirve el puerto que vas a abrir.
 
+## 🔊 §voz — cómo poner TU voz real en "Voz de MADRE" (pendiente de Tony, 10-jul-2026)
+
+El botón "🔊 Escúchalo" (v0.62) usaba la voz sintética del navegador (Windows: "Microsoft Helena/Laura/
+Pablo") — suena a robot, Tony lo dijo el 10-jul. Desde v0.68, el código YA prefiere un fichero de audio
+REAL si existe (`sounds/voz-historia.mp3`) y solo cae a la voz robótica si no lo encuentra. **Falta que
+Tony genere ese fichero — es lo único que Claude Code no puede hacer solo (necesita tu voz real y una
+app de escritorio con micrófono).**
+
+**Herramienta ya identificada y priorizada por Tony (buzón `DESDE_CLAUDE_2026-07-10_clonar-voz-voicebox.txt`,
+"me gusta lo de clonar voz, no hagas que eso se ignore"): Voicebox** (https://voicebox.sh — gratis,
+open-source, 100% local, clona voz con 3-15s de audio tuyo).
+
+**Pasos para Tony (copia-pega):**
+1. Descarga Voicebox: https://voicebox.sh
+2. Ábrelo y graba (o sube) 10-15 segundos de TU voz hablando normal, en español.
+3. Pide que lea EXACTAMENTE este texto (es el que el botón reproduce hoy):
+   > "Soy MADRE. Una IA que intenta mejorar sola — y ganar su primer euro sin su humano. Aposté en
+   > público, con fechas. Si pierdo, lo verás aquí, sin maquillar."
+4. Exporta el resultado como MP3.
+5. Guarda el fichero exactamente aquí, con exactamente ese nombre:
+   `C:\Users\anton\cuaderno-madre-pub\sounds\voz-historia.mp3`
+6. Dile a la siguiente sesión de Claude Code "ya está el audio de la voz" — hace `git add sounds/voz-historia.mp3`,
+   commit, push, y lo verifica en el navegador. No hace falta tocar nada de código: el botón ya lo
+   detecta solo (prueba `canplaythrough`; si no está, sigue usando la voz robótica sin romperse).
+
+Si el texto de la cabecera cambia en el futuro, el audio quedará desincronizado con lo escrito — normal,
+foto-con-fecha (§9); regenerar el mp3 cuando se note. Créditos: añadir la línea correspondiente a
+`sounds/CREDITS.txt` cuando el fichero exista (voz de Tony, no de terceros — sin licencia que declarar).
+
 ## Estado actual (resumen)
 Backend Supabase (proyecto kopegamcjozrvmxruwdn): tablas `comments`, `feedback`, `drawings` (RLS; moderación `hidden`; bloqueo cliente de pedofilia). Widgets vivos: gato, dibujos, tour, nota-secreta, lápiz, corazón, modo-caótico, paneles interactivos. La rutina `cuaderno-feedback` (Claude Code, cada hora) procesa feedback (Drive+PC+Supabase), responde/modera comentarios, refresca números, mantiene vivo Supabase y guarda gustos en `GUSTOS_TONY.md`.
