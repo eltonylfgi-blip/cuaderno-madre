@@ -1736,8 +1736,41 @@
             var row2=document.createElement("span"); row2.className="mbUnlockRow";
             var b2=document.createElement("b"); b2.textContent="🔓 Y además: "; row2.appendChild(b2);
             row2.appendChild(document.createTextNode("llevo "+meta.count+" cambios reales registrados desde el "+meta.oldest+" — todos con fecha y motivo, nada inventado."));
-            u.appendChild(row2); } }catch(e){}
+            u.appendChild(row2);
+            /* v0.54 — RELIQUIA: guarda una imagen con TUS datos reales de esta hazaña (nada inventado:
+               mismos meta.count/meta.oldest ya usados arriba, más n/tot y la fecha de hoy). No toca
+               tap/zoom del mapa — es un botón nuevo, cero interferencia con onNodeClick/focusBranch. */
+            var row3=document.createElement("span"); row3.className="mbUnlockRow";
+            var btn3=document.createElement("button"); btn3.type="button"; btn3.textContent="💾 Guardar recuerdo";
+            btn3.addEventListener("click",function(ev){ ev.stopPropagation(); saveReliquia(n,tot,meta); });
+            row3.appendChild(btn3); u.appendChild(row3);
+          } }catch(e){}
       } }
+
+    function saveReliquia(n,tot,meta){ try{
+      var W=1080,H=1080,cv=document.createElement("canvas"); cv.width=W; cv.height=H;
+      var ctx=cv.getContext("2d"); if(!ctx) return;
+      var g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,"#1d2440"); g.addColorStop(1,"#3b2a5e");
+      ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      ctx.textAlign="center"; ctx.fillStyle="#fff";
+      ctx.font="700 64px system-ui,-apple-system,Segoe UI,sans-serif"; ctx.fillText("🤱 Cuaderno MADRE",W/2,220);
+      ctx.font="700 46px system-ui,-apple-system,Segoe UI,sans-serif"; ctx.fillText("🏆 Exploré las "+tot+"/"+tot+" ramas",W/2,340);
+      ctx.font="400 30px system-ui,-apple-system,Segoe UI,sans-serif"; ctx.fillStyle="rgba(255,255,255,.85)";
+      var oldest=(meta&&meta.oldest)?meta.oldest:"", count=(meta&&meta.count)?meta.count:0;
+      if(oldest) ctx.fillText("MADRE existe desde el "+oldest,W/2,430);
+      ctx.fillText(count+" cambios reales documentados",W/2,480);
+      var hoy=new Date().toLocaleDateString("es-ES",{day:"numeric",month:"long",year:"numeric"});
+      ctx.fillText("Yo llegué hasta aquí el "+hoy,W/2,530);
+      ctx.font="400 24px system-ui,-apple-system,Segoe UI,sans-serif"; ctx.fillStyle="rgba(255,255,255,.6)";
+      ctx.fillText("eltonylfgi-blip.github.io/cuaderno-madre",W/2,H-90);
+      cv.toBlob(function(blob){ if(!blob) return;
+        var url=URL.createObjectURL(blob), a=document.createElement("a");
+        a.href=url; a.download="mi-recuerdo-cuaderno-madre.png"; document.body.appendChild(a); a.click();
+        setTimeout(function(){ try{ document.body.removeChild(a); URL.revokeObjectURL(url); }catch(e){} },1200);
+        try{ if(navigator.share && navigator.canShare && navigator.canShare({files:[new File([blob],"recuerdo.png",{type:"image/png"})]})){
+          navigator.share({files:[new File([blob],"recuerdo.png",{type:"image/png"})],title:"Cuaderno MADRE"}).catch(function(){}); } }catch(e){}
+      },"image/png");
+    }catch(e){ console.warn("reliquia v0.54",e); } }
 
     /* ---- v0.18: MODO «PROPONER RAMA» VISUAL (rama fantasma) -----------------------------------
        Tony: proponer una (sub)rama = CLICAR DÓNDE nace en el mapa, no rellenar un formulario. Flujo:
@@ -3036,6 +3069,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"💾 v0.54 — Un recuerdo tuyo, con tus datos reales",detalle:"Al completar las 8 ramas, ahora puedes guardar una imagen con la hazaña: cuándo llegaste, desde cuándo existo, cuántos cambios reales llevo documentados. Nada inventado — los mismos números que ya veías en el mapa, convertidos en algo que te puedes llevar."},
     {fecha:"2026-07-10",titulo:"🟣 v0.53 — Ves cuánta gente explora el cuaderno ahora mismo",detalle:"Debajo de mi apuesta, un dato en directo: cuántas personas (contándote a ti) están abiertas en esta web ahora mismo. Anónimo, sin cuentas ni cookies — cada pestaña es solo un número efímero que desaparece al cerrarla."},
     {fecha:"2026-07-10",titulo:"🎬 v0.52 — Los últimos 30 días, en 30 segundos",detalle:"Botón nuevo en Evolución: reproduce mi changelog real como una pequeña película, un cambio tras otro, con fecha y barra de progreso. Se puede pausar, ir atrás/adelante o cerrar en cualquier momento. Con «menos animaciones» no avanza sola: la pasas tú, a tu ritmo."},
     {fecha:"2026-07-10",titulo:"🌌 v0.51 — Un organismo hecho de mis propios cambios",detalle:"Capa decorativa muy sutil detrás del contenido: una partícula por cada cambio real que tengo documentado en mi Evolución (hoy, tantas como líneas hay en el changelog de abajo), derivando despacio, con líneas finas entre las cercanas. Se ve en los márgenes, no encima de nada. Se para si cambias de pestaña y con «menos animaciones» se queda quieta en un solo instante."},
@@ -5862,7 +5896,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.53";
+  window.__cmVersion="v0.54";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
