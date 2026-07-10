@@ -11,6 +11,23 @@
 > enlazada, señales del island refrescadas (verificadas). Verificado: 0 errores consola, node --check
 > 32/32, tap del mapa con touch+jitter (toggle 12→8→12), 375px sin overflow, web viva v0.33 + og 200.
 >
+> **✅ v0.34 HECHO Y EN VIVO (a11y + móvil, lote crítico de la auditoría):** modal #ov = dialog+aria-modal+Esc+
+> focus-trap+restaurar-foco+labels for/id+inputs 16px móvil · chips hero con teclado (role/tabindex/keydown) ·
+> targets 44px (::before inset:-10px en .nieBtn/.glosNie/.quees/.mbFb) · tabIndex=-1 en cmBub/cmCrumb (estaban
+> en aria-hidden) · alt en imágenes de comentarios · .mbBar sin recortar la ✕ a 360px (título elipsable + botón
+> "🌱" con texto oculto en móvil vía .mbBtnTxt) · focus-trap del mapa filtra visibles · flecha del glosario
+> respeta reduced-motion · aria-live quitado de #evNow · glint honesto en la tarjeta pequeña del mapa (N/8 ramas).
+> Verificado: node --check 34/34, 360px sin overflow, ✕ del mapa dentro, modal Esc+foco OK, chips teclado OK.
+>
+> **⬜ TODO QUIRÚRGICO RESTANTE (sesión Sonnet barata — cada punto = script Python con reps exactas, uno a uno + verificar + commit):**
+> A. **Barrido "honesto/real/de verdad"** (~15-20 apariciones, tell de IA): presupuesto 1 por pantalla, sustituir por el DATO. `grep -n "honest\|de verdad\|nada inventado\|real" index.html`.
+> B. **Tarjeta 2 "Tu parte" → display:none en modo lectura** (hoy solo se mueve al final por el re-secuenciador; el público la ve). Añadir regla `body:not(.tony) .card.tony#... {display:none}` o gating en JS; dejar línea-resumen pública.
+> C. **window.confirm() del modo caos** (l.~4911) → ráfaga suave inmediata + chip "parar ✕" (anti-patrón §5 del propio repo).
+> D. **Realtime comentarios re-renderiza todo el DOM** (destruye replies a medio escribir): mínimo = guardar los reply-boxes abiertos con su texto antes de renderAll y restaurarlos.
+> E. **Nodos del mapa como PREGUNTAS** (idea GPT): probar en 2 nodos ("El cerebro"→"¿cómo pienso?") y que Tony juzgue; NO tocar el motor del tap.
+> F. **Fusiones Acto II** (riesgo medio, opcional): 8+9, 5+6, ⚙️+🔁+11. Mover contenido a details, no borrar. Re-verificar anclas de 💗 (nth-of-type) tras cualquier reorden.
+> G. **Dead code**: STEP_DEFS/ring/card del tour viejo (~150 líneas) neutralizados pero no borrados.
+
 > **⬜ TODO QUIRÚRGICO RESTANTE (para una sesión SONNET barata — ir uno a uno, verificar, commit):**
 > La síntesis completa de la auditoría (200 hallazgos): pedirla a Tony o re-derivar; los pendientes accionables:
 > 1. **A11y lote 1:** modal #ov (role=dialog+aria-modal+Esc+focus-trap+restaurar foco+labels for/id+inputs 16px);
