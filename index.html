@@ -1013,9 +1013,10 @@
     .map-link{stroke-width:2;opacity:.45}
     .map-link.mapBreathe{animation:mapLinkBreathe 6s ease-in-out infinite}
     @keyframes mapLinkBreathe{0%,100%{opacity:.3}50%{opacity:.55}}
-    .map-rel{stroke-dasharray:2 5;pointer-events:none;opacity:0;transition:opacity 1.1s ease-out}
+    .map-rel{stroke-dasharray:2 5;pointer-events:none;opacity:0;transition:opacity 1.1s ease-out;animation:mapRelFlow 2.4s linear infinite}
+    @keyframes mapRelFlow{to{stroke-dashoffset:-14}}
     .map-rel.in{opacity:.4}
-    @media(prefers-reduced-motion:reduce){ .map-rel{transition:none} }
+    @media(prefers-reduced-motion:reduce){ .map-rel{transition:none;animation:none} }
     .mapCenter .cc{filter:drop-shadow(0 0 10px rgba(124,58,237,.5))}
     @keyframes mapPulse{0%,100%{r:44px;opacity:.22}50%{r:58px;opacity:.04}}
     @keyframes mapFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
@@ -1216,9 +1217,10 @@
        tap/onNodeClick, solo el emoji central decorativo): un guiño ocasional, no un tic constante. */
     .mbWink{animation:mbWinkKf 9s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
     @keyframes mbWinkKf{0%,89%,100%{transform:scaleY(1)}91%,95%{transform:scaleY(.12)}93%{transform:scaleY(1)}}
-    .mbRel{stroke-dasharray:2 6;pointer-events:none;opacity:0;transition:opacity 1.1s ease-out}
+    .mbRel{stroke-dasharray:2 6;pointer-events:none;opacity:0;transition:opacity 1.1s ease-out;animation:mbRelFlow 2.4s linear infinite}
     .mbRel.in{opacity:.4}
-    @media(prefers-reduced-motion:reduce){ .mbRel{transition:none} }
+    @keyframes mbRelFlow{to{stroke-dashoffset:-16}}
+    @media(prefers-reduced-motion:reduce){ .mbRel{transition:none;animation:none} }
     .mbRelLbl{pointer-events:none;font-style:italic;opacity:.85}
     .mbRelLbl text{fill:#c9bdfa!important}
     .mbSubIn{animation:mbPop .28s cubic-bezier(.2,1.3,.4,1) both;transform-box:fill-box;transform-origin:center}
@@ -3029,6 +3031,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🔗 v0.49 — Las conexiones entre ramas ya no son líneas quietas: fluyen",detalle:"Idea de una segunda opinión externa (2 modelos gratis, verificada antes de aplicar): el patrón discontinuo de las líneas violeta ahora se desplaza despacio, como si algo viajara entre las ramas conectadas. Antes aparecían y se quedaban quietas; ahora se sienten activas. Apagado con «menos animaciones»."},
     {fecha:"2026-07-10",titulo:"😉 v0.48 — MADRE te guiña el ojo (de vez en cuando)",detalle:"Un detalle pequeño y sin ninguna pretensión: el emoji 🤱🏻 del centro del mapa parpadea muy de vez en cuando, como un guiño real, no un tic nervioso. Cero riesgo: es puramente decorativo, no toca ni un byte de cómo se abren las ramas. Se apaga con «menos animaciones»."},
     {fecha:"2026-07-10",titulo:"👀 v0.47 — El mapa deja de repetirse: te dice EXACTAMENTE qué rama te falta",detalle:"Antes, si tocabas el centro del mapa, siempre veías el mismo «👆 toca una rama». Ahora, si ya llevas algunas exploradas (pero no todas), te señala una en concreto que aún no has visto: «👀 Aún no has visto 📚 Memoria / archivo». Dato 100% tuyo, real, de tu propia sesión — no es un truco, es MADRE prestando atención de verdad a por dónde vas."},
     {fecha:"2026-07-10",titulo:"🌳 v0.46 — El mapa siempre a un toque, aunque sigas bajando",detalle:"Nuevo botón «🌳 Volver al mapa» que aparece solo cuando lo dejas atrás bajando por la web, y desaparece si vuelves arriba. No es un menú nuevo: sigue la misma regla que ya tenían «Ruta guiada» y «El cuaderno por dentro» — la navegación importante va SIEMPRE fuera del menú ✦, a un solo toque. Refuerza la idea de que el mapa es el centro al que siempre puedes volver, no una parada más en el camino."},
@@ -5850,7 +5853,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.48";
+  window.__cmVersion="v0.49";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
