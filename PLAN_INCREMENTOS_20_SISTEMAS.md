@@ -985,11 +985,48 @@ otro salvo para verificar):**
   y se restaura EXACTO al volver, easter egg de consola con dato real (72 cambios). Verificado: título
   hidden/visible correcto, favicon cambia de encoding (confirma tick), consola sin errores.
 
-**PENDIENTES (8/17, no tocados esta sesión — el plan de cada uno sigue arriba, listo para retomar sin
-releer nada):** MADRE duda (#9) · Latido en directo (#10) · Memoria del visitante (#11) · Tactilidad
-premium (#12) · Voz de MADRE (#15) · Consecuencia visible de propuestas (#16, requiere MCP Supabase) ·
-Espejo del visitante (#17) · Presencia de MADRE en toda la página (#8 — el más delicado de los que
-faltan: el verificador corrigió 3 anclas falsas, revisar sus notas con calma antes de tocarlo).
+**Sesión 1, continuación tras feedback de Tony (crítica externa pegada + "no pares por validación,
+sigue construyendo hasta agotar lo seguro") — 17/17 COMPLETADO, v0.58→v0.67:**
+
+- **v0.59 MADRE duda** — HECHO. Dilema real y vigente (v0.35), voto consultivo vía `window.__fb`,
+  dedupe por sesión verificado (persiste tras recargar).
+- **v0.60 Latido en directo** — HECHO. Hook aditivo al canal `comments-rt` YA existente (sin tocar
+  `liveReload`), toast aria-live + pulso del punto de cabecera, anti-spam 1/min verificado.
+- **v0.61 Tactilidad** — HECHO. `navigator.vibrate` (guard de soporte) en corazón/like-comentario/
+  like-dibujo + `:active` con el muelle ya usado en el mapa, para `.btn`/`.chip`/`.dbjsLike`.
+- **v0.62 Voz de MADRE** — HECHO. Botón "Escúchalo" (speechSynthesis), solo aparece si hay voz es-*
+  real (getVoices + voiceschanged). Verificado ciclo hablar/parar completo, 0 errores.
+- **v0.63 Espejo del visitante** — HECHO. Tracker propio (no existía ninguno reutilizable, confirmado
+  antes de escribir), puro local. **Gotcha nuevo cazado:** el navegador de preview reporta
+  `document.hidden=true` cuando la pestaña de automatización no tiene foco — mi guard lo respetó
+  correctamente (no es bug, es honestidad: no fabricar actividad con la pestaña oculta), verificado
+  forzando visibilidad para la prueba.
+- **v0.64 Memoria del visitante** — HECHO. Tracker propio, lee el valor de la visita ANTERIOR antes
+  de que el de ESTA visita lo sobrescriba (mismo orden que `diarioVivo`). Verificado: chip aparece en
+  2ª+ visita con el valor correcto, NO aparece en 1ª visita, click hace scroll y borra el chip.
+- **v0.65 Consecuencia visible de propuestas** — HECHO. Consulté Supabase real vía MCP antes de
+  escribir: `tipo='propuesta-rama'` = **0** filas hoy (10-jul-2026) — mostrado tal cual, con fecha,
+  sin inflar (honestidad §9), en el panel de proponer rama.
+- **v0.66 Presencia de MADRE en toda la página** — HECHO, el más delicado (el verificador había
+  corregido 3 anclas falsas del plan original). Usé las anclas YA corregidas: `#senalesCard`/
+  `#prediccionesCard`/`<footer>` (NO `#evidencia`, que no existe), clase propia (no `.mbExpl`),
+  z-index por encima de `#toast`. Verificado: los 3 hitos disparan una vez, con el texto correcto.
+- **v0.67 — AUTOCRÍTICA REAL (no ritual, un hallazgo genuino):** tras cerrar los 17, revisé si
+  funcionaban BIEN JUNTOS, no solo aislados uno a uno. Encontré que `cmLatidoToast` (v0.60) y
+  `cmMadreHabla2` (v0.66) compartían EXACTAMENTE `bottom:20px` centrado — si dos avisos coincidían,
+  uno tapaba al otro por completo (silencioso, sin error de consola). Arreglado separando alturas.
+  Verificado: ambos coexisten sin solape (`getBoundingClientRect` sin intersección).
+
+**LOS 17/17 SISTEMAS DEL PLAN ESTÁN EN VIVO (v0.49→v0.67, 18 versiones en una sesión).** Lo único que
+queda de la crítica de Tony y NO se hizo es lo que el propio diagnóstico de Fable ya había marcado
+como dependiente de SU gusto (no una tarea pendiente de ejecución):
+- **Identidad visual propia** — Sonnet propuso 3 direcciones concretas en el chat (no en este fichero,
+  quedaron en la conversación): "Cuaderno de laboratorio nocturno" (negro-tinta + verde-fósforo),
+  "Criatura de papel" (crema envejecido + tinta a mano), "Organismo bioluminiscente" (azul-violeta +
+  halos). Falta que Tony elija una (o pida más) para construir el primer incremento.
+- **Mapa como interfaz única / zoom infinito** — sigue bloqueado por la restricción real del tap/zoom
+  (se rompió 2 veces con cambios mucho menores); necesita permiso EXPLÍCITO de Tony + presupuesto de
+  sesión más largo, no es cosa de "seguir construyendo".
 
 **Aprendizaje que vale para las próximas sesiones de este repo:** el navegador de PREVIEW (no solo el
 de Tony) tiene `prefers-reduced-motion:reduce` ON por defecto — toda verificación de una rama animada

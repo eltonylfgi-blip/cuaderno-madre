@@ -1,16 +1,19 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **▶️ PLAN ACTIVO (10-jul) — v0.49→v0.58 EN VIVO, 9/17 sistemas hechos.** El ejercicio «20 sistemas»
-> de Fable (34 candidatos → 17 descartados → 17 supervivientes, cada uno con su primer incremento
-> anclado línea a línea) sigue en **`PLAN_INCREMENTOS_20_SISTEMAS.md`** (este repo). Sonnet 5 ejecutó
-> la 1ª tanda (~1h40, sin parar): Génesis · Organismo · Modo película · Presencia compartida · Reliquia
-> · Teatro de errores · Logros honestos · Clima · Micro-imposibles — los 9 verificados en navegador real
-> (node --check + consola + 360px + tap del mapa donde tocaba cerca), con **2 bugs de carrera reales**
-> cazados y arreglados (`window.__sb` no listo a tiempo; `renderCambios` desincronizado del array
-> `cambios`). **Quedan 8** (MADRE duda · Latido · Memoria del visitante · Tactilidad · Voz · Consecuencia
-> de propuestas · Espejo · Presencia de MADRE en la página) — su plan YA está escrito y verificado,
-> listo para retomar sin releer nada. Bitácora completa con lo cazado y lo pendiente al final del propio
-> `PLAN_INCREMENTOS_20_SISTEMAS.md`.
+> **✅ PLAN COMPLETADO (10-jul) — v0.49→v0.67 EN VIVO, 17/17 sistemas + 1 fix de revisión de conjunto.**
+> El ejercicio «20 sistemas» de Fable (34 candidatos → 17 descartados → 17 supervivientes) se ejecutó
+> ENTERO en una sesión de Sonnet 5: Génesis · Organismo · Modo película · Presencia compartida · Reliquia
+> · Teatro de errores · Logros honestos · Clima · Micro-imposibles · MADRE duda · Latido en directo ·
+> Tactilidad · Voz de MADRE · Espejo del visitante · Memoria del visitante · Consecuencia de propuestas
+> (0 real, consultado en Supabase) · Presencia de MADRE en toda la página. Los 17 verificados en
+> navegador real (node --check + consola + 360px + tap del mapa donde tocaba cerca). **3 bugs reales
+> cazados y arreglados:** `window.__sb` no listo a tiempo (race condition con el módulo de Supabase) ·
+> `renderCambios` desincronizado del array `cambios` · dos toasts flotantes compartían la misma posición
+> en pantalla (cazado en una revisión de CONJUNTO al terminar, no en la verificación pieza a pieza).
+> **Lo único que queda es lo que YA dependía del gusto de Tony, no de más ejecución:** identidad visual
+> (3 direcciones propuestas en el chat, esperando que elija una) y mapa-como-interfaz-única (bloqueado
+> por la restricción real del tap/zoom, ya roto 2 veces, necesita su permiso explícito). Detalle completo
+> en `PLAN_INCREMENTOS_20_SISTEMAS.md`.
 
 > **✅ v0.37→v0.48 HECHO Y EN VIVO (10-jul, sesión Sonnet larga — protocolo "no pares, busca el
 > siguiente efecto" pedido explícitamente por Tony).** 12 versiones, cada una: EFECTO deseado →
