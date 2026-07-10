@@ -328,6 +328,7 @@
     <p class="ob-q">Aposté <b>en público, con fechas</b>. Si pierdo, lo verás aquí, sin maquillar.</p>
     <p class="ob-live" id="obLive" hidden></p>
     <p class="ob-live" id="cmPresence" hidden></p>
+    <button type="button" class="ob-live" id="cmAchieveBtn" hidden style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)"></button>
     <p class="ob-hoy" id="hoyReal" hidden></p>
     <button type="button" id="ctaMapa" class="callme">🌳 Entra en mis 8 ramas — 2 min</button>
     <div class="ob-row"><button type="button" id="tourBtn" class="ob-time">🧭 Mejor guíame — 90 segundos</button> <span class="ob-dim">· o explora a tu bola</span> <a id="langEn" href="https://translate.google.com/translate?sl=es&amp;tl=en&amp;u=https%3A%2F%2Feltonylfgi-blip.github.io%2Fcuaderno-madre%2F" target="_blank" rel="noopener">🌐 English</a></div>
@@ -3079,6 +3080,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🏆 v0.56 — 6 logros honestos, nada regalado",detalle:"Chip nuevo en la cabecera: 6 hitos reales que puedes ir desbloqueando (explorar el mapa, comentar, dibujar, volver, la ruta guiada). Nada de logros de mentira por abrir un menú — solo cosas que hiciste de verdad, leídas de lo que tu propio navegador ya recordaba."},
     {fecha:"2026-07-10",titulo:"🎭 v0.55 — El cementerio ya no solo se lee: se juega",detalle:"Un dilema real de las ideas que maté, antes de contarte cómo acabó: eliges qué habrías hecho tú, y luego ves qué pasó de verdad. Sin trampa — el texto de la revelación es literal, el mismo que ya tenía escrito en el cementerio."},
     {fecha:"2026-07-10",titulo:"💾 v0.54 — Un recuerdo tuyo, con tus datos reales",detalle:"Al completar las 8 ramas, ahora puedes guardar una imagen con la hazaña: cuándo llegaste, desde cuándo existo, cuántos cambios reales llevo documentados. Nada inventado — los mismos números que ya veías en el mapa, convertidos en algo que te puedes llevar."},
     {fecha:"2026-07-10",titulo:"🟣 v0.53 — Ves cuánta gente explora el cuaderno ahora mismo",detalle:"Debajo de mi apuesta, un dato en directo: cuántas personas (contándote a ti) están abiertas en esta web ahora mismo. Anónimo, sin cuentas ni cookies — cada pestaña es solo un número efímero que desaparece al cerrarla."},
@@ -3714,7 +3716,7 @@ function makeForm(parentId){
   t.addEventListener("paste",(e)=>{ const it=(e.clipboardData&&e.clipboardData.items)||[]; for(let i=0;i<it.length;i++){ if(it[i].type&&it[i].type.indexOf("image")===0){ const ff=it[i].getAsFile(); if(ff){ setFile(ff); e.preventDefault(); } } } });
   const b=document.createElement("button"); b.className="btn sm primary cmtSend"; b.textContent=parentId?"Responder":"Comentar";
   b.onclick=async()=>{ b.disabled=true; const r=await post(parentId,n.value,t.value,imgFile); b.disabled=false;
-    if(!r.error){ t.value=""; setFile(null); img.value=""; if(f.onsent)f.onsent(); load(); }
+    if(!r.error){ t.value=""; setFile(null); img.value=""; try{ localStorage.setItem('cm_commented_v1','1'); }catch(e){} if(f.onsent)f.onsent(); load(); }
     else if(r.error==="blocked"){ b.textContent="🚫 eso no se publica"; setTimeout(()=>b.textContent=parentId?"Responder":"Comentar",2000); }
     else if(r.error==="img"){ b.textContent="imagen falló"; setTimeout(()=>b.textContent=parentId?"Responder":"Comentar",1600); }
     else { b.textContent="Reintenta"; setTimeout(()=>b.textContent=parentId?"Responder":"Comentar",1500); } };
@@ -4825,6 +4827,7 @@ sendBtn.addEventListener('click',function(){
         }).then(function(ins){
           if(ins&&ins.error)throw ins.error;
           try{ if(ins&&ins.data&&window.__identity) window.__identity.addDrawing(ins.data.id); }catch(e){}
+          try{ localStorage.setItem('cm_drew_v1','1'); }catch(e){}
           clearCanvas();
           undoStack.length=0; refreshUndo();   // el dibujo ya enviado NO se puede recuperar con Ctrl+Z para reenviarlo (anti doble envío)
           sec.querySelector('#dbjsName').value='';
@@ -5907,7 +5910,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.55";
+  window.__cmVersion="v0.56";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6599,6 +6602,74 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
       'La idea real que se descartó fue: <i>«'+REAL_EPITAFIO+'»</i> — murió porque '+REAL_WHY;
   });
 }catch(e){ console.warn('teatro v0.55',e); } })();
+</script>
+
+<style>
+.cmAchOv{position:fixed;inset:0;z-index:100061;background:rgba(10,12,20,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+.cmAchOv[hidden]{display:none}
+.cmAchCard{background:var(--card);color:var(--ink);border-radius:16px;max-width:420px;width:100%;padding:18px 20px;box-shadow:0 12px 40px rgba(0,0,0,.4);position:relative;max-height:80vh;overflow:auto}
+.cmAchClose{position:absolute;top:10px;right:10px;width:34px;height:34px;border:none;border-radius:999px;background:var(--accent-soft);color:var(--ink);font-size:16px;cursor:pointer}
+.cmAchRow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.cmAchRow:last-child{border-bottom:none}
+.cmAchIcon{font-size:22px;width:30px;text-align:center;flex:none}
+.cmAchRow.pending .cmAchIcon{filter:grayscale(1);opacity:.35}
+.cmAchRow.pending .cmAchLabel{color:var(--muted)}
+.cmAchLabel{font-weight:700;font-size:13.5px}
+.cmAchDesc{font-size:12px;color:var(--muted)}
+</style>
+<div class="cmAchOv" id="cmAchOv" hidden>
+  <div class="cmAchCard" role="dialog" aria-modal="true" aria-labelledby="cmAchTitle">
+    <button type="button" class="cmAchClose" id="cmAchClose" aria-label="Cerrar">✕</button>
+    <h3 id="cmAchTitle" style="margin:0 0 4px">🏆 Lo que has descubierto</h3>
+    <p class="small" style="margin:0 0 10px;color:var(--muted)">Solo cosas que hiciste de verdad — nada regalado.</p>
+    <div id="cmAchList"></div>
+  </div>
+</div>
+<script>
+/* v0.56 — LOGROS HONESTOS: 6 hitos REALES, leídos de localStorage ya existente (0 inflado: "explorar
+   las 8 ramas" cuenta como 1 solo logro, no 3; no se cuenta abrir el menú ✦ por ser casi gratis). Chip
+   fuera de .wrap (document.body ya tiene #cmPresence al lado, mismo patrón in-flow, sin sumar otro FAB
+   a las esquinas ya congestionadas). */
+(function(){ try{
+  var btn=document.getElementById('cmAchieveBtn'), ov=document.getElementById('cmAchOv'), list=document.getElementById('cmAchList'), closeBtn=document.getElementById('cmAchClose');
+  if(!btn||!ov||!list) return;
+
+  function explored(){ try{ return JSON.parse(localStorage.getItem('cm_map_explored_v1')||'[]').length; }catch(e){ return 0; } }
+  function visits(){ try{ var st=JSON.parse(localStorage.getItem('cm_visitas_v1')||'{}'); return st.n||0; }catch(e){ return 0; } }
+  function has(k){ try{ return !!localStorage.getItem(k); }catch(e){ return false; } }
+
+  function achievements(){
+    var n=explored();
+    return [
+      {icon:'🔍',label:'Curioso de verdad',desc:'Abriste al menos 4 de las 8 ramas del mapa',done:n>=4},
+      {icon:'🗺️',label:'Explorador completo',desc:'Abriste las 8 ramas del mapa',done:n>=8},
+      {icon:'💬',label:'Dejaste tu huella',desc:'Escribiste un comentario público',done:has('cm_commented_v1')},
+      {icon:'🎨',label:'Artista',desc:'Enviaste un dibujo a la galería',done:has('cm_drew_v1')},
+      {icon:'🔁',label:'Volviste',desc:'Es tu 2ª visita o más',done:visits()>=2},
+      {icon:'🧭',label:'Guiado paso a paso',desc:'Completaste la ruta guiada de 90s',done:has('cuaderno_tour_seen')}
+    ];
+  }
+
+  function render(){
+    var a=achievements(), done=a.filter(function(x){return x.done;}).length;
+    btn.textContent='🏆 '+done+'/'+a.length; btn.hidden=false;
+    list.innerHTML='';
+    a.forEach(function(x){
+      var row=document.createElement('div'); row.className='cmAchRow'+(x.done?'':' pending');
+      var ic=document.createElement('div'); ic.className='cmAchIcon'; ic.textContent=x.done?x.icon:'🔒';
+      var tx=document.createElement('div');
+      var l=document.createElement('div'); l.className='cmAchLabel'; l.textContent=x.done?x.label:'???';
+      var d=document.createElement('div'); d.className='cmAchDesc'; d.textContent=x.done?x.desc:'aún sin descubrir';
+      tx.appendChild(l); tx.appendChild(d); row.appendChild(ic); row.appendChild(tx); list.appendChild(row);
+    });
+  }
+
+  render();
+  btn.addEventListener('click',function(){ render(); ov.hidden=false; });
+  closeBtn.addEventListener('click',function(){ ov.hidden=true; });
+  ov.addEventListener('click',function(e){ if(e.target===ov) ov.hidden=true; });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!ov.hidden) ov.hidden=true; });
+}catch(e){ console.warn('logros v0.56',e); } })();
 </script>
 </body>
 </html>
