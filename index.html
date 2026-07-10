@@ -3112,6 +3112,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"♿ v0.70 — Auditoría de accesibilidad de lo nuevo de hoy",detalle:"Revisé, sin que nadie me lo pidiera, si los paneles que construí hoy (modo película, logros) tenían el mismo nivel de accesibilidad que el resto de la web — y no lo tenían: les faltaba foco inicial, restaurar el foco al cerrar y que el tabulador no se escape hacia el fondo. Arreglado con el mismo patrón ya probado en el mapa desde v0.13."},
     {fecha:"2026-07-10",titulo:"🎨 v0.69 — Prueba una identidad visual nueva, en vivo (prototipo)",detalle:"En vez de pedirte que eligieras leyendo texto, construí un prototipo real: botón «Probar identidad nueva» que enciende «Organismo bioluminiscente» (fondo casi negro, halos violeta) en la web de verdad, con un solo toque, 100% reversible. Es UNA de las 3 direcciones que te propuse — si te gusta la dirección pero no los colores exactos, lo afino; si prefieres otra, la prototipamos igual."},
     {fecha:"2026-07-10",titulo:"🗣️ v0.68 — Preparado para tu voz real, no la robótica",detalle:"Dijiste que la voz sonaba artificial — tenías razón. El botón «Escúchalo» ya prefiere un audio real (grabado o clonado con Voicebox, la herramienta que tú mismo priorizaste) si existe, y solo usa la voz del navegador como respaldo. Falta un único paso tuyo: grabar 10-15s con Voicebox — instrucciones exactas en DESARROLLO_CUADERNO.md §voz."},
     {fecha:"2026-07-10",titulo:"🔍 v0.67 — Autocrítica real: cacé un choque entre 2 avisos flotantes",detalle:"Al terminar los 17 sistemas del plan, revisé si funcionaban BIEN JUNTOS (no solo cada uno por separado): el aviso de \"llegaste a esta sección\" y el aviso de \"alguien comentó\" usaban exactamente la misma posición en pantalla — si coincidían, uno tapaba al otro entero. Arreglado separándolos. Nada visible se rompió; era un fallo silencioso que solo aparecería si dos cosas pasaban a la vez."},
@@ -5958,7 +5959,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.69";
+  window.__cmVersion="v0.70";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6582,16 +6583,26 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   }
   function play(){ if(!list.length||idx>=list.length-1) return; playing=true; playBtn.textContent='⏸ Pausa'; scheduleNext(); }
 
+  var lastFocusMovie=null;
   function open2(){
     var src=(window.__cmCambios&&window.__cmCambios.length)?window.__cmCambios:[];
     var cutoff=Date.now()-30*86400000;
     list=src.filter(function(c){ var t=Date.parse((c.fecha||'')+'T00:00:00'); return isNaN(t)||t>=cutoff; }).slice().reverse(); /* orden cronológico: más viejo primero */
     idx=0; render();
+    lastFocusMovie=document.activeElement;
     ov.hidden=false; document.addEventListener('keydown',onKey);
     if(!reduce) play(); else { playBtn.textContent='▶ (paso a paso)'; playBtn.disabled=true; }
+    try{ closeBtn.focus(); }catch(e){}
   }
-  function close2(){ stop(); ov.hidden=true; document.removeEventListener('keydown',onKey); playBtn.disabled=false; }
+  function close2(){ stop(); ov.hidden=true; document.removeEventListener('keydown',onKey); playBtn.disabled=false;
+    try{ if(lastFocusMovie&&lastFocusMovie.focus) lastFocusMovie.focus(); }catch(e){} }
   function onKey(e){ if(e.key==='Escape') close2(); }
+
+  /* focus-trap: mismo patrón ya probado en el mapa (v0.13) — Tab cicla dentro del overlay */
+  ov.addEventListener('keydown',function(e){ if(e.key!=='Tab'||ov.hidden) return;
+    var f=[].filter.call(ov.querySelectorAll('button,[tabindex="0"]'),function(el){ return el.getClientRects().length>0 && !el.disabled; });
+    if(!f.length) return; var first=f[0], last=f[f.length-1], a=document.activeElement;
+    if(e.shiftKey){ if(a===first||!ov.contains(a)){ e.preventDefault(); last.focus(); } } else { if(a===last||!ov.contains(a)){ e.preventDefault(); first.focus(); } } });
 
   btn.addEventListener('click',open2);
   closeBtn.addEventListener('click',close2);
@@ -6713,10 +6724,18 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   }
 
   render();
-  btn.addEventListener('click',function(){ render(); ov.hidden=false; });
-  closeBtn.addEventListener('click',function(){ ov.hidden=true; });
-  ov.addEventListener('click',function(e){ if(e.target===ov) ov.hidden=true; });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!ov.hidden) ov.hidden=true; });
+  var lastFocusAch=null;
+  function openAch(){ render(); lastFocusAch=document.activeElement; ov.hidden=false; try{ closeBtn.focus(); }catch(e){} }
+  function closeAch(){ ov.hidden=true; try{ if(lastFocusAch&&lastFocusAch.focus) lastFocusAch.focus(); }catch(e){} }
+  btn.addEventListener('click',openAch);
+  closeBtn.addEventListener('click',closeAch);
+  ov.addEventListener('click',function(e){ if(e.target===ov) closeAch(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!ov.hidden) closeAch(); });
+  /* focus-trap: mismo patrón ya probado en el mapa (v0.13) */
+  ov.addEventListener('keydown',function(e){ if(e.key!=='Tab'||ov.hidden) return;
+    var f=[].filter.call(ov.querySelectorAll('button,[tabindex="0"]'),function(el){ return el.getClientRects().length>0 && !el.disabled; });
+    if(!f.length) return; var first=f[0], last=f[f.length-1], a=document.activeElement;
+    if(e.shiftKey){ if(a===first||!ov.contains(a)){ e.preventDefault(); last.focus(); } } else { if(a===last||!ov.contains(a)){ e.preventDefault(); first.focus(); } } });
 }catch(e){ console.warn('logros v0.56',e); } })();
 </script>
 
