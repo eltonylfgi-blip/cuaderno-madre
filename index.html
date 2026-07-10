@@ -327,8 +327,14 @@
        por debajo del mínimo táctil de 44px. Misma técnica ya usada en .nieBtn/.glosNie/.quees (hit-area
        invisible con ::before) — aquí SÍ con position:relative explícito, para no depender de que el
        <button> ya esté posicionado. */
-    #cmVozBtn,#cmIdBtn,#cmAchieveBtn{position:relative}
+    #cmVozBtn,#cmIdBtn,#cmAchieveBtn{position:relative;margin-top:12px;margin-bottom:12px}
     #cmVozBtn::before,#cmIdBtn::before,#cmAchieveBtn::before{content:"";position:absolute;inset:-11px}
+    /* v0.78 — auditoría propia: el inset:-11px del área táctil de arriba se comía ~3px del elemento
+       vecino (.ob-live tiene solo 8px de margen) — un tap cerca del borde caía en el botón
+       equivocado. OJO margin-collapsing: márgenes verticales de hermanos en flujo normal se
+       colapsan al MAYOR, no se suman — 4px aquí + 8px del vecino seguía dando 8px (medido, no
+       arreglaba nada). Con 12px en AMBOS lados, gane quien gane el colapso siempre supera los 11px
+       del inset, cierre garantizado con cualquier vecino. */
     #cmDudaOpts button{position:relative;min-height:32px}
     #cmDudaOpts button::before{content:"";position:absolute;inset:-8px}
     /* v0.61 — TACTILIDAD: mismo muelle (.34,1.56,.64,1) que YA usan post-its/mapa/gato/tour — solo
@@ -3135,6 +3141,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"👆 v0.78 — El área de toque de 3 botones le robaba taps al vecino de arriba",detalle:"El arreglo de área táctil de hace unas versiones (v0.72) hacía que un toque cerca del borde inferior del chip «seguir donde lo dejaste» cayera en el botón de identidad de más abajo en vez de en el chip. Medido con coordenadas reales: el hueco entre ambos (8px) era menor que el área invisible del botón (11px). Ahora el hueco es mayor que el área invisible, así que cada uno se queda con sus propios toques."},
     {fecha:"2026-07-10",titulo:"🥊 v0.77 — El modo 💗 y el modo 🤔 se pisaban entre sí",detalle:"Con el modo «marca lo que te gusta» encendido, tocar el botón 🤔 de una tarjeta (o el del glosario) se registraba como un «me gusta» en vez de abrir «qué no entiendes» — el 🤔 vive dentro de la misma zona que el modo captura. Y al revés: si estabas señalando qué no entiendes y tocabas el corazón, el toque se perdía sin encender nada. Ahora cada botón hace lo suyo y, si cambias de modo, el anterior se apaga solo."},
     {fecha:"2026-07-10",titulo:"♿ v0.76 — Lote de accesibilidad 3: 4 arreglos de teclado y lector de pantalla",detalle:"El toggle de identidad nueva ahora anuncia si está encendido o apagado. El voto en «MADRE duda» ya avisa a un lector de pantalla y no te deja perdido sin foco tras votar. El botón de logros describe a dónde lleva, no solo el número."},
     {fecha:"2026-07-10",titulo:"🤪 v0.75 — Dos botones flotantes que se pisaban al cargar",detalle:"Los primeros segundos de cada visita, el botón del modo caótico y el del «cuaderno por dentro» ocupaban casi el mismo hueco en la esquina — hasta que el menú los ordena, uno tapaba al otro. Separados para que ninguno robe el toque del otro."},
@@ -5654,7 +5661,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.77";
+  window.__cmVersion="v0.78";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
