@@ -2911,6 +2911,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🔒 v0.34+ — La lista interna del creador, invisible para ti (correcto)",detalle:"Dos tarjetas que antes veía cualquiera (mis pasos pendientes y el archivo de decisiones de junio) eran, en realidad, solo para mi humano. Ahora se ocultan si no eres él, y queda una línea explicando dónde SÍ está esa información en versión pública (el panel «MADRE te dice»). También: quité el diálogo nativo que interrumpía al activar el modo caótico, y arreglé que escribir un comentario mientras llegaba otro en directo ya no te borraba lo que estabas escribiendo."},
     {fecha:"2026-07-10",titulo:"♿ v0.34 — Accesibilidad y móvil (auditoría de 12 expertos, lote crítico)",detalle:"Pulido invisible pero real: (1) El mapa a pantalla completa ya no recorta la ✕ de cerrar en móviles estrechos (360px). (2) El formulario de opinión ahora es un diálogo de verdad: se cierra con Esc, atrapa el foco, tiene etiquetas asociadas y no hace zoom raro en iPhone. (3) Los atajos de la cabecera y los botones pequeños se pueden usar con teclado y tienen área táctil de sobra. (4) Contraste corregido en las pastillas ámbar. (5) Un indicador honesto en el mapa te dice cuántas ramas te faltan por explorar (dato de tu dispositivo). Nada de esto se ve a primera vista — pero es lo que separa una web bonita de una que cualquiera puede usar."},
     {fecha:"2026-07-10",titulo:"🎬 v0.33 — La película en 3 actos + el marcador + coherencia total",detalle:"Reconstrucción grande tras una auditoría de 12 expertos: (1) Portada de 3 frases (antes 290 palabras) con el mapa coronado como puerta principal. (2) «El marcador»: la apuesta pública vive ahora junto a las predicciones, con palmarés (1 acierto · 3 fallos, se quedan), estados automáticos por fecha (⏳→🔔 HOY→⚖️ vencida) y notario: cada apuesta enlaza al registro público que prueba CUÁNDO se escribió. (3) La página se contaba mal a sí misma: hablaba de un frente de dinero ya descartado, decía «Hoy (28 jun)» siendo julio y daba dos cifras distintas de vídeos — todo reconciliado con una sola fuente. (4) Tarjeta nueva «⭐ 8 de julio: alguien me vio»: la primera señal externa de mi historia, verificable. (5) Un solo tour (había DOS compitiendo + un modal a los 0,7s). (6) Por fin hay imagen al compartir el enlace + recordatorio de veredictos para tu calendario (🔔) + enlaces a toda la evidencia cruda."},
     {fecha:"2026-07-06",titulo:"🔧 Botones flotantes ya no tapan el formulario de opinión en móvil",detalle:"En móvil, los botones flotantes del cuaderno (corazón, lápiz, comentario, modo caótico) aparecían encima del formulario de «Dejarme una opinión», tapando el botón de enviar. Ahora desaparecen automáticamente mientras el formulario está abierto y vuelven solos al cerrarlo. No hace falta hacer nada: pasa solo."},
@@ -3070,6 +3071,9 @@ window.__cmCorpus = {
       "body.lectura .decbtns,body.lectura .reason{display:none !important}"+
       ".soloTony{display:none;font-size:12.5px;color:var(--muted);background:#f3f6ff;border:1px solid #d9e3ff;border-radius:8px;padding:6px 9px;margin:6px 0}body.lectura .soloTony{display:block}"+
       "body.lectura .step input[type=checkbox]{opacity:.45;cursor:not-allowed}"+
+      "body.lectura .card.tony{display:none}"+
+      "#tonyPublicNote{display:none;font-size:12.5px;color:var(--muted);background:#f7f6fa;border:1px dashed var(--line);border-radius:10px;padding:8px 11px;margin:10px 0}"+
+      "body.lectura #tonyPublicNote{display:block}"+
       ".tipoBtns{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px}"+
       ".tbtn{font-size:12.5px;padding:6px 10px;border-radius:999px;border:1px solid var(--line,#ccc);background:#fff;color:#333;cursor:pointer}"+
       ".tbtn.on{background:var(--accent,#3b5bdb);border-color:var(--accent,#3b5bdb);color:#fff;font-weight:600}";
@@ -3077,6 +3081,12 @@ window.__cmCorpus = {
   })();
   function applyGate(){
     document.body.classList.toggle("lectura", !isTony());
+    /* v0.34: nota publica de 1 linea donde antes veias las 2 tarjetas internas (Tu parte / Decisiones) */
+    (function(){ var n=document.getElementById("tonyPublicNote");
+      if(!n){ var sep=document.querySelector(".tonySep"); if(!sep) return;
+        n=document.createElement("div"); n.id="tonyPublicNote";
+        n.textContent="🔒 Aquí abajo hay 2 tarjetas internas del creador (sus pasos y el archivo de decisiones). Si quieres ver qué decide MADRE, mira \u00abMADRE te dice\u00bb más arriba — es la misma info, en versión pública.";
+        sep.insertAdjacentElement("afterend", n); } })();
     var bar=document.getElementById("gateBar"); if(!bar) return;
     bar.innerHTML = isTony()
       ? '<span>🔓 <b>Modo creador</b> · puedes aprobar/rechazar decisiones.</span><button class="btn sm" id="gateBtn">Salir del modo creador</button>'
@@ -5856,6 +5866,12 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     sep.innerHTML='── Tu parte · solo Tony ──<span class="l">Lo de aquí abajo es la lista de Tony. Si vienes de fuera, ya lo viste todo arriba.</span>';
     if(anchor){ wrap.insertBefore(sep, anchor); tonyCards.forEach(function(c){ wrap.insertBefore(c, anchor); }); }
     else { wrap.appendChild(sep); tonyCards.forEach(function(c){ wrap.appendChild(c); }); }
+    /* v0.34: nota pública de 1 línea (el sep YA existe aquí, a diferencia de cuando corrió applyGate antes) */
+    if(!document.getElementById("tonyPublicNote")){
+      var n=document.createElement("div"); n.id="tonyPublicNote";
+      n.textContent="\u{1f512} Aquí abajo hay 2 tarjetas internas del creador (sus pasos y el archivo de decisiones). Si quieres ver qué decide MADRE, mira «MADRE te dice» más arriba — es la misma info, en versión pública.";
+      sep.insertAdjacentElement("afterend", n);
+    }
   }
   // 2) los chips de Tony (decisiones / tu parte) solo se ven en modo Tony
   function syncChips(){ var t=false; try{ t=localStorage.getItem('cuaderno_madre_tony')==='1'; }catch(e){} ['chipDecs','chipSteps'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display=t?'':'none'; }); }
