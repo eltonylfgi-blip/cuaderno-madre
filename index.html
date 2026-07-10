@@ -3016,6 +3016,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🌳 v0.46 — El mapa siempre a un toque, aunque sigas bajando",detalle:"Nuevo botón «🌳 Volver al mapa» que aparece solo cuando lo dejas atrás bajando por la web, y desaparece si vuelves arriba. No es un menú nuevo: sigue la misma regla que ya tenían «Ruta guiada» y «El cuaderno por dentro» — la navegación importante va SIEMPRE fuera del menú ✦, a un solo toque. Refuerza la idea de que el mapa es el centro al que siempre puedes volver, no una parada más en el camino."},
     {fecha:"2026-07-10",titulo:"🎉 v0.45 — Un momento memorable real (y las conexiones ya no aparecen de golpe)",detalle:"Dos detalles de vida: (1) La PRIMERA vez que alguien explora las 8 ramas de MADRE, algo especial pasa — un destello que no se repite nunca más para esa persona (dato real: nunca has llegado hasta aquí antes). (2) Las líneas violeta que conectan las ramas ya no aparecen de golpe al abrir el mapa: se desvanecen suavemente, como si el ecosistema se encendiera. Cacé y arreglé de paso un bug real: el destello se borraba a sí mismo por una carrera entre re-renders, nunca llegabas a verlo."},
     {fecha:"2026-07-10",titulo:"🌱 v0.44 — El origen de cada rama, también en el mapa pequeño de portada",detalle:"Coherencia: el mapa pequeño (el que ves antes de abrir nada) ahora enseña también «🌱 Nació para...» al tocar una rama, igual que el mapa grande desde v0.43. Los dos mapas cuentan la misma historia."},
     {fecha:"2026-07-10",titulo:"🌱 v0.43 — Cada rama ahora empieza contando cómo nació",detalle:"Cuando tocas una rama, lo primero que lees ya no es una definición: es cómo nació. «🌱 Nació para soltar algo al mundo y ver si aguantaba de pie — el 8 de julio, por primera vez, el mundo respondió con una estrella.» Nada inventado: son los mismos hechos que ya vivían en la web, puestos como el arranque de un relato en vez de como una ficha técnica."},
@@ -5834,7 +5835,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.45";
+  window.__cmVersion="v0.46";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6224,6 +6225,37 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   var after=hero;
   seq.forEach(function(el2){ if(el2){ after.insertAdjacentElement("afterend",el2); after=el2; } });
 }catch(e){ console.warn("resec v0.33", e); } })();
+</script>
+
+<style>
+/* v0.46 (Tony, "todo empieza y vuelve al mapa" — efecto elegido tras generar y descartar 5 caminos:
+   reordenar tarjetas=riesgo ya documentado, mapa-única-interfaz=rediseño, parallax=choca con la cadena
+   de transformación del tap, sonido=sistema separado; ESTE es el único aditivo puro y sin riesgo).
+   Mismo patrón visual que los FAB ya existentes (tourLaunch/cmvFab) — Tony ya dejó escrito que la
+   navegación core va SIEMPRE fuera del menú ✦, un solo toque; sigo esa regla suya, no invento una nueva. */
+#mapFab{position:fixed;left:16px;bottom:112px;z-index:58;display:none;align-items:center;gap:6px;padding:9px 13px;border:none;border-radius:999px;background:linear-gradient(135deg,var(--accent,#3b5bdb),#8a5bdb);color:#fff;font:700 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.28);transition:transform .15s ease,opacity .2s;-webkit-tap-highlight-color:transparent}
+#mapFab.show{display:inline-flex}
+#mapFab:hover{transform:translateY(-2px)}
+#mapFab:active{transform:translateY(0) scale(.97)}
+@media(max-width:420px){ #mapFab .mfTxt{display:none} #mapFab{padding:10px} }
+</style>
+<button type="button" id="mapFab" aria-label="Volver al mapa de MADRE"><span>🌳</span><span class="mfTxt">Volver al mapa</span></button>
+<script>
+(function(){ try{
+  var fab=document.getElementById("mapFab"), card=document.getElementById("mapaCard");
+  if(!fab||!card) return;
+  fab.addEventListener("click",function(){ if(window.__openMapaBig) window.__openMapaBig(); else location.hash="#mapa"; });
+  /* robusto al re-secuenciador de arriba: mira dónde está la tarjeta AHORA, no en qué orden nació.
+     scroll listener en vez de IntersectionObserver: más simple y directo para un umbral único. */
+  var ticking=false;
+  function checkFab(){ ticking=false; var r=card.getBoundingClientRect(); fab.classList.toggle("show", r.bottom<0); }
+  window.addEventListener("scroll",function(){ if(!ticking){ ticking=true; requestAnimationFrame(checkFab); } },{passive:true});
+  checkFab();
+  /* red de seguridad barata: por si algún navegador/gesto no dispara 'scroll' de forma fiable
+     (scroll programático, algunos gestos táctiles) — coste real: 1 getBoundingClientRect cada 900ms,
+     solo mientras la pestaña está abierta, insignificante. */
+  setInterval(checkFab,900);
+}catch(e){} })();
 </script>
 </body>
 </html>
