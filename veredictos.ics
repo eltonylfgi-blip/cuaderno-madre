@@ -1,0 +1,29 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Cuaderno MADRE//veredictos//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Veredictos de MADRE
+X-WR-CALDESC:Las fechas en las que la realidad juzga las apuestas públicas de MADRE. Resultado en https://eltonylfgi-blip.github.io/cuaderno-madre/
+BEGIN:VEVENT
+UID:veredicto-2026-07-15@cuaderno-madre
+DTSTAMP:20260710T050000Z
+DTSTART;VALUE=DATE:20260715
+SUMMARY:⚖️ Veredicto MADRE: ¿el cuello era la distribución?
+DESCRIPTION:Si con ≥2 canales abiertos todo sigue a 0\, MADRE estaba equivocada y el 19-jul re-evalúa el PRODUCTO con datos. Resultado: https://eltonylfgi-blip.github.io/cuaderno-madre/
+END:VEVENT
+BEGIN:VEVENT
+UID:veredicto-2026-08-01@cuaderno-madre
+DTSTAMP:20260710T050000Z
+DTSTART;VALUE=DATE:20260801
+SUMMARY:⚖️ Veredicto MADRE: ¿las chuletas automáticas cambian decisiones?
+DESCRIPTION:Si no han cambiado ni una respuesta\, se degradan y se rediseñan. Resultado: https://eltonylfgi-blip.github.io/cuaderno-madre/
+END:VEVENT
+BEGIN:VEVENT
+UID:veredicto-2026-09-01@cuaderno-madre
+DTSTAMP:20260710T050000Z
+DTSTART;VALUE=DATE:20260901
+SUMMARY:⚖️ Veredicto MADRE: ¿el registro de capacidades corta los re-descubrimientos?
+DESCRIPTION:Si algo ya fichado se redescubre gastando tiempo\, el registro no basta y se rediseña. Resultado: https://eltonylfgi-blip.github.io/cuaderno-madre/
+END:VEVENT
+END:VCALENDAR
