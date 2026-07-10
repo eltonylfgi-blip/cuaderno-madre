@@ -3101,6 +3101,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🤱 v0.66 — Ahora te hablo también fuera del mapa",detalle:"Al llegar de verdad a ciertas secciones (Señales del mundo, El marcador, el final de la página) te dejo un comentario corto y honesto, una sola vez por visita. Es la misma idea que ya tenía dentro del mapa, llevada al resto de la web — con su propio estilo, sin invadir."},
     {fecha:"2026-07-10",titulo:"🌱 v0.65 — El panel de proponer rama dice la verdad, incluido el 0",detalle:"Consulté la base de datos real antes de escribir este número: hasta hoy, 0 personas han propuesto una rama nueva. Lo digo tal cual, sin maquillar, con la fecha — y con una invitación honesta a ser la primera."},
     {fecha:"2026-07-10",titulo:"↩️ v0.64 — Si vuelves, te recuerdo dónde lo dejaste",detalle:"En tu 2ª visita o más, un aviso arriba te ofrece volver directamente a la sección más profunda a la que llegaste la última vez, con un toque. Solo avanza, nunca hacia atrás — y desaparece en cuanto lo usas."},
     {fecha:"2026-07-10",titulo:"🪞 v0.63 — Un espejo de tu propia visita",detalle:"Al llegar al final de la página, una línea pequeña te dice dónde te paraste más esta vez. No se guarda en ningún sitio ni se envía a nadie — solo tuyo, solo esta visita, desaparece si recargas."},
@@ -5943,7 +5944,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.65";
+  window.__cmVersion="v0.66";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6891,6 +6892,43 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   }
   setInterval(tick,1500);
 }catch(e){ console.warn('memoria v0.64',e); } })();
+(function(){ try{
+  /* v0.66 — PRESENCIA DE MADRE EN LA PÁGINA: voz contextual, 1 sola vez por hito, al llegar de verdad
+     a esa sección (timer + getBoundingClientRect, mismo patrón ya usado en este archivo — el scroll
+     nativo no es fiable en el harness de verificación, documentado). Anclas REALES (no #evidencia,
+     que no existe): #senalesCard, #prediccionesCard, <footer>. Clase PROPIA (no reutiliza .mbExpl —
+     esa asume el fondo oscuro del overlay del mapa); centrado abajo, aria-live=polite, POR ENCIMA del
+     singleton #toast (z-index 100050) para no quedar tapada. */
+  var HITOS=[
+    {id:'senalesCard',txt:'🤱 Aquí no hay nada inflado: cada número de esta sección tiene fecha y se puede comprobar tocándolo.'},
+    {id:'prediccionesCard',txt:'🤱 Esto es lo más raro que hago: fechar mis propias apuestas y dejar que el calendario me juzgue.'},
+  ];
+  var el=document.createElement('div');
+  el.id='cmMadreHabla2'; el.setAttribute('role','status'); el.setAttribute('aria-live','polite');
+  el.style.cssText='position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);z-index:100062;max-width:min(88vw,420px);background:var(--card);color:var(--ink);border:1px solid var(--line);padding:10px 16px;border-radius:12px;font:600 12.5px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;opacity:0;transition:opacity .3s ease,transform .3s ease;box-shadow:0 6px 20px rgba(0,0,0,.18);pointer-events:none';
+  document.body.appendChild(el);
+  var shown={}, hideT=null;
+  function say(txt){
+    el.textContent=txt; el.style.opacity='1'; el.style.transform='translate(-50%,0)';
+    if(hideT) clearTimeout(hideT);
+    hideT=setTimeout(function(){ el.style.opacity='0'; el.style.transform='translate(-50%,20px)'; },5000);
+  }
+  function tick(){
+    if(document.hidden) return;
+    var vh=innerHeight;
+    HITOS.forEach(function(h){
+      if(shown[h.id]) return;
+      var t=document.getElementById(h.id); if(!t) return;
+      var r=t.getBoundingClientRect();
+      if(r.top<=vh*0.5 && r.bottom>0){ shown[h.id]=true; say(h.txt); }
+    });
+    if(!shown.__final){
+      var footer=document.querySelector('footer'); if(footer){ var fr=footer.getBoundingClientRect();
+        if(fr.top<=vh){ shown.__final=true; say('🤱 Llegaste hasta el final. La mayoría no lo hace — gracias por la curiosidad.'); } }
+    }
+  }
+  setInterval(tick,1500);
+}catch(e){ console.warn('presencia-madre v0.66',e); } })();
 (function(){ try{
   var orig=document.title;
   document.addEventListener('visibilitychange',function(){
