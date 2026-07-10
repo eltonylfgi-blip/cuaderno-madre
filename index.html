@@ -1460,7 +1460,16 @@
         setTimeout(function(){ try{ ta.focus(); }catch(err){} },30);
       }));
       info.appendChild(acts); }
-    function showHint(){ info.textContent=""; var t=document.createElement("span"); t.className="t"; t.textContent="👆 Toca una rama"; var d=document.createElement("span"); d.className="d"; d.textContent="La cámara ENTRA en ella y se abren sus sub-ramas. Arrastra para moverte; rueda o pellizco para acercar."; info.appendChild(t); info.appendChild(d); }
+    /* v0.47 (Tony, "que MADRE te observe de forma útil, no un contador genérico"): en vez de repetir
+       siempre "toca una rama", si ya llevas algo explorado (pero no todo) te señala una rama REAL
+       concreta que aún no has visto — dato 100% tuyo (getExpl ya existía), nada inventado. */
+    function showHint(){ info.textContent=""; var t=document.createElement("span"); t.className="t"; var d=document.createElement("span"); d.className="d";
+      var seen=getExpl(), unseen=NODES.filter(function(n){ return seen.indexOf(n.t)<0; });
+      if(seen.length>0 && seen.length<NODES.length && unseen.length){ var pickN=unseen[Math.floor(Math.random()*unseen.length)];
+        t.textContent="👀 Aún no has visto "+pickN.emoji+" "+pickN.t;
+        d.textContent="De las "+NODES.length+" ramas, esta te falta — dato real de tu propia visita. Tócala, o sigue a tu aire.";
+      } else { t.textContent="👆 Toca una rama"; d.textContent="La cámara ENTRA en ella y se abren sus sub-ramas. Arrastra para moverte; rueda o pellizco para acercar."; }
+      info.appendChild(t); info.appendChild(d); }
 
     /* ---- SUGERIR rama/sub-rama: panel PROPIO dentro del overlay (sin modal externo → sin pelea de z-index/inert).
        Cualquiera propone; se manda por window.__fb (tabla privada feedback) con tipo "propuesta-rama" + texto
@@ -3016,6 +3025,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"👀 v0.47 — El mapa deja de repetirse: te dice EXACTAMENTE qué rama te falta",detalle:"Antes, si tocabas el centro del mapa, siempre veías el mismo «👆 toca una rama». Ahora, si ya llevas algunas exploradas (pero no todas), te señala una en concreto que aún no has visto: «👀 Aún no has visto 📚 Memoria / archivo». Dato 100% tuyo, real, de tu propia sesión — no es un truco, es MADRE prestando atención de verdad a por dónde vas."},
     {fecha:"2026-07-10",titulo:"🌳 v0.46 — El mapa siempre a un toque, aunque sigas bajando",detalle:"Nuevo botón «🌳 Volver al mapa» que aparece solo cuando lo dejas atrás bajando por la web, y desaparece si vuelves arriba. No es un menú nuevo: sigue la misma regla que ya tenían «Ruta guiada» y «El cuaderno por dentro» — la navegación importante va SIEMPRE fuera del menú ✦, a un solo toque. Refuerza la idea de que el mapa es el centro al que siempre puedes volver, no una parada más en el camino."},
     {fecha:"2026-07-10",titulo:"🎉 v0.45 — Un momento memorable real (y las conexiones ya no aparecen de golpe)",detalle:"Dos detalles de vida: (1) La PRIMERA vez que alguien explora las 8 ramas de MADRE, algo especial pasa — un destello que no se repite nunca más para esa persona (dato real: nunca has llegado hasta aquí antes). (2) Las líneas violeta que conectan las ramas ya no aparecen de golpe al abrir el mapa: se desvanecen suavemente, como si el ecosistema se encendiera. Cacé y arreglé de paso un bug real: el destello se borraba a sí mismo por una carrera entre re-renders, nunca llegabas a verlo."},
     {fecha:"2026-07-10",titulo:"🌱 v0.44 — El origen de cada rama, también en el mapa pequeño de portada",detalle:"Coherencia: el mapa pequeño (el que ves antes de abrir nada) ahora enseña también «🌱 Nació para...» al tocar una rama, igual que el mapa grande desde v0.43. Los dos mapas cuentan la misma historia."},
@@ -5835,7 +5845,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.46";
+  window.__cmVersion="v0.47";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
