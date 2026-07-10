@@ -970,7 +970,7 @@
       t.textContent=st.t;
       next.textContent=st.fin?"Cerrar":(i===0?"Vale, enséñame →":"Siguiente →");
       mapa.style.display=st.fin?"":"none";
-      next.onclick=function(){ if(st.fin){ close(); } else show(i+1); };
+      next.onclick=function(){ if(st.fin){ try{ localStorage.setItem("cuaderno_tour_seen","1"); }catch(e){} close(); } else show(i+1); };
     }
     function start(){
       if(ov) return;
@@ -3135,6 +3135,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🧹 v0.74 — Limpieza de motor viejo + un logro que llevaba roto",detalle:"El motor original de la ruta guiada (una ventana propia con anillo y tarjeta) llevaba semanas muerto: nadie lo llamaba, quedó reemplazado por el tour de hoy sin que nadie borrara el código antiguo. Lo quité (unas 250 líneas) y, al revisar de cerca, encontré que el logro «Guiado paso a paso» era imposible de conseguir — dependía de ese motor muerto. Ahora se desbloquea de verdad al terminar la ruta guiada real."},
     {fecha:"2026-07-10",titulo:"🔎 v0.73 — No te lo cuento: lo descubres tocando",detalle:"La comparación «IA normal vs. MADRE» dejó de leerse de un tirón: cada afirmación («cambia sus propias reglas», «experimenta»...) se toca y revela SU prueba real — una cita literal, un enlace, un experimento que puedes votar tú mismo ahí abajo. Primer experimento de un principio nuevo: enseñar descubriendo, no explicando."},
     {fecha:"2026-07-10",titulo:"👆 v0.72 — Los botones nuevos ya se pueden tocar bien en el móvil",detalle:"Medí los botones que construí hoy en pantalla pequeña: 22px de alto, muy por debajo del mínimo táctil recomendado (44px) — el mismo problema que ya se había arreglado antes en otras partes de la web. Aplicada la misma solución: área de toque invisible más grande, sin cambiar cómo se ven."},
     {fecha:"2026-07-10",titulo:"🎨 v0.71 — El prototipo de identidad ahora también cumple contraste AA",detalle:"Calculé el contraste real del violeta del prototipo «Organismo bioluminiscente»: 4.29:1, por debajo del mínimo AA (4.5:1) para texto normal — y ese color se usa como texto en decenas de sitios. Ajustado a un violeta un poco más claro (6.67:1), mismo tono, ahora sí accesible."},
@@ -4041,7 +4042,9 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
   .gxg-cat{ transition:transform .25s ease !important; }
 }
 /* widget: tour */
-/* ===== TOUR / ONBOARDING ===== */
+/* ===== v0.74: motor viejo (overlay propio con STEP_DEFS/backdrop/ring/card/welcome) retirado —
+   confirmado 0 llamadas reales (showWelcome/startTour nunca se invocan). #tourLaunch sigue siendo
+   un boton real, ahora simple proxy de un toque al tour real (#tourBtn). ===== */
 #tourLaunch{
   position:fixed; left:16px; bottom:16px; z-index:62;
   display:inline-flex; align-items:center; gap:7px;
@@ -4062,115 +4065,7 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
   #tourLaunch .tlTxt{ display:none; }
   #tourLaunch{ left:14px; bottom:14px; }
 }
-/* al entrar: la ruta guiada PALPITA y llama la atención hasta que tocas cualquier cosa */
-#tourLaunch.callme{ animation:tlThrob 1.15s ease-in-out infinite; }
-@keyframes tlThrob{
-  0%,100%{ transform:translateY(0) scale(1); box-shadow:0 6px 20px rgba(80,40,180,.45); }
-  50%{ transform:translateY(-3px) scale(1.07); box-shadow:0 12px 32px rgba(124,58,237,.8), 0 0 0 7px rgba(124,58,237,.16); }
-}
-#tourNudge{
-  position:fixed; z-index:63; background:#111; color:#fff;
-  font:800 13px/1.15 system-ui,-apple-system,Segoe UI,sans-serif;
-  padding:8px 12px; border-radius:10px; box-shadow:0 8px 22px rgba(0,0,0,.45);
-  pointer-events:none; opacity:0; transform:translateY(4px); transition:opacity .25s, transform .25s;
-}
-#tourNudge.on{ opacity:1; transform:translateY(0); }
-#tourNudge::after{ content:""; position:absolute; left:-7px; top:50%; transform:translateY(-50%); border:7px solid transparent; border-right-color:#111; }
-@media (prefers-reduced-motion: reduce){ #tourLaunch.callme{ animation:none; box-shadow:0 0 0 4px rgba(124,58,237,.4); } }
-
-/* dim backdrop with a "hole" feel (we use box-shadow on highlight ring) */
-#tourBackdrop{
-  position:fixed; inset:0; z-index:9000;
-  background:transparent;
-  opacity:0; pointer-events:none;
-  transition:opacity .3s ease;
-}
-#tourBackdrop.on{ opacity:1; pointer-events:auto; }
-
-/* spotlight ring drawn around the focused element */
-#tourRing{
-  position:fixed; z-index:9001; pointer-events:none;
-  border-radius:16px;
-  box-shadow:0 0 0 4px #a78bfa, 0 0 0 4000px rgba(8,6,24,.62), 0 0 30px 6px rgba(167,139,250,.7);
-  transition:all .45s cubic-bezier(.22,1,.36,1);
-  opacity:0;
-}
-#tourRing.on{ opacity:1; }
-#tourRing::after{
-  content:""; position:absolute; inset:-4px; border-radius:18px;
-  border:2px solid rgba(255,255,255,.55);
-  animation:tlPulse 1.6s ease-out infinite;
-}
-@keyframes tlPulse{ 0%{transform:scale(1);opacity:.8;} 100%{transform:scale(1.06);opacity:0;} }
-
-/* the explanatory card */
-#tourCard{
-  position:fixed; z-index:9003; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px);
-  width:min(360px,calc(100vw - 28px));
-  background:linear-gradient(160deg,#1e1b3a,#262254);
-  color:#f3f0ff; border:1px solid rgba(167,139,250,.4);
-  border-radius:18px; padding:16px 16px 14px;
-  box-shadow:0 18px 50px rgba(0,0,0,.5);
-  opacity:0; pointer-events:none;
-  transition:opacity .3s ease, transform .35s cubic-bezier(.22,1,.36,1);
-}
-#tourCard.on{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0); }
-#tourCard .tcStep{ font:700 11px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:#a78bfa; }
-#tourCard .tcTitle{ font:800 18px/1.2 system-ui,sans-serif; margin:6px 0 4px; }
-#tourCard .tcBody{ font:400 14px/1.45 system-ui,sans-serif; color:#d8d3f5; }
-#tourCard .tcDots{ display:flex; gap:6px; margin:12px 0 2px; }
-#tourCard .tcDots i{ width:7px; height:7px; border-radius:50%; background:rgba(167,139,250,.3); transition:.2s; }
-#tourCard .tcDots i.act{ background:#a78bfa; transform:scale(1.25); }
-#tourCard .tcBtns{ display:flex; gap:8px; margin-top:12px; }
-#tourCard button{
-  flex:1; padding:11px 12px; border-radius:12px; cursor:pointer;
-  font:700 14px/1 system-ui,sans-serif; border:none; -webkit-tap-highlight-color:transparent;
-  transition:transform .12s, filter .15s;
-}
-#tourCard button:active{ transform:scale(.96); }
-#tourCard .tcNext{ background:linear-gradient(135deg,#7c3aed,#2563eb); color:#fff; }
-#tourCard .tcNext:hover{ filter:brightness(1.1); }
-#tourCard .tcExit{ background:rgba(255,255,255,.08); color:#cdc7ee; flex:0 0 auto; padding:11px 14px; }
-#tourCard .tcExit:hover{ background:rgba(255,255,255,.15); }
-
-/* WELCOME first-visit overlay */
-#tourWelcome{
-  position:fixed; inset:0; z-index:9100;
-  display:flex; align-items:center; justify-content:center; padding:18px;
-  background:radial-gradient(circle at 50% 30%,rgba(124,58,237,.35),rgba(8,6,24,.78));
-  backdrop-filter:blur(4px);
-  opacity:0; pointer-events:none; transition:opacity .35s ease;
-}
-#tourWelcome.on{ opacity:1; pointer-events:auto; }
-#tourWelcome .twBox{
-  width:min(380px,100%); text-align:center;
-  background:linear-gradient(165deg,#211d44,#2c2660);
-  border:1px solid rgba(167,139,250,.45); border-radius:24px;
-  padding:26px 22px 22px; color:#f3f0ff;
-  box-shadow:0 24px 70px rgba(0,0,0,.55);
-  transform:scale(.9) translateY(12px); transition:transform .4s cubic-bezier(.22,1.4,.4,1);
-}
-#tourWelcome.on .twBox{ transform:scale(1) translateY(0); }
-#tourWelcome .twWave{ font-size:54px; display:block; animation:tlWave 2.2s ease-in-out infinite; transform-origin:70% 70%; }
-@keyframes tlWave{ 0%,60%,100%{transform:rotate(0);} 15%{transform:rotate(16deg);} 30%{transform:rotate(-8deg);} 45%{transform:rotate(14deg);} }
-#tourWelcome h2{ font:800 24px/1.15 system-ui,sans-serif; margin:10px 0 6px; }
-#tourWelcome p{ font:400 15px/1.5 system-ui,sans-serif; color:#d8d3f5; margin:0 auto 16px; max-width:300px; }
-#tourWelcome .twBtns{ display:flex; gap:10px; }
-#tourWelcome button{
-  flex:1; padding:13px 12px; border-radius:14px; cursor:pointer; border:none;
-  font:700 15px/1 system-ui,sans-serif; -webkit-tap-highlight-color:transparent;
-  transition:transform .12s, filter .15s;
-}
-#tourWelcome button:active{ transform:scale(.96); }
-#tourWelcome .twGo{ background:linear-gradient(135deg,#7c3aed,#2563eb); color:#fff; }
-#tourWelcome .twGo:hover{ filter:brightness(1.1); }
-#tourWelcome .twNo{ background:rgba(255,255,255,.08); color:#cdc7ee; }
-#tourWelcome .twNo:hover{ background:rgba(255,255,255,.15); }
-
-@media (prefers-reduced-motion: reduce){
-  #tourLaunch .tlEmoji, #tourWelcome .twWave, #tourRing::after{ animation:none !important; }
-  #tourRing,#tourCard,#tourWelcome,#tourWelcome .twBox,#tourBackdrop{ transition:opacity .15s !important; }
-}
+@media (prefers-reduced-motion: reduce){ #tourLaunch .tlEmoji{ animation:none !important; } }
 /* widget: dibujos */
 #dbjsSec{margin:28px auto;max-width:640px;padding:18px 16px 22px;border:3px solid #6a5acd;border-radius:20px;background:linear-gradient(135deg,#fff7fb 0%,#f4f1ff 100%);box-shadow:0 8px 28px rgba(106,90,205,.18);position:relative;overflow:hidden}
 #dbjsSec:before{content:"";position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(255,179,71,.25),transparent 70%);border-radius:50%;pointer-events:none}
@@ -4500,235 +4395,17 @@ try{ D.addEventListener('visibilitychange', function(){
 <script>
 /* widget: tour */
 (function(){try{
-/* ===== TOUR / ONBOARDING widget ===== */
-var SEEN_KEY = "cuaderno_tour_seen";
-
-// ---------- build persistent UI ----------
+/* ===== v0.74: solo el boton #tourLaunch, proxy de un toque al tour real (#tourBtn, ~linea 949).
+   El motor viejo (overlay propio con backdrop/ring/card/welcome) se retiro por ser codigo muerto
+   confirmado: showWelcome() y el "else startTour()" nunca se ejecutaban en produccion (grep: 0
+   llamadas fuera de su propia definicion). Vease PLAN_INCREMENTOS_20_SISTEMAS.md bitacora v0.74. ===== */
 var launch = document.createElement("button");
 launch.id = "tourLaunch";
 launch.type = "button";
 launch.setAttribute("aria-label","Ruta guiada");
 launch.innerHTML = '<span class="tlEmoji">🧭</span><span class="tlTxt">Ruta guiada</span>';
 document.body.appendChild(launch);
-
-var backdrop = document.createElement("div");
-backdrop.id = "tourBackdrop";
-document.body.appendChild(backdrop);
-
-var ring = document.createElement("div");
-ring.id = "tourRing";
-document.body.appendChild(ring);
-
-var card = document.createElement("div");
-card.id = "tourCard";
-card.setAttribute("role","dialog");
-card.innerHTML =
-  '<div class="tcStep"></div>'+
-  '<div class="tcTitle"></div>'+
-  '<div class="tcBody"></div>'+
-  '<div class="tcDots"></div>'+
-  '<div class="tcBtns">'+
-    '<button type="button" class="tcExit">Salir</button>'+
-    '<button type="button" class="tcNext">Siguiente</button>'+
-  '</div>';
-document.body.appendChild(card);
-
-var elStep  = card.querySelector(".tcStep");
-var elTitle = card.querySelector(".tcTitle");
-var elBody  = card.querySelector(".tcBody");
-var elDots  = card.querySelector(".tcDots");
-var btnNext = card.querySelector(".tcNext");
-var btnExit = card.querySelector(".tcExit");
-
-// ---------- helper: find a card by its .num text ----------
-function findCardByNum(n){
-  try{
-    var cards = document.querySelectorAll(".card");
-    for(var i=0;i<cards.length;i++){
-      var numEl = cards[i].querySelector(".num");
-      if(numEl && (numEl.textContent||"").trim() === String(n)) return cards[i];
-    }
-  }catch(e){}
-  return null;
-}
-
-// ---------- the steps (resolved lazily, so missing ones are skipped) ----------
-var STEP_DEFS = [
-  { sel:function(){ return document.querySelector(".hero"); },
-    title:"El termómetro 🌡️",
-    body:"Esto mide qué tan lejos ha llegado MADRE en el mundo real, de 0 a 10." },
-  { sel:function(){ return document.querySelector("#senalesCard"); },
-    title:"La prueba real ✅",
-    body:"Aquí van las señales que no mienten: euros, clientes, estrellas… resultados de verdad." },
-  { sel:function(){ return findCardByNum("1"); },
-    title:"¿Qué es MADRE? 🤔",
-    body:"Esta tarjeta lo cuenta en una sola frase. Si solo lees una, lee esta." },
-  { sel:function(){ return findCardByNum("3"); },
-    title:"El primer euro 💶",
-    body:"Cómo MADRE intenta ganar su primer euro de forma autónoma." },
-  { sel:function(){ return document.querySelector("#comentarios"); },
-    title:"Deja tu huella ✍️",
-    body:"Comenta, opina o dibuja. MADRE lee lo que dejas aquí." },
-  { sel:function(){ return document.querySelector("#dbjsSec"); },
-    title:"¡Sorpresa! Dibuja 🎨",
-    body:"Premio por llegar hasta aquí: una pizarra para dibujar. Pulsa «🎭 Plantillas traviesas» y traza algo gamberro 😏" }
-];
-
-var steps = [];        // resolved at tour start
-var idx = 0;
-var tourActive = false;
-
-// ---------- positioning ----------
-function placeRing(el){
-  var r = el.getBoundingClientRect();
-  var pad = 8;
-  var top = Math.max(6, r.top - pad);
-  var left = Math.max(6, r.left - pad);
-  var w = Math.min(window.innerWidth - left - 6, r.width + pad*2);
-  var h = r.height + pad*2;
-  ring.style.top = top + "px";
-  ring.style.left = left + "px";
-  ring.style.width = w + "px";
-  ring.style.height = h + "px";
-}
-
-function buildDots(){
-  elDots.innerHTML = "";
-  for(var i=0;i<steps.length;i++){
-    var d = document.createElement("i");
-    if(i===idx) d.className = "act";
-    elDots.appendChild(d);
-  }
-}
-
-function showStep(){
-  if(idx >= steps.length){ endTour(); return; }
-  var st = steps[idx];
-  var el = st.el;
-  // scroll element into view, then position ring/card after settle
-  try{ el.scrollIntoView({behavior:"smooth", block:"center"}); }catch(e){ try{el.scrollIntoView();}catch(_){} }
-
-  elStep.textContent = "Paso " + (idx+1) + " de " + steps.length;
-  elTitle.textContent = st.title;
-  elBody.textContent = st.body;
-  btnNext.textContent = (idx === steps.length-1) ? "¡Listo!" : "Siguiente";
-  buildDots();
-
-  setTimeout(function(){
-    if(!tourActive) return;
-    placeRing(el);
-    ring.classList.add("on");
-    card.classList.add("on");
-  }, 360);
-}
-
-function startTour(){
-  stopPulse();
-  // resolve steps now (skip missing zones)
-  steps = [];
-  for(var i=0;i<STEP_DEFS.length;i++){
-    var el = null;
-    try{ el = STEP_DEFS[i].sel(); }catch(e){}
-    if(el) steps.push({ el:el, title:STEP_DEFS[i].title, body:STEP_DEFS[i].body });
-  }
-  if(!steps.length) return;
-  idx = 0;
-  tourActive = true;
-  backdrop.classList.add("on");
-  showStep();
-}
-
-function nextStep(){
-  if(!tourActive) return;
-  if(idx >= steps.length-1){ endTour(true); return; }
-  idx++;
-  ring.classList.remove("on");
-  card.classList.remove("on");
-  setTimeout(showStep, 180);
-}
-
-function endTour(finished){
-  tourActive = false;
-  ring.classList.remove("on");
-  card.classList.remove("on");
-  backdrop.classList.remove("on");
-  if(finished){
-    try{ if(window.__fb) window.__fb({card:"tour", section:"ruta-guiada", tipo:"completado", texto:"Terminó la ruta guiada"}); }catch(e){}
-  }
-}
-
-// reposition ring on resize/scroll while active
-function reposition(){
-  if(tourActive && idx < steps.length && steps[idx]) placeRing(steps[idx].el);
-}
-window.addEventListener("resize", reposition);
-window.addEventListener("scroll", reposition, {passive:true});
-
-// ---------- wire controls ----------
-launch.addEventListener("click", function(){ var nb=document.getElementById("tourBtn"); if(nb){ nb.click(); } else if(!tourActive){ startTour(); } });
-btnNext.addEventListener("click", nextStep);
-btnExit.addEventListener("click", function(){ endTour(false); });
-backdrop.addEventListener("click", function(){ endTour(false); });
-document.addEventListener("keydown", function(e){
-  if(!tourActive) return;
-  if(e.key === "Escape") endTour(false);
-  else if(e.key === "Enter" || e.key === "ArrowRight") nextStep();
-});
-
-// ---------- "palpita al entrar": llama la atención a la Ruta guiada hasta el primer toque ----------
-var nudge=null, pulsing=false;
-function startPulse(){
-  if(pulsing || tourActive) return; pulsing=true;
-  try{ launch.classList.add("callme"); }catch(e){}
-  try{
-    if(!nudge){ nudge=document.createElement("div"); nudge.id="tourNudge"; nudge.textContent="👈 empieza por aquí"; document.body.appendChild(nudge); }
-    var r=launch.getBoundingClientRect();
-    nudge.style.left=Math.round(r.right+12)+"px";
-    nudge.style.top=Math.round(r.top + r.height/2 - 16)+"px";
-    setTimeout(function(){ if(nudge) nudge.classList.add("on"); }, 30);   // setTimeout (no rAF: rAF se pausa si la pestaña no está visible)
-  }catch(e){}
-}
-function stopPulse(){
-  if(!pulsing) return; pulsing=false;
-  try{ launch.classList.remove("callme"); }catch(e){}
-  if(nudge){ nudge.classList.remove("on"); var n=nudge; nudge=null; setTimeout(function(){ try{ n.remove(); }catch(e){} },300); }
-}
-// cualquier interacción que NO sea la propia ruta apaga el reclamo
-["pointerdown","keydown","touchstart"].forEach(function(ev){
-  document.addEventListener(ev,function(e){ if(!pulsing) return; if(e.target && e.target.closest && e.target.closest("#tourLaunch")) return; stopPulse(); },{passive:true});
-});
-
-// ---------- first-visit welcome ----------
-function showWelcome(){
-  var w = document.createElement("div");
-  w.id = "tourWelcome";
-  w.innerHTML =
-    '<div class="twBox">'+
-      '<span class="twWave">👋</span>'+
-      '<h2>¿Qué es esto?</h2>'+
-      '<p>Es el cuaderno vivo de <b>MADRE</b>, un sistema que intenta lograr cosas reales por su cuenta. Te lo enseño en 10 segundos.</p>'+
-      '<div class="twBtns">'+
-        '<button type="button" class="twNo">Ahora no</button>'+
-        '<button type="button" class="twGo">Enséñame (10s)</button>'+
-      '</div>'+
-    '</div>';
-  document.body.appendChild(w);
-  requestAnimationFrame(function(){ w.classList.add("on"); });
-
-  function closeWelcome(go){
-    try{ localStorage.setItem(SEEN_KEY, "1"); }catch(e){}
-    w.classList.remove("on");
-    setTimeout(function(){ try{ w.remove(); }catch(e){} }, 400);
-    if(go) setTimeout(startTour, 420);
-    else setTimeout(startPulse, 500);   // si dice "ahora no", la ruta queda palpitando como reclamo
-  }
-  w.querySelector(".twGo").addEventListener("click", function(){ closeWelcome(true); });
-  w.querySelector(".twNo").addEventListener("click", function(){ closeWelcome(false); });
-  w.addEventListener("click", function(e){ if(e.target === w) closeWelcome(false); });
-}
-
-/* v0.33: UNA sola puerta — el modal de bienvenida (700ms) y el pulso mueren: 4 reclamos competian
-   en los primeros 10s (leccion bitacora v0.11 "apilar avisos = ruido"). El FAB 🧭 relanza el tour nuevo. */
+launch.addEventListener("click", function(){ var nb=document.getElementById("tourBtn"); if(nb) nb.click(); });
 }catch(e){console.warn('widget tour',e);}})();
 </script>
 <script>
@@ -5879,21 +5556,6 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 </script>
 
 <script>
-/* C2: "🤔 no entiendo" en cada paso de la ruta guiada */
-(function(){ try{
-  var D=document, card=D.getElementById("tourCard"); if(!card) return;
-  var btns=card.querySelector(".tcBtns"); if(!btns) return;
-  var nie=D.createElement("button"); nie.type="button"; nie.className="tcNie"; nie.textContent="🤔 no entiendo";
-  btns.insertBefore(nie, btns.firstChild);
-  nie.addEventListener("click",function(e){ e.stopPropagation();
-    var step=(card.querySelector(".tcStep")||{}).textContent||"", title=(card.querySelector(".tcTitle")||{}).textContent||"";
-    try{ if(window.__fb) window.__fb({card:"🧭 Ruta guiada", section:((step?step+" — ":"")+title).trim()||"paso", tipo:"no-entiendo", texto:""}); }catch(err){}
-    var prev=nie.textContent; nie.textContent="recibido ✓"; setTimeout(function(){ nie.textContent="🤔 no entiendo"; },1300);
-  });
-}catch(e){ console.warn("tour-nie", e); } })();
-</script>
-
-<script>
 /* C3 + T14: consolida los FAB sueltos en un HUB "✦" con menú y nudge "toca aquí" */
 (function(){
  function boot(){ try{
@@ -5985,7 +5647,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.73";
+  window.__cmVersion="v0.74";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
