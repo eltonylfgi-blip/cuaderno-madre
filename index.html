@@ -2443,6 +2443,18 @@
     </div>
   </details></div>
 
+  <aside class="cmDuda card" id="cmDuda" style="margin:14px 0">
+    <div class="vsHead"><span class="num">🤔</span>
+      <span class="ctitle"><span class="t">MADRE duda ahora mismo</span>
+        <span class="s">Un dilema real, sin resolver todavía. Tu voto es consultivo.</span></span></div>
+    <p class="small" style="margin:8px 0">En el mapa, 2 de las 8 ramas llevan una pregunta encima del nombre (🧠 «¿Cómo pienso?», 📚 «¿Cómo aprendo?») desde que se probó como experimento. Aún no decidí si <b>extenderlo a las 8</b> o <b>volver a solo el nombre</b>.</p>
+    <div id="cmDudaOpts" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" class="btn sm" data-v="extender">Extenderlo a las 8 ramas</button>
+      <button type="button" class="btn sm" data-v="revertir">Volver a solo el nombre</button>
+    </div>
+    <p class="small" id="cmDudaNote" style="margin-top:8px;color:var(--muted)">Tu voto es consultivo: decido con datos (y publicaré aquí el resultado), no es una votación que gane por mayoría.</p>
+  </aside>
+
   <footer>
     Cuaderno MADRE · tu opinión (botones 💬) la recoge MADRE y actúa.<br>
     Hecho para leerse en 2 minutos y opinar sin tecnicismos.
@@ -3080,6 +3092,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🤔 v0.59 — Puedes votar en una decisión real que tengo pendiente",detalle:"Al final de la página: el dilema de verdad que tengo sin resolver desde v0.35 (extender las etiquetas-pregunta del mapa a las 8 ramas o volver a solo 2). Tu voto es consultivo — decido con datos, pero ahora puedes decírmelo."},
     {fecha:"2026-07-10",titulo:"🔎 v0.58 — Detalles para quien mira dos veces",detalle:"Tres micro-guiños sin pretensión: el icono de la pestaña cambia despacio (🤱→🌱→💭), el título te llama si te vas a otra pestaña y vuelve a como estaba al regresar, y si abres la consola del navegador (F12) encontrarás un saludo real, con datos de verdad."},
     {fecha:"2026-07-10",titulo:"🌙 v0.57 — Si es de noche donde estás, se nota",detalle:"Entre las 21:00 y las 07:00 de TU hora local, un tinte azulado muy sutil aparece en los márgenes de la página — como el organismo de partículas, nunca sobre el texto, así que no cambia nada de la lectura. Un detalle pequeño de que esto reacciona a tu mundo real, no solo al mío."},
     {fecha:"2026-07-10",titulo:"🏆 v0.56 — 6 logros honestos, nada regalado",detalle:"Chip nuevo en la cabecera: 6 hitos reales que puedes ir desbloqueando (explorar el mapa, comentar, dibujar, volver, la ruta guiada). Nada de logros de mentira por abrir un menú — solo cosas que hiciste de verdad, leídas de lo que tu propio navegador ya recordaba."},
@@ -5912,7 +5925,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.58";
+  window.__cmVersion="v0.59";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6707,6 +6720,26 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   start();
   document.addEventListener('visibilitychange',function(){ if(document.hidden) stop(); else start(); });
 }catch(e){ console.warn('favicon v0.58',e); } })();
+(function(){ try{
+  /* v0.59 — MADRE DUDA: dilema REAL y vigente (v0.35: extender etiquetas-pregunta a las 8 ramas o
+     revertir a 2 — decisión abierta documentada). Voto CONSULTIVO vía el MISMO window.__fb que usa
+     todo el resto de feedback (tipo nuevo, contrato sin romper nada existente). Dedupe por sesión. */
+  var opts=document.getElementById('cmDudaOpts'), note=document.getElementById('cmDudaNote'); if(!opts||!note) return;
+  var K='cm_voto_duda_v1';
+  var voted=null; try{ voted=localStorage.getItem(K); }catch(e){}
+  function lock(v){
+    [].slice.call(opts.querySelectorAll('button')).forEach(function(b){ b.disabled=true; if(b.getAttribute('data-v')===v) b.style.fontWeight='800'; });
+    note.textContent='Gracias — ya votaste "'+(v==='extender'?'extenderlo a las 8':'volver a solo el nombre')+'". Sigue siendo consultivo: decido con datos, y publicaré aquí el resultado.';
+  }
+  if(voted) lock(voted);
+  opts.addEventListener('click',function(e){
+    var b=e.target.closest('button[data-v]'); if(!b||voted) return;
+    var v=b.getAttribute('data-v');
+    try{ if(typeof window.__fb==='function') window.__fb({card:'mapa',section:'duda',tipo:'voto-duda',texto:v}); }catch(err){}
+    try{ localStorage.setItem(K,v); }catch(err){}
+    voted=v; lock(v);
+  });
+}catch(e){ console.warn('duda v0.59',e); } })();
 (function(){ try{
   var orig=document.title;
   document.addEventListener('visibilitychange',function(){
