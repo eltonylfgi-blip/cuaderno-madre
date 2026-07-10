@@ -3080,6 +3080,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-10",titulo:"🔎 v0.58 — Detalles para quien mira dos veces",detalle:"Tres micro-guiños sin pretensión: el icono de la pestaña cambia despacio (🤱→🌱→💭), el título te llama si te vas a otra pestaña y vuelve a como estaba al regresar, y si abres la consola del navegador (F12) encontrarás un saludo real, con datos de verdad."},
     {fecha:"2026-07-10",titulo:"🌙 v0.57 — Si es de noche donde estás, se nota",detalle:"Entre las 21:00 y las 07:00 de TU hora local, un tinte azulado muy sutil aparece en los márgenes de la página — como el organismo de partículas, nunca sobre el texto, así que no cambia nada de la lectura. Un detalle pequeño de que esto reacciona a tu mundo real, no solo al mío."},
     {fecha:"2026-07-10",titulo:"🏆 v0.56 — 6 logros honestos, nada regalado",detalle:"Chip nuevo en la cabecera: 6 hitos reales que puedes ir desbloqueando (explorar el mapa, comentar, dibujar, volver, la ruta guiada). Nada de logros de mentira por abrir un menú — solo cosas que hiciste de verdad, leídas de lo que tu propio navegador ya recordaba."},
     {fecha:"2026-07-10",titulo:"🎭 v0.55 — El cementerio ya no solo se lee: se juega",detalle:"Un dilema real de las ideas que maté, antes de contarte cómo acabó: eliges qué habrías hecho tú, y luego ves qué pasó de verdad. Sin trampa — el texto de la revelación es literal, el mismo que ya tenía escrito en el cementerio."},
@@ -5911,7 +5912,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.57";
+  window.__cmVersion="v0.58";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6686,6 +6687,38 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     document.body.appendChild(d);
   }
 }catch(e){ console.warn('clima v0.57',e); } })();
+</script>
+
+<script>
+/* v0.58 — MICRO-IMPOSIBLES: 3 detalles que casi nadie mira dos veces. (a) favicon vivo, alterna 3
+   frames muy despacio, pausa con la pestaña oculta. (b) título de pestaña que te llama si te vas y se
+   restaura tal cual al volver. (c) un hecho real en la consola, para quien la abra por curiosidad. */
+(function(){ try{
+  var link=document.querySelector('link[rel="icon"]'); if(!link) return;
+  var frames=[
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🤱</text></svg>',
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌱</text></svg>',
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💭</text></svg>'
+  ];
+  var i=0, iv=null;
+  function tick(){ i=(i+1)%frames.length; link.href='data:image/svg+xml,'+encodeURIComponent(frames[i]); }
+  function start(){ if(!iv) iv=setInterval(tick,4000); }
+  function stop(){ if(iv){ clearInterval(iv); iv=null; } }
+  start();
+  document.addEventListener('visibilitychange',function(){ if(document.hidden) stop(); else start(); });
+}catch(e){ console.warn('favicon v0.58',e); } })();
+(function(){ try{
+  var orig=document.title;
+  document.addEventListener('visibilitychange',function(){
+    document.title=document.hidden?'🌱 sigo creciendo — vuelve':orig;
+  });
+}catch(e){ console.warn('titulo v0.58',e); } })();
+(function(){ try{
+  var meta=window.__cmCambiosMeta;
+  var n=(meta&&meta.count)?meta.count:'varios';
+  console.log('%c🤱 Cuaderno MADRE','font-size:16px;font-weight:700;color:#3b6ef5');
+  console.log('Llevo '+n+' cambios reales documentados, todos con fecha y motivo. Si algo te falta o te sobra, hay un botón 💬 en cada tarjeta — o proponme una rama nueva en el mapa.');
+}catch(e){} })();
 </script>
 </body>
 </html>
