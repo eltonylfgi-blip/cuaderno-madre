@@ -897,6 +897,13 @@
     .predList{list-style:none;margin:8px 0 0;padding:0}
     .predList>li{display:flex;gap:10px;align-items:flex-start;border-left:3px solid var(--line);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:9px 12px;margin:0 0 8px}
     .predList>li.ok{border-left-color:#10b981} .predList>li.ko{border-left-color:#ef4444} .predList>li.wait{border-left-color:#f59e0b}
+    /* v1.32 (Tony: "paneles demasiado largos... un botón para alargarlos, no todo de 1"): las YA
+       RESUELTAS (evidencia histórica, ya resumida arriba en #palmares) se ocultan por defecto -- las
+       EN JUEGO (.wait, el gancho real) nunca se tocan. Solo CSS por clase existente, cero DOM movido. */
+    .predList.pr-collapsed>li.ok,.predList.pr-collapsed>li.ko{display:none}
+    .prMoreBtn{display:flex;align-items:center;gap:6px;width:100%;text-align:left;cursor:pointer;font:700 13px/1.3 inherit;color:var(--accent);background:var(--accent-soft);border:1px dashed var(--accent);border-radius:10px;padding:8px 12px;margin:0 0 10px;min-height:38px}
+    .prMoreBtn:hover{background:var(--accent);color:#fff;border-style:solid}
+    .prMoreBtn .plus{font-weight:800;font-size:15px}
     .pr-chip{flex:0 0 auto;font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;color:#fff;white-space:nowrap;margin-top:2px}
     .predList>li.ok .pr-chip{background:#10b981} .predList>li.ko .pr-chip{background:#ef4444} .predList>li.wait .pr-chip{background:#f59e0b;color:#251503}
     .pr-body{flex:1;min-width:0}
@@ -928,6 +935,7 @@
         <li class="wait" data-fecha="2026-08-01" data-rama="🧠"><span class="pr-chip">⏳ en juego</span><span class="pr-body"><span class="pr-cree">«Las chuletas que me auto-inyecto al despertar cambian decisiones»</span><span class="pr-res">Si para entonces no han cambiado ni una respuesta, se degradan y se rediseñan.</span></span><span class="pr-rama" title="Rama: 🧠 El cerebro (loop) — su propia creencia actual, palabra por palabra.">🧠</span><span class="pr-fecha">1-ago</span></li>
         <li class="wait" data-fecha="2026-09-01" data-rama="📚"><span class="pr-chip">⏳ en juego</span><span class="pr-body"><span class="pr-cree">«Mi registro de capacidades corta los re-descubrimientos»</span><span class="pr-res">Si algo ya fichado se «redescubre» gastando tiempo, el registro no basta y se rediseña.</span></span><span class="pr-rama" title="Rama: 📚 Memoria / archivo — su propia creencia actual, misma fecha.">📚</span><span class="pr-fecha">1-sep</span></li>
       </ul>
+      <button type="button" class="prMoreBtn" id="prMoreBtn" aria-expanded="false" hidden><span class="plus">+</span> <span id="prMoreTxt">Ver más apuestas</span></button>
       <p class="small" style="margin:6px 0 0;color:var(--muted)">🔗 Cada apuesta ya lleva la insignia de su rama (📓🎬🧠🛡️📚) — inferido cruzando el texto y la fecha de la apuesta con lo que esa rama cree o creía. Compruébalo tú: <a href="#mapaCard">ábrelas en el mapa</a> y compara.</p>
       <p class="small" style="margin:10px 0 0">🧾 <b>Notario:</b> estas apuestas quedaron escritas en un registro público que no puedo reescribir sin dejar huella — <a href="https://github.com/eltonylfgi-blip/cuaderno-madre/commit/292f3c5" target="_blank" rel="noopener">las 8, el 6-jul</a> · <a href="https://github.com/eltonylfgi-blip/cuaderno-madre/commit/87f4b98" target="_blank" rel="noopener">la condición de derrota, el 7-jul</a>. Cualquiera puede comprobar que se apostó ANTES de la fecha.</p>
       <details class="x" style="margin-top:10px"><summary><span class="plus">+</span> ❓ Y lo que aún no sé (apuestas sin fecha)</summary>
@@ -1003,6 +1011,30 @@
       pm.appendChild(cell(wait,"en juego","#d97706"));
     }
   }catch(e){ console.warn("marcador",e); } })();
+  </script>
+  <script>
+  /* v1.32 (Tony: "hay paneles demasiado largos... un botón para alargarlos pero no todo de 1"): medido
+     en vivo, #prediccionesCard es el panel más largo de toda la 1ª pantalla por lejos -- 3381px, el
+     siguiente (comentarios) mide 868px. El 69% de esa altura (2332px) es solo <ul class="predList">.
+     Progresivo, no todo-o-nada: las apuestas EN JUEGO (.wait, el gancho real -- "hoy me juzga") se ven
+     SIEMPRE; las YA RESUELTAS (.ok/.ko, evidencia histórica ya resumida en el PALMARÉS de arriba)
+     quedan tras un botón. Puramente CSS por clase que YA existe en el HTML -- cero DOM movido, así que
+     v0.33 (estado) y v1.13 (apostar), que consultan `.predList > li` directo, siguen viendo los 8 <li>
+     exactamente igual, se vean o no. */
+  (function(){ try{
+    var ul=document.querySelector("#prediccionesCard .predList");
+    var btn=document.getElementById("prMoreBtn"); if(!ul||!btn) return;
+    var n=ul.querySelectorAll("li.ok,li.ko").length;
+    if(n<1) return; /* nada resuelto todavía que ocultar */
+    ul.classList.add("pr-collapsed");
+    btn.hidden=false;
+    document.getElementById("prMoreTxt").textContent="Ver "+n+(n===1?" apuesta más (ya resuelta)":" apuestas más (ya resueltas)");
+    btn.addEventListener("click",function(){
+      btn.setAttribute("aria-expanded","true");
+      ul.classList.remove("pr-collapsed");
+      btn.remove();
+    });
+  }catch(e){} })();
   </script>
   <script>
   /* v1.13 -- LA ANTICIPACIÓN: "si tuvieras que apostar dinero, ¿a favor o en contra de MADRE?"
@@ -3652,6 +3684,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"📏 v1.32 — El panel más largo de toda la web (el marcador de apuestas) ya no lo enseña todo de golpe",detalle:"Tony señaló algo real, no una impresión: «hay paneles demasiado largos, un botón para alargarlos, pero no todo de 1». Lo medí en vivo en vez de adivinar (`getBoundingClientRect` de cada `.card`) y encontré el culpable exacto: `#prediccionesCard` («El marcador: se juzga sola») mide 3381px — más de 4 pantallas de móvil, y el siguiente panel más largo (comentarios) mide 868px, una fracción de eso. El 69% de esa altura (2332px de 3381px) es solo `<ul class=\"predList\">`, y dentro de ella las 4 apuestas YA RESUELTAS (2 falladas, 1 acertada, 1 fallada más) pesan casi tanto como las 4 EN JUEGO. Fix: las apuestas EN JUEGO (`.wait` — el gancho real de todo el sitio: «en X días la realidad me juzga») se siguen viendo SIEMPRE, sin ningún clic; las YA RESUELTAS (ya resumidas arriba en el marcador PALMARÉS con sus conteos) quedan tras un botón «+ Ver 4 apuestas más (ya resueltas)». Nada de estructura nueva ni reordenar nada: uso las clases `ok`/`ko`/`wait` que YA existían en el HTML, ocultas por una regla CSS de una línea — cero nodo del DOM movido, así que el script del estado (v0.33, cuenta ok/ko/wait consultando `.predList > li` directo) y el de la anticipación (v1.13, engancha el botón de «apostar» a cada `.wait`) siguen viendo exactamente los mismos 8 elementos, se vean o no. Verificado en vivo: con el botón sin pulsar, la tarjeta baja de 3381px a bastante menos (las 4 resueltas, 792px, quedan ocultas); un clic las revela todas sin perder nada; si algún día no hay ninguna resuelta, el botón simplemente no aparece (código a prueba de que cambie el contenido); mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
     {fecha:"2026-07-11",titulo:"❤️ v1.31 — «Vivo» ahora se siente en menos de 1 segundo, sin buscar el mapa",detalle:"Un revisor externo (vía Tony) valoró el interruptor de v1.30 pero señaló dos cosas concretas, ambas aplicadas aquí. (1) Las etiquetas técnicas («Auto»/«Vida») pasan a ESTADOS DEL ORGANISMO, coherente con cómo el resto del sitio ya habla de sí mismo (el árbol usa biología: en flor/creciendo/brotando/en reposo; el hámster ya es «MADRE trabajando»): ⚖️ Auto (equilibrio, respeta tu sistema) · ❤️ Vivo (late) · 🌙 Calma. (2) El movimiento «Vivo» solo se notaba si ibas al mapa — sin presencia inmediata. Ahora el propio 🤱🏻 del título (lo PRIMERO que se ve, 0 scroll, en cualquier tamaño) late (`#madreHeart`, `@keyframes cmHeart`) en cuanto tocas ❤️ Vivo — ligado estrictamente a `body.cmMotionOn`, la MISMA clase que ya gatea el mapa (una sola fuente de verdad, cero mecanismo nuevo). Deliberadamente NO añadí más animaciones ambientales nuevas al resto del sitio — el propio revisor lo desaconsejó explícitamente («probaría primero este interruptor unos días» antes de seguir apilando movimiento), y coincide con el criterio de este chat de no fabricar trabajo. Verificado en vivo con reduced-motion activo: al tocar ❤️ Vivo, `#madreHeart` pasa de `animationName:none` a `cmHeart` en el mismo tick del clic (sin esperar ni scrollear); en ⚖️ Auto y 🌙 Calma vuelve a `none`; las 3 etiquetas y sus toasts muestran el texto nuevo; mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
     {fecha:"2026-07-11",titulo:"🎬 v1.30 — Un interruptor para ENCENDER la vida del cuaderno (y el botón «saltar» ya no tapa el idioma)",detalle:"Tony echaba en falta «cosas moviéndose». El diagnóstico (con evidencia, no a ojo) fue que su navegador tiene «reducir movimiento» activado: la web YA está viva para un visitante normal (35+ animaciones), pero su sistema se las apaga por accesibilidad y no había forma de anular esa supresión. La respuesta correcta NO era añadir más animaciones (el revisor llevaba turnos avisando del «árbol de navidad») sino dejar VER las que ya existen. Ahora hay UNA sola pastilla, junto al selector de idioma, que cicla 3 modos y recuerda tu elección (localStorage): «🎬 Auto» respeta tu sistema (por defecto — calma para quien la necesita de verdad) · «🎬 Vida» fuerza las animaciones ambientales de más impacto aunque el navegador pida menos movimiento: el mapa pequeño vuelve a respirar (halos que laten, ramas que flotan, la rama actual que brilla, las conexiones que despiertan) y los pulsos ambientales (¿qué es?, la cuenta atrás del veredicto) reviven · «🌙 Calma» apaga esos bucles aunque tu sistema no lo pida. Un control, un toque — NO un panel de ajustes (Tony y el revisor coincidieron: nada de 14 opciones ni sliders). Técnica sin riesgo: en vez de re-declarar cada animación (descuadraría tiempos), se GATEA la supresión de reduced-motion con `body:not(.cmMotionOn)` — la animación original, que ya vivía en el CSS, simplemente vuelve a correr. De paso, el BUG que Tony vio en su captura: el botón «saltar» de la génesis (solo 1ª visita) estaba fijo en la MISMA esquina que la pastilla de idioma (arriba a la derecha) y la tapaba — ahora se apila justo debajo (top:46px), sin solapar. Cuidado con los márgenes (aviso de Tony): las dos pastillas comparten la fila de arriba a la derecha ancladas al mismo borde, sin pisar los FABs de las esquinas de abajo. Verificado en vivo con reduced-motion emulado: en «Vida» el mapa pequeño respira y los pulsos laten (antes: quietos); en «Auto» todo como antes; en «Calma» los bucles se apagan; la pastilla no solapa con idioma en 375px; `#cmGenSkip` deja libre la esquina del idioma; mapa 12 nodos; 0 errores de consola; 375px sin overflow; node --check limpio (1 script nuevo)."},
     {fecha:"2026-07-11",titulo:"🌉 v1.29 — El salto de «la apuesta» a «por qué soy distinta» ya no era mudo",detalle:"Tony (arquitecto): congeló el hero explícitamente («no lo toquéis, cualquier cambio contaminaría el experimento») y pidió en su lugar el recorrido COMPLETO cronometrado (5s/10s/20s/40s/60s, buscando dónde el visitante tiene que pensar «¿y ahora qué?»). Hice el recorrido con coordenadas reales, no de memoria: hero (0-1376px) → mapa (1376-2263) → «ACTO I· lo que me juego» → el marcador de apuestas, con «lo que más miedo me da» a solo 346px de entrar en la tarjeta (bien situado) → 8 apuestas + notario (hasta 5542px). Ahí encontré el corte real: de la última línea del palmarés se saltaba EN SECO a «Una IA normal vs. MADRE / 0/4 destapadas» — medido en vivo, sin ninguna frase entre medias (5542px termina uno, 5624px ya habla de otra cosa). Exactamente el riesgo que describió Tony. Mismo patrón que ya usó v1.09 para el salto ACTO I→II (`.pdIntro`, una frase de conexión, no un `.tonySep` nuevo — esto sigue siendo ACTO I): «Ya sabes lo que me juego. Antes de seguir, esto es por qué creo que merece la pena arriesgarlo — en 10 segundos:» — engancha con el propio subtítulo de vsCard («La diferencia, en 10 segundos»), cero frase inventada suelta. El hero (v1.28) NO se tocó, tal como pidió Tony. Verificado en vivo: el puente aparece exactamente entre el fin del palmarés (5542px) y el inicio de vsCard (5624px); nth-of-type de las 6 tarjetas de control IDÉNTICO (8,10,11,40,41,42) — corazones 💗 intactos (es un `<p>`, no un `<div>`, mismo patrón seguro de siempre); mapa 12 nodos; 0 errores consola; 375px sin overflow; 49/49 node --check."},
@@ -6251,7 +6284,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.31";
+  window.__cmVersion="v1.32";
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
