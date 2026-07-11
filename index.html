@@ -591,8 +591,18 @@
         /* v0.20: alimenta el «🔦 HOY» de la cabecera con los MISMOS datos reales (evidencia, no relato) */
         try{ var hr=document.getElementById("hoyReal");
           if(hr){ var day=Date.now()-864e5, hoy=commits.filter(function(c){ return new Date(c.date).getTime()>day; }).length, last=commits[0];
-            hr.textContent = hoy>0 ? ("🔦 Hoy, de verdad: ✓ "+hoy+(hoy===1?" cambio real":" cambios reales")+" en 24 h — el último, "+hace(last.date)+": «"+clean(last.msg)+"»")
-                                   : ("🔦 Último cambio real, "+hace(last.date)+": «"+clean(last.msg)+"»");
+            /* v1.05: este texto salia del mensaje de commit EN CRUDO (clean() solo quita prefijos tipo
+               "fix:", no jerga tecnica) -> un commit real llego a mostrar "#giroCard" a cualquier
+               visitante. window.__cmCambios[0] es el MISMO titulo que ya escribo a mano, en espanol
+               llano, para el propio changelog (v0.52 lo expone para el modo pelicula) - se prioriza ese
+               y el mensaje de commit crudo queda solo de red de seguridad si aun no cargo. */
+            var lastTitle=clean(last.msg);
+            try{
+              var cc=window.__cmCambios;
+              if(cc && cc[0] && cc[0].titulo){ lastTitle=cc[0].titulo.replace(/^\S+\s*v?\d+\.\d+\s*[—-]\s*/,""); }
+            }catch(e2){}
+            hr.textContent = hoy>0 ? ("🔦 Hoy, de verdad: ✓ "+hoy+(hoy===1?" cambio real":" cambios reales")+" en 24 h — el último, "+hace(last.date)+": «"+lastTitle+"»")
+                                   : ("🔦 Último cambio real, "+hace(last.date)+": «"+lastTitle+"»");
             hr.hidden=false; } }catch(e){}
         if(initial && !firstDone){ firstDone=true; lsSet(LV, new Date().toISOString()); if(!document.hidden) start(); }
       }).catch(function(){ /* silencio: si no hay datos, el bloque sigue oculto (degrada limpio) */ });
@@ -3202,6 +3212,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🔒 v1.05 — El ticker «Hoy, de verdad» ya no expone jerga técnica",detalle:"Leí la web viva de un tirón, como visitante nuevo, tras cambiar de escala (de «componente» a «flujo completo») — y encontré esto: ese ticker sacaba el texto del mensaje de commit EN CRUDO, y uno reciente decía literalmente «...para #giroCard (EL GIRO)», un identificador de código expuesto a cualquiera. No era un caso suelto a maquillar: es un fallo de diseño que podía repetirse con cualquier commit futuro. Ahora usa el mismo título en español llano que ya escribo a mano para el changelog (`window.__cmCambios[0]`, expuesto desde v0.52) — el mensaje de commit crudo queda solo como red de seguridad si ese dato aún no cargó."},
     {fecha:"2026-07-11",titulo:"⭐ v1.04 — EL GIRO se siente distinto, no solo se lee distinto",detalle:"La tarjeta «8 de julio: alguien me vio» (#giroCard) es el ÚNICO punto marcado «EL GIRO» en la barra de progreso (etiqueta viva de v0.92) — el giro dramático real de toda la historia. Hasta ahora entraba en pantalla exactamente igual que cualquier otra tarjeta (mismo fade+subida genérico de v0.85, sin ninguna variación). Ahora, SOLO a ella, un destello dorado breve (~1,2s, una única vez) recorre su borde la primera vez que entra en pantalla — cero texto nuevo, cero dato inventado, IIFE y observer propios, sin tocar el bloque v0.85 existente. Si el navegador pide «reduce motion», no se añade nada."},
     {fecha:"2026-07-11",titulo:"✨ v1.03 — El primer toque de la tabla ⚖️ ya no abre en seco",detalle:"Al tocar cualquiera de las 4 filas de «Una IA normal vs. MADRE» — la tarjeta que ve cualquier visitante nuevo justo tras el hero, antes incluso del 3/10 — el texto revelado (`.cmVsReveal`) pasaba de `hidden` a visible de golpe, sin transición (grep confirmado: la regla CSS no tenía ninguna propiedad de animación). Ahora entra con un fundido + deslizamiento sutil de ~0,28s, el mismo lenguaje de movimiento que ya usan las tarjetas al llegar (`.cmRise`, v0.85) y el muelle de los botones (`cubic-bezier(.34,1.56,.64,1)`, v0.61). Si el navegador pide `prefers-reduced-motion:reduce`, se pinta el texto final de golpe, sin animar — igual que el resto de animaciones de este cuaderno."},
     {fecha:"2026-07-11",titulo:"🔢 v1.02 — El PALMARÉS cuenta hacia arriba, como ya hace el 3/10",detalle:"Las 4 cifras del marcador de apuestas (aciertos/fallos/vencidas sin anotar/en juego, justo al principio de ACTO I) aparecían ya escritas de golpe al entrar en pantalla — sin ningún tipo de conteo (grep confirmado: la función `cell()` solo hacía `a.textContent=n`, una asignación directa). Ahora cada cifra sube de 0 a su valor real en poco más de medio segundo (requestAnimationFrame, ~650ms) al crearse el marcador — mismo lenguaje de «cifra que cobra vida» que ya usa el número grande del hero. Si el navegador pide `prefers-reduced-motion:reduce`, se pinta el valor final de golpe, sin animar."},
@@ -5774,7 +5785,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.04";
+  window.__cmVersion="v1.05";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
