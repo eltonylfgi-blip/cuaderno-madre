@@ -1,6 +1,35 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **▶️ EMPIEZA AQUÍ (chat nuevo) — FASE DE EDICIÓN: reducir el ruido de la 1ª pantalla ~30%, sin
+> **✅ v1.28 EN VIVO (11-jul) — fase de EDICIÓN construida en la misma sesión (no hizo falta chat
+> nuevo). Commit `c63b219`.** Dos piezas, ambas grounded (cero dato inventado):
+> - **Acercar el conflicto:** teaser tras el hook — *"⏳ En 4 días, la realidad me juzga: se juzga
+>   si el cuello era la distribución"* — reusa el mismo cálculo (`VERE`/`next`/`dias`) que ya usaba
+>   `#chipVeredicto`, solo pintado 3 frases más cerca del H1.
+> - **Bajar sin borrar:** `#cmAchieveBtn` (🏆 logros) · `#hoyReal` (🔦 ticker dev) · `#visitLine`
+>   (👀 nº visita) reubicados por `id` tras `#vsCard` — siguen existiendo y poblándose, solo dejan
+>   de competir en los primeros 10s. `#cmSeguirChip` investigado y DESCARTADO del cambio (no es el
+>   mismo widget que la visita, solo aparece en visitas 2ª+, nunca compite con un visitante nuevo).
+> - Verificado: 1ª pantalla 390×844 pasa de 13 a 12 elementos (conflicto añadido, 3 fuera); nth-of-
+>   type de las 6 tarjetas de control IDÉNTICO a antes de tocar nada — corazones 💗 intactos; mapa
+>   12 nodos; 0 consola; 375px sin overflow; 49/49 node --check.
+>
+> **Guardarraíles en vigor, LEER antes de la siguiente edición de la 1ª pantalla / hero:**
+> 1. Personalidad = activo. Nunca se borra por limpieza — solo se esconde si compite, y solo se
+>    elimina si algún día deja de aportar diversión de verdad (condición de salida, no protección
+>    eterna).
+> 2. Editar ≠ solo quitar. También es ACERCAR — reordenar peso narrativo hacia la apuesta pública.
+> 3. Criterio permanente para CUALQUIER mejora futura (no solo hero): *"¿esto hace la apuesta
+>    pública más fuerte, o solo hace la web más rica? Si solo más rica, no la construyas."*
+> 4. Cuando Tony pide criterio/decisión, DECIDIR y DEFENDER una opción — no devolverle la pregunta.
+>
+> **Siguiente hilo posible (no decidido, no urgente):** Propuesta C que quedó aparcada — reencabezar
+> `#chipVeredicto` (más abajo, en la tira "de un vistazo") con más fuerza emocional ahora que ya
+> existe el teaser corto en el hero; o simplemente medir el efecto de v1.28 antes de tocar más. El
+> árbol sigue parado a propósito (instrucción de Tony, ver bloque de abajo) salvo que él lo reabra.
+>
+> ---
+>
+> **▶️ (bloque de fase de edición, ya construido — se deja como historial) FASE DE EDICIÓN: reducir el ruido de la 1ª pantalla ~30%, sin
 > perder ninguna idea. Decisión YA TOMADA y defendida (no volver a preguntar a Tony "¿qué hago?" —
 > él pidió explícitamente criterio, no consulta). CONSTRUIR la Propuesta B de abajo.**
 >
