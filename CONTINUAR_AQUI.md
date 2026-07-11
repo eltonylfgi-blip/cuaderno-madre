@@ -1,5 +1,19 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v1.32 EN VIVO (11-jul) — el panel más largo del sitio ya no se enseña de golpe. Commit `16af1d9`.**
+> El revisor pivotó ("cierra el tema del movimiento; vuelve a dónde pierde impulso el visitante") y Tony
+> ya había señalado el síntoma él mismo: "paneles demasiado largos, un botón para alargarlos, no todo de 1".
+> Medido en vivo (no a ojo): `#prediccionesCard` medía **3381px** — el panel más largo por lejos (el
+> siguiente, comentarios, 868px). El 69% (2332px) era solo `<ul class="predList">`. Fix: las apuestas
+> **en juego** (`.wait`, el gancho real) siempre visibles; las **ya resueltas** (`.ok`/`.ko`, ya resumidas
+> en el PALMARÉS de arriba) quedan tras "+ Ver 4 apuestas más". Solo CSS por clase existente — cero DOM
+> movido, los scripts v0.33/v1.13 siguen viendo los 8 `<li>` igual. **3381px → 2579px por defecto (-24%)**,
+> un clic revela todo. Verificado: 12 nodos, 0 consola, 375px sin overflow, 51/51 node --check.
+>
+> **Otros paneles largos NO revisados todavía** (candidato del siguiente ciclo si Tony quiere seguir):
+> `comentariosCard` (868px) y `mapaCard` (806px) son mucho más cortos que el marcador — no urge tocarlos,
+> pero si Tony sigue viendo fricción, medirlos primero (no adivinar) antes de aplicar el mismo patrón.
+>
 > **🔬 INVESTIGACIÓN (11-jul, tras v1.31) — el revisor pidió más ("Vivo" intensifica, "Auto" con vida
 > discreta, y a más largo plazo "organismo sincronizado"). Verificado con workflow real (investigación
 > con fuentes + 2 jueces independientes) antes de construir nada más — NO se tocó código.**
