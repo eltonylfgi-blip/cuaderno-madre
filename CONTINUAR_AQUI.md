@@ -1,5 +1,19 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v1.33 EN VIVO (11-jul) — «4 apuestas más» no eran «4 elementos iguales», eran el pasado.
+> Commit `441dd1f`.** El revisor validó v1.32 (recorte del panel) pero pidió reforzar la separación
+> en-juego/historial con FRASES, no solo un botón — y probó el test "¿qué querrías leer primero al
+> aterrizar?". Aplicado, sin reordenar nada: etiqueta **«⏳ Ahora mismo en juego»** justo antes de la
+> lista recortada (mismo emoji que ya llevaba cada chip — cero vocabulario nuevo), y el botón pasa a
+> **«📜 Ver el historial — N ya resueltas»** (📜 ya lo usaba el propio changelog; descarté 📚 porque esa
+> insignia ya es la rama "Memoria/archivo" — habría creado ambigüedad). Verificado: con la lista
+> recortada, lo primero visible es la etiqueta + las 4 en juego (pasa el test del revisor); un clic
+> revela el historial completo; 12 nodos, 0 consola, 375px sin overflow, 51/51 node --check.
+>
+> **El propio revisor dijo que NO tocaría más las apuestas — están bien así. No seguir aquí.** También
+> dejó un detector (no regla dura, guardado en memoria): panel >2500-3000px → preguntar qué aporta MENOS
+> a la narrativa actual y ocultar solo eso — no una regla de "colapsar todo lo largo".
+>
 > **✅ v1.32 EN VIVO (11-jul) — el panel más largo del sitio ya no se enseña de golpe. Commit `16af1d9`.**
 > El revisor pivotó ("cierra el tema del movimiento; vuelve a dónde pierde impulso el visitante") y Tony
 > ya había señalado el síntoma él mismo: "paneles demasiado largos, un botón para alargarlos, no todo de 1".
