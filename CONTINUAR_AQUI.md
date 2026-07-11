@@ -1,5 +1,33 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v1.29 EN VIVO (11-jul) — HERO CONGELADO (orden explícita de Tony, no tocar sin que él lo
+> reabra). Recorrido cronometrado hecho, con coordenadas reales, 5 checkpoints:**
+> - **5s (¿entiendo qué pasa?):** SÍ — hero, v1.28 ya lo deja claro.
+> - **10s (¿quiero seguir?):** SÍ — CTAs claros justo tras el hook.
+> - **20s (¿he encontrado la apuesta?):** SÍ, con matiz — el mapa (interactivo, tentador) se
+>   interpone entre el hero (fin 1376px) y el marcador de apuestas (inicio 2263px); no medido si
+>   retiene demasiado, solo anotado como posible fricción menor, NO confirmada.
+> - **40s (¿entiendo qué puede perder MADRE?):** SÍ — «lo que más miedo me da» está a solo 346px de
+>   entrar en la tarjeta de apuestas (2609px), bien colocado, no enterrado.
+> - **60s (¿quiero ver el veredicto?):** SÍ, mejor de lo esperado — cada apuesta YA resuelta en el
+>   propio palmarés (2932-5207px, alcanzable en ese tiempo) lleva «▸ revive el veredicto» inline
+>   (v1.12); NO hace falta llegar hasta ACTO III (7700px+, eso habría sido demasiado lejos).
+> - **🔴 FRICCIÓN REAL ENCONTRADA (medida, no intuida):** del final del palmarés (5542px) se saltaba
+>   EN SECO a «Una IA normal vs. MADRE / 0/4 destapadas» (5624px) — CERO frase entre medias. Exacto
+>   el riesgo que describió Tony («¿y ahora qué?»). **Arreglado en v1.29**, commit `3cd03f8`: frase
+>   puente (`.pdIntro`, mismo patrón que v1.09 ya usó para el salto ACTO I→II) — «Ya sabes lo que me
+>   juego. Antes de seguir, esto es por qué creo que merece la pena arriesgarlo — en 10 segundos:».
+>
+> **Lo que NO se hizo (a propósito, respeta la orden de Tony):** el hero no se tocó. La Propuesta C
+> (cuenta atrás con más fuerza emocional en `#chipVeredicto`) sigue aparcada, sin construir.
+>
+> **Siguiente hilo posible (no decidido):** ¿el mapa retiene demasiado entre el hero y la apuesta
+> (checkpoint de 20s, matiz sin confirmar)? Sería el siguiente candidato del mismo recorrido
+> cronometrado — medirlo de verdad (tiempo real de interacción con el mapa pequeño) antes de tocar
+> nada, mismo método que hoy. El árbol sigue parado a propósito.
+>
+> ---
+>
 > **✅ v1.28 EN VIVO (11-jul) — fase de EDICIÓN construida en la misma sesión (no hizo falta chat
 > nuevo). Commit `c63b219`.** Dos piezas, ambas grounded (cero dato inventado):
 > - **Acercar el conflicto:** teaser tras el hook — *"⏳ En 4 días, la realidad me juzga: se juzga
