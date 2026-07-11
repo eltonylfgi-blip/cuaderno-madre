@@ -3182,6 +3182,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"💬 v0.99 — Tu comentario también dice «· tú», como ya pasaba con tus dibujos",detalle:"Los dibujos de la galería ya distinguían el tuyo con «· tú» en color propio (window.__identity, addDrawing/ownsDrawing) — pero en comentarios ese reconocimiento no existía (grep confirmado: 0 resultados de ownsComment/addComment antes de este cambio). Ahora, al publicar un comentario, se guarda su id en tu identidad anónima (addComment) y cada vez que la lista se pinta, el tuyo lleva un «· tú» en el mismo morado de los dibujos (#6a5acd) junto a tu nombre — mismo patrón exacto, llevado al otro sitio donde dejas huella."},
     {fecha:"2026-07-11",titulo:"🏆 v0.98 — Los logros avisan EN EL MOMENTO, no solo si abres el trofeo",detalle:"El chip 🏆 de la cabecera solo se pintaba al cargar la página o al abrir el panel (grep confirmado: 0 toasts ligados a logros) — cruzar un umbral real (tu 4ª rama del mapa, tu 1er comentario, tu 1er dibujo, tu 2ª visita, terminar el tour) no se notaba si no ibas a mirar el trofeo tú mismo. Ahora, en el instante en que lo cruzas, un aviso breve dice «🏆 Logro desbloqueado: <nombre>» y el número del chip sube solo. La primera vez que corre este código en un navegador siembra en silencio lo que ya estuviera hecho de antes, para no soltar una cascada de avisos retroactivos a quien ya llevaba tiempo aquí."},
     {fecha:"2026-07-11",titulo:"🎵 v0.97 — Ritmo en ACTO II: 2 tarjetas rompen la monotonía de las 12 seguidas",detalle:"3 jueces independientes (UX, videojuegos, diseño visual) confirmaron por separado el mismo hallazgo: entre «ACTO II» y «EL GIRO» van 12 tarjetas seguidas con el mismo patrón visual exacto, sin ninguna variación — nota de Ritmo, 6-7/10. Reordenar o fusionar tarjetas es riesgo ya conocido (los 💗 se anclan por posición); en vez de tocar el orden, «La historia de MADRE» y «El cementerio de ideas muertas» — ya las 2 más citadas como memorables por los propios jueces — llevan ahora un acento de color que las hace destacar del resto, sin mover ni una sola tarjeta de sitio."},
     {fecha:"2026-07-11",titulo:"⌨️ v0.96 — El pill «¿qué es?» de la cabecera ya se navega y activa con teclado",detalle:"El pill junto al título (lo primero tras el H1, id queesBtn) solo respondía a clic de ratón/dedo: sin tabindex, sin role, sin ninguna regla :focus en toda la hoja de estilos (grep confirmado) — quien navega solo con Tab no podía ni llegar a él, mucho menos activarlo. Ahora tiene tabindex=\"0\" y role=\"button\", un :focus-visible con contorno visible (mismo patrón ya usado en los nodos del mapa y los chips de acto), y Enter/Espacio disparan la misma acción que el clic — mismo patrón exacto que ya usan esos otros controles del cuaderno."},
@@ -3843,9 +3844,9 @@ async function post(parentId, name, body, file){
   name=(name||"").trim().slice(0,40);
   let image_url=null;
   if(file){ image_url=await uploadImg(file); if(!image_url) return {error:"img"}; }
-  const { error }=await sb.from("comments").insert({ body:body.slice(0,2000), name:name||null, parent_id:parentId||null, image_url });
+  const { data, error }=await sb.from("comments").insert({ body:body.slice(0,2000), name:name||null, parent_id:parentId||null, image_url }).select().single();
   if(error){ console.warn("insert:", error.message); return {error}; }
-  return {};
+  return {id: data && data.id};
 }
 async function like(id){
   if(isLiked(id)) return; markLiked(id);
@@ -3867,7 +3868,7 @@ function makeForm(parentId){
   t.addEventListener("paste",(e)=>{ const it=(e.clipboardData&&e.clipboardData.items)||[]; for(let i=0;i<it.length;i++){ if(it[i].type&&it[i].type.indexOf("image")===0){ const ff=it[i].getAsFile(); if(ff){ setFile(ff); e.preventDefault(); } } } });
   const b=document.createElement("button"); b.className="btn sm primary cmtSend"; b.textContent=parentId?"Responder":"Comentar";
   b.onclick=async()=>{ b.disabled=true; const r=await post(parentId,n.value,t.value,imgFile); b.disabled=false;
-    if(!r.error){ t.value=""; setFile(null); img.value=""; try{ localStorage.setItem('cm_commented_v1','1'); }catch(e){} if(f.onsent)f.onsent(); load(); }
+    if(!r.error){ t.value=""; setFile(null); img.value=""; try{ localStorage.setItem('cm_commented_v1','1'); }catch(e){} try{ if(r.id&&window.__identity) window.__identity.addComment(r.id); }catch(e){} if(f.onsent)f.onsent(); load(); }
     else if(r.error==="blocked"){ b.textContent="🚫 eso no se publica"; setTimeout(()=>b.textContent=parentId?"Responder":"Comentar",2000); }
     else if(r.error==="img"){ b.textContent="imagen falló"; setTimeout(()=>b.textContent=parentId?"Responder":"Comentar",1600); }
     else { b.textContent="Reintenta"; setTimeout(()=>b.textContent=parentId?"Responder":"Comentar",1500); } };
@@ -3876,7 +3877,11 @@ function makeForm(parentId){
 function makeComment(c, isReply){
   const w=document.createElement("div"); w.className="cmt";
   if((c.name||"").indexOf("MADRE")===0) w.classList.add("madreReply");
-  const m=document.createElement("div"); m.className="meta"; m.textContent=(c.name||"Anónimo")+" · "+fmt(c.created_at);
+  const m=document.createElement("div"); m.className="meta";
+  m.appendChild(document.createTextNode(c.name||"Anónimo"));
+  var ownC=false; try{ ownC=!!(window.__identity&&window.__identity.ownsComment&&window.__identity.ownsComment(c.id)); }catch(e){}
+  if(ownC){ var tuS=document.createElement("span"); tuS.textContent=" · tú"; tuS.style.color="#6a5acd"; m.appendChild(tuS); }
+  m.appendChild(document.createTextNode(" · "+fmt(c.created_at)));
   /* v0.29: avatar con inicial + tono propio por nombre (hash → hue); MADRE conserva su 🤱🏻 por CSS más específico */
   try{ var nm=(c.name||"Anónimo"); var ini=(nm.match(/[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/)||["🙂"])[0].toUpperCase(); m.dataset.ini=ini; var hh=0; for(var hi=0;hi<nm.length;hi++) hh=(hh*31+nm.charCodeAt(hi))%360; m.style.setProperty("--avh",hh); }catch(e){}
   const tx=document.createElement("div"); tx.className="ctext"; tx.textContent=c.body||"";
@@ -5270,11 +5275,14 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   var id=load();
   if(!id || !id.name){ id={ name: ADJ[Math.floor(Math.random()*ADJ.length)]+" "+ANIM[Math.floor(Math.random()*ANIM.length)]+" "+(10+Math.floor(Math.random()*89)), drawings:[] }; save(id); }
   if(!id.drawings) id.drawings=[];
+  if(!id.comments) id.comments=[];
   window.__identity={
     name:function(){ return id.name; },
     setName:function(n){ id.name=(n||"").slice(0,40); save(id); },
     addDrawing:function(did){ if(did && id.drawings.indexOf(did)<0){ id.drawings.push(did); save(id); } },
-    ownsDrawing:function(did){ return id.drawings.indexOf(did)>=0; }
+    ownsDrawing:function(did){ return id.drawings.indexOf(did)>=0; },
+    addComment:function(cid){ if(cid && id.comments.indexOf(cid)<0){ id.comments.push(cid); save(id); } },
+    ownsComment:function(cid){ return id.comments.indexOf(cid)>=0; }
   };
   function prefill(){ try{
     var dn=document.getElementById("dbjsName"); if(dn && !dn.value) dn.value=id.name;
@@ -5726,7 +5734,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.98";
+  window.__cmVersion="v0.99";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
