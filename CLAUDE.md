@@ -58,6 +58,10 @@ de botella de mayor impacto DENTRO del Cuaderno y resolverlo — no esperar una 
   crear) compiten en el MISMO ranking — construye el que más suba la experiencia global, sea cual
   sea su categoría. La lente generativa ("qué momento inolvidable falta") es UNA lente más a usar
   cuando haga falta, NO una fase fija del ciclo ni un agente permanente añadido a cada ronda.
+  **Ese backlog VIVE en `IDEAS_Y_BRUJULA.md` (raíz del repo) — LÉELO antes de elegir qué mejorar y
+  SIEMPRE que no sepas qué hacer** (orden de Tony, 11-jul-2026). Ahí están las 🧭 BRÚJULAS (principios que
+  filtran cada decisión) y las ideas rankeadas por palanca. Cuando descubras una idea que te ENCANTE,
+  NO la construyas por impulso: apúntala ahí con su palanca; al construir una, muévela a ✅ CONSTRUIDO.
 - **Quitar cuenta como mejorar** — si eliminar algo sube más la calidad que añadir, elimina.
 - **Nunca fabriques trabajo ni declares un frente agotado por costumbre** — solo cuando de verdad
   no encuentres un cambio razonable que suba más la calidad (regla 5: con evidencia, no de palabra).

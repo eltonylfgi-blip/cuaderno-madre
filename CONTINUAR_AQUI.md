@@ -1,5 +1,9 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> 💡 **ANTES de elegir qué mejorar (o si no sabes qué hacer): abre `IDEAS_Y_BRUJULA.md`** — es el backlog
+> vivo (brújulas + ideas por palanca). Orden de Tony (11-jul): documentar ahí las ideas con más palanca y
+> atacarlas desde ahí, no improvisar.
+
 > **✅ v1.33 EN VIVO (11-jul) — «4 apuestas más» no eran «4 elementos iguales», eran el pasado.
 > Commit `441dd1f`.** El revisor validó v1.32 (recorte del panel) pero pidió reforzar la separación
 > en-juego/historial con FRASES, no solo un botón — y probó el test "¿qué querrías leer primero al
