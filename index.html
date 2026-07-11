@@ -69,6 +69,14 @@
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
     margin-bottom:11px;box-shadow:var(--shadow);overflow:hidden}
+  /* v0.97 — RITMO en ACTO II: 3 jueces independientes confirmaron por separado que las 12 tarjetas
+     entre "ACTO II" y "EL GIRO" comparten el mismo patron visual sin variacion (Ritmo 6-7/10, una de
+     las notas mas bajas). Reordenar/fusionar es riesgo medio ya documentado (corazones 💗 anclados
+     por nth-of-type de posicion) -> en vez de tocar el orden, se marcan 2 tarjetas ya narrativamente
+     fuertes (historia, cementerio) con .beat: SOLO una clase anadida a un div YA existente, cero
+     insercion/reorden, cero riesgo para los corazones. */
+  .card.beat{border-left:4px solid var(--accent);background:linear-gradient(135deg,var(--card),var(--accent-soft))}
+  .card.beat > details > summary .num{background:var(--accent);color:#fff}
   .card > details{margin:0}
   .card > details > summary{list-style:none;cursor:pointer;padding:14px 15px;display:flex;align-items:flex-start;gap:11px}
   .card > details > summary::-webkit-details-marker{display:none}
@@ -2084,7 +2092,7 @@
     </div>
   </details></div>
 
-  <div class="card"><details>
+  <div class="card beat"><details>
     <summary>
       <span class="num">📖</span>
       <span class="ctitle"><span class="t">La historia de MADRE, en 5 pasos</span>
@@ -2383,7 +2391,7 @@
     </div>
   </details></div>
 
-  <div class="card"><details>
+  <div class="card beat"><details>
     <summary>
       <span class="num">⚰️</span>
       <span class="ctitle"><span class="t">El cementerio de ideas muertas</span>
@@ -3174,6 +3182,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🎵 v0.97 — Ritmo en ACTO II: 2 tarjetas rompen la monotonía de las 12 seguidas",detalle:"3 jueces independientes (UX, videojuegos, diseño visual) confirmaron por separado el mismo hallazgo: entre «ACTO II» y «EL GIRO» van 12 tarjetas seguidas con el mismo patrón visual exacto, sin ninguna variación — nota de Ritmo, 6-7/10. Reordenar o fusionar tarjetas es riesgo ya conocido (los 💗 se anclan por posición); en vez de tocar el orden, «La historia de MADRE» y «El cementerio de ideas muertas» — ya las 2 más citadas como memorables por los propios jueces — llevan ahora un acento de color que las hace destacar del resto, sin mover ni una sola tarjeta de sitio."},
     {fecha:"2026-07-11",titulo:"⌨️ v0.96 — El pill «¿qué es?» de la cabecera ya se navega y activa con teclado",detalle:"El pill junto al título (lo primero tras el H1, id queesBtn) solo respondía a clic de ratón/dedo: sin tabindex, sin role, sin ninguna regla :focus en toda la hoja de estilos (grep confirmado) — quien navega solo con Tab no podía ni llegar a él, mucho menos activarlo. Ahora tiene tabindex=\"0\" y role=\"button\", un :focus-visible con contorno visible (mismo patrón ya usado en los nodos del mapa y los chips de acto), y Enter/Espacio disparan la misma acción que el clic — mismo patrón exacto que ya usan esos otros controles del cuaderno."},
     {fecha:"2026-07-11",titulo:"🔓 v0.95 — La tabla ⚖️ dice CUÁNTAS de las 4 pruebas ya destapaste, no solo cuál",detalle:"La tabla «IA normal vs. MADRE» (v0.73) ya dejaba tocar cada fila y revelar su prueba real, pero nunca decía cuántas llevabas vistas ni si las tenías las 4. Ahora un contador pequeño y discreto junto al título de la tarjeta («0/4 destapadas» → … → «4/4») sube 1 en 1 la primera vez que abres cada fila (reabrir la misma no suma dos veces), y al llegar a 4/4 un aviso breve cierra el círculo: «🔓 Destapaste las 4 — ya tienes toda la diferencia real.» Es la segunda tarjeta que ve cualquier visitante, justo tras el hero."},
     {fecha:"2026-07-11",titulo:"🎯 v0.94 — Jerarquía real en los chips del hero: 1 acción destacada, el resto discreto",detalle:"Las 3 pastillas visibles bajo el 3/10 (desglose, salud, desviaciones) competían por la mirada con exactamente el mismo peso visual — mismo fondo gris. Ahora «Ver el desglose» (la acción con más sentido justo debajo del titular, lleva al propio desglose del 3/10) se pinta con el color de acento y texto blanco, igual que ya hacían los botones .btn.primary; salud y desviaciones pasan a un estilo quieto (sin borde, texto apagado) — misma información, mismo destino al tocarlas, cero funcionalidad tocada."},
@@ -5716,7 +5725,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.96";
+  window.__cmVersion="v0.97";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
