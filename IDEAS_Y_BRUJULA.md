@@ -2,16 +2,27 @@
 
 > **LÉEME antes de decidir qué mejorar, y SIEMPRE que no sepas qué hacer.** Este es el ÚNICO backlog del
 > Cuaderno (fricciones + momentos memorables compiten en el MISMO ranking, por palanca). No es un documento
-> de proceso: es una lista viva de qué atacar.
+> de proceso: es un banco de HIPÓTESIS vivo — el Cuaderno no acumula ideas, MATA hipótesis malas y conserva
+> las que sobreviven (reformulado 11-jul-2026, revisor externo: *"no haría una lista de ideas, haría una
+> lista de hipótesis... eso refleja mucho mejor la identidad de MADRE que un backlog tradicional"* — MADRE
+> es literalmente un sistema que apuesta por escrito, con fecha, y deja que la realidad decida; este
+> documento aplica esa misma disciplina a las decisiones de diseño, no solo al producto).
 >
-> **Cómo se usa (Tony, 11-jul-2026):**
-> 1. Antes de un ciclo de mejora → repasa las 🧭 BRÚJULAS (filtran cualquier decisión) y coge la idea de
->    MÁS palanca del backlog que no esté gateada (o pide OK si lo está).
-> 2. Cuando cierres algo y descubras una idea que te ENCANTA → añádela aquí con su palanca estimada, NO la
->    construyas por impulso. Ordénala por palanca.
-> 3. Al construir una idea de aquí → muévela a ✅ CONSTRUIDO con su versión.
-> - Palanca = cuánto cambia la EXPERIENCIA del visitante (qué recordaría/contaría al día siguiente), no cuánto
->   trabajo es. "Bonito" no es palanca. Medir antes de asumir (🧭 B4).
+> **Cómo se usa (Tony, 11-jul-2026 — "decide tú, nunca esperes a mí para hacer cosas"):**
+> 1. Antes de un ciclo de mejora → repasa las 🧭 BRÚJULAS (filtran cualquier decisión) y coge la hipótesis
+>    de MÁS palanca en estado `☐ Sin probar` que no esté gateada. Las gateadas (tocan mapa/identidad) SÍ
+>    necesitan OK de Tony — eso no lo decide la autonomía, lo dice CLAUDE.md.
+> 2. Cuando descubras una hipótesis que te ENCANTA → añádela aquí con su palanca estimada y estado
+>    `☐ Sin probar`. NO la construyas por impulso.
+> 3. Al construir el MVP de una hipótesis → pasa a `☐ Probando` (construida y en vivo, SIN validar con
+>    tráfico/reacción real todavía — técnicamente desplegado ≠ operativamente confirmado).
+> 4. Cuando haya evidencia real (reacción de Tony, datos, o un fallo claro) → pasa a `☑ Confirmada` o
+>    `☒ Rechazada`, con la evidencia anotada. Una hipótesis confirmada puede escalar a la siguiente versión
+>    de sí misma; una rechazada NO se reintenta sin un dato nuevo que la reabra.
+> - **Nunca mezclar dos hipótesis en el mismo cambio** (lección de esta sesión): si cambias el vínculo Y el
+>   orden del árbol a la vez, y algo mejora, no sabrás cuál de las dos lo causó. Una variable por MVP.
+> - Palanca = cuánto cambia la EXPERIENCIA del visitante (qué recordaría/contaría al día siguiente), no
+>   cuánto trabajo es. "Bonito" no es palanca. Medir antes de asumir (🧭 B4).
 
 ---
 
@@ -31,65 +42,85 @@
 - **B5 — "Esconder cuenta como mejorar — pero NUNCA moviendo el DOM."** Colapsar por clase CSS ya existente,
   jamás reordenando nodos (rompe scripts que dependen de `selector > li`). Cortar por NARRATIVA (qué aporta
   menos al conflicto), no por posición. (Validado v1.32/v1.33.)
+- **B6 — "Correlación no es causa: separar el HECHO medido de la CONCLUSIÓN."** Que el árbol se cruce antes
+  que la apuesta es un HECHO (medido, B4). Que eso "robe protagonismo" es una hipótesis, NO un hecho — falta
+  probarla antes de actuar como si estuviera demostrada. (Revisor, 11-jul, corrigiendo mi propia conclusión
+  precipitada tras medir I3.)
 
 ---
 
-## 🔥 BACKLOG por palanca (arriba = más palanca)
+## 🧪 HIPÓTESIS por palanca (arriba = más palanca)
 
 ### 🟥 Alta palanca
 
-- **I1 — El árbol como "MAPA DE COMPROMISOS", no como estado.** Reencuadre de qué SIGNIFICA el árbol: cada
-  rama con una apuesta abierta está *"jugándose algo con la realidad"*, no "va a morir/vivir". Mantiene la
-  incertidumbre intacta (B1+B2). El visitante piensa "esa rama está comprometida", no "esa rama va a fallar".
-  El dato ya existe (v1.25: cada apuesta tiene `data-rama`). *Palanca: cambia el significado entero del árbol.*
-  **⚠️ GATED** (toca semántica/render del mapa) → necesita OK de Tony. Empezar por la versión MÍNIMA.
+**H1 — "Si una apuesta ilumina/conecta con su rama, el visitante entiende mejor qué se está jugando."**
+- Estado: **☐ Probando** (MVP en vivo desde v1.34, 11-jul — sin reacción/datos reales todavía).
+- MVP construido (deliberadamente el más barato posible, UNA sola dirección): cada insignia de rama de una
+  apuesta (📓🎬🧠🛡️📚) ya es tocable — toca/Enter → abre el mapa si estaba cerrado, hace scroll, y destaca
+  el nodo exacto con un borde de acento (siempre visible, sin depender de movimiento) + un brillo si el
+  interruptor de v1.30 lo permite. Cero riesgo al motor: localizado por consulta DOM externa comparando el
+  emoji ya renderizado (`.mn-emoji`), CERO llamada a `onNodeClick`/`routeTap`/`nodeAtPoint`/`focusBranch`
+  (confirmado por grep antes y después de construir).
+- Deliberadamente NO construido todavía (para no mezclar hipótesis, B6): el sentido inverso (tocar la rama
+  resalta sus apuestas), la respiración/energía/cicatriz que proponía el revisor, y CUALQUIER cambio al
+  orden de las secciones (eso es H3, aparte).
+- **Cómo se confirma/rechaza:** si en próximas sesiones Tony (o un visitante) usa el vínculo y dice que le
+  ayuda a entender la apuesta → `☑ Confirmada`, y entonces sí se plantea I1 (mapa de compromisos) o el
+  sentido inverso. Si nadie lo toca o no aporta nada → `☒ Rechazada`, se retira sin más inversión.
+- Palanca si se confirma: alta (validaría además la premisa de I1, el reencuadre grande del árbol).
 
-- **I2 — Vínculo apuesta↔rama que se ilumina AL TOCAR (no siempre).** Al pasar/tocar una apuesta abierta →
-  se ilumina SOLO su línea hacia la rama; al tocar la rama → se ilumina la apuesta. Nada de que todos los
-  vínculos respiren a la vez (ruido). Reviewer: construir la versión *"ridículamente simple"* primero (una
-  sola línea luminosa al tocar), preguntar "¿ya se entiende?", y NO añadir metáforas (respiración, energía,
-  cicatriz, brote) hasta comprobar que hace falta. *Palanca: hace visible la relación, que hoy hay que deducir.*
-  **⚠️ GATED** (hit-test/interacción del mapa, uno de los 2 gates de CLAUDE.md) → OK de Tony.
+**H2 — "El árbol como MAPA DE COMPROMISOS (no como estado) mantiene la incertidumbre y da más significado."**
+- Estado: **☐ Sin probar.** Reencuadre de qué SIGNIFICA el árbol: cada rama con una apuesta abierta está
+  *"jugándose algo con la realidad"*, no "va a morir/vivir" (mantiene B1+B2 intactos). El dato ya existe
+  (`data-rama` desde v1.25).
+- **Depende de H1:** no tiene sentido construir el reencuadre completo del árbol si el vínculo mínimo (H1)
+  ni siquiera demuestra ser útil. Esperar a que H1 tenga evidencia.
+- **⚠️ GATED** (toca semántica/render del mapa) → necesita OK de Tony cuando llegue el momento.
 
-- **I3 — Reordenar el VIAJE: el árbol DESPUÉS de la apuesta/veredicto.** MEDIDO 11-jul (375px): el árbol
-  (pos 3, top 1465) se cruza ANTES que la apuesta (pos 4, top 2364) — el visitante topa el mapa antes de
-  sentir el conflicto público, que es la estrella. Orden ideal del revisor: Hero→Conflicto→Apuesta→Veredicto→
-  Árbol. *Palanca: alinea el recorrido con la historia principal.* Reversible (no toca el motor, solo posición
-  de secciones) pero es un cambio narrativo grande → **medir/proponer antes**, probablemente pedir OK a Tony.
+**H3 — "Reordenar el viaje (árbol DESPUÉS de la apuesta/veredicto) alinea el recorrido con la historia
+principal y aumenta el impulso de seguir bajando."**
+- Estado: **☐ Sin probar.** ⚠️ Corregido 11-jul (B6): el HECHO medido es que el árbol (pos 3, top 1465px)
+  se cruza ANTES que la apuesta (pos 4, top 2364px). La CONCLUSIÓN ("eso perjudica") NO está demostrada —
+  el revisor lo señaló explícitamente: *"solo sabemos que aparece antes, no sabemos si eso perjudica"*.
+- **No mezclar con H1** (ya construida): si se reordena el árbol AHORA, cualquier cambio de reacción de
+  Tony no se sabría si vino del vínculo (H1) o del reorden (H3). Esperar a tener lectura de H1 primero.
+- Antes de tocar el orden: la prueba mental del revisor — comparar A (árbol→apuesta, actual) vs B
+  (apuesta→árbol) y preguntar *"¿cuál da más SIGNIFICADO al árbol?"* — no asumir que B gana solo por orden.
+- Reversible (no toca el motor, solo posición de secciones) pero es un cambio narrativo grande → medir/
+  proponer explícitamente antes de construir, probablemente con el criterio de Tony antes de decidir solo.
 
 ### 🟨 Media palanca (bajo riesgo, no tocan el motor del mapa)
 
-- **I4 — El historial se DESPLIEGA como un pergamino al abrir 📜.** Al pulsar "📜 Ver el historial", en vez
-  de aparecer 4 bloques de golpe, que se desenrolle (refuerza el significado de 📜). Reviewer: *"eso sí sería
-  una mejora perceptible."* Listo para construir, CSS puro, respeta el interruptor de movimiento (v1.30). No
-  toca el mapa. *Palanca media: pulido con significado.*
+**H4 — "El historial se despliega como un pergamino (no aparece de golpe) refuerza el significado de 📜."**
+- Estado: **☐ Sin probar.** CSS puro, respeta el interruptor de movimiento (v1.30), no toca el mapa. Listo
+  para construir cuando toque un ciclo de pulido pequeño.
 
-- **I5 — "¿Qué se está jugando MADRE HOY?" como línea-brújula que une secciones.** Una frase que conecte
-  hero + apuesta + árbol + veredicto bajo la misma pregunta. Encaja con B1 (incertidumbre del presente).
-  *Palanca: da hilo conductor al viaje (B3).* Copy, bajo riesgo. Definir bien antes de colocar.
+**H5 — "¿Qué se está jugando MADRE HOY? como línea-brújula uniendo secciones aumenta la sensación de
+viaje continuo (B3)."**
+- Estado: **☐ Sin probar.** Copy, bajo riesgo. Definir bien el texto antes de colocarlo en varias secciones.
 
 ### 🟦 Deuda técnica de baja prioridad (real, pero NO es el cuello hoy)
 
-- **I6 — `<span role="button">` → `<button>` nativo** (p.ej. `#queesBtn`). Mejora accesibilidad/teclado/
-  mantenimiento, no estética. Reviewer: valor 10/10, prioridad MADRE 8/10. Hacer cuando toque, no urge.
-- **I7 — Hover en móvil**: si un tooltip importante depende de `:hover`, en móvil no se dispara. Reviewer 8/10.
-- ❌ NO hacer ahora (reviewer, baja prioridad para MADRE): extraer CSS a fichero, quitar comentarios de
-  producción, modularizar CSS, i18n con HTML separado, `will-change` (puede EMPEORAR el rendimiento si se
-  abusa — solo con un problema medido). El cuello no es el código; es si la experiencia es inolvidable.
+- **H6 — `<span role="button">` → `<button>` nativo** (p.ej. `#queesBtn`). Estado: ☐ Sin probar, no urge.
+  Mejora accesibilidad/teclado/mantenimiento, no estética.
+- **H7 — Hover en móvil**: si un tooltip importante depende de `:hover`, en móvil no se dispara.
+- ❌ Descartadas para MADRE ahora (reviewer): extraer CSS a fichero, quitar comentarios de producción,
+  modularizar CSS, i18n con HTML separado, `will-change` sin medir (puede EMPEORAR el rendimiento). El
+  cuello no es el código; es si la experiencia es inolvidable.
 
 ---
 
-## ✅ CONSTRUIDO (ideas que salieron de aquí o del mismo hilo)
+## ✅ CONFIRMADO / CONSTRUIDO (con versión — lo que ya se desplegó)
 
 - v1.30/v1.31 — Interruptor de movimiento (Auto/Vivo/Calma) + latido inmediato en el título.
 - v1.32 — Recorte del panel de apuestas (en juego vs historial), midiendo antes (B4, B5).
 - v1.33 — Etiquetas "en juego" / "📜 historial" reforzando la separación.
-- (El marcador de apuestas queda CERRADO por decisión del revisor — no hacer una v1.34 dedicada a él.)
+- v1.34 — H1 en `☐ Probando`: vínculo mínimo apuesta→rama (ver arriba).
+- (El marcador de apuestas queda CERRADO por decisión del revisor — no construir más ahí sin un hecho nuevo.)
 
 ---
 
 ## 📏 Foto del viaje (MEDIDA 11-jul, 375px — 13.3 pantallas de móvil, doc 10817px)
 Hero(56,h606) · En directo(929,h522) · **🌳 Mapa(1465,h808)** · **⚖️ Apuesta(2364,h2604)** ·
 IAvsMADRE(5051,h511) · QuéEsMADRE(5726,h808) · 8-jul(6812,h345) · Comentarios(8153,h868) · Duda(9035,h251).
-→ Fricción medida: el árbol (pos 3) precede a la apuesta (pos 4). El marcador sigue siendo el bloque más
-alto (2604px) aun tras recortarlo, pero NO se toca más (decisión del revisor).
+→ HECHO: el árbol (pos 3) precede a la apuesta (pos 4). Si eso perjudica es H3, sin probar (ver arriba).

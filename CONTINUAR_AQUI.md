@@ -18,6 +18,24 @@
 > dejó un detector (no regla dura, guardado en memoria): panel >2500-3000px → preguntar qué aporta MENOS
 > a la narrativa actual y ocultar solo eso — no una regla de "colapsar todo lo largo".
 >
+> **✅ v1.34 EN VIVO (11-jul) — HIPÓTESIS 1 en `☐ Probando`: el vínculo mínimo apuesta→rama.
+> Commit `82b251d`.** Tony dijo explícitamente "decide tú, nunca esperes a mí" — así que no pedí OK y
+> construí el MVP más barato del vínculo que proponía el revisor, sin mezclarlo con el reorden del árbol
+> (dos hipótesis distintas, B6). Cada insignia de rama (📓🎬🧠🛡️📚, ya existía desde v1.25) ahora es
+> tocable: abre el mapa, hace scroll, destaca el nodo exacto. Cero riesgo al motor gateado: localizado por
+> consulta DOM externa (`.mn-emoji`), CERO llamada a `onNodeClick`/`routeTap`/`nodeAtPoint`/`focusBranch`
+> (confirmado por grep). Verificado: clic y teclado funcionan, el motor del mapa sigue abriendo info al
+> clicar un nodo normal, 12 nodos, 0 consola, 375px sin overflow, 52/52 node --check.
+>
+> **`IDEAS_Y_BRUJULA.md` reescrito a formato de HIPÓTESIS con estado** (orden explícita de Tony/revisor:
+> "el Cuaderno no acumula ideas, mata hipótesis malas y conserva las que sobreviven" — coherente con la
+> propia identidad de MADRE). H1 en Probando; H2 (árbol=mapa de compromisos) y H3 (reordenar el viaje)
+> quedan **Sin probar, deliberadamente NO mezcladas con H1** — esperar evidencia antes de tocarlas.
+>
+> **Corrección propia importante (B6, nueva brújula):** había concluido "el árbol roba protagonismo" solo
+> por medir que aparece ANTES que la apuesta — el revisor tenía razón en frenar eso: es un HECHO medido,
+> no una conclusión probada. Separado en el documento para no actuar sobre una hipótesis sin confirmar.
+>
 > **✅ v1.32 EN VIVO (11-jul) — el panel más largo del sitio ya no se enseña de golpe. Commit `16af1d9`.**
 > El revisor pivotó ("cierra el tema del movimiento; vuelve a dónde pierde impulso el visitante") y Tony
 > ya había señalado el síntoma él mismo: "paneles demasiado largos, un botón para alargarlos, no todo de 1".
