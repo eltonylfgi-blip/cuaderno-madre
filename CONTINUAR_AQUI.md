@@ -1,5 +1,42 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v1.24 EN VIVO (11-jul) — turno largo de construcción, arco completo: los DOS mapas (pequeño
+> y grande) ya son un panel de estado vivo, con datos 100% reales.** Encadenado sin parar a
+> resumir (a petición de Tony): v1.21 insignias por rama en el mapa pequeño → v1.22 resumen
+> agregado bajo «MADRE» (mapa pequeño) → v1.23 las mismas insignias en el mapa GRANDE (sin tocar el
+> hover ni el hit-test — Tony pidió explícitamente NO copiar el hover ahí) → v1.24 el resumen
+> agregado también en el mapa grande. Cada paso reusa la MISMA función (`vitalTier`, expuesta vía
+> `window.__vitalTier`) — una sola fuente de verdad, cero número inventado. Commits `428636c` ·
+> `4744793` · `5b95dda` · `6ad2b0a`.
+>
+> **Por qué me detuve aquí (condición 3 del propio mandato de Tony: "el siguiente cambio ya no
+> mejora perceptiblemente"):** revisé lo que queda del backlog del critique y las 3 vías reales que
+> quedan NO son "seguir picando mejoras" — cada una necesita algo que no tengo:
+> 1. **🍂 hoja caída / 🌸 flor por evento específico** — necesita saber a qué RAMA pertenece cada
+>    apuesta del palmarés. Verificado: ese vínculo NO existe en los datos (`.predList` no tiene
+>    `data-rama` ni nada parecido). Adivinarlo yo mismo sería inventar un hecho, no una decisión de
+>    diseño — cruza la línea de "nunca maquillar". Si Tony quiere esto, el primer paso es que él (o
+>    MADRE) etiquete esa relación en los datos.
+> 2. **Mapa grande rediseñado como organismo (el hover, conexiones con propósito, memoria entre
+>    visitas)** — Tony fue explícito: "no lo copiaría, lo rediseñaría". Merece su propio ciclo de
+>    diseño dedicado, no una extensión rápida en modo autopilot — y además roza el motor gateado
+>    (`nodeAtPoint`). No es prudente rushearlo en un turno de "sigue automáticamente".
+> 3. **Cicatriz que cicatriza / crecer por verdad no por tiempo** — la idea más potente de todas,
+>    pero necesita arquitectura nueva (guardar CUÁNDO pasó cada evento por rama, no solo el estado
+>    actual). Es un proyecto de datos, no un CSS de una tarde.
+>
+> **Incidente propio en el camino (v1.20), ya reparado — la lección sigue en pie:** al insertar un
+> changelog se me olvidó re-incluir la línea ancla `var cambios=[` en el reemplazo, rompiendo el
+> array, y el texto salió con una repetición corrupta. Al repararlo con Python además cambié sin
+> querer los finales de línea CRLF→LF de todo el fichero. Ambos detectados y revertidos antes de
+> comitear nada roto (commit de reparación `6fa8c07`). Regla en vigor desde entonces: cuando aparece
+> un error de este tipo, Recover → Verify → **PARAR** — no seguir construyendo en el mismo turno
+> salvo petición explícita. Desde v1.21 en adelante: cada `Edit` al array `cambios` verificó el
+> conteo de `var cambios=[` (debe ser 1) ANTES de dar la entrada por buena — cero repeticiones desde
+> entonces en 4 versiones seguidas.
+>
+> ---
+>
 > **✅ v1.21 EN VIVO (11-jul) — el mapa empieza a ser un panel de estado vivo, no decoración.**
 > Tony (como "arquitecto"): "toda biología debe corresponder a un dato real" — rechazó estaciones/
 > pájaros/luciérnagas explícitamente ("no cuentan nada"). Antes de tocar código investigué el
