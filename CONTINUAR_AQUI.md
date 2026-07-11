@@ -1,5 +1,54 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **🎯 EMPIEZA AQUÍ (sesión 5) — CONSTRUIR EL MECANISMO CENTRAL: el "reloj del veredicto".**
+> Dos búsquedas profundas (amplitud de 7 lentes + altitud de 5 paradigmas divergentes con abogado
+> del diablo) CONVERGIERON, sin pistas cruzadas, en el mismo núcleo. Tony subió la pregunta hasta
+> "¿qué ES esto, y podría existir fuera de MADRE?". Respuesta: es un **experimento notariado que
+> puedes ver fallar** — una apuesta fechada, falsable, sellada en git. Lo único imposible de copiar.
+>
+> **QUÉ CONSTRUIR (la #1, aprobado como dirección — NO es un gate de Tony, es reversible):** ascender
+> la apuesta fechada de tarjeta enterrada a COLUMNA VERTEBRAL de la web: **un reloj vivo, honesto,
+> al PRÓXIMO VEREDICTO** (hoy la del 15-jul: «mi cuello es la distribución, no el producto»), con su
+> condición de derrota escrita al lado. Hoy `hasHMS=false`: la fecha es solo texto enterrado. El
+> sitio ya shipó el "después" (Día del Veredicto, v1.08, la pantalla que te recibe al volver tras
+> resolverse); FALTA el "antes" (la anticipación, el motivo para volver ESE día). Este reloj cierra
+> ese arco.
+> - **Material que YA existe (nada inventado):** los `data-fecha` de las 4 apuestas (`.predList>li.wait`,
+>   líneas ~909-912), el chip "próximo veredicto", el evento Día del Veredicto (`#veredictoOv`, script
+>   ~1023), el `.ics`, el notario git. El reloj se ancla a todo eso.
+> - **Reorganiza el resto (esto es la prueba de que es el núcleo):** el mapa = "dónde vive la apuesta
+>   mientras el reloj corre"; el palmarés = "relojes ya parados"; el notario = "prueba de que el reloj
+>   es honesto"; el 3/10 = "lo que el veredicto va a mover". Todo pasa de competir a ser APOYO del reloj.
+> - **REGLA DE ORO INNEGOCIABLE (honestidad = alma del sitio):** unidades HONESTAS — días:horas +
+>   "se juzga en la pasada de ese día". **NUNCA un contador de segundos** que finja un instante
+>   (00:00:00) que no existe: el veredicto cae en la pasada del loop, no a una hora exacta. Un segundero
+>   fake viola la honestidad y se cae solo.
+> - **Cuidado técnico (por eso NO se hizo en un contexto saturado, merece ventana fresca):** comparte
+>   el espacio de barra fija superior con la barra de progreso v0.88 (`#tonyProgWrap`, fixed top) — hay
+>   que coordinar z-index/posición, no pisarla. Re-arma al siguiente `data-fecha` cuando el actual
+>   vence. Verificar 375px (dos barras fijas arriba en móvil es el riesgo real de overflow/tapado).
+> - **Filtro que pasó (de Tony):** si borras TODO lo demás y queda solo el reloj, ¿la web es más
+>   memorable? SÍ — porque la apuesta resolviéndose en tiempo real es el núcleo imposible de fingir.
+>
+> **⚖️ ESCALADO A TONY (NO construir sin su OK — es decisión de visión, toca el alma):** el paradigma
+> "revelación" devolvió `REDEFINE-LA-WEB`: una bisagra al final de ACTO III que re-apunta el "GIRO"
+> ya prometido para revelar "el diario era el experimento, y TÚ eres la variable que podía mover el
+> 0→1 — y sigue en 0, también contigo. No pasa nada." Techo más alto que el reloj, PERO: (1) el "tú
+> eras el experimento" es un recurso narrativo PORTABLE (falla el filtro anti-copia; solo su payload
+> es de MADRE); (2) roza el ÚNICO tabú del sitio — leerse como *gotcha/manipulación* — y **sobreescribe
+> la tarjeta del GIRO**, que otra búsqueda verificó como el momento MÁS memorable de hoy. Apostar un
+> activo verificado contra la honestidad del sitio = decisión de Tony, no de Claude. Preguntarle antes
+> de tocar nada de esto.
+>
+> **DESCARTADO con evidencia (no re-proponer):** paradigma "espejo/confrontación" (muere desnudo,
+> `superaFiltro=false` — es parásito de las apuestas, no núcleo). Optimizaciones LOCALES de la búsqueda
+> de amplitud (marcar nodos ya visitados en el mini-mapa, la etiqueta del botón de la tabla vs, el
+> estante de 12 texturas ASMR al abrir ACTO III) — reales pero pequeñas y PORTABLES; **POSPONER**, no
+> son el núcleo. Full output de ambas búsquedas en los journal.jsonl de los workflows `wf_eb93ca73-3ac`
+> (amplitud) y `wf_b1dc4fe2-433` (mecanismo central) si hace falta el detalle.
+>
+> ---
+>
 > **✅ SESIÓN 4, continuación — v1.11 EN VIVO. Disciplina nueva: hipótesis + refutación, no "rondas".**
 >
 > **Corrección de proceso (aprobada por Tony, aplicada — NO escrita en `CLAUDE.md`, la moratoria
