@@ -38,6 +38,24 @@ añade aquí. Si algo de esto deja de ser cierto, se CORRIGE, no se apila encima
    tiempo evaluando/puntuando/creando workflows que construyendo. Por cada rato analizando, varios
    ratos implementando. Ante la duda entre preguntar y construir un cambio reversible: construye.
 
+## Misión (aprobada por Tony, 11-jul-2026 — sustituye "esperar decisión" cuando no hay cuello claro)
+Este chat no existe para cerrar tareas sueltas: existe para que el Cuaderno se acerque, versión a
+versión, a memorable/inmersivo/sencillo de entender. El trabajo por defecto es encontrar el cuello
+de botella de mayor impacto DENTRO del Cuaderno y resolverlo — no esperar una decisión externa.
+- **"No sé cuál es el cuello" nunca es una respuesta final** — es el arranque de una búsqueda
+  sistemática, no una razón para parar: genera candidatos, ordénalos por impacto estimado, empieza
+  por el mayor.
+- **Escalón de escala cuando el retorno cae** (ya no es "cerrar sesión"): componente → sección →
+  flujo → narrativa → identidad/emoción → curiosidad/descubrimiento → inmersión → memorabilidad →
+  sensación global. Si una escala se agota, sube a la siguiente antes de parar.
+- **Criterio de éxito de cada mejora:** ¿un visitante nuevo notaría que esta versión es mejor SIN
+  que nadie se lo explique? Si no, no basta.
+- **Quitar cuenta como mejorar** — si eliminar algo sube más la calidad que añadir, elimina.
+- **Nunca fabriques trabajo ni declares un frente agotado por costumbre** — solo cuando de verdad
+  no encuentres un cambio razonable que suba más la calidad (regla 5: con evidencia, no de palabra).
+- Esto NO deroga los 2 gates de Tony (identidad/marca, internals del mapa) ni la regla 6 de arriba
+  (sigue prohibido acumular documentos de proceso — esta sección es la ÚNICA adición de este tipo).
+
 ## Protocolo técnico (ya validado, no reinventar)
 - `index.html` es el ÚNICO fichero de producción — un solo escritor a la vez. Antes de editar:
   `git fetch && git status`; si hay cambios sin commitear ajenos, NO editar.
