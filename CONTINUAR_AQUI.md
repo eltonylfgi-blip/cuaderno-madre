@@ -8,16 +8,32 @@
 > no 4/año. Y arregla el hallazgo nº1 de la búsqueda de amplitud (palmarés contaba pero no se sentía).
 > Verificado en vivo (revivir ✅/❌, flujo automático intacto, teclado/Esc, mapa 12 nodos, 375px).
 >
-> **⏭️ SIGUIENTE (la RAMPA, aún sin construir) — es LA decisión de diseño pendiente, hazla con
-> cuidado:** el reloj/anticipación al PRÓXIMO veredicto. FORK real a resolver antes de teclear: los 2
-> agentes discreparon — "reloj-columna FIJO arriba" (choca con la barra de progreso v0.88 `#tonyProgWrap`,
-> ya fija arriba → riesgo) vs "primer BLOQUE prominente" (en/tras el hero, sin colisión de fixed → más
-> seguro). Recomendación: BLOQUE prominente, no barra fija (evita el choque, mismo efecto de "la apuesta
-> es la espina"). Y OJO a lo que Tony añadió: la rampa NO es solo el reloj ("¿cuándo?") — también
-> responde ¿por qué debería importarme?, ¿qué pierde MADRE si falla?, ¿qué cambia si acierta?, ¿quién
-> verifica?, ¿qué intentó antes?, ¿por qué esta vez es distinta? El reloj es UN componente de la rampa,
-> no la rampa entera. Unidades HONESTAS (días, nunca segundos fake). Ya existe un chip "próximo veredicto
-> en N días" enterrado — verificar y consolidar, no duplicar.
+> **⏭️ SIGUIENTE — NO es "el reloj", es LA ANTICIPACIÓN (corrección clave de Tony, cierre sesión 4).**
+> El reloj INFORMA ("faltan 3 días"); no genera TENSIÓN. La pregunta a responder ANTES de teclear:
+> **"¿por qué un desconocido querría volver EXACTAMENTE ese día?"** Respuesta potente hallada: **porque
+> hizo una predicción y quiere saber si acertó** — skin in the game (psicología del que apuesta en un
+> partido: no te importa el resultado hasta que has predicho). Y solo puede existir aquí: predice el
+> resultado de una apuesta REAL, fechada, sellada en git, que una IA puede perder en público.
+> - **QUÉ CONSTRUIR (el arco de Tony: expectativa → tensión → veredicto → consecuencias):** sobre la
+>   apuesta EN JUEGO (hoy 15-jul), invitar al visitante a PREDECIR el resultado (un toque, sin registro,
+>   "¿lo consigue o la realidad le da la razón a su miedo?"). Luego: (a) ve el agregado REAL ("62% cree
+>   que fallará"), (b) se le da motivo+forma de volver ese día (.ics ya existe), (c) al volver tras el
+>   veredicto, la escena (v1.08/v1.12) TAMBIÉN le dice si SU predicción acertó → cierra el bucle.
+> - **ORDEN DE PRIORIDAD (de Tony, respétalo):** 1º que quiera volver (la predicción) · 2º que entienda
+>   qué está en juego (surfacear el miedo escrito de MADRE + condición de derrota junto a la apuesta) ·
+>   3º veredicto inolvidable (YA hecho: v1.08 + v1.12; falta cerrar el bucle de la predicción) · 4º el
+>   FORMATO del reloj (barra vs bloque) = casi decisión de interfaz, AL FINAL, no al principio. Si
+>   construyes el 4º primero, optimizas un componente antes de generar la emoción que lo sostiene.
+> - **GUARDARRAÍLES (alma del sitio, innegociables):** agregado SIEMPRE real (si votaron 3, dice 3,
+>   nunca inflado — inflarlo viola la honestidad y se cae solo). La predicción es "TU apuesta para tener
+>   algo en juego", NO un voto que decide el destino de MADRE (los datos deciden — CONSULTIVO, como ya
+>   exige la sección "🤔 MADRE duda ahora mismo", que hay que verificar y REUSAR su infra de votos, no
+>   duplicar). Unidades de tiempo honestas (días, nunca segundos fake).
+> - **Backend:** probablemente Supabase (el sitio ya lo usa para comentarios/dibujos). Verificar la infra
+>   de "MADRE duda" primero. Es multi-pieza (UI predicción + persistencia + agregado + cerrar bucle en la
+>   escena) → merece ventana fresca + Sonnet, NO el final de un turno saturado.
+> - **FORK de formato del reloj (para el PASO 4, no antes):** "bloque prominente en/tras el hero" (sin
+>   colisión) es más seguro que "barra fija arriba" (choca con la de progreso v0.88 `#tonyProgWrap`).
 >
 > ---
 >
