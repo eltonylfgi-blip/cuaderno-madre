@@ -11,34 +11,43 @@
 > que apuesta en público y enseña cuando pierde"** — todo en la 1ª pantalla debe apuntar a eso, o
 > ser prueba viva honesta; nada debe apuntar al VISITANTE (gamificación) ni a META (log de dev).
 >
-> **🟢 GUARDARRAÍL INNEGOCIABLE (Tony, 11-jul, tras proponer la edición): EDITAR = QUITAR RUIDO QUE
-> COMPITE, NO QUITAR PERSONALIDAD.** Las cosas *guays y divertidas* (hámster, texturas ASMR, modo
-> caótico, galería de dibujos, gato easter-egg, toggle de identidad, voz, logros…) son parte de lo
-> que hace el Cuaderno IMPOSIBLE DE COPIAR — **NUNCA se borran**. A lo sumo se ESCONDEN un poco (en
-> el menú ✦, tras un acordeón, más abajo del fold, o gate por scroll) para que no compitan en los
-> primeros segundos, pero SIGUEN ESTANDO para quien explora. Literal de Tony: *"no quieres las cosas
-> guays y divertidas? si acaso es necesario escóndelas un poco pero que sigan estando."* Si una
-> edición hace desaparecer diversión/personalidad en vez de solo reordenarla, está MAL — reconsiderar.
+> **🟢 GUARDARRAÍL (Tony, 11-jul, refinado tras dos vueltas — NO es absoluto, tiene condición de
+> salida honesta): "La personalidad es un activo. Nunca se elimina por hacer la web más limpia.
+> Solo se elimina si deja de aportar personalidad o empieza a competir con la historia principal."**
+> Las cosas *guays y divertidas* (hámster, texturas ASMR, modo caótico, galería de dibujos, gato
+> easter-egg, toggle de identidad, voz, logros…) son parte de lo que hace el Cuaderno IMPOSIBLE DE
+> COPIAR — la regla por DEFECTO es esconder un poco (menú ✦, acordeón, más abajo del fold, gate por
+> scroll), no borrar. Pero si dentro de unos meses una de esas piezas deja de aportar diversión o
+> empieza a competir de verdad con la apuesta pública, SÍ puede eliminarse — no está protegida solo
+> por ser divertida. Editar ≠ solo quitar ruido: también es **acercar** — reordenar peso narrativo,
+> subir algo, adelantar una frase — para acortar el "tiempo hasta el conflicto" (cuánto tarda el
+> visitante en sentir "esta IA apostó algo real y la realidad la va a juzgar").
 >
-> **QUÉ CONSTRUIR (Propuesta B, decidida — "máxima curiosidad"):** en `#onboard` (líneas ~403-408),
-> los 6 widgets tras el CTA están todos con `id` (seguros para 💗, cssPath usa `#id`). Veredicto por
-> elemento, ya defendido con el DOM real medido (390×844, sin scroll):
-> - **QUEDAN en 1ª pantalla** (on-message + prueba viva): `.ob-ics` 🔔 veredictos (ES la apuesta) ·
->   `#obLive` "ahora mismo: rama X" (MADRE trabajando ahora) · `#cmPresence` 🟣 explorando ahora
->   (prueba social real de Supabase).
-> - **BAJAN** (relocalizar tras la 1ª tarjeta de contenido, NO borrar — siguen existiendo y
->   poblándose): `#cmSeguirChip` 👀 visita nº (mira al visitante) · `#cmAchieveBtn` 🏆 logros
->   (gamifica al visitante) · `#hoyReal` 🔦 ticker "Hoy, de verdad" (log de desarrollo, meta).
-> - **Mecanismo recomendado (bajo riesgo):** un script runtime DESPUÉS del resecuenciador (v0.33)
->   que mueva esos 3 nodos por `id` a justo detrás de la 1ª tarjeta real (`#vsCard` o la que caiga
->   primera). Alternativa: gate por scroll (ocultar hasta el 1er scroll). Verificar que hearts (💗)
->   no se afectan (usan `#id` → deberían ser inmunes) y que los 3 siguen poblándose por su JS.
+> **QUÉ CONSTRUIR (Propuesta B corregida + "acercar", investigación de IDs ya hecha con grep real):**
+> - **BAJAN** (relocalizar por `id` tras `#vsCard`, NO borrar): `#cmAchieveBtn` 🏆 logros (gamifica al
+>   visitante) · `#hoyReal` 🔦 ticker "Hoy, de verdad" (log de desarrollo, meta) · `#visitLine` 👀
+>   visita nº (creado dinámicamente ~línea 1352 y hecho `ob.appendChild(vl)` — cambiar el target de
+>   ese append, no mover después). **Corrección sobre la nota anterior:** `#cmSeguirChip` («↩️ ¿Seguir
+>   donde lo dejaste?») NO es el mismo widget que la visita — solo aparece en visitas 2ª+ con scroll
+>   guardado, nunca en la 1ª visita → no compite con el problema de los primeros 10s, DEJAR IGUAL.
+> - **QUEDAN**: `.ob-ics` 🔔 veredictos · `#obLive` "ahora mismo" · `#cmPresence` 🟣 explorando ahora.
+> - **ACERCAR (lo nuevo, pedido explícito de Tony — "acercar el conflicto", no solo quitar ruido):**
+>   añadir `<p class="ob-conflict" id="obConflict" hidden></p>` justo tras `.ob-q` (la línea "Aposté
+>   en público, con fechas..."), poblado en el MISMO script que ya calcula `next`/`dias` para
+>   `#chipVeredicto` (~línea 1337-1338, `VERE` array) — reusar esas variables, NO duplicar datos.
+>   Texto: si `dias===0` → "⚖️ HOY se juzga: "+next[1]; si no → "⏳ En "+dias+" día(s), la realidad
+>   me juzga: "+next[1]. Pone el conflicto concreto (con fecha real) a 3 frases del H1.
+> - **Mecanismo de relocación:** script runtime DESPUÉS del resecuenciador (v0.33, ~línea 6400s) que
+>   mueva `cmAchieveBtn`/`hoyReal` por `id` tras `#vsCard` (mismo patrón `insertAdjacentElement` que
+>   ya usa el resecuenciador). Verificar que hearts (💗) no se afectan (usan `#id` → inmunes) y que
+>   los 3 siguen poblándose por su JS de siempre (la relocación es solo posición, no toca quién los
+>   rellena).
 > - **Rechazadas y por qué (para no re-litigar):** A (bajar los 6) pierde el pulso "vivo" —
->   demasiado seco. C (B + reencabezar 🔔 con cuenta atrás) es mejor pero más trabajo/riesgo; hacer
->   B primero, medir, y C solo si B se queda corta.
-> - **Criterio de HECHO:** 1ª pantalla (390×844, sin scroll) muestra pitch + CTA + los 3 que quedan,
->   y NO los 3 que bajan; los 3 bajados aparecen correctos más abajo; hearts intactos; mapa 12
->   nodos; 0 consola; 375px sin overflow; 48/48 node --check. Changelog v1.28 + commit + push.
+>   demasiado seco. C completa (B + reencabezar 🔔 con cuenta atrás) es más trabajo; la pieza de
+>   "acercar" de arriba ya cubre buena parte de esa idea sin rehacer `#chipVeredicto`.
+> - **Criterio de HECHO:** 1ª pantalla (390×844, sin scroll) muestra pitch + `#obConflict` (nuevo,
+>   con fecha real) + CTA + los 3 que quedan, y NO los 3 que bajan; los 3 bajados aparecen correctos
+>   tras `#vsCard`; hearts intactos; mapa 12 nodos; 0 consola; 375px sin overflow; 48/48 node --check.
 >
 > **⚠️ Disciplina de edición del changelog (incidente v1.20, no repetir):** al tocar `var cambios=[`,
 > el `old_string` del Edit DEBE incluir la línea `var cambios=[` completa también en el `new_string`
