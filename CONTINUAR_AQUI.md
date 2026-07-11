@@ -1,5 +1,44 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ SESIÓN 4 (11-jul, chat nuevo) — v1.06 EN VIVO. Decisión de Tony + 1 incremento de riesgo real,
+> mapeado antes de tocar código.**
+>
+> **Decisión de Tony sobre el hilo abierto de la sesión 3 (enseñar a 5-10 personas reales):**
+> DESCARTADO — el código está expuesto públicamente y podría copiarse; el único "visitante real" que
+> queda por ahora es el propio Tony. Es una restricción real del proyecto, no un fallo de proceso —
+> no se reabre sin que cambie esa condición.
+>
+> **Sobre la ronda de crítica externa que trajo Tony (ChatGPT, panel de 2ª opinión en modo red-team,
+> "no confirmar sino refutar"):** verificado contra `SEGUNDA_OPINION/APRENDIZAJES.md` y
+> `QUE_MANDAR_A_OTRAS_IAS.txt` de MADRE (fuera de este repo) — **0 marco nuevo.** La regla 9e
+> ("2 rondas sin cambiar una decisión → parar de consultar"), la verificación adversarial por
+> refutador y la regla del moat (nunca pegar mecanismos internos, solo el resumen abstracto) YA
+> estaban escritas y ya se habían aplicado, varias veces, a rondas anteriores de la MISMA fuente
+> pidiendo lo mismo. No se montó otra ronda de opiniones sobre esto — habría sido la propia trampa
+> que esas reglas existen para cortar. Se aplicó tal cual y se siguió construyendo.
+>
+> **v1.06 — progressive disclosure real en ACTO II/III** (el incremento que la sesión 3 dejó
+> identificado pero sin hacer "por ser mucho más grande/arriesgado que cualquier otro cambio de esa
+> noche"): ACTO II (12 tarjetas) y ACTO III (5) arrancan colapsados; un botón "seguir leyendo" los
+> revela de golpe al llegar. EL GIRO queda siempre visible entre ambos, como respiro narrativo.
+> Antes de tocar código se lanzaron 2 agentes Explore en paralelo a mapear los 3 sistemas frágiles
+> que podía romper: (1) la barra de progreso v0.88 solo mide las marcas de acto UNA vez, no en cada
+> scroll — se dispara un `resize` sintético tras revelar para que se recalculen, sin tocar ese
+> bloque; (2) los logros son 100% contador/estado, cero dependencia de scroll — riesgo descartado
+> antes de empezar; (3) los corazones 💗 se anclan por `nth-of-type` de posición — el colapso usa
+> SOLO `display` (nunca mueve/reparenta nada) y el botón nuevo es `<button>`, no `<div>`, para no
+> correr el índice de las tarjetas siguientes. **Verificado en vivo, no solo razonado:** se midió el
+> `nth-of-type` real de 3 tarjetas de prueba antes y después de revelar — IDÉNTICO; las marcas de la
+> barra de progreso cambiaron de posición tras el resize (recálculo confirmado); el mapa grande siguió
+> dando sus 12 nodos de siempre; 45/45 scripts pasan `node --check`; 0 errores de consola; 375px sin
+> overflow. Commit `5c65f07`, pusheado.
+>
+> **Hilo abierto ahora:** con (A) personas reales descartado y (B) progressive disclosure hecho,
+> los 2 caminos que la sesión 3 dejó sobre la mesa están agotados. Sin nueva señal externa (Tony
+> mismo usando la web, o que cambie la restricción de exposición del código), seguir "puliendo" cae
+> otra vez en el mismo retorno decreciente que la sesión 3 ya documentó — el siguiente movimiento de
+> mayor valor NO está en más incrementos a ciegas.
+
 > **✅ SESIÓN 3 CERRADA DEL TODO (10/11-jul madrugada) — v0.81→v1.05 EN VIVO, 25 versiones en total.**
 > **LO MÁS IMPORTANTE DE TODA LA SESIÓN, antes que cualquier detalle técnico:** dos workflows
 > independientes de mejora continua terminaron y su propia síntesis final dice, sin que nadie se lo
