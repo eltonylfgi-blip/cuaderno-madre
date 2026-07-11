@@ -1,7 +1,18 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **✅ SESIÓN 4, continuación — v1.08 EN VIVO. 2º ciclo de la misión: lente GENERATIVA (no
-> defectos, "qué momento inolvidable falta") + criterio de éxito afilado.**
+> **✅ SESIÓN 4, continuación — v1.09 EN VIVO. 3er ciclo de la misión + MORATORIA en `CLAUDE.md`.**
+>
+> **MORATORIA (aprobada por Tony):** no se vuelve a tocar `CLAUDE.md` salvo un mecanismo que
+> demuestre utilidad real durante MUCHAS sesiones de trabajo — las ideas nuevas se prueban
+> trabajando, no documentando. Esta sesión ya lo tenía casi todo escrito (misión, criterio de
+> éxito, ciclo Explorar→Construir); el resto de guía recibida (dramaturgia/escenas, "protege los
+> pocos momentos extraordinarios") se aplicó CONSTRUYENDO, no editando el fichero más.
+>
+> **v1.09 (commit `812a697`):** hallazgo de agente (lente narrativa) — ACTO II cambiaba de golpe de
+> voz (cuento → backlog de producto) al revelar. Fix en calma (a propósito, para alternar con el
+> espectáculo de v1.08): las 2 tarjetas con voz real (ya marcadas `.beat` desde v0.97) se abren
+> solas al revelar + una frase puente explica qué es relato y qué es consulta. Cero reorden de las
+> 13 tarjetas — mismo patrón seguro que v1.06/v1.07. Verificado en vivo, 46/46 node --check.
 >
 > **Criterio de éxito afilado en `CLAUDE.md` (aprobado por Tony):** ya no es solo "¿se nota la
 > mejora?" — es "¿qué historia contaría el visitante al día siguiente?". Un solo backlog: fricciones
