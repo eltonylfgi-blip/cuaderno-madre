@@ -1,5 +1,32 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v1.30 EN VIVO (11-jul) — INTERRUPTOR DE MOVIMIENTO construido y verificado. Commit `ecdc462`.**
+> Tony echaba de menos "cosas moviéndose"; causa ya diagnosticada = su navegador tiene reduced-motion.
+> Construido (siguiendo el MVP + la crítica que Tony reenvió, que pedía 3 modos y NO un panel de ajustes):
+> una sola pastilla junto al idioma que cicla **🎬 Auto → 🎬 Vida → 🌙 Calma**, recordada en localStorage.
+> - **Técnica sin riesgo (clave):** en vez de re-declarar cada animación, se GATEA la supresión de
+>   reduced-motion con `body:not(.cmMotionOn)` (líneas 171 y 1447) — la animación original vuelve sola.
+>   `body.cmMotionOff` apaga un conjunto ACOTADO de bucles (breathe/pulse/map/hámster/ev-dot), nunca kill global.
+> - **Verificado en vivo con reduced-motion activo (el propio entorno lo tiene, = caso de Tony):** en "Vida"
+>   el mapa pequeño respira (mapNow/mapFloat/mapLinkWake/breathe pasan de `none` a animar); en "Auto" quieto;
+>   en "Calma" apagado; localStorage persiste; pastillas sin solape a 375px (gap 10px, margen der. 12px);
+>   12 nodos; 0 consola; 375px sin overflow; 50/50 node --check.
+> - **BUG de Tony arreglado de paso:** el botón «saltar» de la génesis (`#cmGenSkip`) estaba fijo en la MISMA
+>   esquina que la pastilla de idioma y la tapaba (lo vio en su captura) → movido a top:46px, justo debajo,
+>   verificado sin solape con idioma NI con la pastilla nueva.
+>
+> **🔴 HILOS ABIERTOS que Tony pidió EN ESTE MISMO turno y NO se tocaron aún (candidatos del siguiente ciclo):**
+> 1. **Paneles largos de la 1ª pantalla → botón "alargar" (revelación progresiva), "no todo de 1"** (palabras
+>    de Tony). Es lo más claro que queda: buscar los paneles/tarjetas demasiado altos de la primera pantalla y
+>    ponerles un "ver más ▾" que expanda por tramos, en vez de mostrarlo todo. OJO MÁRGENES (aviso de Tony).
+> 2. **"me encantaron las animaciones del mapa de las ramas, solo se nota si hago zoom, haz más así"** — PARCIAL:
+>    con "Vida" el mapa pequeño ya respira sin zoom. Pero Tony quiere MÁS de ese tipo de vida perceptible. Mirar
+>    si desbloquear más ambientales bajo `body.cmMotionOn` (hoy solo mapa+breathe+pulse; hay 35 en total) o dar
+>    intensidad (la crítica sugirió 0.2×/1×/1.5× = "más elementos, no más rápido"). NO meter mareo.
+> 3. La crítica objetó el NOMBRE "MADRE en movimiento" (no cambia al visitante normal, que ya la ve). Se
+>    reencuadró como "interruptor" en el changelog; punto zanjado, no reabrir.
+>
+> **(HISTÓRICO — plan original de la tarea, ya ejecutado; se deja como contexto del diagnóstico:)**
 > **▶️ EMPIEZA AQUÍ (chat nuevo) — TAREA: "MADRE en movimiento" (lo único que Tony echa de menos).**
 > Tony: *"lo único que echo de menos es cosas moviéndose en la pantalla, como el hámster o
 > simplemente animaciones repetidas en bucle."* Investigué la causa yo mismo en el navegador (él dio
