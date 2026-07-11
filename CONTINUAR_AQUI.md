@@ -1,7 +1,56 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **✅ SESIÓN 4 (11-jul, chat nuevo) — v1.06 EN VIVO. Decisión de Tony + 1 incremento de riesgo real,
-> mapeado antes de tocar código.**
+> **✅ SESIÓN 4, continuación — v1.07 EN VIVO. Misión nueva aprobada por Tony + 1er ciclo completo
+> Explorar→Elegir→Construir→Verificar.**
+>
+> **MISIÓN aprobada por Tony, ya en `CLAUDE.md`:** este chat no cierra por "no sé cuál es el
+> cuello" — eso es el arranque de una búsqueda, no una respuesta final. Ciclo obligatorio:
+> Explorar → Elegir → Construir → Verificar → volver a Explorar (una ronda de exploración por
+> ciclo, nunca encadenar más agentes "por si acaso"). Detalle completo en `CLAUDE.md`.
+>
+> **1ª ejecución de la misión:** 6 agentes, cada uno una lente distinta (comprensión/narrativa/
+> identidad/memorabilidad/descubrimiento/qué-sobra), navegando la web PÚBLICA real en vivo
+> (github.io, no localhost). 3 de ellos, SIN cruzar información, coincidieron en la misma causa:
+> la cabecera es una pared de ~30 badges/CTAs que ahoga el mensaje central. Verificado el detalle
+> con el código real: "entra en mis 8 ramas" tenía el estilo grande/morado; "mejor guíame — 90s"
+> (el que un agente probó de verdad y SÍ explica todo de un tirón) era una pill pequeña — estilos
+> invertidos respecto a lo que funciona. **v1.07 (commit `1c4aefe`):** swap de estilos (tour ahora
+> prominente, mapa secundario), status-widgets bajados a después del CTA, dedup de "De un vistazo".
+> Verificado en vivo: mapa/tour siguen funcionando, 12 nodos, 0 errores consola, 375px sin overflow,
+> traducción intacta, 45/45 `node --check`.
+>
+> **Hallazgo "click no responde" en el botón de progressive disclosure (v1.06): VERIFICADO Y
+> DESCARTADO como bug real.** Instrumenté `document` en captura (pointerdown/mousedown/click) — un
+> click real vía herramienta de automatización no generó NINGÚN evento en el documento; descartadas
+> las causas de código (sin `inert`, sin overlay a pantalla completa, `elementFromPoint` confirma el
+> botón en su sitio con `pointer-events:auto`). Apunta a una limitación de la herramienta de
+> automatización en esta página concreta (mismo tipo de quirk que el screenshot, ya documentado en
+> `CLAUDE.md`). `.click()` forzado por JS sí dispara el listener bien. No se tocó código por esto.
+>
+> **BACKLOG restante de la misma ronda de exploración (NO re-explorar — elegir de aquí primero):**
+> 1. **`narrativa` (impacto 8, alta confianza):** al revelar ACTO II/III, lo que aparece es un panel
+>    de referencia técnico (12 acordeones "Glosario/Riesgos/Rutinas/Salud...") en vez de continuar
+>    la HISTORIA — corte de registro real entre Acto I (cuento) y Acto II/III (backlog de producto).
+>    Dirección: separar 2-3 tarjetas con voz/prosa real (p.ej. "La historia de MADRE en 5 pasos",
+>    "El cementerio de ideas muertas") como continuación narrativa, dejar el resto como "apéndice/
+>    consulta técnica" fuera del marco de Acto.
+> 2. **`identidad` (impacto 7, alta):** el botón "🔊 Escúchalo" no reproduce audio real (solo
+>    `console.log`, invisible para cualquier visitante); "🎨 Probar identidad nueva" cambia un flag
+>    en localStorage pero cero cambio visible en el DOM. Es la ÚNICA pieza dedicada a mostrar
+>    personalidad de MADRE y no cumple lo que promete — rompe la propia honestidad que la web
+>    presume. Arreglar de verdad o retirar, no dejar a medias.
+> 3. **`descubrimiento` (impacto 7, confianza media):** el mini-mapa ya da una respuesta "suficiente"
+>    al tocar un nodo, sin dar pista de que el mapa GRANDE (con flechas de relaciones causales,
+>    notas de avance, línea de tiempo, enlaces a repos reales) es sustancialmente mejor — el
+>    contador de "ramas exploradas" se completa con el toque superficial, sin incentivar el salto.
+> 4. **`que_sobra` restante (impacto 7, alta):** el botón "💬 Tu opinión sin más" se repite 17 veces
+>    literales sin variar texto; `buildRibbons()` (asmr, línea ~5494) coloca una textura antes de
+>    CADA tarjeta impar de TODA la página con solo 10 tipos únicos en el pool — repetición
+>    matemáticamente garantizada una vez hay más de 10 ribbons (que hay, de sobra). El propio
+>    comentario del código ("sin repetir en la misma página") es una promesa que el diseño actual
+>    no puede cumplir. Nota `memorabilidad`: también pide podar el aluvión de scores redundantes
+>    (claridad 8, salud 7, cobertura 6...) que no llevan a ninguna acción — parcialmente atacado ya
+>    por v1.07, revisar si sigue siendo un problema tras verlo en vivo.
 >
 > **Decisión de Tony sobre el hilo abierto de la sesión 3 (enseñar a 5-10 personas reales):**
 > DESCARTADO — el código está expuesto públicamente y podría copiarse; el único "visitante real" que
