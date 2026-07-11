@@ -11,6 +11,15 @@
 > que apuesta en público y enseña cuando pierde"** — todo en la 1ª pantalla debe apuntar a eso, o
 > ser prueba viva honesta; nada debe apuntar al VISITANTE (gamificación) ni a META (log de dev).
 >
+> **🟢 GUARDARRAÍL INNEGOCIABLE (Tony, 11-jul, tras proponer la edición): EDITAR = QUITAR RUIDO QUE
+> COMPITE, NO QUITAR PERSONALIDAD.** Las cosas *guays y divertidas* (hámster, texturas ASMR, modo
+> caótico, galería de dibujos, gato easter-egg, toggle de identidad, voz, logros…) son parte de lo
+> que hace el Cuaderno IMPOSIBLE DE COPIAR — **NUNCA se borran**. A lo sumo se ESCONDEN un poco (en
+> el menú ✦, tras un acordeón, más abajo del fold, o gate por scroll) para que no compitan en los
+> primeros segundos, pero SIGUEN ESTANDO para quien explora. Literal de Tony: *"no quieres las cosas
+> guays y divertidas? si acaso es necesario escóndelas un poco pero que sigan estando."* Si una
+> edición hace desaparecer diversión/personalidad en vez de solo reordenarla, está MAL — reconsiderar.
+>
 > **QUÉ CONSTRUIR (Propuesta B, decidida — "máxima curiosidad"):** en `#onboard` (líneas ~403-408),
 > los 6 widgets tras el CTA están todos con `id` (seguros para 💗, cssPath usa `#id`). Veredicto por
 > elemento, ya defendido con el DOM real medido (390×844, sin scroll):
