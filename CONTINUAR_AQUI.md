@@ -15,10 +15,19 @@
 > partido: no te importa el resultado hasta que has predicho). Y solo puede existir aquí: predice el
 > resultado de una apuesta REAL, fechada, sellada en git, que una IA puede perder en público.
 > - **QUÉ CONSTRUIR (el arco de Tony: expectativa → tensión → veredicto → consecuencias):** sobre la
->   apuesta EN JUEGO (hoy 15-jul), invitar al visitante a PREDECIR el resultado (un toque, sin registro,
->   "¿lo consigue o la realidad le da la razón a su miedo?"). Luego: (a) ve el agregado REAL ("62% cree
->   que fallará"), (b) se le da motivo+forma de volver ese día (.ics ya existe), (c) al volver tras el
->   veredicto, la escena (v1.08/v1.12) TAMBIÉN le dice si SU predicción acertó → cierra el bucle.
+>   apuesta EN JUEGO (hoy 15-jul), invitar al visitante a tomar POSTURA — framing exacto de Tony (fuerza
+>   a mojarse, no a opinar): **"si tuvieras que apostar dinero, ¿a favor o en contra de MADRE?"** (2
+>   botones, sin registro, 5 s). Luego: (a) ve el agregado REAL, (b) motivo+forma de volver ese día
+>   (.ics ya existe), (c) al volver tras el veredicto, la escena (v1.08/v1.12) TAMBIÉN le dice si SU
+>   apuesta acertó → cierra el bucle.
+> - **⭐ EL CORAZÓN (corrección clave de Tony — no es la votación, es esto): el MARCADOR HISTÓRICO /
+>   responsabilidad colectiva.** Tras el veredicto, mostrar: *"El 78% apostó que MADRE fallaría. La
+>   realidad: MADRE acertó. El 78% se equivocó."* Convierte el resultado en historia colectiva y **juzga
+>   a la multitud, no solo a MADRE**. Sensación diana (la brújula del proyecto): "la realidad acaba de
+>   juzgar una apuesta pública… y yo también quedé juzgado por esa misma realidad."
+> - **MADRE SIGUE SIENDO LA PROTAGONISTA:** la apuesta del visitante AUMENTA la tensión, NO se convierte
+>   en la historia. El visitante no vino a ver si él tenía razón — vino a ver si MADRE sobrevive al
+>   contacto con la realidad. Su predicción es la lente, no el cristal.
 > - **ORDEN DE PRIORIDAD (de Tony, respétalo):** 1º que quiera volver (la predicción) · 2º que entienda
 >   qué está en juego (surfacear el miedo escrito de MADRE + condición de derrota junto a la apuesta) ·
 >   3º veredicto inolvidable (YA hecho: v1.08 + v1.12; falta cerrar el bucle de la predicción) · 4º el
@@ -28,7 +37,9 @@
 >   nunca inflado — inflarlo viola la honestidad y se cae solo). La predicción es "TU apuesta para tener
 >   algo en juego", NO un voto que decide el destino de MADRE (los datos deciden — CONSULTIVO, como ya
 >   exige la sección "🤔 MADRE duda ahora mismo", que hay que verificar y REUSAR su infra de votos, no
->   duplicar). Unidades de tiempo honestas (días, nunca segundos fake).
+>   duplicar). Unidades de tiempo honestas (días, nunca segundos fake). **NUNCA una red social:** cero
+>   perfiles/rankings/comentarios/puntos/logros alrededor de la predicción — eso mata el alma. La
+>   participación es casi INVISIBLE: un gesto, 5 segundos, y el protagonismo vuelve de inmediato a MADRE.
 > - **Backend:** probablemente Supabase (el sitio ya lo usa para comentarios/dibujos). Verificar la infra
 >   de "MADRE duda" primero. Es multi-pieza (UI predicción + persistencia + agregado + cerrar bucle en la
 >   escena) → merece ventana fresca + Sonnet, NO el final de un turno saturado.
