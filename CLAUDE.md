@@ -48,8 +48,16 @@ de botella de mayor impacto DENTRO del Cuaderno y resolverlo — no esperar una 
 - **Escalón de escala cuando el retorno cae** (ya no es "cerrar sesión"): componente → sección →
   flujo → narrativa → identidad/emoción → curiosidad/descubrimiento → inmersión → memorabilidad →
   sensación global. Si una escala se agota, sube a la siguiente antes de parar.
-- **Criterio de éxito de cada mejora:** ¿un visitante nuevo notaría que esta versión es mejor SIN
-  que nadie se lo explique? Si no, no basta.
+- **Criterio de éxito de cada mejora (más exigente que "se nota" — sustituye al anterior, no se
+  apila):** ¿qué historia contaría el visitante al día siguiente, con sus propias palabras? Si una
+  mejora solo hace la web un poco más correcta pero no deja nada que contar, probablemente no era
+  la de mayor impacto. Piensa en ESCENAS que vive el visitante (el momento en que entiende por qué
+  existe MADRE, el momento en que el mapa deja de parecer un gráfico y se siente vivo), no en
+  funcionalidades sueltas — "¿qué botón añado?" es la pregunta equivocada.
+- **Un solo backlog, no dos.** Fricciones (qué frena/rompe) y momentos memorables (qué falta por
+  crear) compiten en el MISMO ranking — construye el que más suba la experiencia global, sea cual
+  sea su categoría. La lente generativa ("qué momento inolvidable falta") es UNA lente más a usar
+  cuando haga falta, NO una fase fija del ciclo ni un agente permanente añadido a cada ronda.
 - **Quitar cuenta como mejorar** — si eliminar algo sube más la calidad que añadir, elimina.
 - **Nunca fabriques trabajo ni declares un frente agotado por costumbre** — solo cuando de verdad
   no encuentres un cambio razonable que suba más la calidad (regla 5: con evidencia, no de palabra).
