@@ -915,6 +915,12 @@
     .pr-res{display:block;font-size:12.5px;color:var(--muted);margin-top:3px}
     .pr-fecha{font-weight:800;font-size:11.5px;color:var(--ink);opacity:.75;white-space:nowrap;flex:0 0 auto;margin-top:3px}
     .pr-rama{flex:0 0 auto;font-size:16px;margin-top:1px;cursor:default}
+    /* v1.34 -- HIPOTESIS 1 (ver IDEAS_Y_BRUJULA.md): vinculo minimo apuesta<->rama. Progressive
+       enhancement: si JS no corre, .pr-rama sigue siendo el span decorativo de siempre (cursor:default
+       de arriba). El JS anade .pr-ramaLink SOLO cuando activa el click -- una sola fuente de verdad. */
+    .pr-ramaLink{cursor:pointer;border-radius:50%;transition:transform .15s}
+    .pr-ramaLink:hover,.pr-ramaLink:focus-visible{transform:scale(1.22)}
+    .pr-ramaLink:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
     @media (max-width:520px){ .predList>li{flex-wrap:wrap} .pr-fecha{order:-1;width:100%} }
   </style>
   <div class="card key" id="prediccionesCard"><details open>
@@ -1100,6 +1106,44 @@
     }
     document.querySelectorAll("#prediccionesCard .predList > li.wait").forEach(wireBet);
   }catch(e){ console.warn("prediccion v1.13", e); } })();
+  </script>
+  <script>
+  /* v1.34 -- HIPOTESIS 1 (IDEAS_Y_BRUJULA.md): "si una apuesta ilumina su rama correspondiente, el
+     visitante entiende mejor que se esta jugando". MVP deliberadamente minimo (revisor + Tony, 11-jul):
+     UNA direccion (apuesta -> rama), sin redisenar el arbol, sin tocar el motor gateado. Localiza el
+     nodo por consulta DOM externa (texto de .mn-emoji) -- onNodeClick/routeTap/nodeAtPoint/focusBranch
+     no se tocan ni se llaman. Progressive enhancement: si algo falta, no rompe nada, .pr-rama sigue
+     siendo el span decorativo de siempre. */
+  (function(){ try{
+    var ramas=[].slice.call(document.querySelectorAll("#prediccionesCard .pr-rama"));
+    if(!ramas.length) return;
+    ramas.forEach(function(span){
+      var emoji=(span.textContent||"").trim(); if(!emoji) return;
+      span.classList.add("pr-ramaLink");
+      span.setAttribute("role","button"); span.tabIndex=0;
+      var baseTitle=(span.getAttribute("title")||"").replace(/^Rama:\s*/,"");
+      span.setAttribute("aria-label","Ver en el mapa: "+baseTitle);
+      if(baseTitle) span.setAttribute("title", baseTitle+" — toca para verla en el mapa");
+      function go(){
+        var mapaCard=document.getElementById("mapaCard"); if(!mapaCard) return;
+        try{ var det=mapaCard.querySelector("details"); if(det) det.open=true; }catch(e){}
+        var target=null, groups=mapaCard.querySelectorAll(".mapNode");
+        for(var i=0;i<groups.length;i++){
+          var em=groups[i].querySelector(".mn-emoji");
+          if(em && em.textContent.trim()===emoji){ target=groups[i]; break; }
+        }
+        mapaCard.scrollIntoView({behavior:"smooth", block:"start"});
+        if(target){
+          setTimeout(function(){
+            target.classList.add("pr-ramaPulse");
+            setTimeout(function(){ target.classList.remove("pr-ramaPulse"); }, 2300);
+          }, 650); /* deja tiempo al scroll suave antes de destacar -- misma heuristica que goPred() */
+        }
+      }
+      span.addEventListener("click", go);
+      span.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+    });
+  }catch(e){ console.warn("vinculo-rama v1.34", e); } })();
   </script>
   <style>
     .predList>li.today{border-left-color:#f59e0b;background:#fdf3df;box-shadow:0 2px 10px rgba(245,158,11,.18)}
@@ -1560,6 +1604,14 @@
     #mapBig{min-height:44px;padding:10px 16px;font-size:14px}
     .mapFoto{font-size:11.5px;color:var(--muted)}
     @media(prefers-reduced-motion:reduce){ body:not(.cmMotionOn) .mapHalo,body:not(.cmMotionOn) .mapNode.att,body:not(.cmMotionOn) .mapNode.att .mn-c,body:not(.cmMotionOn) .mapNode.now .mn-c,body:not(.cmMotionOn) .map-link{animation:none} }
+    /* v1.34 -- HIPOTESIS 1: al tocar la insignia de rama de una apuesta, el nodo correspondiente del
+       mapa PEQUEÑO se destaca. Confirmacion SIEMPRE visible sin movimiento (stroke+color estatico) --
+       el brillo animado es solo el refuerzo, igual que el resto del mapa (mismo gate cmMotionOn). Cero
+       llamada a onNodeClick/routeTap/nodeAtPoint/focusBranch: localizado por consulta DOM externa
+       (comparando texto de .mn-emoji), el motor de tap/zoom no se entera de que esto existe. */
+    .mapNode.pr-ramaPulse .mn-c{stroke:var(--accent)!important;stroke-width:5;animation:prRamaPulse 1.1s ease-in-out 2}
+    @keyframes prRamaPulse{0%,100%{filter:none}50%{filter:drop-shadow(0 0 10px var(--accent))}}
+    @media(prefers-reduced-motion:reduce){ body:not(.cmMotionOn) .mapNode.pr-ramaPulse .mn-c{animation:none} }
   </style>
   <div class="card key" id="mapaCard">
     <div class="mapHead">
@@ -3689,6 +3741,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🔗 v1.34 — HIPÓTESIS 1: tocar la insignia de una apuesta te lleva a su rama en el mapa",detalle:"Un revisor externo propuso un vínculo visual apuesta↔rama («como una cuerda tensa»); antes de construir el rediseño grande, la propia crítica y Tony coincidieron en probar la versión MÁS barata posible primero — sin mezclar dos hipótesis a la vez (no tocar también el ORDEN del árbol en el mismo cambio). Cada apuesta ya llevaba una insignia de su rama (📓🎬🧠🛡️📚, desde v1.25) pero era decorativa. Ahora es tocable: toca/pulsa Enter en la insignia → se abre el mapa (si estaba cerrado) y el nodo exacto de esa rama se destaca ahí, con scroll suave hasta él. Cero riesgo al motor: la búsqueda del nodo es una consulta DOM externa (compara el texto ya renderizado en `.mn-emoji`), no llama ni modifica `onNodeClick`/`routeTap`/`nodeAtPoint`/`focusBranch` — confirmado por grep, esas 4 funciones siguen intactas. La confirmación visual es SIEMPRE visible sin depender de movimiento (borde grueso color-acento estático); el brillo animado es solo el refuerzo, con el mismo interruptor de v1.30 (se anima si `cmMotionOn`, o si el sistema no pide reducir movimiento). Deliberadamente NO se tocó el orden de las secciones (esa es otra hipótesis, sin probar todavía) ni el mapa GRANDE (fuera de alcance del MVP). Verificado en vivo: clic en una insignia abre el `<details>` del mapa si estaba cerrado, hace scroll, y el nodo correcto (comparado por emoji) recibe la clase de refuerzo visual 2.3s; funciona igual por teclado (Tab+Enter); mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
     {fecha:"2026-07-11",titulo:"📜 v1.33 — «4 apuestas más» no eran «4 elementos iguales»: eran el pasado",detalle:"Un revisor externo (vía Tony), sobre el recorte de v1.32: el botón «Ver 4 apuestas más» sonaba a 4 elementos intercambiables, cuando en realidad son historia — apuestas ya juzgadas por el calendario. Dos frases, cero reordenar nada (mismo cuidado que v1.32: los 8 `<li>` de `.predList` siguen en su sitio exacto, el estado v0.33 y la anticipación v1.13 no ven ningún cambio). (1) Antes de la lista, una etiqueta nueva «⏳ Ahora mismo en juego» (reusa el mismo emoji que ya llevaba cada chip «⏳ en juego» — cero vocabulario nuevo) para que lo primero que se lea, con la lista recortada, sea justo lo que sigue vivo. (2) El botón pasa de «+ Ver 4 apuestas más» a «📜 Ver el historial — 4 ya resueltas» — 📜 porque ya lo usaba el propio changelog para «cómo va mejorando MADRE» (misma idea: registro del pasado); descarté 📚 aunque el revisor lo sugirió porque esa insignia YA significa una rama concreta (Memoria/archivo) en este mismo mapa — reusarla aquí habría creado ambigüedad, no claridad. Verificado en vivo: con la lista recortada, la etiqueta «en juego» aparece justo antes de las 4 apuestas vivas (el test del propio revisor — ¿qué querrías leer primero al aterrizar? — pasa: lo primero visible es la etiqueta + las 4 en juego, el historial queda debajo, ya rotulado, no antes); el botón muestra el conteo real (4) sin texto fijo; mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
     {fecha:"2026-07-11",titulo:"📏 v1.32 — El panel más largo de toda la web (el marcador de apuestas) ya no lo enseña todo de golpe",detalle:"Tony señaló algo real, no una impresión: «hay paneles demasiado largos, un botón para alargarlos, pero no todo de 1». Lo medí en vivo en vez de adivinar (`getBoundingClientRect` de cada `.card`) y encontré el culpable exacto: `#prediccionesCard` («El marcador: se juzga sola») mide 3381px — más de 4 pantallas de móvil, y el siguiente panel más largo (comentarios) mide 868px, una fracción de eso. El 69% de esa altura (2332px de 3381px) es solo `<ul class=\"predList\">`, y dentro de ella las 4 apuestas YA RESUELTAS (2 falladas, 1 acertada, 1 fallada más) pesan casi tanto como las 4 EN JUEGO. Fix: las apuestas EN JUEGO (`.wait` — el gancho real de todo el sitio: «en X días la realidad me juzga») se siguen viendo SIEMPRE, sin ningún clic; las YA RESUELTAS (ya resumidas arriba en el marcador PALMARÉS con sus conteos) quedan tras un botón «+ Ver 4 apuestas más (ya resueltas)». Nada de estructura nueva ni reordenar nada: uso las clases `ok`/`ko`/`wait` que YA existían en el HTML, ocultas por una regla CSS de una línea — cero nodo del DOM movido, así que el script del estado (v0.33, cuenta ok/ko/wait consultando `.predList > li` directo) y el de la anticipación (v1.13, engancha el botón de «apostar» a cada `.wait`) siguen viendo exactamente los mismos 8 elementos, se vean o no. Verificado en vivo: con el botón sin pulsar, la tarjeta baja de 3381px a bastante menos (las 4 resueltas, 792px, quedan ocultas); un clic las revela todas sin perder nada; si algún día no hay ninguna resuelta, el botón simplemente no aparece (código a prueba de que cambie el contenido); mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
     {fecha:"2026-07-11",titulo:"❤️ v1.31 — «Vivo» ahora se siente en menos de 1 segundo, sin buscar el mapa",detalle:"Un revisor externo (vía Tony) valoró el interruptor de v1.30 pero señaló dos cosas concretas, ambas aplicadas aquí. (1) Las etiquetas técnicas («Auto»/«Vida») pasan a ESTADOS DEL ORGANISMO, coherente con cómo el resto del sitio ya habla de sí mismo (el árbol usa biología: en flor/creciendo/brotando/en reposo; el hámster ya es «MADRE trabajando»): ⚖️ Auto (equilibrio, respeta tu sistema) · ❤️ Vivo (late) · 🌙 Calma. (2) El movimiento «Vivo» solo se notaba si ibas al mapa — sin presencia inmediata. Ahora el propio 🤱🏻 del título (lo PRIMERO que se ve, 0 scroll, en cualquier tamaño) late (`#madreHeart`, `@keyframes cmHeart`) en cuanto tocas ❤️ Vivo — ligado estrictamente a `body.cmMotionOn`, la MISMA clase que ya gatea el mapa (una sola fuente de verdad, cero mecanismo nuevo). Deliberadamente NO añadí más animaciones ambientales nuevas al resto del sitio — el propio revisor lo desaconsejó explícitamente («probaría primero este interruptor unos días» antes de seguir apilando movimiento), y coincide con el criterio de este chat de no fabricar trabajo. Verificado en vivo con reduced-motion activo: al tocar ❤️ Vivo, `#madreHeart` pasa de `animationName:none` a `cmHeart` en el mismo tick del clic (sin esperar ni scrollear); en ⚖️ Auto y 🌙 Calma vuelve a `none`; las 3 etiquetas y sus toasts muestran el texto nuevo; mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
@@ -6290,7 +6343,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.33";
+  window.__cmVersion="v1.34";
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
