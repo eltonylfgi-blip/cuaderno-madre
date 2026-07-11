@@ -1,5 +1,47 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **▶️ EMPIEZA AQUÍ (chat nuevo) — TAREA: "MADRE en movimiento" (lo único que Tony echa de menos).**
+> Tony: *"lo único que echo de menos es cosas moviéndose en la pantalla, como el hámster o
+> simplemente animaciones repetidas en bucle."* Investigué la causa yo mismo en el navegador (él dio
+> permiso) — **diagnóstico con evidencia, NO es que falte animación:**
+> - **El navegador de Tony tiene `prefers-reduced-motion:reduce` ACTIVADO** (confirmado: mismo estado
+>   en el entorno de verificación; es el caso ya documentado en v0.15 del hámster). Medido en vivo:
+>   `map-link breathe = none`, halo estático, todas las animaciones ambientales SUPRIMIDAS para él.
+> - Un visitante SIN esa preferencia ve 35+ animaciones (mapa respirando, halos, flotar de nodos,
+>   texturas, wink…). Tony NO — su SO las apaga por accesibilidad, y el sitio lo respeta (correcto).
+> - El hámster (que tiene rescate JS y se movería igual bajo reduced-motion) ahora mismo **ni está
+>   visible**: `.wheel-and-hamster` da `w:0 h:0 visible:false` — vive en una sección colapsada.
+> - **NO existe ningún toggle** para anular la supresión.
+>
+> **QUÉ CONSTRUIR (la solución correcta — NO "más animaciones", el revisor lleva 5 turnos avisando
+> del árbol de navidad):** un **interruptor de movimiento visible** ("▶️ Activar movimiento / vida"),
+> que por DEFECTO respeta el SO (calma para quien de verdad la necesita) pero deja que CUALQUIERA
+> —Tony incluido— active la experiencia animada completa. Así Tony ve el movimiento que YA existe,
+> sin romper accesibilidad para usuarios que necesitan reduce.
+> - **Arquitectura recomendada:** que el "motion permitido" lo calcule JS considerando SO **+**
+>   override del usuario (localStorage), y aplique una clase `body.cmMotionOn` / `body.cmMotionOff`.
+>   Las supresiones CSS `@media(prefers-reduced-motion:reduce){…animation:none}` (hay MUCHAS, grep
+>   `prefers-reduced-motion`) tendrían que pasar a keyear también en `body.cmMotionOff` para ser
+>   anulables — es un refactor mediano pero es la arquitectura correcta de un toggle.
+> - **MVP más barato (empezar por aquí, medir, y ampliar):** NO intentes desbloquear las 35. Elige
+>   las 3-4 de más impacto de "vida" (hámster VISIBLE + respiración del mapa + un pulso suave junto a
+>   MADRE) y haz que corran cuando `body.cmMotionOn` esté puesto, aunque haya reduced-motion — mismo
+>   patrón JS-fallback que ya usa el hámster (v0.15, busca `__hamSpin`). Tasteful, no mareante.
+> - **Ganancia concreta e inmediata (hazla sí o sí):** el hámster que Tony AMA está oculto (w:0/h:0).
+>   Asegurarse de que sea visible en algún punto que él vea, o subirlo. Cheap win.
+> - **Criterio de HECHO:** con el toggle en ON y reduced-motion activo (simular en DevTools o entorno
+>   real), el mapa respira, el hámster se ve y se mueve, y hay algún latido junto a MADRE; con el
+>   toggle en OFF (default bajo reduced-motion), todo calmado como ahora. Es cambio VISIBLE → sí
+>   merece número de versión (v1.30). Verificación estándar + hearts + 375px + node --check.
+>
+> **📏 Regla del revisor, ya en vigor (confirmada, no cambia nada de lo que hago):** las
+> investigaciones/hipótesis se commitean como `docs:` SIN subir versión; los números de versión se
+> reservan para cambios que el visitante NOTA. (Ya lo hago: el "recorrido cronometrado" fue `docs:`,
+> v1.29 sí fue visible.) NO instrumentar/medir por costumbre — solo si hay una pregunta concreta que
+> no se pueda responder de otra forma.
+>
+> ---
+>
 > **✅ v1.29 EN VIVO (11-jul) — HERO CONGELADO (orden explícita de Tony, no tocar sin que él lo
 > reabra). Recorrido cronometrado hecho, con coordenadas reales, 5 checkpoints:**
 > - **5s (¿entiendo qué pasa?):** SÍ — hero, v1.28 ya lo deja claro.
