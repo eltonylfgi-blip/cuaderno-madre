@@ -17,7 +17,20 @@
 >
 > Los 3 verificados en vivo con el protocolo de siempre (node --check, servidor local +
 > javascript_tool, mapa 12 nodos, 0 consola, 375px sin overflow) y desplegados (GitHub Pages
-> confirmado sirviendo cada versión tras el push).
+> confirmado sirviendo cada versión tras el push). **Además, segunda mirada independiente** (agente
+> aparte, servidor propio, sin ver mi verificación): confirmó los 3 fixes en ejecución real y que los
+> 2 mecanismos nuevos (anticipación + revelación) funcionan de punta a punta con datos honestos, 0
+> errores de consola en toda la navegación (mapa, 4 ramas, logros, ambos ACTOs, votos, 375px). Su
+> propio clic de prueba en la predicción también quedó como voto real en Supabase (mismo tipo de
+> huella ya documentada abajo, no un dato nuevo — los conteos actuales ya lo reflejan).
+>
+> **Hallazgo nuevo de esa revisión, NO urgente (candidato a otro ciclo, no bloqueante):** las 10
+> tarjetas decorativas de textura ASMR (`aside.cmTex`, `buildRibbons()` ~línea 5745) deberían
+> repartirse por toda la página pero aparecen agrupadas — porque ese script corre una sola vez,
+> antes de que `#revelBeat` y las tarjetas privadas de Tony existan, así que sus "huecos" quedan sin
+> textura y las que sí se generaron se apelotonan. Preexistente (no causado por v1.15-v1.17),
+> `aria-hidden="true"` (cero impacto de accesibilidad), puramente cosmético — mismo cajón que la
+> rotación de texturas ya pospuesta antes: no compite con nada del backlog actual.
 >
 > **⏸️ PENDIENTE — decisión de Tony, no técnica:** en `comments` (Supabase, producción) hay una fila
 > real y pública (id `99374012-ebab-46a4-bec9-884a87521243`, autor "Travieso Zorro 81", 11-jul
