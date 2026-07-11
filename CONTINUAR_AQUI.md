@@ -1,5 +1,43 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **▶️ EMPIEZA AQUÍ (chat nuevo) — FASE DE EDICIÓN: reducir el ruido de la 1ª pantalla ~30%, sin
+> perder ninguna idea. Decisión YA TOMADA y defendida (no volver a preguntar a Tony "¿qué hago?" —
+> él pidió explícitamente criterio, no consulta). CONSTRUIR la Propuesta B de abajo.**
+>
+> Contexto: el "arquitecto" (crítica que Tony reenvía) cerró la fase de construir-piezas y abrió la
+> de EDITAR (qué NO enseñar). Métrica nueva de Tony: *"tiempo hasta la curiosidad"* (8-10s = bien).
+> Criterio permanente para toda mejora: *"¿esto hace la historia principal —la apuesta pública— más
+> fuerte, o solo hace la web más rica? Si solo más rica, no lo construyas."* La estrella es **"la IA
+> que apuesta en público y enseña cuando pierde"** — todo en la 1ª pantalla debe apuntar a eso, o
+> ser prueba viva honesta; nada debe apuntar al VISITANTE (gamificación) ni a META (log de dev).
+>
+> **QUÉ CONSTRUIR (Propuesta B, decidida — "máxima curiosidad"):** en `#onboard` (líneas ~403-408),
+> los 6 widgets tras el CTA están todos con `id` (seguros para 💗, cssPath usa `#id`). Veredicto por
+> elemento, ya defendido con el DOM real medido (390×844, sin scroll):
+> - **QUEDAN en 1ª pantalla** (on-message + prueba viva): `.ob-ics` 🔔 veredictos (ES la apuesta) ·
+>   `#obLive` "ahora mismo: rama X" (MADRE trabajando ahora) · `#cmPresence` 🟣 explorando ahora
+>   (prueba social real de Supabase).
+> - **BAJAN** (relocalizar tras la 1ª tarjeta de contenido, NO borrar — siguen existiendo y
+>   poblándose): `#cmSeguirChip` 👀 visita nº (mira al visitante) · `#cmAchieveBtn` 🏆 logros
+>   (gamifica al visitante) · `#hoyReal` 🔦 ticker "Hoy, de verdad" (log de desarrollo, meta).
+> - **Mecanismo recomendado (bajo riesgo):** un script runtime DESPUÉS del resecuenciador (v0.33)
+>   que mueva esos 3 nodos por `id` a justo detrás de la 1ª tarjeta real (`#vsCard` o la que caiga
+>   primera). Alternativa: gate por scroll (ocultar hasta el 1er scroll). Verificar que hearts (💗)
+>   no se afectan (usan `#id` → deberían ser inmunes) y que los 3 siguen poblándose por su JS.
+> - **Rechazadas y por qué (para no re-litigar):** A (bajar los 6) pierde el pulso "vivo" —
+>   demasiado seco. C (B + reencabezar 🔔 con cuenta atrás) es mejor pero más trabajo/riesgo; hacer
+>   B primero, medir, y C solo si B se queda corta.
+> - **Criterio de HECHO:** 1ª pantalla (390×844, sin scroll) muestra pitch + CTA + los 3 que quedan,
+>   y NO los 3 que bajan; los 3 bajados aparecen correctos más abajo; hearts intactos; mapa 12
+>   nodos; 0 consola; 375px sin overflow; 48/48 node --check. Changelog v1.28 + commit + push.
+>
+> **⚠️ Disciplina de edición del changelog (incidente v1.20, no repetir):** al tocar `var cambios=[`,
+> el `old_string` del Edit DEBE incluir la línea `var cambios=[` completa también en el `new_string`
+> — omitirla la BORRA y rompe el array. Tras cada Edit al array: `grep -c "var cambios=\["` debe dar
+> 1 ANTES de dar por buena la entrada. Ya son 7 versiones seguidas sin repetir el fallo.
+>
+> ---
+>
 > **🔄 CAMBIO DE FRENTE (11-jul, v1.27 EN VIVO) — de "el árbol" a "los primeros 10 segundos".**
 > Tony (arquitecto): árbol confirmado en pausa, correcto no seguir con v1.28/v1.29 de eso. Nueva
 > prioridad: *"¿en los primeros 10 segundos ya entiendo por qué esta web es diferente?"* — y una
