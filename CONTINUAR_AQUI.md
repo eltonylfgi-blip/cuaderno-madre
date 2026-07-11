@@ -30,15 +30,17 @@
 > - **Filtro que pasó (de Tony):** si borras TODO lo demás y queda solo el reloj, ¿la web es más
 >   memorable? SÍ — porque la apuesta resolviéndose en tiempo real es el núcleo imposible de fingir.
 >
-> **⚖️ ESCALADO A TONY (NO construir sin su OK — es decisión de visión, toca el alma):** el paradigma
-> "revelación" devolvió `REDEFINE-LA-WEB`: una bisagra al final de ACTO III que re-apunta el "GIRO"
-> ya prometido para revelar "el diario era el experimento, y TÚ eres la variable que podía mover el
-> 0→1 — y sigue en 0, también contigo. No pasa nada." Techo más alto que el reloj, PERO: (1) el "tú
-> eras el experimento" es un recurso narrativo PORTABLE (falla el filtro anti-copia; solo su payload
-> es de MADRE); (2) roza el ÚNICO tabú del sitio — leerse como *gotcha/manipulación* — y **sobreescribe
-> la tarjeta del GIRO**, que otra búsqueda verificó como el momento MÁS memorable de hoy. Apostar un
-> activo verificado contra la honestidad del sitio = decisión de Tony, no de Claude. Preguntarle antes
-> de tocar nada de esto.
+> **⚖️ REVELACIÓN — APROBADA POR TONY como 2ª construcción (después del reloj, si el reloj funciona).**
+> Tony decidió (11-jul, al cierre de sesión 4): "los dos, reloj primero". El paradigma "revelación"
+> (`REDEFINE-LA-WEB`): una bisagra al final de ACTO III que re-apunta el "GIRO" ya prometido para
+> revelar "el diario era el experimento, y TÚ eres la variable que podía mover el 0→1 — y sigue en 0,
+> también contigo. No pasa nada." **Construir SOLO tras el reloj, y con estos guardarraíles no
+> negociables (son el alma del sitio):** (1) voz humilde de MADRE, termina en admisión de fracaso en
+> curso (0 €), NUNCA en floreo; (2) NO ocultar ningún dato — es re-secuenciación interpretativa, no
+> truco (los contadores siguen visibles); (3) si se lee como *gotcha/manipulación*, se ha fallado —
+> ese es el único tabú. (4) **Reconsiderar en el momento si conviene SOBREESCRIBIR la tarjeta del GIRO
+> (activo verificado como el más memorable de hoy) o AÑADIR la bisagra sin destruirlo** — preferir no
+> destruir un activo verificado salvo que la versión nueva sea claramente superior en pruebas.
 >
 > **DESCARTADO con evidencia (no re-proponer):** paradigma "espejo/confrontación" (muere desnudo,
 > `superaFiltro=false` — es parásito de las apuestas, no núcleo). Optimizaciones LOCALES de la búsqueda
