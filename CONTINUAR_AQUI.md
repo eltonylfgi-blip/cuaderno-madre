@@ -1,5 +1,36 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **🔄 CAMBIO DE FRENTE (11-jul, v1.27 EN VIVO) — de "el árbol" a "los primeros 10 segundos".**
+> Tony (arquitecto): árbol confirmado en pausa, correcto no seguir con v1.28/v1.29 de eso. Nueva
+> prioridad: *"¿en los primeros 10 segundos ya entiendo por qué esta web es diferente?"* — y una
+> métrica nueva, "tiempo hasta la curiosidad" (8-10s = bien, 1 minuto = mal). **Criterio que aplica
+> a partir de ahora a CUALQUIER mejora, no solo al árbol:** *"¿esto hace la historia principal más
+> fuerte, o solo hace la web más rica?"* Si solo la hace más rica, no construirla.
+>
+> **v1.27 — apliqué el test de verdad, midiendo el DOM real (no de memoria), y encontré un bug
+> real:** `.ob-live{display:flex}` (regla de autor) ganaba SIEMPRE al `[hidden]` nativo del
+> navegador (UA-stylesheet, pierde contra cualquier regla de autor pase lo que pase la
+> especificidad) — «🔊 Escúchalo» y «🎨 Probar identidad nueva» se veían SIEMPRE aunque el
+> desplegable «⋯ más (voz, identidad nueva)» estuviera cerrado, prometiendo esconderlos y sin
+> hacerlo. Arreglado: `details:not([open]) .ob-live{display:none}`. Commit `9dceb17`.
+>
+> **Pregunta de Tony sobre el mapa (💶 sobredimensionada), respondida con datos, no con opinión:**
+> los 8 nodos tienen geometría IDÉNTICA (r=28, stroke-width=3); el color viene del ESTADO real
+> (`st`), no de la identidad de la rama; 💶 (benef 3, "marcha") hoy tiene MENOS énfasis visual que
+> 📓/🛡️ (en "atención", con animación extra). La preocupación no se sostuvo al mirar el código real
+> — no se tocó el mapa.
+>
+> **⏸️ Lo que queda abierto, NO resuelto todavía (evidencia medida, decisión pendiente):** incluso
+> tras el fix de v1.27, la primera pantalla (390×844, sin scroll) sigue mostrando 9 elementos tras
+> el hook+CTA: recordatorio/calendario, "ahora mismo: rama X", presencia ("tú y N más"), logros
+> (🏆 1/6), ticker de cambios (🔦 Hoy, de verdad), contador de visitas — todos construidos con
+> razones válidas en sesiones pasadas (prueba social, motivo de volver, gamificación), pero
+> potencialmente compitiendo con el hook igual que señaló el critique. Medido, NO decidido: ¿alguno
+> de estos debería bajar más / esconderse hasta que haya interacción? Necesita el criterio de Tony
+> (recordar más la apuesta pública, o solo enriquecer), no una poda unilateral mía.
+>
+> ---
+>
 > **🛑 ÁRBOL PARADO A PROPÓSITO (11-jul, v1.26 EN VIVO) — Tony lo pidió explícitamente, no es que
 > se haya agotado el trabajo.** Como arquitecto: *"corréis el riesgo de sobreoptimizar el árbol
 > mientras otras partes de la experiencia podrían dar más retorno... la estrella del Cuaderno sigue
