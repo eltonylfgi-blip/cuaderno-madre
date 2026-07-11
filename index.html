@@ -925,7 +925,12 @@
           var n=document.createElement("b"); n.textContent=" → Resultado pendiente de anotar (el sistema lo apunta en su siguiente pasada). Que esté vencida y sin maquillar es parte del trato.";
           res.appendChild(n);
         }
-      } else { wait++; }
+      } else {
+        wait++;
+        var diasRest=Math.round((d.getTime()-hoy.getTime())/86400000);
+        var fechaEl=li.querySelector(".pr-fecha");
+        if(fechaEl) fechaEl.textContent+=" · faltan "+diasRest+(diasRest===1?" día":" días");
+      }
     });
     var pm=document.getElementById("palmares");
     if(pm && (ok+ko+wait+due)>0){
@@ -3182,6 +3187,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"⚖️ v1.00 — El marcador ya cuenta los días reales, no solo la fecha fija",detalle:"Cada apuesta 'en juego' con fecha futura solo mostraba la fecha escrita ('15-jul'), quieta (grep confirmado: la rama `} else { wait++; }` del máquina de estados no escribía nada en pantalla para ese caso). Ahora, en el mismo bucle que ya compara la fecha del cliente con la fecha de cada apuesta, se calcula cuántos días reales quedan y se añaden al `.pr-fecha` que ya existía: '15-jul · faltan 4 días'. Mismo dato, mismo sitio, ahora contando de verdad."},
     {fecha:"2026-07-11",titulo:"💬 v0.99 — Tu comentario también dice «· tú», como ya pasaba con tus dibujos",detalle:"Los dibujos de la galería ya distinguían el tuyo con «· tú» en color propio (window.__identity, addDrawing/ownsDrawing) — pero en comentarios ese reconocimiento no existía (grep confirmado: 0 resultados de ownsComment/addComment antes de este cambio). Ahora, al publicar un comentario, se guarda su id en tu identidad anónima (addComment) y cada vez que la lista se pinta, el tuyo lleva un «· tú» en el mismo morado de los dibujos (#6a5acd) junto a tu nombre — mismo patrón exacto, llevado al otro sitio donde dejas huella."},
     {fecha:"2026-07-11",titulo:"🏆 v0.98 — Los logros avisan EN EL MOMENTO, no solo si abres el trofeo",detalle:"El chip 🏆 de la cabecera solo se pintaba al cargar la página o al abrir el panel (grep confirmado: 0 toasts ligados a logros) — cruzar un umbral real (tu 4ª rama del mapa, tu 1er comentario, tu 1er dibujo, tu 2ª visita, terminar el tour) no se notaba si no ibas a mirar el trofeo tú mismo. Ahora, en el instante en que lo cruzas, un aviso breve dice «🏆 Logro desbloqueado: <nombre>» y el número del chip sube solo. La primera vez que corre este código en un navegador siembra en silencio lo que ya estuviera hecho de antes, para no soltar una cascada de avisos retroactivos a quien ya llevaba tiempo aquí."},
     {fecha:"2026-07-11",titulo:"🎵 v0.97 — Ritmo en ACTO II: 2 tarjetas rompen la monotonía de las 12 seguidas",detalle:"3 jueces independientes (UX, videojuegos, diseño visual) confirmaron por separado el mismo hallazgo: entre «ACTO II» y «EL GIRO» van 12 tarjetas seguidas con el mismo patrón visual exacto, sin ninguna variación — nota de Ritmo, 6-7/10. Reordenar o fusionar tarjetas es riesgo ya conocido (los 💗 se anclan por posición); en vez de tocar el orden, «La historia de MADRE» y «El cementerio de ideas muertas» — ya las 2 más citadas como memorables por los propios jueces — llevan ahora un acento de color que las hace destacar del resto, sin mover ni una sola tarjeta de sitio."},
@@ -5734,7 +5740,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.99";
+  window.__cmVersion="v1.00";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
