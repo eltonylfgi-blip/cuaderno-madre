@@ -1,5 +1,16 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v1.31 EN VIVO (11-jul) — respuesta al revisor externo. Commit `22b792a`.** Dos ajustes concretos,
+> el resto de su feedback (más animaciones en el mapa) DELIBERADAMENTE no aplicado — el propio revisor
+> aconsejó parar y probar el interruptor unos días antes de seguir añadiendo movimiento; coincide con la
+> regla de este chat de no fabricar trabajo.
+> - **Etiquetas más orgánicas:** 🎬 Auto/Vida → **⚖️ Auto / ❤️ Vivo / 🌙 Calma** (lenguaje de organismo,
+>   coherente con vitalTier del árbol).
+> - **"Vivo" ahora se siente en <1s sin scroll:** `#madreHeart` (el 🤱🏻 del H1, LO PRIMERO que se ve)
+>   late en el mismo tick del clic — verificado: `animationName` pasa de `none` a `cmHeart` sin esperar,
+>   visible a 19px del top en 375px. Ligado a `body.cmMotionOn` (misma clase que ya gatea el mapa).
+> - Verificado: reduced-motion activo (caso real de Tony), 12 nodos, 0 consola, 375px sin overflow, 50/50 node --check.
+>
 > **✅ v1.30 EN VIVO (11-jul) — INTERRUPTOR DE MOVIMIENTO construido y verificado. Commit `ecdc462`.**
 > Tony echaba de menos "cosas moviéndose"; causa ya diagnosticada = su navegador tiene reduced-motion.
 > Construido (siguiendo el MVP + la crítica que Tony reenvió, que pedía 3 modos y NO un panel de ajustes):
