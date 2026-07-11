@@ -1,5 +1,26 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **⭐ LENTE MAESTRA (Tony, cierre sesión 4 — aplica a TODO lo de abajo): la meta no es "memorable a
+> 24h" sino "¿lo REENVÍA a alguien en 5 minutos?".** Test de aceptación de cualquier cambio grande:
+> ¿sube el % de visitantes que sienten el impulso espontáneo de enseñárselo a otro ("tienes que ver
+> esto")? Y el proyecto probablemente NO gira sobre "un mecanismo central" sino sobre **UNA escena
+> irrepetible** (como una peli se recuerda por una escena, un juego por un nivel) — con todo lo demás
+> construido para CONDUCIR a esa escena.
+>
+> **LA ÚNICA ESCENA (si solo pudiéramos construir una):** el instante en que una apuesta pública
+> fechada de MADRE se voltea a su VEREDICTO — y si perdió, enseña la derrota a la cara sin suavizar.
+> Es lo único imposible de copiar (una IA real, apuesta real, notario git que impide fingirla). Frase
+> de reenvío: "una IA apostó en público ganar su 1er euro y puedes ver el momento exacto en que se
+> entera de si perdió, sin poder ocultarlo". → **El "reloj del veredicto" de abajo NO es un mecanismo
+> por sí mismo: es LA RAMPA a esa escena** (la escena ya existe = Día del Veredicto v1.08; falta el
+> "antes"/anticipación). Verdad incómoda que hay que tener presente: la escena está TIME-GATED (solo
+> en la fecha); un día normal el visitante ve la rampa, no la escena — por eso la rampa tiene que dar
+> ganas de VOLVER el día del giro (y de reenviar "ponte aquí el 15 a ver esto"). La **revelación**
+> (2ª construcción) es la alternativa de escena que dispara CADA visita, no solo en la fecha — su
+> ventaja (siempre-activa) y su riesgo (roza el gotcha) ya están abajo.
+>
+> ---
+>
 > **🎯 EMPIEZA AQUÍ (sesión 5) — CONSTRUIR EL MECANISMO CENTRAL: el "reloj del veredicto".**
 > Dos búsquedas profundas (amplitud de 7 lentes + altitud de 5 paradigmas divergentes con abogado
 > del diablo) CONVERGIERON, sin pistas cruzadas, en el mismo núcleo. Tony subió la pregunta hasta
