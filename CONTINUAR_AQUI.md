@@ -1,7 +1,35 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **✅ SESIÓN 4, continuación — v1.07 EN VIVO. Misión nueva aprobada por Tony + 1er ciclo completo
-> Explorar→Elegir→Construir→Verificar.**
+> **✅ SESIÓN 4, continuación — v1.08 EN VIVO. 2º ciclo de la misión: lente GENERATIVA (no
+> defectos, "qué momento inolvidable falta") + criterio de éxito afilado.**
+>
+> **Criterio de éxito afilado en `CLAUDE.md` (aprobado por Tony):** ya no es solo "¿se nota la
+> mejora?" — es "¿qué historia contaría el visitante al día siguiente?". Un solo backlog: fricciones
+> y momentos memorables compiten en el MISMO ranking, gana el de mayor impacto real sea cual sea su
+> categoría. La lente generativa es una lente más a usar cuando haga falta, NO una fase fija.
+>
+> **v1.08 — "Día del Veredicto" (commit `3ccadeb`):** un agente con lente generativa encontró que
+> el material más fuerte de toda la web (apuestas reales con fecha, notario git-verificable, fallos
+> a la vista) se consumía como una fila más de una lista al resolverse. Con la próxima apuesta
+> resolviendo el 15-jul (entonces a 4 días), se construyó AHORA para no perder ese primer momento
+> real: pantalla propia de acontecimiento (`#veredictoOv`) que recibe al visitante la 1ª vez que
+> vuelve tras un veredicto real anotado — la apuesta exacta, el resultado sin maquillar, el commit-
+> prueba de la fecha. Sembrado en el primer arranque (mismo patrón que logros v0.98) para no
+> disparar nada retroactivo sobre las 4 apuestas ya resueltas. Hook de prueba para verificar/
+> previsualizar sin esperar al 15-jul: `window.__testVeredicto()` en la consola del navegador.
+> Verificado en vivo con el disparador REAL (no solo el hook): seed, detección, cola de varios,
+> foco/Esc, mapa 12 nodos, 0 errores consola, 375px sin overflow, 46/46 node --check.
+>
+> **Para comprobar el Día del Veredicto cerca del 15-jul:** abre la web, `F12` → consola →
+> `window.__testVeredicto()` — muestra la pantalla con datos reales de las apuestas ya resueltas
+> (sirve para ver el diseño; el disparo automático real solo ocurre cuando "la rutina" anote ✅/❌
+> de verdad en el `<li>` de la apuesta del 15-jul).
+>
+> **BACKLOG de fricciones SIN TOCAR desde la ronda de 6 lentes (sigue vigente, no re-explorar):**
+> `narrativa` (8, Acto II/III revela FAQ no historia) · `identidad` (7, botón "Escúchalo" no suena)
+> · `descubrimiento` (7, mini-mapa desincentiva el mapa grande) · `que_sobra` (7, botón de feedback
+> repetido 17x + rotación de texturas ASMR con repeticiones). Detalle completo más abajo en este
+> fichero, sección "1ª ejecución de la misión".
 >
 > **MISIÓN aprobada por Tony, ya en `CLAUDE.md`:** este chat no cierra por "no sé cuál es el
 > cuello" — eso es el arranque de una búsqueda, no una respuesta final. Ciclo obligatorio:
