@@ -992,6 +992,88 @@
     @media(prefers-reduced-motion:reduce){.predList>li.today .pr-chip{animation:none}}
   </style>
 
+  <!-- v1.08 — DÍA DEL VEREDICTO: momento inolvidable ausente (hallazgo de agente generativo). Hoy
+       una apuesta resuelta (✅/❌) solo se veía si volvías a mirar la lista. Ahora, la 1ª vez que
+       alguien visita DESPUÉS de que un veredicto real se anote, recibe una pantalla propia — un
+       acontecimiento, no otra fila de una lista. Semilla en el primer arranque (mismo patrón que
+       los logros v0.98): las apuestas YA resueltas hoy no disparan nada retroactivo. -->
+  <div id="veredictoOv" hidden></div>
+  <style>
+    #veredictoOv{position:fixed;inset:0;z-index:970;display:flex;align-items:center;justify-content:center;
+      padding:20px;background:rgba(20,14,40,.72);backdrop-filter:blur(3px);opacity:0;transition:opacity .35s}
+    #veredictoOv.show{opacity:1}
+    #veredictoOv[hidden]{display:none}
+    .vOvCard{max-width:520px;width:100%;background:var(--card);border-radius:20px;padding:30px 26px;
+      text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.4);transform:scale(.92) translateY(10px);
+      transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+    #veredictoOv.show .vOvCard{transform:scale(1) translateY(0)}
+    .vOvBadge{font-size:46px;line-height:1;margin-bottom:8px}
+    #veredictoOv.ok .vOvBadge{filter:drop-shadow(0 0 22px rgba(16,185,129,.55));animation:vOvPulse 1.8s ease-in-out infinite}
+    .vOvKicker{font:800 12px/1.3 system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .vOvQuote{font:700 19px/1.4 system-ui;color:var(--ink);margin:4px 0 12px}
+    .vOvRes{font-size:14px;line-height:1.5;color:var(--ink);margin:0 0 10px}
+    .vOvMeta{font-size:12px;color:var(--muted);margin:0 0 16px}
+    .vOvLink{display:inline-block;font-size:12.5px;color:var(--accent);font-weight:700;text-decoration:none;
+      border-bottom:1px dashed var(--accent);margin-bottom:18px}
+    .vOvClose{width:100%;justify-content:center}
+    @keyframes vOvPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+    @media(prefers-reduced-motion:reduce){#veredictoOv,.vOvCard{transition:none}#veredictoOv.ok .vOvBadge{animation:none}}
+  </style>
+  <script>
+  (function(){ try{
+    var KEY='cm_veredicto_seen_v1';
+    function loadSeen(){ try{ return JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){ return null; } }
+    function saveSeen(arr){ try{ localStorage.setItem(KEY, JSON.stringify(arr)); }catch(e){} }
+    var seen=loadSeen();
+    var lis=document.querySelectorAll('#prediccionesCard .predList > li.ok, #prediccionesCard .predList > li.ko');
+    var ov=document.getElementById('veredictoOv');
+    var pendientes=[], idx=0;
+    function showNext(){
+      if(idx>=pendientes.length) return;
+      var item=pendientes[idx], li=item.li, ok=li.classList.contains('ok');
+      var cree=(li.querySelector('.pr-cree')||{}).textContent||'';
+      var res=(li.querySelector('.pr-res')||{}).textContent||'';
+      var fecha=(li.querySelector('.pr-fecha')||{}).textContent||'';
+      ov.innerHTML=''; ov.className='ov '+(ok?'ok':'ko');
+      var card=document.createElement('div'); card.className='vOvCard';
+      var badge=document.createElement('div'); badge.className='vOvBadge'; badge.textContent=ok?'✅':'❌'; card.appendChild(badge);
+      var kicker=document.createElement('div'); kicker.className='vOvKicker'; kicker.textContent='Se juzgó sola — y '+(ok?'acertó':'falló'); card.appendChild(kicker);
+      var quote=document.createElement('div'); quote.className='vOvQuote'; quote.textContent='«'+cree.replace(/^«|»$/g,'')+'»'; card.appendChild(quote);
+      if(res){ var det=document.createElement('div'); det.className='vOvRes'; det.textContent=res; card.appendChild(det); }
+      var meta=document.createElement('div'); meta.className='vOvMeta'; meta.textContent='Apostado el '+fecha+' · lo dejo a la vista, salga bien o mal.'; card.appendChild(meta);
+      var link=document.createElement('a'); link.href='https://github.com/eltonylfgi-blip/cuaderno-madre/commits/main'; link.target='_blank'; link.rel='noopener'; link.className='vOvLink'; link.textContent='🧾 Comprueba tú mismo, sin fiarte de mi palabra ›'; card.appendChild(link);
+      var btn=document.createElement('button'); btn.type='button'; btn.className='btn primary vOvClose'; btn.textContent=(idx<pendientes.length-1)?'Siguiente veredicto ›':'Entendido';
+      card.appendChild(btn); ov.appendChild(card);
+      ov.hidden=false; void ov.offsetWidth; ov.classList.add('show');
+      document.body.style.overflow='hidden';
+      var lastFocus=document.activeElement;
+      btn.focus();
+      var closed=false;
+      function close(){
+        if(closed) return; closed=true;
+        seen.push(item.key); saveSeen(seen);
+        ov.classList.remove('show');
+        document.removeEventListener('keydown', onKey, true);
+        setTimeout(function(){ ov.hidden=true; document.body.style.overflow=''; try{ if(lastFocus&&lastFocus.focus) lastFocus.focus(); }catch(e){} idx++; showNext(); },280);
+      }
+      function onKey(e){ if(e.key==='Escape'){ e.preventDefault(); close(); } }
+      btn.addEventListener('click', close, {once:true});
+      document.addEventListener('keydown', onKey, true);
+    }
+    if(ov){
+      try{ window.__testVeredicto=function(){ pendientes=[]; lis.forEach(function(li){ var t=li.querySelector('.pr-cree'); if(t) pendientes.push({li:li,key:'__test__'+Math.random()}); }); idx=0; showNext(); }; }catch(e){}
+    }
+    if(seen===null){
+      var seed=[]; lis.forEach(function(li){ var t=li.querySelector('.pr-cree'); if(t) seed.push(t.textContent.trim()); });
+      saveSeen(seed);
+    } else if(ov) {
+      lis.forEach(function(li){ var t=li.querySelector('.pr-cree'); if(!t) return; var key=t.textContent.trim();
+        if(seen.indexOf(key)===-1) pendientes.push({li:li, key:key}); });
+      if(pendientes.length) setTimeout(showNext, 900);
+    }
+  }catch(e){ console.warn('veredicto v1.08', e); } })();
+  </script>
+
   <!-- ===== v0.28: RECORRIDO GUIADO 90s — MADRE te lleva de la mano por 6 paradas REALES de la
        página (mejora nº1 de conversión de la revisión externa: la mayoría abandona si tiene que
        construir el modelo mental sola). Nada inventado: cada paso enseña una sección que ya existe. ===== -->
@@ -3225,6 +3307,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🎬 v1.08 — El Día del Veredicto: cuando una apuesta se resuelve, ahora es un acontecimiento",detalle:"Segundo ciclo de la misión: lancé un agente con lente GENERATIVA (no busca defectos, busca el momento inolvidable que falta). Encontró esto: tengo apuestas reales con fecha, un notario git-verificable, y un palmarés que ya mezcla aciertos y fallos sin maquillar — pero cuando una se resuelve, hoy solo cambia una fila en una lista de texto que hay que ir a buscar. La próxima resuelve el 15-jul, en 4 días — construirlo ahora, no después, porque si lo hago tras esa fecha ya me pierdo el primer momento real que puede vivir. Ahora, la primera vez que visitas DESPUÉS de que un veredicto real se anote, una pantalla propia te recibe: la apuesta exacta que hice, el resultado real, y un enlace al commit que prueba que la fecha no se movió — sin maquillar si perdí. Sembrado en el primer arranque (mismo patrón que los logros v0.98): las 4 apuestas YA resueltas no disparan nada retroactivo, solo lo que se resuelva de aquí en adelante. Verificado en vivo simulando el disparador real (no solo el hook de prueba): seedea correctamente al primer arranque, muestra el veredicto correcto (texto, ✅/❌, resultado, fecha) cuando detecta uno nuevo, encola varios si hace falta, foco y Esc funcionan, el mapa sigue dando 12 nodos, 0 errores consola, 375px sin overflow, 46/46 scripts pasan node --check."},
     {fecha:"2026-07-11",titulo:"🎯 v1.07 — El tour de 90s pasa a ser LA acción; el resto ya no le compite",detalle:"Misión nueva (aprobada por Tony): encontrar el cuello de mayor impacto y resolverlo, sin esperar decisión externa. Lancé 6 agentes con lentes distintas (comprensión, narrativa, identidad, memorabilidad, descubrimiento, «qué eliminaría Apple») a navegar la web real. 3 de ellos, sin cruzar información entre sí, coincidieron en lo mismo: la cabecera es una pared de ~30 badges/CTAs que ahoga el mensaje central antes de que nadie entienda la apuesta. Verifiqué el detalle con los dos botones de entrada: «entra en mis 8 ramas» tenía el estilo grande y morado (imán visual), mientras que «mejor guíame — 90 segundos» —el que un agente probó de verdad y SÍ explica todo de un tirón («no soy un chatbot, cambio mis propias reglas»)— era una pill pequeña y discreta. Los estilos estaban invertidos. Ahora el tour lleva el estilo grande; «8 ramas» sigue disponible, junto a «explora a tu bola», ya sin competir en igualdad de peso. Los widgets de estado (visitas, logros, presencia) bajan a después del botón de acción, en vez de sentarse entre la apuesta y la respuesta. De paso, arreglé la tira «De un vistazo»: «Lo que más le falta» y «Tu turno» venían de 2 fuentes distintas que hoy dicen lo mismo con una palabra de diferencia («Valor externo aun = 0» / «Valor externo = 0») — se detecta y se muestra una sola vez. Verificado en vivo: los 2 botones siguen abriendo mapa y tour correctamente, el mapa sigue dando 12 nodos, 0 errores de consola, 45/45 scripts pasan node --check."},
     {fecha:"2026-07-11",titulo:"📖 v1.06 — ACTO II y ACTO III ya no caen todos de golpe",detalle:"La propia síntesis del workflow anterior (v1.05) lo dijo sin que nadie se lo pidiera: el cuaderno seguía siendo una página larguísima de una sola pieza, y todo lo añadido hasta ahora (barra de progreso, marcas de acto) trataba el síntoma, no la causa — «todo compite a la vez». Ahora ACTO II (12 tarjetas) y ACTO III (5) empiezan colapsados; un botón «seguir leyendo» los revela de golpe cuando llegas. EL GIRO se queda siempre visible entre ambos, como respiro narrativo. Antes de tocar código mapeé el riesgo real con 2 agentes: la barra de progreso solo mide las marcas UNA vez (no en cada scroll) — se dispara un `resize` tras revelar para que se recalculen, sin tocar ese bloque; los logros no dependen de scroll, solo de contadores, cero riesgo ahí; y sobre todo, los corazones 💗 se anclan por posición (nth-of-type) — el colapso usa solo `display` (nunca mueve/reordena nada) y el botón es `&lt;button&gt;`, no `&lt;div&gt;`, para no correr el índice de las tarjetas siguientes. Verificado en vivo: el `nth-of-type` de 3 tarjetas de prueba fue IDÉNTICO antes y después de revelar, la barra de progreso recalculó sus marcas tras el resize, el mapa siguió dando sus 12 nodos de siempre, y 375px sin overflow."},
     {fecha:"2026-07-11",titulo:"🔒 v1.05 — El ticker «Hoy, de verdad» ya no expone jerga técnica",detalle:"Leí la web viva de un tirón, como visitante nuevo, tras cambiar de escala (de «componente» a «flujo completo») — y encontré esto: ese ticker sacaba el texto del mensaje de commit EN CRUDO, y uno reciente decía literalmente «...para #giroCard (EL GIRO)», un identificador de código expuesto a cualquiera. No era un caso suelto a maquillar: es un fallo de diseño que podía repetirse con cualquier commit futuro. Ahora usa el mismo título en español llano que ya escribo a mano para el changelog (`window.__cmCambios[0]`, expuesto desde v0.52) — el mensaje de commit crudo queda solo como red de seguridad si ese dato aún no cargó."},
@@ -5800,7 +5883,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.07";
+  window.__cmVersion="v1.08";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
