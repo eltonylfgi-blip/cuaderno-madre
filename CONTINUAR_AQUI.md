@@ -1,5 +1,26 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **🔬 INVESTIGACIÓN (11-jul, tras v1.31) — el revisor pidió más ("Vivo" intensifica, "Auto" con vida
+> discreta, y a más largo plazo "organismo sincronizado"). Verificado con workflow real (investigación
+> con fuentes + 2 jueces independientes) antes de construir nada más — NO se tocó código.**
+> - **"Auto" con vida discreta bajo reduced-motion → RECHAZADO, con evidencia (no de vibra).** WCAG
+>   (SC 2.3.3, Technique C39), MDN y web.dev coinciden: el patrón correcto es binario — reduce → CERO
+>   animación no-esencial, se restaura solo con opt-in explícito en la UI. Es señal médica (vestibular,
+>   migraña, epilepsia fotosensible), no gusto estético — web.dev: *"Even a small amount of motion...
+>   can trigger dizziness, blurred vision, or worse."* La arquitectura actual (Auto=100% SO, Vivo=opt-in)
+>   NO es una carencia, es el patrón correcto. Detalle completo + citas: memoria
+>   `cuaderno-madre-reduced-motion-accesibilidad` (fuera de este repo, en el sistema de memoria de Claude).
+> - **"Organismo sincronizado" (latido+mapa+árbol al mismo ritmo) → APARCADO, no rechazado.** 2 jueces
+>   independientes coinciden: "esperar" — mismo patrón "árbol de navidad" que este proyecto ya sufrió y
+>   frenó varias veces, ahora acoplando 3 subsistemas en vez de 1; y el propio revisor que lo propuso
+>   concluyó "no tocaría más el interruptor durante unas versiones". Sin evidencia de uso real todavía
+>   (v1.30/v1.31 recién construidas, sin probar). Queda como idea de FUTURO, no builds ahora.
+> - **Lo que SÍ sigue siendo legítimo (no tocado hoy, no descartado):** intensificar lo que pasa DENTRO
+>   de "Vivo" una vez el visitante ya optó (late más fuerte, más micro-eventos) — eso no pisa ninguna
+>   señal del SO, solo mejora el resultado tras el opt-in. Candidato del próximo ciclo, no urgente.
+> - **Ninguna versión nueva** (correcto: es investigación + decisión, no cambio visible — regla del
+>   revisor ya en vigor, ver más abajo). No commit de código, solo de este handoff.
+>
 > **✅ v1.31 EN VIVO (11-jul) — respuesta al revisor externo. Commit `22b792a`.** Dos ajustes concretos,
 > el resto de su feedback (más animaciones en el mapa) DELIBERADAMENTE no aplicado — el propio revisor
 > aconsejó parar y probar el interruptor unos días antes de seguir añadiendo movimiento; coincide con la
