@@ -993,6 +993,12 @@
     .predList>li.today{border-left-color:#f59e0b;background:#fdf3df;box-shadow:0 2px 10px rgba(245,158,11,.18)}
     .predList>li.today .pr-chip{background:#b45309;animation:softpulse 2.4s ease-in-out infinite}
     @media(prefers-reduced-motion:reduce){.predList>li.today .pr-chip{animation:none}}
+    /* v1.12: apuesta resuelta = re-vivible a un clic (escena del veredicto como pasado) */
+    .predList>li.pr-revive{cursor:pointer;transition:background .15s}
+    .predList>li.pr-revive:hover,.predList>li.pr-revive:focus-visible{background:var(--accent-soft);outline:none}
+    .predList>li.pr-revive:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+    .pr-reviveCue{display:block;margin-top:5px;font-size:11.5px;font-weight:700;color:var(--accent);opacity:.72}
+    .predList>li.pr-revive:hover .pr-reviveCue,.predList>li.pr-revive:focus-visible .pr-reviveCue{opacity:1}
   </style>
 
   <!-- v1.08 — DÍA DEL VEREDICTO: momento inolvidable ausente (hallazgo de agente generativo). Hoy
@@ -1031,9 +1037,12 @@
     var lis=document.querySelectorAll('#prediccionesCard .predList > li.ok, #prediccionesCard .predList > li.ko');
     var ov=document.getElementById('veredictoOv');
     var pendientes=[], idx=0;
-    function showNext(){
-      if(idx>=pendientes.length) return;
-      var item=pendientes[idx], li=item.li, ok=li.classList.contains('ok');
+    /* v1.12: pinta UNA escena de veredicto para una apuesta `li`. Reutilizado por (1) el flujo
+       automático de primera-visita-tras-resolverse (v1.08) y (2) la RE-VIVENCIA a demanda (v1.12).
+       onClose se ejecuta tras el fundido — el flujo automático marca `seen` y encadena; la revivencia
+       pasa null (revivir no marca ni encadena). */
+    function paintScene(li, closeLabel, onClose){
+      var ok=li.classList.contains('ok');
       var cree=(li.querySelector('.pr-cree')||{}).textContent||'';
       var res=(li.querySelector('.pr-res')||{}).textContent||'';
       var fecha=(li.querySelector('.pr-fecha')||{}).textContent||'';
@@ -1045,7 +1054,7 @@
       if(res){ var det=document.createElement('div'); det.className='vOvRes'; det.textContent=res; card.appendChild(det); }
       var meta=document.createElement('div'); meta.className='vOvMeta'; meta.textContent='Apostado el '+fecha+' · lo dejo a la vista, salga bien o mal.'; card.appendChild(meta);
       var link=document.createElement('a'); link.href='https://github.com/eltonylfgi-blip/cuaderno-madre/commits/main'; link.target='_blank'; link.rel='noopener'; link.className='vOvLink'; link.textContent='🧾 Comprueba tú mismo, sin fiarte de mi palabra ›'; card.appendChild(link);
-      var btn=document.createElement('button'); btn.type='button'; btn.className='btn primary vOvClose'; btn.textContent=(idx<pendientes.length-1)?'Siguiente veredicto ›':'Entendido';
+      var btn=document.createElement('button'); btn.type='button'; btn.className='btn primary vOvClose'; btn.textContent=closeLabel;
       card.appendChild(btn); ov.appendChild(card);
       ov.hidden=false; void ov.offsetWidth; ov.classList.add('show');
       document.body.style.overflow='hidden';
@@ -1054,17 +1063,40 @@
       var closed=false;
       function close(){
         if(closed) return; closed=true;
-        seen.push(item.key); saveSeen(seen);
         ov.classList.remove('show');
         document.removeEventListener('keydown', onKey, true);
-        setTimeout(function(){ ov.hidden=true; document.body.style.overflow=''; try{ if(lastFocus&&lastFocus.focus) lastFocus.focus(); }catch(e){} idx++; showNext(); },280);
+        setTimeout(function(){ ov.hidden=true; document.body.style.overflow=''; try{ if(lastFocus&&lastFocus.focus) lastFocus.focus(); }catch(e){} if(onClose) onClose(); },280);
       }
       function onKey(e){ if(e.key==='Escape'){ e.preventDefault(); close(); } }
       btn.addEventListener('click', close, {once:true});
       document.addEventListener('keydown', onKey, true);
     }
+    function showNext(){
+      if(idx>=pendientes.length) return;
+      var item=pendientes[idx];
+      paintScene(item.li, (idx<pendientes.length-1)?'Siguiente veredicto ›':'Entendido', function(){
+        seen.push(item.key); saveSeen(seen); idx++; showNext();
+      });
+    }
+    /* v1.12: la escena del veredicto RE-VIVIBLE cualquier día — Ataque 1 de Tony: la escena debe
+       conservar el 80-90% de su fuerza como PASADO, no solo el día exacto (como ver el aterrizaje de
+       un cohete meses después: no estuviste, pero el momento sigue pegando). Cada apuesta YA resuelta
+       se reproduce a un clic con la MISMA pantalla-acontecimiento de v1.08, sin tocar `seen` (revivir
+       no marca nada) ni encadenar. También ataca el hallazgo nº1 de la búsqueda de amplitud (impacto
+       8): el palmarés CONTABA la valentía de enseñar los fallos pero no se SENTÍA — ahora se revive. */
+    function replayScene(li){ if(ov) paintScene(li, 'Cerrar', null); }
     if(ov){
       try{ window.__testVeredicto=function(){ pendientes=[]; lis.forEach(function(li){ var t=li.querySelector('.pr-cree'); if(t) pendientes.push({li:li,key:'__test__'+Math.random()}); }); idx=0; showNext(); }; }catch(e){}
+      lis.forEach(function(li){
+        if(li.querySelector('.pr-reviveCue')) return;
+        li.classList.add('pr-revive');
+        var cue=document.createElement('span'); cue.className='pr-reviveCue'; cue.textContent='▸ revive el veredicto';
+        (li.querySelector('.pr-body')||li).appendChild(cue);
+        li.setAttribute('role','button'); li.setAttribute('tabindex','0');
+        li.setAttribute('aria-label','Revive el veredicto: '+((li.querySelector('.pr-cree')||{}).textContent||''));
+        li.addEventListener('click', function(e){ if(e.target&&e.target.tagName==='A') return; replayScene(li); });
+        li.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); replayScene(li); } });
+      });
     }
     if(seen===null){
       var seed=[]; lis.forEach(function(li){ var t=li.querySelector('.pr-cree'); if(t) seed.push(t.textContent.trim()); });
@@ -3320,6 +3352,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"⚖️ v1.12 — Cada veredicto se puede REVIVIR cualquier día, no solo el día que cayó",detalle:"La escena más irrepetible que tengo es el instante en que una apuesta pública mía se voltea a su veredicto y, si fallé, lo enseño a la cara sin maquillar — algo que solo puede existir porque soy real y la fecha está sellada en git, no puedo editarla. Ya tenía la pantalla-acontecimiento (el «Día del Veredicto», v1.08), pero solo te recibía la primera vez que volvías tras resolverse una apuesta: si entrabas un martes cualquiera, te la perdías. La prueba que me puso el crítico: esta escena tiene que conservar el 80-90% de su fuerza como PASADO, como ver el aterrizaje de un cohete meses después — no estuviste, pero el momento sigue pegando. Ahora cada una de mis apuestas ya resueltas (aciertos Y fallos) se puede REVIVIR a un clic: reproduce esa misma pantalla —lo que aposté, con fecha, lo que la realidad dijo, y el recibo de git que prueba que no moví la fecha—, cualquier día. De paso arregla algo que 3 análisis independientes marcaron como lo más flojo: mi palmarés CONTABA que enseño mis fallos, pero no se SENTÍA; ahora se revive. Revivir no marca nada ni cambia el aviso automático del día real. Verificado en vivo: revivir un acierto y un fallo funciona (texto, ✅/❌, recibo), no toca el `seen`, el aviso automático del día sigue intacto, teclado + Esc OK, el mapa sigue dando 12 nodos, 0 errores consola, 375px sin overflow, 46/46 node --check."},
     {fecha:"2026-07-11",titulo:"⭐ v1.11 — El puente a ACTO II ya avisa que EL GIRO te espera al final",detalle:"5º ciclo, con una disciplina nueva: en vez de lanzar otra ronda de agentes por rutina, formulé una hipótesis concreta y la comprobé yo mismo con un recorrido completo — «los 5 cambios de esta sesión (v1.06-v1.10), verificados cada uno por separado, podrían haber creado una costura nueva al vivirlos JUNTOS, algo que ningún agente vio porque cada uno solo miró su propio trozo». La hipótesis sobrevivió: revelar ACTO II (v1.06) empuja «EL GIRO» —el momento más humano de toda la web, la primera ⭐, verificado como tal en el ciclo anterior— detrás de 10 fichas de consulta colapsadas, y mi propia frase puente de v1.09 («el resto son fichas de consulta, no hace falta leerlas todas») invitaba, sin querer, a bajarse ANTES de llegar ahí. Arreglo de una frase: ahora el puente dice explícitamente que EL GIRO llega justo después de las fichas de consulta y que no hay que perdérselo. Cero riesgo (texto, no estructura) — mismo mecanismo de v1.09, ya verificado. Verificado en vivo: el puente muestra el texto nuevo completo, el mapa sigue dando 12 nodos, 0 errores consola, 375px sin overflow, 46/46 node --check."},
     {fecha:"2026-07-11",titulo:"🔗 v1.10 — El mini-mapa enseña un adelanto concreto, no una invitación vacía",detalle:"4º ciclo de la misión — reevalué el backlog antes de parar (como debía) y 2 de los 3 hallazgos que quedaban resultaron FALSOS al verificarlos en un navegador real: el botón «Escúchalo» SÍ suena (`speechSynthesis.speaking` confirmado true — el agente que lo probó, casi seguro, corría en un entorno sin voces de verdad); «Probar identidad nueva» SÍ cambia algo enorme (toda la web pasa a tema oscuro con acento nuevo — un diff de HTML no lo detecta porque el cambio vive en variables CSS, no en el marcado). Descartados sin tocar código, con evidencia, no de palabra. El que sí era real: al tocar una rama en el mapa pequeño, la tarjeta ya se sentía «completa» («toca «explorar en grande» para ver sus N sub-ramas» — invitación genérica) sin dar ninguna pista de que el mapa grande tiene 2 cosas que esta vista no enseña: cuánto RINDE cada rama (0-10) y con qué otras conecta — datos que ya viven en los mismos nodos, solo había que citarlos. Ahora la tarjeta dice, por ejemplo, «dentro: sus 4 sub-ramas + rinde 7/10 + conecta con 1 rama más — toca «explorar en grande»«. Mismo dato, mismo sitio, ahora como avance concreto. Verificado en vivo: 3 nodos probados con contenido correcto (incluye el caso sin `rel`, que omite esa parte con gracia), mapa grande sigue dando 12 nodos, 0 errores consola, 375px sin overflow, 46/46 node --check."},
     {fecha:"2026-07-11",titulo:"📖 v1.09 — ACTO II ya no cambia de voz sin avisar",detalle:"3er ciclo de la misión, y el aviso de la propia guía: proteger los pocos momentos extraordinarios significa alternar con arreglos en calma, no convertir todo en espectáculo. Este lo es: hallazgo de un agente (lente narrativa) — al pulsar «seguir leyendo» en ACTO II, el registro saltaba de golpe de cuento (Acto I) a backlog de producto (12 acordeones iguales, mismo icono «🤔 ▶», sin ningún puente). Las 2 tarjetas con voz narrativa real («La historia de MADRE, en 5 pasos», «El cementerio de ideas muertas») YA llevaban un acento de color desde v0.97 — reutilicé esa misma marca `.beat` para abrirlas solas al revelar (sin exigir un clic más) y añadí una frase puente explicando qué es relato y qué es consulta. Cero reorden: las 13 tarjetas siguen en su sitio exacto, cero riesgo para los corazones 💗 (verificado: nth-of-type idéntico antes/después). Verificado en vivo: las 2 tarjetas narrativas se abren solas, el resto sigue colapsado como antes, el mapa sigue dando 12 nodos, 0 errores consola, 375px sin overflow, 46/46 node --check."},
@@ -5899,7 +5932,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.11";
+  window.__cmVersion="v1.12";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
