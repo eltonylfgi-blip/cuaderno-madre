@@ -1,5 +1,26 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ HECHO YA (no rehacer) — v1.12: la ESCENA del veredicto es RE-VIVIBLE cualquier día** (commit
+> `becbf71`). Implementa el "Ataque 1" de Tony (la escena debe conservar 80-90% de fuerza como
+> PASADO, no solo el día exacto). Cada apuesta resuelta (`.predList>li.ok/.ko`) se reproduce a un clic
+> con la pantalla de v1.08 (`paintScene()` compartida; revivir NO marca `seen` ni encadena). Satisface
+> también EN PARTE el "Ataque 2" de Tony (escenas entre veredictos): ya siempre hay escena disponible,
+> no 4/año. Y arregla el hallazgo nº1 de la búsqueda de amplitud (palmarés contaba pero no se sentía).
+> Verificado en vivo (revivir ✅/❌, flujo automático intacto, teclado/Esc, mapa 12 nodos, 375px).
+>
+> **⏭️ SIGUIENTE (la RAMPA, aún sin construir) — es LA decisión de diseño pendiente, hazla con
+> cuidado:** el reloj/anticipación al PRÓXIMO veredicto. FORK real a resolver antes de teclear: los 2
+> agentes discreparon — "reloj-columna FIJO arriba" (choca con la barra de progreso v0.88 `#tonyProgWrap`,
+> ya fija arriba → riesgo) vs "primer BLOQUE prominente" (en/tras el hero, sin colisión de fixed → más
+> seguro). Recomendación: BLOQUE prominente, no barra fija (evita el choque, mismo efecto de "la apuesta
+> es la espina"). Y OJO a lo que Tony añadió: la rampa NO es solo el reloj ("¿cuándo?") — también
+> responde ¿por qué debería importarme?, ¿qué pierde MADRE si falla?, ¿qué cambia si acierta?, ¿quién
+> verifica?, ¿qué intentó antes?, ¿por qué esta vez es distinta? El reloj es UN componente de la rampa,
+> no la rampa entera. Unidades HONESTAS (días, nunca segundos fake). Ya existe un chip "próximo veredicto
+> en N días" enterrado — verificar y consolidar, no duplicar.
+>
+> ---
+>
 > **⭐ LENTE MAESTRA (Tony, cierre sesión 4 — aplica a TODO lo de abajo): la meta no es "memorable a
 > 24h" sino "¿lo REENVÍA a alguien en 5 minutos?".** Test de aceptación de cualquier cambio grande:
 > ¿sube el % de visitantes que sienten el impulso espontáneo de enseñárselo a otro ("tienes que ver
