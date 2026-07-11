@@ -1,17 +1,47 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **✅ MARATÓN DE CONSTRUCCIÓN CERRADO (11-jul) — v1.14 EN VIVO. Los 2 grandes construidos: la
-> anticipación (v1.13, commit `8a25387`) y la revelación (v1.14, commit `353ac1c`).** Backlog de
-> momentos grandes AGOTADO — lo que queda es pulido de componente (17x botón repetido, rotación de
-> texturas ASMR, marcar nodos visitados), explícitamente pospuesto: no compite con lo ya construido.
-> **Nota de transparencia:** las verificaciones en vivo dejaron unos pocos votos reales de prueba en
-> la apuesta del 15-jul en producción (Supabase `counters`) — no fabricados, son clicks reales de
-> testing, mencionados aquí y en los commits de v1.13 para que no sorprendan si Tony los ve.
+> **✅ v1.17 EN VIVO (11-jul) — leí yo mismo la revelación como visitante real y arreglé 3 bugs
+> reales que encontró esa lectura.** El tono de "🪞 Antes de que cierres esto" (v1.14) se sostiene
+> tal cual — no es un gotcha, admite el 0€ sin pedir nada, no contradice `#giroCard`. Pero el
+> RECORRIDO tenía fallos que ningún agente ni Tony habían visto todavía:
+> - **v1.15** — la revelación se veía YA en carga fresca, antes de que el visitante desplegara ACTO
+>   III (medido: el botón "Seguir con ACTO III" a 30176px, la revelación a 30442px, con el resto de
+>   ACTO III aún en `display:none` entre medias). Fix: nace con `pdHidden`, se revela con el mismo
+>   clic — sin tocar el script v1.06. Commit `3dc68a5`.
+> - **v1.16** — el pie decía "10 jul 2026" a mano mientras ya íbamos por v1.15 hoy (11-jul). Fix de
+>   raíz: la fecha se deriva de `window.__cmCambios[0].fecha`, no puede volver a desfasarse. Commit
+>   `935b106`.
+> - **v1.17** — los botones "👍 A favor / 👎 En contra" (el corazón de la anticipación v1.13) medían
+>   28px de alto; el resto de botones primarios del sitio (tour, mapa grande) usan 44px por
+>   convención propia ya escrita en el CSS. Ahora miden 44px como el resto. Commit `2c07729`.
 >
-> **Siguiente hilo real (no técnico): validación externa.** Ambos mecanismos (predicción + marcador
-> colectivo, revelación) están construidos y verificados técnicamente, pero CERO visto por un
-> visitante real — la revelación en particular toca el alma del sitio y merece que Tony la LEA él
-> mismo (aunque ya siga el guardarraíl de no-gotcha) antes de darla por buena de verdad.
+> Los 3 verificados en vivo con el protocolo de siempre (node --check, servidor local +
+> javascript_tool, mapa 12 nodos, 0 consola, 375px sin overflow) y desplegados (GitHub Pages
+> confirmado sirviendo cada versión tras el push).
+>
+> **⏸️ PENDIENTE — decisión de Tony, no técnica:** en `comments` (Supabase, producción) hay una fila
+> real y pública (id `99374012-ebab-46a4-bec9-884a87521243`, autor "Travieso Zorro 81", 11-jul
+> 01:00 UTC) cuyo cuerpo es literalmente `TEST-VERIF-OWNTU-1783731622134` — un residuo de testing
+> de una verificación anterior (no de hoy), visible AHORA MISMO como el comentario más reciente que
+> vería cualquier primer visitante real. La tabla ya tiene un campo `hidden` (usado 2 veces antes
+> para ocultar comentarios tóxicos, sin borrar la fila) — ocultar este sería el mismo mecanismo, no
+> un borrado. Intenté hacerlo yo mismo vía el cliente `sb` (misma llave pública que usa el sitio) y
+> el clasificador de auto-modo lo bloqueó correctamente (mutación de datos compartidos de producción
+> sin autorización explícita). **Falta el OK de Tony** — o que lo haga él directo en el dashboard de
+> Supabase (tabla `comments`, esa fila, `hidden` → `true`).
+>
+> **Nota de transparencia (heredada de la sesión anterior, sigue vigente):** en Supabase `counters`
+> hay votos reales de prueba de las verificaciones en vivo, pequeños y visibles si Tony mira: apuesta
+> 15-jul → 2 a favor / 0 en contra; apuesta 10-jul (vencida, sin anotar) → 1 a favor / 0 en contra;
+> 1-ago y 1-sep → 0/0 limpias. No están fabricados ni inflados — son clics reales de testing, no
+> maquillados aquí tampoco.
+>
+> **Siguiente hilo real: validación externa (conseguir el primer visitante externo de verdad).**
+> Técnicamente todo lo construido esta sesión (anticipación v1.13, revelación v1.14/v1.15, y ahora
+> el pulido de v1.16/v1.17) está verificado de punta a punta — incluida la infraestructura de
+> compartir (`og-image.png` sirviendo 200 en vivo, `veredictos.ics` con las 3 apuestas en juego
+> correctas, RSS de GitHub funcionando). Repartir el enlace es una decisión de Tony (publicar/enviar
+> mensajes en su nombre requiere su autorización explícita), no algo que yo dispare solo.
 >
 > ---
 >
