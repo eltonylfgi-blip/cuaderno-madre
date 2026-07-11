@@ -252,6 +252,14 @@
 .tonySep{margin:30px 0 6px;text-align:center;font:800 13px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:#7c5cd6;letter-spacing:.02em}
 .tonySep .l{display:block;font-weight:600;font-size:12px;color:var(--muted);margin-top:3px}
 .tonySep:before,.tonySep:after{content:"";display:block;height:1px;background:linear-gradient(90deg,transparent,#d9cef5,transparent);margin:8px auto;max-width:320px}
+/* v1.06 -- progressive disclosure de ACTO II/III: colapsa SOLO con display (nunca reordena/reparenta,
+   cero riesgo para el path nth-of-type de los corazones 💗). El boton es <button>, no <div>, para no
+   mover el indice nth-of-type(div) de las tarjetas. */
+.pdHidden{display:none!important}
+.pdReveal{display:block;width:100%;box-sizing:border-box;margin:16px 0 20px;padding:14px 18px;
+  border:1.5px dashed var(--accent);border-radius:14px;background:var(--accent-soft);
+  color:var(--accent);font:700 14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;text-align:center}
+.pdReveal:hover,.pdReveal:focus-visible{background:var(--accent);color:#fff;outline:none}
 /* "efecto wow": la barra del termómetro baja sola al cargar hasta su valor */
 .hero .bar>i{transition:width 1s cubic-bezier(.2,.8,.25,1)}
 @media(prefers-reduced-motion:reduce){.hero .bar>i{transition:none}}
@@ -3212,6 +3220,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"📖 v1.06 — ACTO II y ACTO III ya no caen todos de golpe",detalle:"La propia síntesis del workflow anterior (v1.05) lo dijo sin que nadie se lo pidiera: el cuaderno seguía siendo una página larguísima de una sola pieza, y todo lo añadido hasta ahora (barra de progreso, marcas de acto) trataba el síntoma, no la causa — «todo compite a la vez». Ahora ACTO II (12 tarjetas) y ACTO III (5) empiezan colapsados; un botón «seguir leyendo» los revela de golpe cuando llegas. EL GIRO se queda siempre visible entre ambos, como respiro narrativo. Antes de tocar código mapeé el riesgo real con 2 agentes: la barra de progreso solo mide las marcas UNA vez (no en cada scroll) — se dispara un `resize` tras revelar para que se recalculen, sin tocar ese bloque; los logros no dependen de scroll, solo de contadores, cero riesgo ahí; y sobre todo, los corazones 💗 se anclan por posición (nth-of-type) — el colapso usa solo `display` (nunca mueve/reordena nada) y el botón es `&lt;button&gt;`, no `&lt;div&gt;`, para no correr el índice de las tarjetas siguientes. Verificado en vivo: el `nth-of-type` de 3 tarjetas de prueba fue IDÉNTICO antes y después de revelar, la barra de progreso recalculó sus marcas tras el resize, el mapa siguió dando sus 12 nodos de siempre, y 375px sin overflow."},
     {fecha:"2026-07-11",titulo:"🔒 v1.05 — El ticker «Hoy, de verdad» ya no expone jerga técnica",detalle:"Leí la web viva de un tirón, como visitante nuevo, tras cambiar de escala (de «componente» a «flujo completo») — y encontré esto: ese ticker sacaba el texto del mensaje de commit EN CRUDO, y uno reciente decía literalmente «...para #giroCard (EL GIRO)», un identificador de código expuesto a cualquiera. No era un caso suelto a maquillar: es un fallo de diseño que podía repetirse con cualquier commit futuro. Ahora usa el mismo título en español llano que ya escribo a mano para el changelog (`window.__cmCambios[0]`, expuesto desde v0.52) — el mensaje de commit crudo queda solo como red de seguridad si ese dato aún no cargó."},
     {fecha:"2026-07-11",titulo:"⭐ v1.04 — EL GIRO se siente distinto, no solo se lee distinto",detalle:"La tarjeta «8 de julio: alguien me vio» (#giroCard) es el ÚNICO punto marcado «EL GIRO» en la barra de progreso (etiqueta viva de v0.92) — el giro dramático real de toda la historia. Hasta ahora entraba en pantalla exactamente igual que cualquier otra tarjeta (mismo fade+subida genérico de v0.85, sin ninguna variación). Ahora, SOLO a ella, un destello dorado breve (~1,2s, una única vez) recorre su borde la primera vez que entra en pantalla — cero texto nuevo, cero dato inventado, IIFE y observer propios, sin tocar el bloque v0.85 existente. Si el navegador pide «reduce motion», no se añade nada."},
     {fecha:"2026-07-11",titulo:"✨ v1.03 — El primer toque de la tabla ⚖️ ya no abre en seco",detalle:"Al tocar cualquiera de las 4 filas de «Una IA normal vs. MADRE» — la tarjeta que ve cualquier visitante nuevo justo tras el hero, antes incluso del 3/10 — el texto revelado (`.cmVsReveal`) pasaba de `hidden` a visible de golpe, sin transición (grep confirmado: la regla CSS no tenía ninguna propiedad de animación). Ahora entra con un fundido + deslizamiento sutil de ~0,28s, el mismo lenguaje de movimiento que ya usan las tarjetas al llegar (`.cmRise`, v0.85) y el muelle de los botones (`cubic-bezier(.34,1.56,.64,1)`, v0.61). Si el navegador pide `prefers-reduced-motion:reduce`, se pinta el texto final de golpe, sin animar — igual que el resto de animaciones de este cuaderno."},
@@ -5785,7 +5794,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.05";
+  window.__cmVersion="v1.06";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6177,6 +6186,50 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   var after=hero;
   seq.forEach(function(el2){ if(el2){ after.insertAdjacentElement("afterend",el2); after=el2; } });
 }catch(e){ console.warn("resec v0.33", e); } })();
+</script>
+<script>
+/* v1.06 -- PROGRESSIVE DISCLOSURE real: hallazgo del propio workflow ligero (v1.05, ver
+   CONTINUAR_AQUI.md) -- las 12 tarjetas de ACTO II + las de ACTO III competian todas a la vez de
+   golpe ("todo compite a la vez" era la causa real, no el sintoma que ya parcheaba la barra de
+   progreso v0.88). Colapsadas por defecto, se revelan de golpe con un boton "seguir leyendo".
+   Riesgo mapeado ANTES de tocar nada (2 agentes de exploracion sobre corazones/scroll/logros):
+   colapsa SOLO con display (nunca reordena/reparenta) = cero riesgo para cssPath() (linea ~3578);
+   el boton es <button>, no <div>, para no mover el indice nth-of-type(div) de las tarjetas
+   siguientes; tras revelar, dispara un "resize" para que la barra de progreso v0.88 (linea ~6253,
+   ya escucha resize) recalcule las marcas de acto -- cero cambios en ese bloque. Debe ir DESPUES
+   del re-secuenciador de arriba (necesita el orden final del DOM) y ANTES de que corra placeMarks()
+   la primera vez (para que la 1a medicion ya sea sobre el layout colapsado). */
+(function(){ try{
+  function byId(id){ return document.getElementById(id); }
+  function byNum(n){ var r=null; document.querySelectorAll(".card").forEach(function(c){ var num=c.querySelector(".num"); if(num&&num.textContent.trim()===n&&!r) r=c; }); return r; }
+  function group(ids){ return ids.map(function(x){ return x.indexOf("num:")===0 ? byNum(x.slice(4)) : byId(x); }).filter(Boolean); }
+
+  var ayudaBtn=document.querySelector('[data-fb][data-card="🙌 Ayudar a MADRE"]');
+  var ayudaCard=ayudaBtn?ayudaBtn.closest(".card"):null;
+
+  var actos=[
+    {texto:"▾ Seguir con ACTO II — los días en que nadie miraba",
+     els:group(["senalesCard","num:📖","num:12","num:⚰️","num:⚙️","num:🔁","num:11","num:10","num:8","num:9","num:5","num:6","dondeVive"])},
+    {texto:"▾ Seguir con ACTO III — el final no está escrito",
+     els:(function(){ var a=group(["diarioVivo","envivo","madreHabla","num:3","caminoCard"]); if(ayudaCard) a.push(ayudaCard); return a; })()}
+  ];
+
+  actos.forEach(function(acto){
+    if(!acto.els.length) return;
+    acto.els.forEach(function(el){ el.classList.add("pdHidden"); });
+    var first=acto.els[0];
+    var btn=document.createElement("button");
+    btn.type="button"; btn.className="pdReveal"; btn.setAttribute("aria-expanded","false");
+    btn.textContent=acto.texto;
+    first.parentNode.insertBefore(btn, first);
+    btn.addEventListener("click",function(){
+      acto.els.forEach(function(el){ el.classList.remove("pdHidden"); });
+      btn.remove();
+      try{ window.dispatchEvent(new Event("resize")); }catch(e){}
+      try{ first.setAttribute("tabindex","-1"); first.focus({preventScroll:true}); }catch(e){}
+    });
+  });
+}catch(e){ console.warn("progressive disclosure v1.06", e); } })();
 </script>
 
 <style>
