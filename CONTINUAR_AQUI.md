@@ -1,5 +1,46 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v1.21 EN VIVO (11-jul) — el mapa empieza a ser un panel de estado vivo, no decoración.**
+> Tony (como "arquitecto"): "toda biología debe corresponder a un dato real" — rechazó estaciones/
+> pájaros/luciérnagas explícitamente ("no cuentan nada"). Antes de tocar código investigué el
+> modelo de datos real (`window.__MAPA.nodes`): cada rama YA tiene `benef` (0-10, calculado por la
+> propia rutina de MADRE cada semana) y `st`. v1.21 traduce eso a 4 insignias honestas por rama:
+> 🌸 en flor (8-10) · 🌿 creciendo (5-7) · 🌱 brotando (0-4) · 🌑 en reposo (`st==="conocimiento"`).
+> `<title>` explica el número real en cada una. Commit `428636c`.
+>
+> **⏸️ Hubo un incidente propio en el camino (v1.20), ya reparado, dejarlo anotado para no
+> repetirlo:** al insertar el changelog de v1.20 se me olvidó re-incluir la línea `var cambios=[`
+> al escribir el reemplazo (Edit hace substitución literal, no "inserción relativa" — omitir una
+> línea del `old_string` en el `new_string` la BORRA), dejando el array roto, y el texto de esa
+> entrada salió con una repetición corrupta ("until until..."). Al repararlo con Python porque
+> `Edit` fallaba por un carácter que no coincidía, cometí un SEGUNDO error: escribí el archivo sin
+> preservar los finales de línea CRLF del repo (7512 líneas cambiaron de CRLF a LF). Lo detecté con
+> `git diff --stat` (saltó de "34 líneas" a "todo el archivo") antes de comitear nada, y lo revertí.
+> Commit `6fa8c07`. **Regla que Tony puso tras esto, ya en vigor:** cuando aparece un error de este
+> tipo, el ciclo pasa a ser Recover → Verify → **PARAR** (no seguir construyendo en el mismo turno
+> sin que él lo pida explícitamente otra vez). **Lección técnica para la próxima vez que haga falta
+> tocar `var cambios=[`:** el `old_string` de un Edit SIEMPRE debe incluir la línea ancla completa
+> en el `new_string` también — nunca asumir que "empezar el reemplazo un poco más abajo" es seguro.
+>
+> **Backlog del mapa, actualizado tras v1.21 (Tony ya reaccionó a la 1ª pieza, pendiente de ver el
+> resto):**
+> - **Deliberadamente NO cubierto en v1.21** (2 de los 6 símbolos que pidió Tony): 🍂 hoja caída por
+>   predicción fallida y 🌸 flor por logro específico — necesitan saber a qué RAMA pertenece cada
+>   apuesta del palmarés, dato que hoy NO existe en `window.__MAPA` ni en `.predList`. No inventado.
+>   Si Tony quiere esto, el primer paso es decidir/etiquetar esa relación apuesta↔rama en los datos,
+>   no en el CSS.
+> - **Mapa GRANDE (`.mbNode`) sin tocar todavía** — Tony fue explícito: "no copiaría el hover del
+>   mapa pequeño [ahí]. Lo rediseñaría" — merece su propio ciclo de diseño, no una extensión rápida
+>   de v1.19/v1.21. Sigue gateado además por `nodeAtPoint` (pan/zoom), uno de los 2 motores que Tony
+>   pidió no tocar sin su OK.
+> - **La pregunta que Tony puso como objetivo real, no "el mapa":** *¿puede un visitante entender el
+>   estado completo de MADRE mirando el árbol 10 segundos, sin leer texto?* v1.21 es un primer paso
+>   grounded hacia eso (4 estados reales), no la respuesta completa — falta ver su reacción antes de
+>   seguir escalando (cicatrices que cicatrizan, ramas que crecen por verdad no por tiempo, etc. —
+>   todo eso pedido, todo eso necesita datos que hoy no existen).
+>
+> ---
+>
 > **✅ v1.19 EN VIVO (11-jul) — Tony trajo un critique externo sobre "fluidez/movimiento" y el tour
 > que "no resalta". Diagnóstico con evidencia, no ideas nuevas a ciegas: encontré 2 causas reales.**
 > - **v1.18a (tour):** `#tourOv` era una tira fija al pie SIN fondo oscurecido — la tarjeta del paso
