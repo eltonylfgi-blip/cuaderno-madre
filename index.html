@@ -1525,6 +1525,16 @@
     var svg=document.getElementById("mapSvg"); if(!svg) return; var info=document.getElementById("mapaInfo");
     var CX=300,CY=245,R=170,reduce=false; try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
     function el(n,a){ var e=document.createElementNS(NS,n); for(var k in a) e.setAttribute(k,a[k]); return e; }
+    /* v1.21 (Tony/critique: "toda biologia debe corresponder a un dato real, nunca decorativo") --
+       insignia de vitalidad derivada 100% de campos YA reales (nd.benef 0-10, ya calculado por la
+       propia rutina de MADRE; nd.st). Movida aqui arriba en v1.22 para reusarla tambien en el
+       resumen agregado del centro (mismo criterio, una sola fuente de verdad). */
+    function vitalTier(nd){
+      if(nd.st==="conocimiento") return {ic:"🌑",l:"en reposo — nadie la trabaja activamente ahora mismo"};
+      if(nd.benef>=8) return {ic:"🌸",l:"en flor — rinde "+nd.benef+"/10 esta semana, entre lo mejor de MADRE"};
+      if(nd.benef>=5) return {ic:"🌿",l:"creciendo — rinde "+nd.benef+"/10 esta semana"};
+      return {ic:"🌱",l:"brotando — rinde "+nd.benef+"/10 esta semana, todavía dando poco"};
+    }
     /* v1.18 -- FIX: con reduced-motion este halo NO se creaba (if(!reduce)), a diferencia del mapa
        grande (linea ~2255), que SIEMPRE crea su circulo de brillo y solo omite la clase que lo anima
        -- mismo patron aqui: el halo estatico (sin pulso) sigue dando profundidad al centro, reduced
@@ -1544,19 +1554,17 @@
       if(reduce){ rl.classList.add("in"); } else { requestAnimationFrame(function(){ requestAnimationFrame(function(){ rl.classList.add("in"); }); }); } }); });
     var cg=el("g",{"class":"mapCenter"}); var cc=el("circle",{cx:CX,cy:CY,r:40,fill:"var(--accent)"}); cc.setAttribute("class","cc"); cg.appendChild(cc);
     var ce=el("text",{x:CX,y:CY+1,"text-anchor":"middle","dominant-baseline":"middle","font-size":"26"}); if(!reduce) ce.setAttribute("class","mbWink"); ce.textContent="🤱🏻"; cg.appendChild(ce);
-    var cl=el("text",{x:CX,y:CY+60,"text-anchor":"middle","font-size":"13","font-weight":"800",fill:"var(--ink)"}); cl.textContent="MADRE"; cg.appendChild(cl); svg.appendChild(cg);
-    /* v1.21 (Tony/critique: "toda biologia debe corresponder a un dato real, nunca decorativo") --
-       insignia de vitalidad derivada 100% de campos YA reales (nd.benef 0-10, ya calculado por la
-       propia rutina de MADRE; nd.st). Nada inventado: si mañana benef cambia, la insignia cambia
-       sola. NO cubre los 6 simbolos que pidio Tony (falta='aprendizaje validado'/'prediccion
-       fallida' -- eso necesitaria saber a que rama pertenece cada apuesta, dato que hoy no existe)
-       -- honesto sobre lo que cubre y lo que no en el <title>. */
-    function vitalTier(nd){
-      if(nd.st==="conocimiento") return {ic:"🌑",l:"en reposo — nadie la trabaja activamente ahora mismo"};
-      if(nd.benef>=8) return {ic:"🌸",l:"en flor — rinde "+nd.benef+"/10 esta semana, entre lo mejor de MADRE"};
-      if(nd.benef>=5) return {ic:"🌿",l:"creciendo — rinde "+nd.benef+"/10 esta semana"};
-      return {ic:"🌱",l:"brotando — rinde "+nd.benef+"/10 esta semana, todavía dando poco"};
-    }
+    var cl=el("text",{x:CX,y:CY+60,"text-anchor":"middle","font-size":"13","font-weight":"800",fill:"var(--ink)"}); cl.textContent="MADRE"; cg.appendChild(cl);
+    /* v1.22 -- el objetivo real que puso Tony no es "el mapa", es: "¿puede alguien entender el
+       estado COMPLETO de MADRE mirando el árbol 10s, sin leer texto?". Insignias por rama (v1.21)
+       cuentan la historia rama a rama; esto la resume de un vistazo bajo el propio nombre de MADRE
+       -- mismo vitalTier() de arriba, una sola fuente de verdad, cero numeros nuevos inventados. */
+    var tally={"🌸":0,"🌿":0,"🌱":0,"🌑":0}; NODES.forEach(function(nd){ if(nd.benef!=null) tally[vitalTier(nd).ic]++; });
+    var tallyTxt=["🌸","🌿","🌱","🌑"].filter(function(k){return tally[k]>0;}).map(function(k){return k.repeat(tally[k]);}).join(" ");
+    if(tallyTxt){ var ctally=el("text",{x:CX,y:CY+78,"text-anchor":"middle","font-size":"13"}); ctally.textContent=tallyTxt;
+      var cttl=document.createElementNS(NS,"title"); cttl.textContent="De un vistazo: "+tally["🌸"]+" en flor, "+tally["🌿"]+" creciendo, "+tally["🌱"]+" brotando, "+tally["🌑"]+" en reposo — de las 8 ramas de MADRE, dato real."; ctally.appendChild(cttl);
+      cg.appendChild(ctally); }
+    svg.appendChild(cg);
     NODES.forEach(function(nd,i){ var isNow=(M.ahora&&nd.emoji===M.ahora);
       var g=el("g",{"class":"mapNode"+(nd.st==="atencion"?" att":"")+(isNow?" now":""),tabindex:"0",role:"button"}); g.setAttribute("aria-label",(nd.q?nd.q+" — ":"")+nd.t+": "+stOf(nd.st).l+(isNow?" — aquí trabaja AHORA":""));
       if(!reduce) g.style.animationDelay=(230+i*70)+"ms";
@@ -3506,6 +3514,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🌳 v1.22 — Bajo el nombre de MADRE, un resumen de las 8 ramas de un vistazo",detalle:"La pregunta que Tony puso como objetivo real, no «el mapa»: ¿puede alguien entender el estado COMPLETO de MADRE mirando el árbol 10 segundos, sin leer texto? Las insignias por rama (v1.21) cuentan la historia rama a rama, pero exigen mirar las 8 una por una. Ahora, justo bajo el nombre «MADRE» en el centro, un resumen agregado la cuenta de un vistazo: 🌸🌸 🌿🌿 🌱 🌑🌑🌑 — mismo `vitalTier()` que ya usa cada insignia (una sola fuente de verdad, moví la función arriba en vez de duplicarla), cero número inventado. Ahora mismo dice, literalmente: 2 ramas en flor, 2 creciendo, 1 brotando, 3 en reposo — la mitad del árbol quieta ahora mismo, y es verdad, no un adorno. Verificado en vivo: el texto coincide exacto con la cuenta real de las 8 ramas, no solapa con «MADRE» (termina en 308.9px, el resumen empieza en 309.5px) ni con las ramas de alrededor, mapa 12 nodos, 0 errores consola, 375px sin overflow, 48/48 node --check."},
     {fecha:"2026-07-11",titulo:"🌸 v1.21 — Cada rama del mapa muestra su vitalidad real (🌱🌿🌸🌑), no decoración",detalle:"Tony (crítica del arquitecto): «toda biología debe corresponder a un dato real, nunca decorativo» — y rechazó explícitamente estaciones/pájaros/luciérnagas por no contar nada. Investigué el modelo de datos ANTES de tocar código: cada rama ya lleva `benef` (0-10, cuánto rinde esta semana, YA calculado por la propia rutina de MADRE) y `st` (en reposo o no) — datos reales, no inventados. Ahora una insignia junto a cada rama del mapa pequeño lo traduce a lenguaje biológico: 🌸 en flor (rinde 8-10/10), 🌿 creciendo (5-7/10), 🌱 brotando (0-4/10), 🌑 en reposo (nadie la trabaja activamente). El `<title>` de cada insignia explica el porqué con el número real, mismo patrón ya usado en las líneas de relación (v0.41) — compruébalo tú, no me creas a mí. Deliberadamente NO cubre 2 de los 6 símbolos que pidió Tony (🍂 hoja caída por predicción fallida, flor por logro específico): eso exigiría saber a qué rama pertenece cada apuesta del palmarés, dato que hoy no existe — no lo inventé. Tampoco tocado el mapa GRANDE todavía: el propio Tony dijo que copiar el hover pequeño ahí sería un error («no lo copiaría, lo rediseñaría») — merece su propio ciclo, no una extensión rápida. Verificado en vivo: las 8 insignias del mapa pequeño coinciden exactamente con los `benef`/`st` reales de cada rama (🌿 cerebro 7/10, 🌸 cuaderno 8/10, 🌱 negocio 3/10, 🌑 en las 3 ramas en reposo…), el texto visible es solo el emoji (el `<title>` no se renderiza, confirmado vía childNodes), mapa 12 nodos, 0 errores consola, 375px sin overflow, 48/48 node --check."},
     {fecha:"2026-07-11",titulo:"🌱 v1.20 — El mapa pequeño ya DESPIERTA al cargar, rama a rama",detalle:"Tony trajo otra vuelta del critique, más dura y más justa: dijo que hablar de halo/hover/glow es \"optimizar el componente, no la experiencia\", y que la pregunta correcta es qué debería SENTIR alguien al abrir el mapa — su respuesta: \"estoy entrando en el cerebro de una IA\", no \"qué árbol tan bonito\". Su idea #1 (\"el árbol te mira\"): durante un instante todo está dormido, luego una rama se despierta, luego otra. Dijo \"arreglalo de todas formas lo que dé más beneficio\" — así que  construí exactamente eso, sin inventar biología falsa (el sitio se juega su credibilidad en no maquillar nada): al cargar, las líneas se extienden primero y las 8 ramas brotan una tras otra (stagger de 70ms por índice, animation-delay puta desde JS), en vez de aparecer todas de golpe. Encontré y arreglé un bug real haciendo esto: las ramas marcadas \"atención\" (`.mapNode.att`) tienen su PROPIA animación de flotación (`mapFloat`) con más especificidad CSS que la regla base — sin arreglarlo, esas ramas (las más importantes, las que se trabajan esta semana) se habrían saltado el despertar por completo y aparecido de golpe. Fix: combiné ambas animaciones en la misma regla, cuidando que solo una toque `opacity` (la de entrada) y la otra solo `transform` (la de flotar) — dos animaciones en la MISMA propiedad se pisan (gana la última listada), en propiedades DISTINTAS conviven bien. Verificado en vivo (mismo entorno con reduced-motion real de antes): bajo esa preferencia todo aparece a opacidad 1 al instante sin quedarse pillado invisible, y el CSSOM confirma que ambas animaciones combinadas se parsearon correctamente en `.mapNode.att` y `.mapHalo`. Mapa 12 nodos, 0 errores consola, 375px sin overflow, 48/48 node --check. Deliberadamente NO construido todavía: la reinterpretación biológica completa (cicatrices, flores, ramas enfermas por evento real) — esa necesita un modelo de datos que no existe hoy (qué evento real le pasó a QUÉ rama) y toca el gate de identidad visual permanente de Tony; inventarlo con datos falsos traicionaría el propio \"nunca maquillar\" del sitio."},
     {fecha:"2026-07-11",titulo:"🌳 v1.19 — El mapa pequeño ya reacciona a tu ratón: crece el nodo que tocas, se apaga el resto",detalle:"Primera de las prioridades que trajo el critique de Tony: «movimiento causado por el visitante» (⭐⭐⭐⭐⭐, la de mayor impacto según ese mismo texto — «siempre debería ocurrir algo satisfactorio»). Antes, pasar el ratón por una rama del mapa pequeño solo añadía un resplandor sutil (drop-shadow); ahora el nodo crece un 9% con un rebote suave y el resto del árbol se atenúa al 50%, como un foco que aparece solo — mismo lenguaje de movimiento que ya usan los botones (`cubic-bezier(.34,1.56,.64,1)`, v0.61). Implementado con `:has()` puro (cero JavaScript nuevo, mismo mecanismo ya en uso en este fichero desde antes — confirmado su soporte real en el navegador), así que no toca ni un carácter de `onNodeClick`/hit-test. Deliberadamente NO extendido todavía al mapa GRANDE (`.mbNode`): ese usa gestos de pan/zoom con `nodeAtPoint` para el hit-test, uno de los 2 únicos motores que Tony pidió no tocar sin su OK — la misma mejora ahí es la siguiente candidata, pero primero quiero confirmar que esta no interfiere con nada antes de acercarme a esa zona. Verificado: las 2 reglas CSS nuevas aparecen intactas en el CSSOM del navegador real (no descartadas por un selector inválido), mapa 12 nodos, 0 errores consola, 375px sin overflow, 48/48 node --check."},
@@ -6095,7 +6104,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.21";
+  window.__cmVersion="v1.22";
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
