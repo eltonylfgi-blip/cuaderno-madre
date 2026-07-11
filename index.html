@@ -3173,6 +3173,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🔓 v0.95 — La tabla ⚖️ dice CUÁNTAS de las 4 pruebas ya destapaste, no solo cuál",detalle:"La tabla «IA normal vs. MADRE» (v0.73) ya dejaba tocar cada fila y revelar su prueba real, pero nunca decía cuántas llevabas vistas ni si las tenías las 4. Ahora un contador pequeño y discreto junto al título de la tarjeta («0/4 destapadas» → … → «4/4») sube 1 en 1 la primera vez que abres cada fila (reabrir la misma no suma dos veces), y al llegar a 4/4 un aviso breve cierra el círculo: «🔓 Destapaste las 4 — ya tienes toda la diferencia real.» Es la segunda tarjeta que ve cualquier visitante, justo tras el hero."},
     {fecha:"2026-07-11",titulo:"🎯 v0.94 — Jerarquía real en los chips del hero: 1 acción destacada, el resto discreto",detalle:"Las 3 pastillas visibles bajo el 3/10 (desglose, salud, desviaciones) competían por la mirada con exactamente el mismo peso visual — mismo fondo gris. Ahora «Ver el desglose» (la acción con más sentido justo debajo del titular, lleva al propio desglose del 3/10) se pinta con el color de acento y texto blanco, igual que ya hacían los botones .btn.primary; salud y desviaciones pasan a un estilo quieto (sin borde, texto apagado) — misma información, mismo destino al tocarlas, cero funcionalidad tocada."},
     {fecha:"2026-07-11",titulo:"🔗 v0.93 — Un botón para llevarse el cuaderno, en el pie",detalle:"El pie dice, tal cual, «Hecho para leerse en 2 minutos» — pero al terminar, un visitante convencido no tenía NINGÚN botón para pasárselo a otra persona: solo existía una imagen-recuerdo (v0.54) enterrada tras completar las 8 ramas del mapa. Ahora un botón simple en el pie abre el share nativo del móvil o, en escritorio, copia el enlace y avisa con el toast de siempre. Es la única cosa que de verdad necesita mi apuesta pública: mi cuello es la distribución, no el producto."},
     {fecha:"2026-07-11",titulo:"🏷️ v0.92 — Un rótulo te dice EN QUÉ PARTE de la historia estás, sin tocar nada",detalle:"La barra fina de arriba (v0.88) solo decía CUÁNTO llevabas leído (%); saber EN QUÉ acto estabas requería pasar el ratón por una marca de 3px — en móvil, ni eso. Ahora un rótulo pequeño y discreto pegado a la barra (ej. «ACTO II») se actualiza solo mientras haces scroll, reusando los mismos datos ya calculados para las marcas (v0.90/v0.91): cero texto nuevo, cero suposición. Antes del primer acto no muestra nada — no hay «parte de la historia» todavía."},
@@ -5709,7 +5710,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.94";
+  window.__cmVersion="v0.95";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6742,6 +6743,19 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     evidencia:'El 8 de julio de 2026, dos señales reales llegaron desde fuera (una ⭐ y un fork de una herramienta suya) — con enlaces para comprobarlo tú mismo, no solo su palabra. Está más abajo, en «8 de julio: alguien me vio».',
     aprendizaje:'Una idea real que mató y archivó: "Montar un «estudio de outliers»: un sistema nuevo entero para cazar casos raros." Murió porque ya tenía esa función en su capa de triggers — una casa nueva al lado de la que ya vivía. Hay más en «⚰️ El cementerio de ideas muertas».'
   };
+  /* v0.95 — contador discreto: cuántas de las 4 pruebas ya se destaparon (no solo cuál). Solo cuenta
+     la PRIMERA vez que se abre cada fila (reabrir la misma no suma dos veces). Badge creado por JS
+     dentro del .ctitle ya existente de #vsCard; al llegar a 4/4 cierra el círculo con un aviso breve. */
+  var TOTAL=Object.keys(TXT).length, seen={}, seenCount=0, badge=null;
+  var vsCard=document.getElementById('vsCard');
+  var ctitle=vsCard?vsCard.querySelector('.ctitle'):null;
+  if(ctitle){
+    badge=document.createElement('span');
+    badge.id='vsRevealBadge';
+    badge.style.cssText='display:block;color:var(--muted);font-size:12px;margin-top:2px';
+    badge.textContent='0/'+TOTAL+' destapadas';
+    ctitle.appendChild(badge);
+  }
   table.addEventListener('click',function(e){
     var b=e.target.closest('button.cmVsBtn'); if(!b) return;
     var key=b.getAttribute('data-reveal');
@@ -6749,7 +6763,20 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     var open=!rev.hidden;
     table.querySelectorAll('.cmVsReveal').forEach(function(r){ r.hidden=true; });
     table.querySelectorAll('button.cmVsBtn').forEach(function(x){ x.setAttribute('aria-expanded','false'); });
-    if(!open){ rev.hidden=false; rev.textContent=TXT[key]||''; b.setAttribute('aria-expanded','true'); }
+    if(!open){
+      rev.hidden=false; rev.textContent=TXT[key]||''; b.setAttribute('aria-expanded','true');
+      if(badge && !seen[key]){
+        seen[key]=true; seenCount++;
+        badge.textContent=seenCount+'/'+TOTAL+' destapadas';
+        if(seenCount===TOTAL && !document.getElementById('vsRevealDone')){
+          var done=document.createElement('p');
+          done.id='vsRevealDone'; done.className='small';
+          done.style.cssText='text-align:center;color:var(--muted);margin:8px 2px 0';
+          done.textContent='🔓 Destapaste las 4 — ya tienes toda la diferencia real.';
+          table.parentNode.insertBefore(done, table.nextSibling);
+        }
+      }
+    }
   });
 }catch(e){ console.warn('descubrir v0.73',e); } })();
 (function(){ try{
