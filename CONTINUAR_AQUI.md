@@ -1,5 +1,56 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ v1.19 EN VIVO (11-jul) — Tony trajo un critique externo sobre "fluidez/movimiento" y el tour
+> que "no resalta". Diagnóstico con evidencia, no ideas nuevas a ciegas: encontré 2 causas reales.**
+> - **v1.18a (tour):** `#tourOv` era una tira fija al pie SIN fondo oscurecido — la tarjeta del paso
+>   competía a la vista con toda la página detrás (se ve en la captura que mandó Tony). Fix: scrim de
+>   pantalla completa + `.tourGlow` sube de z-index — patrón "spotlight" estándar, cero cambios en
+>   ningún motor. Commit `0d28bdd`.
+> - **v1.18b (mapa, hallazgo grande):** el mapa YA tenía mucha "vida" construida antes de hoy
+>   (conexiones que respiran, líneas con energía fluyendo, halo pulsante, guiño ocasional — todo
+>   documentado en el CSS desde v0.35-v0.48). Pero el halo del mapa PEQUEÑO (a diferencia de su
+>   gemelo en el grande) solo se creaba `if(!reduce)` — desaparecía ENTERO, no solo dejaba de
+>   animarse, con `prefers-reduced-motion:reduce` activado. Lo confirmé en vivo: mi propio entorno de
+>   verificación de esta sesión tiene esa preferencia activada (mismo tipo de causa ya documentada
+>   para el hámster, v0.15). Fix: el halo siempre se crea, estático si toca reduced-motion. Mismo
+>   commit `0d28bdd`.
+> - **v1.19 (mapa, prioridad #1 del critique — "movimiento causado por el visitante"):** hover en un
+>   nodo del mapa pequeño ahora lo hace crecer 9% y atenúa el resto al 50% — CSS puro vía `:has()`
+>   (ya en uso en el fichero), cero JS nuevo. Commit `e6d27f0`.
+>
+> **⏸️ Pendiente de Tony (pregunté, no lo sabía):** ¿tienes "reducir movimiento" activado en tu
+> sistema/navegador? Si sí, v1.18b ya te devuelve el halo que te faltaba — dime si con eso ya sientes
+> más vida, antes de construir más capas. Comprobar: Windows → Configuración → Accesibilidad →
+> Efectos visuales → Animaciones. O en Chrome: DevTools → Rendering → "Emulate CSS prefers-reduced-motion".
+>
+> **Del critique, lo que YA estaba bien (no hace falta reconstruir):** el "centro de gravedad" que
+> pide GPT ("la IA que apostó en público y no podía esconder si fracasaba") ES exactamente el diseño
+> ya convenido en esta sesión — el veredicto/apuesta pública sigue siendo LA escena, reforzada por
+> la revelación (v1.14) y la anticipación (v1.13). Las conexiones "que fluyen energía" que pide el
+> critique YA existen (`.map-rel`, dashoffset animado, desde v0.41). No se trata de inventar
+> mecanismos nuevos — el critique mismo lo dice: "no seguiría añadiendo mecanismos indefinidamente".
+>
+> **Backlog del critique, priorizado, NO construido todavía (candidatos para el siguiente ciclo):**
+> 1. Mismo hover (crecer + atenuar resto) en el mapa GRANDE (`.mbNode`) — deliberadamente NO hecho hoy:
+>    ese mapa usa `nodeAtPoint` para el gesto de pan/zoom, uno de los 2 motores que Tony pidió no tocar
+>    sin su OK. Antes de tocarlo ahí, o pido su OK explícito, o investigo a fondo que un `transform`
+>    CSS en hover no interfiere con ese hit-test (nunca se ha roto por esto, pero prefiero no arriesgar
+>    un sistema "que se rompió 2 veces antes" sin estar seguro).
+> 2. "Iluminar la conexión específica" del nodo bajo el ratón (no solo atenuar el resto) — necesita
+>    JS nuevo (vincular línea↔nodo por `data-e`), no solo CSS. Seguro, pero más trabajo.
+> 3. Ramas visitadas con brillo persistente ("el árbol recuerda tu recorrido") — el sitio YA cuenta
+>    ramas exploradas (🧭 1/8), falta la señal visual persistente en el propio nodo. Seguro de construir.
+> 4. "Al completar algo, el árbol CRECE (rama/hoja/flor) en vez de un check" — esto es un cambio de
+>    IDENTIDAD VISUAL del mapa (qué significa "completar", cómo se ve el crecimiento), no solo pulido.
+>    Toca uno de los 2 gates explícitos de Tony (identidad visual nueva y permanente) — no lo
+>    construyo sin su reacción primero, aunque la idea me gusta.
+> 5. "El árbol envejece con las estaciones, reflejando el estado de MADRE" — la idea más grande y más
+>    arriesgada del critique (bonita, pero es una reinterpretación completa de qué ES el mapa). Mismo
+>    gate que el punto 4. Además tocaría lógica nueva de estado (no solo CSS) cerca del motor gateado.
+>    Guardar como idea, no construir sin decisión de Tony.
+>
+> ---
+>
 > **✅ v1.17 EN VIVO (11-jul) — leí yo mismo la revelación como visitante real y arreglé 3 bugs
 > reales que encontró esa lectura.** El tono de "🪞 Antes de que cierres esto" (v1.14) se sostiene
 > tal cual — no es un gotcha, admite el 0€ sin pedir nada, no contradice `#giroCard`. Pero el
