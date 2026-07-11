@@ -1,5 +1,20 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **✅ MARATÓN DE CONSTRUCCIÓN CERRADO (11-jul) — v1.14 EN VIVO. Los 2 grandes construidos: la
+> anticipación (v1.13, commit `8a25387`) y la revelación (v1.14, commit `353ac1c`).** Backlog de
+> momentos grandes AGOTADO — lo que queda es pulido de componente (17x botón repetido, rotación de
+> texturas ASMR, marcar nodos visitados), explícitamente pospuesto: no compite con lo ya construido.
+> **Nota de transparencia:** las verificaciones en vivo dejaron unos pocos votos reales de prueba en
+> la apuesta del 15-jul en producción (Supabase `counters`) — no fabricados, son clicks reales de
+> testing, mencionados aquí y en los commits de v1.13 para que no sorprendan si Tony los ve.
+>
+> **Siguiente hilo real (no técnico): validación externa.** Ambos mecanismos (predicción + marcador
+> colectivo, revelación) están construidos y verificados técnicamente, pero CERO visto por un
+> visitante real — la revelación en particular toca el alma del sitio y merece que Tony la LEA él
+> mismo (aunque ya siga el guardarraíl de no-gotcha) antes de darla por buena de verdad.
+>
+> ---
+>
 > **✅ HECHO YA (no rehacer) — v1.12: la ESCENA del veredicto es RE-VIVIBLE cualquier día** (commit
 > `becbf71`). Implementa el "Ataque 1" de Tony (la escena debe conservar 80-90% de fuerza como
 > PASADO, no solo el día exacto). Cada apuesta resuelta (`.predList>li.ok/.ko`) se reproduce a un clic
