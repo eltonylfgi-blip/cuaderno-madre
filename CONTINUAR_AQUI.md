@@ -1,6 +1,27 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **✅ SESIÓN 4, continuación — v1.09 EN VIVO. 3er ciclo de la misión + MORATORIA en `CLAUDE.md`.**
+> **✅ SESIÓN 4, continuación — v1.10 EN VIVO. Backlog de la ronda de 6 lentes AGOTADO (4 de 4).**
+>
+> **v1.10 (commit `005a919`):** reevalué el backlog en vez de parar tras v1.09 (per el proceso que
+> Tony pidió). 2 de los 3 hallazgos restantes resultaron FALSOS al verificar en navegador real —
+> "Escúchalo" SÍ suena (`speechSynthesis.speaking===true` confirmado), "Probar identidad nueva" SÍ
+> cambia algo grande (tema oscuro completo vía variables CSS — un diff de HTML no lo detecta).
+> Descartados con evidencia, cero código tocado. El único real: el mini-mapa ahora cita datos que
+> ya existían (rating "rinde N/10", conexiones) como avance concreto hacia el mapa grande, en vez
+> de una invitación genérica.
+>
+> **Backlog de la ronda de 6 lentes: agotado.** `narrativa`→v1.09, `comprensión`+`memorabilidad`+
+> `qué_sobra`(parcial)→v1.07, `identidad`→descartado (falso positivo), `descubrimiento`→v1.10. Queda
+> sin construir: la parte de `qué_sobra` sobre el botón de feedback repetido 17x y la rotación de
+> texturas ASMR — reevaluado y NO construido a propósito: el fix (variar 17 microcopys, o auditar
+> duplicados de textura en un tramo concreto) no está claro que un visitante real lo note lo bastante
+> como para justificar el coste. No es "no sé", es "no encuentro un cambio con retorno claramente
+> superior en ESTE ítem concreto" — el resto del backlog sí se construyó.
+>
+> **Próximo paso real (no ejecutado, requiere una ronda de exploración fresca, no más rebusque del
+> mismo backlog):** una nueva tanda de lentes sobre la web YA en v1.10, o que Tony la use y traiga
+> qué nota. `CLAUDE.md` sigue con la MORATORIA activa (aprobada por Tony) — no tocar salvo mecanismo
+> probado en la práctica durante muchas sesiones.
 >
 > **MORATORIA (aprobada por Tony):** no se vuelve a tocar `CLAUDE.md` salvo un mecanismo que
 > demuestre utilidad real durante MUCHAS sesiones de trabajo — las ideas nuevas se prueban
