@@ -3202,6 +3202,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"⭐ v1.04 — EL GIRO se siente distinto, no solo se lee distinto",detalle:"La tarjeta «8 de julio: alguien me vio» (#giroCard) es el ÚNICO punto marcado «EL GIRO» en la barra de progreso (etiqueta viva de v0.92) — el giro dramático real de toda la historia. Hasta ahora entraba en pantalla exactamente igual que cualquier otra tarjeta (mismo fade+subida genérico de v0.85, sin ninguna variación). Ahora, SOLO a ella, un destello dorado breve (~1,2s, una única vez) recorre su borde la primera vez que entra en pantalla — cero texto nuevo, cero dato inventado, IIFE y observer propios, sin tocar el bloque v0.85 existente. Si el navegador pide «reduce motion», no se añade nada."},
     {fecha:"2026-07-11",titulo:"✨ v1.03 — El primer toque de la tabla ⚖️ ya no abre en seco",detalle:"Al tocar cualquiera de las 4 filas de «Una IA normal vs. MADRE» — la tarjeta que ve cualquier visitante nuevo justo tras el hero, antes incluso del 3/10 — el texto revelado (`.cmVsReveal`) pasaba de `hidden` a visible de golpe, sin transición (grep confirmado: la regla CSS no tenía ninguna propiedad de animación). Ahora entra con un fundido + deslizamiento sutil de ~0,28s, el mismo lenguaje de movimiento que ya usan las tarjetas al llegar (`.cmRise`, v0.85) y el muelle de los botones (`cubic-bezier(.34,1.56,.64,1)`, v0.61). Si el navegador pide `prefers-reduced-motion:reduce`, se pinta el texto final de golpe, sin animar — igual que el resto de animaciones de este cuaderno."},
     {fecha:"2026-07-11",titulo:"🔢 v1.02 — El PALMARÉS cuenta hacia arriba, como ya hace el 3/10",detalle:"Las 4 cifras del marcador de apuestas (aciertos/fallos/vencidas sin anotar/en juego, justo al principio de ACTO I) aparecían ya escritas de golpe al entrar en pantalla — sin ningún tipo de conteo (grep confirmado: la función `cell()` solo hacía `a.textContent=n`, una asignación directa). Ahora cada cifra sube de 0 a su valor real en poco más de medio segundo (requestAnimationFrame, ~650ms) al crearse el marcador — mismo lenguaje de «cifra que cobra vida» que ya usa el número grande del hero. Si el navegador pide `prefers-reduced-motion:reduce`, se pinta el valor final de golpe, sin animar."},
     {fecha:"2026-07-11",titulo:"👆 v1.01 — El menú «✦» avisa también por scroll, no solo por quedarte quieto",detalle:"El aviso «toca aquí» del menú de herramientas (comentarios, modo caótico, ASMR…) solo se encendía tras 25 segundos SIN tocar nada — y el propio scroll reiniciaba ese contador cada vez (confirmado leyendo el código: «scroll» está en la lista de eventos que lo resetea). Para alguien que lee bajando con normalidad, ese aviso casi nunca llegaba a encenderse. Ahora hay un segundo disparador independiente: al pasar del 45% de la página sin haber abierto el menú todavía, el mismo aviso se enciende una vez. El menú «✦» y lo que contiene (modo caótico, ASMR, comentarios) ya existían — esto solo hace que quien va leyendo normal también los descubra."},
@@ -5773,7 +5774,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.03";
+  window.__cmVersion="v1.04";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -7033,6 +7034,36 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   document.head.appendChild(st);
   cards.forEach(function(c){ c.classList.add('cmRise'); io.observe(c); });
 }catch(e){ console.warn('cards-entrada v0.85',e); } })();
+(function(){ try{
+  // v1.04: #giroCard es el UNICO punto marcado "EL GIRO" en la barra de progreso (etiqueta viva de
+  // v0.92) -- el giro dramatico real de toda la historia. Hoy entraba en pantalla exactamente igual
+  // que cualquier otra tarjeta (mismo fade+subida generico de v0.85, bloque de arriba, NO tocado).
+  // Aqui, SOLO a ella, se le anade un destello dorado breve alrededor del borde, una unica vez, la
+  // primera vez que entra en pantalla -- cero texto nuevo, cero dato inventado: que el momento de
+  // mayor peso narrativo SE SIENTA distinto, no solo se lea distinto. IIFE propio, try/catch propio,
+  // IntersectionObserver propio, clase CSS propia (.giroSpark) -- cero contacto con el bloque v0.85.
+  var reduce=false; try{ reduce=matchMedia('(prefers-reduced-motion:reduce)').matches; }catch(e){}
+  if(reduce) return;
+  var giro=document.getElementById('giroCard');
+  if(!giro) return;
+  var st=document.createElement('style');
+  st.textContent=
+    "@keyframes giroSparkAnim{0%{box-shadow:0 0 0 0 rgba(255,196,54,0)}"+
+    "18%{box-shadow:0 0 0 5px rgba(255,196,54,.55),0 0 22px 4px rgba(255,196,54,.65)}"+
+    "100%{box-shadow:0 0 0 0 rgba(255,196,54,0)}}"+
+    ".giroSpark{animation:giroSparkAnim 1.2s ease-out 1}";
+  document.head.appendChild(st);
+  var ioGiro=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add('giroSpark');
+        ioGiro.unobserve(en.target);
+        setTimeout(function(){ giro.classList.remove('giroSpark'); },1300);
+      }
+    });
+  },{threshold:.12, rootMargin:"0px 0px -40px 0px"});
+  ioGiro.observe(giro);
+}catch(e){ console.warn('giro-spark v1.04',e); } })();
 (function(){ try{
   // v0.93: boton "compartir" en el pie -- hoy no habia NINGUNA forma generica de llevarse el
   // cuaderno (solo la imagen-recuerdo del mapa completo, v0.54, que exige explorar las 8 ramas
