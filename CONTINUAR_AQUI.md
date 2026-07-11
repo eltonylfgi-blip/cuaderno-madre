@@ -1,6 +1,26 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **✅ SESIÓN 4, continuación — v1.10 EN VIVO. Backlog de la ronda de 6 lentes AGOTADO (4 de 4).**
+> **✅ SESIÓN 4, continuación — v1.11 EN VIVO. Disciplina nueva: hipótesis + refutación, no "rondas".**
+>
+> **Corrección de proceso (aprobada por Tony, aplicada — NO escrita en `CLAUDE.md`, la moratoria
+> sigue en pie):** dejar de pensar en "rondas de exploración" como unidad fija. El disparador de
+> explorar es una hipótesis concreta con posibilidad real de cambiar una decisión, no que el backlog
+> se haya agotado. Cada exploración termina en 1 de 4 salidas — Construir / Descartar / Posponer /
+> Escalar — nunca "seguir explorando".
+>
+> **v1.11 (commit `2d81cbd`):** hipótesis propia (no otra ronda de agentes) — "los 5 cambios de esta
+> sesión (v1.06-v1.10), verificados por separado, podrían haber creado una costura al vivirlos
+> JUNTOS". Sobrevivió: revelar ACTO II empuja EL GIRO (el momento más humano de la web) detrás de 10
+> fichas de consulta, y el puente de v1.09 invitaba a bajarse antes de llegar ahí. Fix de una frase.
+> Segunda hipótesis del mismo ciclo (¿el swap de estilos de v1.07 rompió el foco de teclado?):
+> REFUTADA — outline de 3px presente en ambos botones, gradiente confirmado aplicado; mi primera
+> lectura ("outline:none") era un artefacto de probar con `.focus()` por JS, no un fallo real.
+>
+> **Estado ahora: sin hipótesis nueva con posibilidad real de encontrar algo mayor.** No es "backlog
+> agotado, toca explorar otra vez" — es que, tras revisar, no hay una duda concreta que valga la pena
+> comprobar YA. Esto es POSPONER, no parar por costumbre. El siguiente dato real de mayor valor sigue
+> siendo el mismo de sesiones anteriores: que Tony use la web y traiga qué nota, o una sesión futura
+> con ojos frescos (nueva hipótesis, no "ronda 8" por inercia).
 >
 > **v1.10 (commit `005a919`):** reevalué el backlog en vez de parar tras v1.09 (per el proceso que
 > Tony pidió). 2 de los 3 hallazgos restantes resultaron FALSOS al verificar en navegador real —
