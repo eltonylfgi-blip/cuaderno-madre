@@ -3170,6 +3170,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🏷️ v0.92 — Un rótulo te dice EN QUÉ PARTE de la historia estás, sin tocar nada",detalle:"La barra fina de arriba (v0.88) solo decía CUÁNTO llevabas leído (%); saber EN QUÉ acto estabas requería pasar el ratón por una marca de 3px — en móvil, ni eso. Ahora un rótulo pequeño y discreto pegado a la barra (ej. «ACTO II») se actualiza solo mientras haces scroll, reusando los mismos datos ya calculados para las marcas (v0.90/v0.91): cero texto nuevo, cero suposición. Antes del primer acto no muestra nada — no hay «parte de la historia» todavía."},
     {fecha:"2026-07-11",titulo:"👉 v0.91 — Las marcas de la barra de progreso, de decorativas a tocables",detalle:"Las 4 marcas de ACTO I / ACTO II / EL GIRO / ACTO III en la barra fina de arriba (v0.88, con tooltip real desde v0.90) eran puramente decorativas: tocarlas no hacía nada. Ahora cada una es un botón real (con su rol y su tabIndex, navegable por teclado igual que los chips [data-goto] de más abajo) que te salta directo a ese punto del cuaderno con scrollIntoView suave — convirtiendo la barra en un mini-índice navegable de una sola página larga. Respeta «menos animaciones»: si tu sistema lo pide, el salto es instantáneo, sin scroll suave."},
     {fecha:"2026-07-11",titulo:"🩹 v0.90 — 2 regresiones reales, cazadas por autocrítica y arregladas",detalle:"El propio workflow de mejora continua se auditó a sí mismo (no se dio por bueno con el primer check) y encontró 2 fallos reales que su primera verificación no vio: (1) las marcas de acto en la barra de progreso (v0.88) tenían un contraste de ~1:1 — invisibles a ojo humano, medido de verdad, no a ojo — ahora son un trazo sólido oscuro con halo blanco y avisan con un tooltip qué acto empieza ahí. (2) las tarjetas que ya habían «llegado» (v0.85) perdían el efecto de elevación al pasar el ratón por encima en escritorio, porque su regla nueva empataba en especificidad CSS con el hover de siempre y ganaba por estar más abajo en el fichero — una línea con más especificidad lo arregla para siempre, sin tocar nada más."},
     {fecha:"2026-07-11",titulo:"🎈 v0.89 — El hero respira: 2 botones opcionales se guardan en «⋯ más»",detalle:"Una auditoría con 5 jueces independientes (UX, diseño, game design, narrativa, visitante nuevo) coincidió en algo concreto y medible: el primer tramo apilaba hasta 6 botones/CTA antes del primer dato real — la nota más baja de toda la evaluación fue Claridad visual, 3/10. «Escúchalo» y «Probar identidad nueva» son opcionales por definición (la propia identidad se etiqueta «prototipo»); ahora viven en un desplegable «⋯ más», mismo patrón de acordeón que ya usa el resto de la web. El mapa y el tour siguen a un toque, igual que siempre."},
@@ -5703,7 +5704,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v0.91";
+  window.__cmVersion="v0.92";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
@@ -6105,19 +6106,29 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 #tonyProgWrap{position:fixed;top:0;left:0;right:0;height:3px;z-index:39;background:rgba(124,92,214,.14);pointer-events:none}
 #tonyProgFill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent,#3b5bdb),#e0568a);transition:width .12s linear}
 .tonyProgMark{position:absolute;top:-1px;width:3px;height:6px;border-radius:1px;background:var(--ink,#1a1a2e);box-shadow:0 0 0 1px rgba(255,255,255,.85);cursor:pointer}
+/* v0.92 — ETIQUETA VIVA: la barra decia CUANTO (%) pero nunca EN QUE PARTE de la historia estabas
+   salvo que pasaras el raton por una marca de 3px (en movil ni eso). Rotulo fijo, discreto,
+   pointer-events:none (no roba toques a la barra ni a las marcas), se actualiza SOLO con el scroll. */
+#tonyProgLabel{position:fixed;top:6px;left:52px;z-index:39;pointer-events:none;font:700 10px/1 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink,#1a1a2e);background:rgba(255,255,255,.85);padding:3px 8px;border-radius:99px;box-shadow:0 1px 4px rgba(0,0,0,.16);letter-spacing:.02em;opacity:0;transform:translateY(-3px);transition:opacity .2s,transform .2s}
+/* left:52px (no 10px): deja libre la esquina 0,0-44,44 que ocupa #gxg-cat-root (z-index 40, easter
+   egg del gato) — evita que el gato tape el rotulo justo en su posicion de reposo. */
+#tonyProgLabel.on{opacity:1;transform:translateY(0)}
 </style>
-<div id="tonyProgWrap"><div id="tonyProgFill"></div></div>
+<div id="tonyProgWrap"><span id="tonyProgLabel"></span><div id="tonyProgFill"></div></div>
 <script>
 (function(){ try{
   var wrap=document.getElementById("tonyProgWrap"), fill=document.getElementById("tonyProgFill");
   if(!wrap||!fill) return;
+  var label=document.getElementById("tonyProgLabel");
   var reduce=false; try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
   function docH(){ return document.documentElement.scrollHeight - window.innerHeight; }
   function clearMarks(){ var ex=wrap.querySelectorAll(".tonyProgMark"); for(var i=0;i<ex.length;i++) ex[i].remove(); }
+  var marks=[]; // v0.92: {top,texto} de cada .tonySep, calculado una vez en placeMarks() y leido en update()
   function placeMarks(){
     var h=docH(); if(h<=0) return;
     var seps=document.querySelectorAll(".tonySep"); if(!seps.length) return;
     clearMarks();
+    marks=[];
     seps.forEach(function(s){
       var top=s.getBoundingClientRect().top + window.scrollY;
       var pct=Math.max(0,Math.min(100,(top/h)*100));
@@ -6136,10 +6147,23 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
       m.addEventListener("click",goTo);
       m.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); goTo(); } });
       wrap.appendChild(m);
+      if(txt) marks.push({top:top,texto:txt});
     });
+    marks.sort(function(a,b){ return a.top-b.top; });
   }
   var ticking=false;
-  function update(){ ticking=false; var h=docH(); var pct= h>0 ? Math.max(0,Math.min(100,(window.scrollY/h)*100)) : 0; fill.style.width=pct+"%"; }
+  function update(){
+    ticking=false; var h=docH(); var pct= h>0 ? Math.max(0,Math.min(100,(window.scrollY/h)*100)) : 0; fill.style.width=pct+"%";
+    /* v0.92: rotulo vivo "donde estas en la historia" — SOLO scroll, sin hover/touch. Compara la
+       posicion actual contra las marcas ya calculadas y muestra el texto del ultimo acto cruzado
+       (vacio = antes del primero, ej. portada: no hay "acto" que mostrar todavia). */
+    if(label && marks.length){
+      var y=window.scrollY, cur="";
+      for(var i=0;i<marks.length;i++){ if(y>=marks[i].top-4) cur=marks[i].texto; else break; }
+      if(cur){ label.textContent=cur; label.classList.add("on"); }
+      else{ label.classList.remove("on"); }
+    }
+  }
   window.addEventListener("scroll",function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } },{passive:true});
   update();
   placeMarks();
