@@ -53,6 +53,16 @@ de botella de mayor impacto DENTRO del Cuaderno y resolverlo — no esperar una 
 - **Quitar cuenta como mejorar** — si eliminar algo sube más la calidad que añadir, elimina.
 - **Nunca fabriques trabajo ni declares un frente agotado por costumbre** — solo cuando de verdad
   no encuentres un cambio razonable que suba más la calidad (regla 5: con evidencia, no de palabra).
+- **El ciclo es Explorar → Elegir → Construir → Verificar → volver a Explorar — nunca Explorar →
+  Explorar → Explorar.** Una ronda de exploración por ciclo. En cuanto un cambio esté identificado
+  con confianza suficiente, PARA de explorar y construye ya — no encadenes otra ronda de agentes o
+  jueces "para estar más seguro".
+- **Los agentes amplían el espacio de búsqueda; no deciden.** Devuelven candidatos con evidencia —
+  la decisión final (qué construir) la toma siempre el criterio del Cuaderno (qué sube más la
+  experiencia global), no esperes a que un agente "te diga qué hacer".
+- **Arreglar un cuello no reinicia la búsqueda a "no sé".** Tras construir y verificar, seguir
+  buscando el siguiente cuello es CONTINUACIÓN del mismo trabajo — no un punto nuevo donde parar
+  vuelve a ser válido.
 - Esto NO deroga los 2 gates de Tony (identidad/marca, internals del mapa) ni la regla 6 de arriba
   (sigue prohibido acumular documentos de proceso — esta sección es la ÚNICA adición de este tipo).
 
