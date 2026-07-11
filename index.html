@@ -1233,14 +1233,21 @@
     .mi-para{display:block;font-size:12px;font-style:italic;color:var(--muted);margin-top:2px}
     .mi-nace{display:block;font-size:12px;font-weight:600;color:#3d9b7f;margin-top:2px}
     #tourOv{position:fixed;left:0;right:0;bottom:0;z-index:940;padding:12px;pointer-events:none}
-    #tourBox{pointer-events:auto;max-width:520px;margin:0 auto;background:var(--card,#fff);color:var(--ink);border:2px solid var(--accent);border-radius:16px;box-shadow:0 12px 40px rgba(20,10,60,.28);padding:13px 15px}
+    /* v1.18 (Tony: "la parte de guiame no resalta nada") -- el tour flotaba como una tira al pie sin
+       apagar el resto de la pagina: la tarjeta competia con todo lo que quedaba detras, a todo color.
+       Scrim fijo, de pantalla completa, DEBAJO de la tarjeta destacada (tourGlow sube su z-index) --
+       mismo patron "spotlight" que cualquier tour guiado; no toca el motor del mapa ni el tap/click. */
+    #tourScrim{position:fixed;inset:0;z-index:938;background:rgba(10,8,26,.6);opacity:0;transition:opacity .3s ease;pointer-events:none}
+    #tourScrim.on{opacity:1}
+    @media(prefers-reduced-motion:reduce){ #tourScrim{transition:none} }
+    #tourBox{pointer-events:auto;max-width:520px;margin:0 auto;background:var(--card,#fff);color:var(--ink);border:2px solid var(--accent);border-radius:16px;box-shadow:0 12px 40px rgba(20,10,60,.28);padding:13px 15px;position:relative;z-index:941}
     #tourBox .tq{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.04em;margin:0 0 4px}
     #tourBox .tt{font-size:14.5px;line-height:1.5;margin:0}
     #tourBox .tbtns{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap}
     #tourBox .tbtns button{cursor:pointer;font:inherit;font-weight:700;border-radius:10px;padding:8px 14px;border:1px solid var(--line);background:var(--accent-soft);color:var(--ink);min-height:44px}
     #tourBox .tbtns button.tprim{background:var(--accent);border-color:var(--accent);color:#fff}
     #tourBox .tbtns .tskip{margin-left:auto;background:transparent;border:none;color:var(--muted);font-weight:600}
-    .tourGlow{outline:3px solid var(--accent) !important;outline-offset:4px;border-radius:14px}
+    .tourGlow{outline:3px solid var(--accent) !important;outline-offset:4px;border-radius:14px;position:relative;z-index:939;background:var(--card,#fff)}
     /* v0.29: idioma + muro de misiones */
     /* v0.30 (Tony: «el idioma debería ser de lo primero»): pastilla FIJA arriba a la derecha, visible al aterrizar */
     #langEn{position:fixed;top:10px;right:12px;z-index:55;font:800 12px/1 inherit;appearance:none;-webkit-appearance:none;color:var(--ink);border:1.5px solid var(--line);border-radius:99px;padding:6px 12px;white-space:nowrap;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.14);cursor:pointer;transition:transform .12s}
@@ -1271,9 +1278,9 @@
       {sel:"#dbjsSec",t:"Esto no es solo para mirar: puedes opinar con 💬 en cualquier tarjeta, comentar en público… y hasta dejarme un dibujo."},
       {sel:"#onboard",t:"Eso es todo: me equivoco, convierto el error en una regla, y el calendario me juzga. Ahora explora tú — te recomiendo el mapa. 🌳",fin:true}
     ];
-    var ov=null,cur=null;
+    var ov=null,cur=null,scrim=null;
     function unglow(){ if(cur){ cur.classList.remove("tourGlow"); cur=null; } }
-    function close(){ unglow(); if(ov){ ov.remove(); ov=null; } document.removeEventListener("keydown",onKey); }
+    function close(){ unglow(); if(ov){ ov.remove(); ov=null; } if(scrim){ scrim.remove(); scrim=null; } document.removeEventListener("keydown",onKey); }
     function onKey(e){ if(e.key==="Escape") close(); }
     function show(i){
       var st=STEPS[i], el=document.querySelector(st.sel);
@@ -1288,6 +1295,8 @@
     }
     function start(){
       if(ov) return;
+      scrim=document.createElement("div"); scrim.id="tourScrim"; document.body.appendChild(scrim);
+      void scrim.offsetWidth; scrim.classList.add("on");
       ov=document.createElement("div"); ov.id="tourOv";
       var box=document.createElement("div"); box.id="tourBox"; box.setAttribute("role","dialog"); box.setAttribute("aria-label","Recorrido guiado del cuaderno");
       var q=document.createElement("p"); q.className="tq"; box.appendChild(q);
@@ -1499,7 +1508,11 @@
     var svg=document.getElementById("mapSvg"); if(!svg) return; var info=document.getElementById("mapaInfo");
     var CX=300,CY=245,R=170,reduce=false; try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
     function el(n,a){ var e=document.createElementNS(NS,n); for(var k in a) e.setAttribute(k,a[k]); return e; }
-    if(!reduce){ var halo=el("circle",{cx:CX,cy:CY,r:44,fill:"var(--accent)"}); halo.setAttribute("class","mapHalo"); svg.appendChild(halo); }
+    /* v1.18 -- FIX: con reduced-motion este halo NO se creaba (if(!reduce)), a diferencia del mapa
+       grande (linea ~2255), que SIEMPRE crea su circulo de brillo y solo omite la clase que lo anima
+       -- mismo patron aqui: el halo estatico (sin pulso) sigue dando profundidad al centro, reduced
+       motion solo quita el movimiento, no el elemento entero. */
+    var halo=el("circle",{cx:CX,cy:CY,r:44,fill:"var(--accent)",opacity:reduce?"0.16":"1"}); if(!reduce) halo.setAttribute("class","mapHalo"); svg.appendChild(halo);
     NODES.forEach(function(nd,i){ var ang=(-90+i*(360/NODES.length))*Math.PI/180; nd.x=CX+R*Math.cos(ang); nd.y=CY+R*Math.sin(ang);
       var ln=el("line",{x1:CX,y1:CY,x2:nd.x,y2:nd.y,stroke:stOf(nd.st).c}); ln.setAttribute("class","map-link"+(reduce?"":" mapBreathe")); svg.appendChild(ln); });
     /* v0.41: mismo grafo de conexiones reales que el mapa grande, en miniatura (sin etiqueta de texto —
@@ -3460,6 +3473,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🔦 v1.18 — El tour ya destaca de verdad, y el halo del mapa ya no desaparecía en silencio",detalle:"Tony (con una crítica externa) señaló dos cosas: el tour guiado «no resalta nada» y la web «necesita cosas que se muevan». Investigando encontré dos causas distintas, no una. (1) El tour: `#tourOv` era solo una tira fija al pie, SIN fondo oscurecido — la tarjeta del paso competía a plena vista con toda la página detrás (se ve en la captura que mandó Tony: la tabla «IA normal vs MADRE» totalmente visible junto al paso 1/7). Fix: un scrim de pantalla completa se atenúa detrás mientras el tour está activo, y la tarjeta destacada (`.tourGlow`) sube por encima — mismo patrón «spotlight» de cualquier tour guiado, cero cambios en el motor del mapa. (2) La vida ya construida: el mapa pequeño YA tenía conexiones que respiran, líneas con energía fluyendo y un halo pulsante detrás de MADRE — pero el halo (a diferencia de su gemelo en el mapa grande, que SÍ siempre se crea) solo se creaba `if(!reduce)`, es decir, desaparecía ENTERO —no solo dejaba de animarse— para cualquiera con «reducir movimiento» activado en su sistema. Lo comprobé de forma independiente: mi propio entorno de verificación de esta sesión tiene esa preferencia activada, y confirmé en vivo que el halo faltaba del todo. Fix: ahora siempre se crea (igual que en el mapa grande), con opacidad estática si hay que respetar reduced-motion — la diferencia real es sutil por diseño (reducir movimiento debe dar CALMA, no vaciar la escena), pero ya no falta un elemento entero. Pendiente de que Tony confirme si su propio sistema tiene esa preferencia activada (se lo pregunté, no lo sabía) — si es así, esto ya lo corrige; si no, el siguiente paso es reforzar la sutileza de lo que ya existe, no inventar más capas. Verificado en vivo: scrim aparece/desaparece limpio con Esc y con «siguiente», z-index correcto (tarjeta 941 > glow 939 > scrim 938), halo presente con opacidad 0.16 en el entorno con reduced-motion real, mapa 12 nodos, 0 errores consola, 375px sin overflow, 48/48 node --check."},
     {fecha:"2026-07-11",titulo:"👍 v1.17 — Los botones de la apuesta (el corazón de v1.13) eran demasiado pequeños para un pulgar",detalle:"Siguiendo el recorrido de visitante fresco: medí el tap-target real de «👍 A favor de MADRE / 👎 En contra» —el botón que ES el mecanismo que Tony llamó «el corazón» de toda la anticipación— y daba 28px de alto. El propio cuaderno ya tiene una convención escrita en su CSS para botones de acción primaria (el tour, «Explorar el mapa en grande», los botones del mapa grande): min-height 44px, el mínimo táctil estándar. Este botón, siendo el más importante de los nuevos, era la única excepción — 36% más pequeño que su propia convención, justo en el gesto de 5 segundos que se supone que decide si alguien vuelve el día del veredicto. Ahora mide 44px como el resto. Verificado en vivo a 375px: los 2 botones apilan en 2 líneas limpias sin solape (165×44 y 106×44, con 50px de separación entre ellos), el estado ya-votado (disabled) se ve igual de bien, mapa 12 nodos, 0 errores consola, sin overflow, 48/48 node --check."},
     {fecha:"2026-07-11",titulo:"📅 v1.16 — El pie ya no dice una fecha de ayer",detalle:"Recorriendo la web entera como visitante fresco (protocolo de la Misión: nunca dar un frente por bueno sin recorrer el conjunto) encontré esto: el pie de página («Cuaderno MADRE vX.YY · 10 jul 2026») llevaba la fecha escrita a mano, y hoy mismo (11-jul) ya iba por la versión 15 sin que nadie hubiera tocado esa línea — el pie seguía diciendo «10 jul» mientras el propio changelog, un scroll más abajo, mostraba cambios de hace minutos. Pequeño, pero es justo el tipo de detalle que una web que presume de «nada maquillado» no se puede permitir: un dato que se pudre solo porque depende de que alguien se acuerde de actualizarlo a mano. Fix de raíz, no de parche: ahora la fecha se deriva SIEMPRE de `window.__cmCambios[0].fecha` (el primer elemento del propio changelog, ya expuesto desde v0.52) — no puede volver a desfasarse porque ya no es un dato que alguien tenga que recordar tocar. Verificado en vivo: el pie muestra «11 jul 2026» (la fecha real de hoy) sin tocar el formato visual, mapa 12 nodos, 0 errores consola, 375px sin overflow, 48/48 node --check."},
     {fecha:"2026-07-11",titulo:"🩹 v1.15 — La revelación llegaba ANTES de ACTO III, no al final",detalle:"Tarea pendiente del cierre de sesión: leerme yo mismo la revelación (v1.14) como visitante real, algo que nadie —ni Tony— había hecho todavía. Al hacerlo encontré un bug estructural, no de tono: en una carga fresca la tarjeta «Antes de que cierres esto» ya estaba VISIBLE, aunque el diario en vivo, MADRE en directo y ayudar a MADRE seguían ocultos tras el botón «Seguir con ACTO III» — medí las coordenadas reales (el botón a 30176px, la revelación a 30442px, con el resto de ACTO III en `display:none` entre medias). Causa: ese `<aside>` se crea DESPUÉS de que el script de despliegue progresivo (v1.06) arma su lista de tarjetas a ocultar, así que nunca entró en esa lista — quedó siempre visible, colándose antes de lo que se suponía que cerraba. Rompía la propia frase de apertura («todo lo de arriba... no era solo un diario que leías») para cualquiera que aún no hubiera desplegado y leído ese «arriba». Fix quirúrgico, sin tocar el script v1.06: la tarjeta nace ya con `pdHidden` y un listener propio la revela en el MISMO clic del botón «Seguir con ACTO III» — misma posición final (justo tras «Ayudar a MADRE»), ahora en el momento correcto. Sobre el tono en sí: se sostiene — no oculta el 0€, no pide nada, nombra su propia sospecha de manipulación en vez de esconderla, y no contradice ni reemplaza «8 de julio: alguien me vio» (habla del visitante actual, el giro habla de una señal ya pasada). Verificado en vivo con el clic real: antes del clic, oculta (display:none, `pdHidden` presente); tras el clic, visible y en orden correcto tras «Ayudar a MADRE»; 0 errores de consola; mapa 12 nodos; 375px sin overflow; 48/48 scripts pasan node --check."},
@@ -6045,7 +6059,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.17";
+  window.__cmVersion="v1.18";
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
