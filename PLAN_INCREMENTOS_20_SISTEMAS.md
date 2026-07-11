@@ -1188,3 +1188,57 @@ gateadas de verdad (identidad/marca nueva, internals del mapa) — todo lo demá
 construye sin pedir permiso. Y el aviso más importante de la propia sesión, que vale para cualquier
 sesión futura: **no acumular más reglas de proceso** — el riesgo real no es parar demasiado pronto,
 es gastar más tiempo evaluando/puntuando/documentando que construyendo.
+
+---
+
+**Continuación de sesión 3 (mismo día, workflow ligero "v3" con anti-colisión por grep + 3 hallazgos
+propios de Sonnet en paralelo). v0.91→v1.05, 15 versiones más (25 en total esta sesión):**
+
+- **Workflow ligero (`wp95srxze`, 41 agentes, ~112 min, 12 construidas, 0 descartadas, 0 errores):**
+  v0.91 (marcas de acto tocables), v0.92 (etiqueta viva "dónde estás"), v0.93 (botón compartir en el
+  pie — no existía NINGUNA forma de llevarse el cuaderno), v0.94 (jerarquía de color en chips del
+  hero — ataca directamente el peor defecto medido por el scorecard, Claridad visual 3/10), v0.95
+  (contador "0/4 destapadas"), v0.96 (accesibilidad de teclado del pill "¿qué es?"), v0.98 (logros
+  avisan en el momento con toast), v0.99 (comentario propio con "· tú"), v1.00 (cuenta atrás real en
+  el marcador), v1.02 (PALMARÉS cuenta hacia arriba), v1.03 (tabla ⚖️ revela con transición), v1.04
+  (destello dorado único para EL GIRO). Todas verificadas con el mismo protocolo (git anti-colisión
+  por grep de versión EN EL MOMENTO — no un contador fijo — node --check, navegador real, mapa,
+  consola, autocrítica de si es perceptible en 3 min).
+- **v0.97 (Sonnet, hallazgo propio, cambio de escala de "componente" a "sección"):** 3 jueces
+  independientes del scorecard habían señalado, cada uno por su cuenta, que Acto II son 12 tarjetas
+  seguidas con el mismo patrón visual (Ritmo 6-7/10). Reordenar/fusionar es riesgo ya documentado
+  (los 💗 se anclan por `nth-of-type` de posición, `cssPath()` línea 3531) — en vez de tocar el
+  orden, 2 tarjetas ya citadas como memorables (historia, cementerio) llevan un acento de color.
+  Verificado que el nº de `<div>` hermanos no cambió (cero riesgo para los corazones).
+- **v1.01 (Sonnet, hallazgo propio, refutando su propia conclusión anterior):** tras decir
+  inicialmente "no queda nada que mejorar sin romper la honestidad", Tony corrigió que esa conclusión
+  era más fuerte que la evidencia — se reabrió la búsqueda. El scorecard decía "modo caótico/ASMR sin
+  affordance visual"; verificado que eso es FALSO (ya existe un hub "✦" con menú y nudge), pero el
+  nudge de 25s de inactividad se resetea con cada scroll — casi nunca dispara para quien lee con
+  normalidad. Fix: segundo disparador por profundidad de scroll (45%), complementario, no sustituye
+  al anterior.
+- **v1.05 (Sonnet, hallazgo propio, otro cambio de escala — de "sección" a "flujo completo leído de
+  un tirón"):** el ticker público "🔦 Hoy, de verdad" mostraba el mensaje de commit de Git EN CRUDO;
+  el commit de v1.04 llegó a mostrar literalmente `#giroCard` (un ID de código) a cualquier
+  visitante. Fix en el origen (no reescritura de historial): el ticker ahora prioriza el título ya
+  curado del changelog (`window.__cmCambios[0].titulo`, expuesto desde v0.52) sobre el commit crudo.
+  Previene que CUALQUIER commit futuro (mío o de un workflow) vuelva a filtrar jerga técnica.
+- **Verificación de generalización (pedida por Tony tras v1.01): ¿el mismo bug del nudge se repite en
+  otro sitio?** Comprobado a fondo, no solo intuido: de 51 reglas `:hover` en el fichero, solo 1
+  oculta contenido (`.nieBtn`, opacidad base 0.5, no 0 — no es el mismo bug); de los `setTimeout`
+  largos ligados a "nudge", solo hay 2 en todo el fichero y el otro (plantillas de dibujo) usa
+  `IntersectionObserver`, patrón correcto que no se resetea con scroll. Conclusión honesta: el bug
+  del menú "✦" era un caso aislado, no un patrón repetido — no se inventó más trabajo donde no lo hay.
+
+**LA SÍNTESIS FINAL DEL WORKFLOW LIGERO ES EL HALLAZGO MÁS IMPORTANTE DE TODA LA SESIÓN, sin que
+nadie se lo pidiera:** todo lo validado hasta hoy (scorecard de 5 jueces, autocríticas de workflow,
+hallazgos de Sonnet) es autoauditoría interna — **cero datos de un visitante real**. La prueba que
+Tony propuso hace semanas ("enseñar el cuaderno a 5-10 personas reales, sin explicar nada, traer las
+reacciones") sigue sin hacerse. El cuello de botella real no resuelto: el cuaderno sigue siendo una
+página larguísima de una sola pieza sin segmentación real — toda la señalización añadida esta sesión
+(barra de progreso, marcas, etiqueta de acto) trata el síntoma ("no sé dónde estoy"), no la causa
+("todo compite a la vez"). El siguiente incremento de mayor apalancamiento, SI se sigue construyendo
+sin ese dato real, ya está identificado: progressive disclosure de verdad (colapsar por defecto los
+Actos no activos, revelar "Acto siguiente ▸" al llegar) — deliberadamente NO se hizo esta sesión por
+ser mucho más grande/arriesgado que cualquier otro cambio de esta noche (podría interactuar con el
+tracking de scroll/logros/corazones) y merece su propio presupuesto y decisión explícita de Tony.

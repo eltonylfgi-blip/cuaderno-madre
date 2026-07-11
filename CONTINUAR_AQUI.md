@@ -1,8 +1,43 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> **✅ SESIÓN 3 CERRADA (10/11-jul noche) — v0.81→v0.90 EN VIVO, 10 versiones más. Cambio de modo de
-> trabajo persistido en `CLAUDE.md` (nuevo, léelo — autonomía total en lo reversible, solo 2 gates
-> reales: identidad visual/marca e internals del mapa; nunca esperar a un workflow en background).**
+> **✅ SESIÓN 3 CERRADA DEL TODO (10/11-jul madrugada) — v0.81→v1.05 EN VIVO, 25 versiones en total.**
+> **LO MÁS IMPORTANTE DE TODA LA SESIÓN, antes que cualquier detalle técnico:** dos workflows
+> independientes de mejora continua terminaron y su propia síntesis final dice, sin que nadie se lo
+> pida, que **todo lo validado hasta hoy es autoauditoría interna** (5 jueces, workflows de
+> autocrítica, Sonnet) — **cero datos de una persona real mirando la web.** La prueba que Tony mismo
+> propuso hace semanas ("enseñar el cuaderno a 5-10 personas reales, 2 min, sin explicar nada, traer
+> las reacciones") **sigue sin hacerse.** Seguir puliendo internamente a partir de aquí tiene
+> retorno decreciente documentado — el propio sistema lo dice, no es una excusa para parar.
+> **Siguiente paso de mayor valor: enseñarle esto a gente real** (ahora hay hasta botón de compartir,
+> v0.93) antes de construir más a ciegas. Si se prefiere seguir construyendo mientras tanto, el
+> incremento de más apalancamiento ya está identificado: progressive disclosure real (colapsar por
+> defecto los Actos no activos, revelar "Acto siguiente ▸" al llegar) — es más grande/arriesgado que
+> cualquier cosa tocada esta sesión (podría interactuar con el tracking de scroll/logros/corazones),
+> así que NO se hizo sin más presupuesto y sin decisión explícita.
+>
+> **Modo de trabajo persistido en `CLAUDE.md`** (nuevo este ciclo, léelo primero de todo — autonomía
+> total en lo reversible, solo 2 gates reales: identidad visual/marca e internals del mapa; nunca
+> esperar a un workflow en background; no acumular más reglas de proceso).
+>
+> **Lo construido v0.91→v1.05 (15 versiones más tras el cierre parcial de v0.90):** v0.91/v0.92
+> (marcas de acto tocables + etiqueta viva "dónde estás"), v0.93 (botón compartir — no existía NINGUNA
+> forma de llevarse el cuaderno), v0.94 (jerarquía de color en los chips del hero — ataca el peor
+> defecto medido, Claridad visual 3/10), v0.95 (contador de pruebas destapadas), v0.96 (accesibilidad
+> por teclado del pill "¿qué es?"), **v0.97** (ritmo en Acto II — hallazgo propio, 2 tarjetas con
+> acento para romper la monotonía de las 12 seguidas, sin reordenar nada por el riesgo de los 💗),
+> v0.98 (logros avisan en el momento), v0.99 (comentario propio marcado "· tú"), v1.00 (cuenta atrás
+> real en el marcador), **v1.01** (hallazgo propio — el aviso del menú "✦" solo disparaba tras 25s
+> parado y el scroll lo reseteaba; ahora también dispara por profundidad de scroll), v1.02 (PALMARÉS
+> cuenta hacia arriba), v1.03 (la tabla ⚖️ revela con transición), v1.04 (destello para EL GIRO),
+> **v1.05** (hallazgo propio — el ticker "Hoy, de verdad" exponía el mensaje de commit EN CRUDO;
+> un commit real llegó a mostrar `#giroCard` a cualquier visitante; arreglado en el origen para que
+> nunca vuelva a pasar, usando el título ya curado del changelog en vez del commit crudo).
+>
+> **2 regresiones reales cazadas por autocrítica de los propios workflows y arregladas** (v0.90):
+> contraste invisible en las marcas de acto de v0.88, hover de tarjetas roto en escritorio por v0.85.
+> **3 hallazgos de auditoría verificados y DESCARTADOS antes de tocar nada** porque no eran ciertos
+> tal cual se afirmaban (Escúchalo/404, "hace un momento" estático, "sin affordance" del modo caótico)
+> — la propia auditoría es hipótesis, no orden; regla ya conocida de este repo, reconfirmada 3 veces.
 > Tony reprodujo el bug real del botón de inglés (ERR_CONNECTION_REFUSED, translate.goog bloqueado
 > por DNS/Brave Shields) y corrigió el enfoque: v0.81 solo avisaba del fallo, v0.82 lo quitó de raíz
 > (la intro del hero se traduce EN EL SITIO, sin red, texto a mano — funciona pase lo que pase en la
