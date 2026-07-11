@@ -1,5 +1,41 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> **🛑 ÁRBOL PARADO A PROPÓSITO (11-jul, v1.26 EN VIVO) — Tony lo pidió explícitamente, no es que
+> se haya agotado el trabajo.** Como arquitecto: *"corréis el riesgo de sobreoptimizar el árbol
+> mientras otras partes de la experiencia podrían dar más retorno... la estrella del Cuaderno sigue
+> siendo MADRE enfrentándose a la realidad."*
+>
+> **Lo último que se construyó (v1.25-v1.26), la única de las 3 vías que Tony aprobó:**
+> - **v1.25 — conectar apuestas↔ramas.** Investigando encontré que el vínculo YA existe
+>   implícitamente en los datos: varias apuestas del palmarés son, casi palabra por palabra, el
+>   mismo texto que `juicio.cree` de una rama — cruzado por texto Y fecha, no inventado, 8/8
+>   apuestas encontraron su rama con evidencia (documentado en cada `title`, compruébalo tú). Cada
+>   apuesta del palmarés ya lleva la insignia de su rama (`data-rama`); las 3 ramas con una apuesta
+>   FALLIDA vinculada (🧠 📓 🎬) llevan 🍂 en los dos mapas — el símbolo exacto que propuso Tony.
+> - **v1.26 — verificación que Tony pidió, y que falló a la primera.** "Comprobar que se entiende
+>   de un vistazo" reveló que 5 versiones de símbolos (🌸🌿🌱🌑🍂) no tenían NINGUNA leyenda visible.
+>   Arreglado: una línea más en la leyenda que ya existía en los dos mapas.
+> - Commits `bff6868` (v1.25) · `58f9818` (v1.26).
+>
+> **🎯 CRITERIO NUEVO, en vigor desde ahora para CUALQUIER mejora (regla de Tony, no solo para el
+> árbol):** antes de construir, preguntar *"¿esto hace que el visitante recuerde más la apuesta
+> pública, o más el árbol?"* Si la respuesta es "el árbol" → parar y reconsiderar. El árbol debe ser
+> un actor secundario extraordinario; la protagonista sigue siendo MADRE enfrentándose a la
+> realidad.
+>
+> **NO tocar el árbol durante varias versiones** (instrucción explícita) salvo que Tony lo pida de
+> nuevo. Las 2 vías que quedaron sin construir (rediseño del mapa grande, arquitectura de eventos
+> para cicatrices-que-cicatrizan) siguen documentadas más abajo — Tony las marcó "no todavía" /
+> "solo si desbloquea muchas mejoras futuras", no "nunca".
+>
+> **Siguiente hilo real, per el propio criterio nuevo de Tony:** volver a la apuesta pública / la
+> historia principal — no el árbol. Candidatos sin explorar todavía en esta sesión: la escena del
+> veredicto en sí (¿sigue siendo tan potente como puede ser?), la distribución (conseguir el primer
+> visitante externo, tema que sigue exactamente igual de pendiente que al principio de la sesión),
+> o cualquier fricción real que quede en el recorrido de la apuesta que NO sea el mapa.
+>
+> ---
+>
 > **✅ v1.24 EN VIVO (11-jul) — turno largo de construcción, arco completo: los DOS mapas (pequeño
 > y grande) ya son un panel de estado vivo, con datos 100% reales.** Encadenado sin parar a
 > resumir (a petición de Tony): v1.21 insignias por rama en el mapa pequeño → v1.22 resumen
