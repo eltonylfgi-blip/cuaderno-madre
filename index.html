@@ -308,7 +308,7 @@
 <div class="wrap">
 
   <div class="ttwrap" style="flex-wrap:wrap;margin-bottom:2px">
-    <h1 id="madreTitle" style="margin:0;cursor:help">🤱🏻 Cuaderno MADRE</h1>
+    <h1 id="madreTitle" style="margin:0;cursor:help"><span id="madreHeart">🤱🏻</span> Cuaderno MADRE</h1>
     <span class="quees breathe" id="queesBtn" title="Ir a la explicación" tabindex="0" role="button">¿qué es?</span>
     <div class="ttbub" id="madreTip">🤱🏻 <b>MADRE</b> es un sistema que intenta <b>decidir mejor</b>, <b>aprender de la realidad</b> y <b>generar valor en el mundo real</b> — no es un bot de dinero ni un almacén de notas. (Mantén pulsado / pasa el ratón para esto.)</div>
   </div>
@@ -1297,15 +1297,24 @@
   body.cmMotionOff .mapHalo,body.cmMotionOff .mapNode.att,body.cmMotionOff .mapNode.att .mn-c,
   body.cmMotionOff .mapNode.now .mn-c,body.cmMotionOff .map-link,
   body.cmMotionOff .cmHamWrap .wheel-and-hamster *,body.cmMotionOff #envivo .ev-dot{animation:none!important}
+  /* v1.31 (revisor externo, vía Tony: "Vivo" debe sentirse en <1s, sin tener que buscar el mapa) — un
+     latido en el propio 🤱🏻 del título, lo PRIMERO que se ve, 0 scroll, en cualquier tamaño. Ligado
+     ESTRICTAMENTE a body.cmMotionOn: no es un adorno permanente nuevo, es la prueba visual inmediata de
+     que el interruptor hizo algo — desaparece en Auto/Calma, igual que antes de esta versión. */
+  @keyframes cmHeart{0%,100%{transform:scale(1)}50%{transform:scale(1.16)}}
+  body.cmMotionOn #madreHeart{display:inline-block;animation:cmHeart 1.15s ease-in-out infinite}
   </style>
   <script>
   /* v1.30 — control del interruptor de movimiento (Auto → Vida → Calma → Auto). Aplica la clase a <body>
      cuanto antes (mínimo parpadeo), persiste en localStorage y avisa con un toast al cambiar. */
   (function(){ try{
+    /* v1.31 (revisor externo, vía Tony): las etiquetas pasan de nombres técnicos ("Auto"/"Vida") a
+       ESTADOS DEL ORGANISMO, coherente con el resto del sitio (vitalTier ya habla en biología: en flor/
+       creciendo/brotando/en reposo). ⚖️ equilibrio (respeta tu sistema) · ❤️ vivo (late) · 🌙 calma. */
     var KEY='cm_motion', modes=['auto','on','off'];
     var meta={
-      auto:{label:'🎬 Auto', on:false, toast:'Movimiento: automático 🎬 (según tu sistema)'},
-      on:  {label:'🎬 Vida', on:true,  toast:'Movimiento: vida completa ✨'},
+      auto:{label:'⚖️ Auto', on:false, toast:'Movimiento: equilibrio ⚖️ (según tu sistema)'},
+      on:  {label:'❤️ Vivo', on:true,  toast:'MADRE despierta del todo ❤️'},
       off: {label:'🌙 Calma',on:false, toast:'Movimiento: calma 🌙'}
     };
     function read(){ try{ var m=localStorage.getItem(KEY); return (m==='on'||m==='off'||m==='auto')?m:'auto'; }catch(e){ return 'auto'; } }
@@ -1334,7 +1343,7 @@
         var m=meta[mode];
         btn.textContent=m.label;
         btn.classList.toggle('cmMon', m.on);
-        btn.title='Movimiento: '+(mode==='auto'?'automático (según tu sistema operativo)':mode==='on'?'vida completa — todas las animaciones ambientales':'calma — animaciones ambientales apagadas')+'. Toca para cambiar.';
+        btn.title='Movimiento: '+(mode==='auto'?'equilibrio — respeta tu sistema operativo':mode==='on'?'vivo — MADRE late, todas las animaciones ambientales despiertas':'calma — animaciones ambientales apagadas')+'. Toca para cambiar.';
       }
       refresh();
       btn.addEventListener('click',function(){
@@ -3643,6 +3652,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"❤️ v1.31 — «Vivo» ahora se siente en menos de 1 segundo, sin buscar el mapa",detalle:"Un revisor externo (vía Tony) valoró el interruptor de v1.30 pero señaló dos cosas concretas, ambas aplicadas aquí. (1) Las etiquetas técnicas («Auto»/«Vida») pasan a ESTADOS DEL ORGANISMO, coherente con cómo el resto del sitio ya habla de sí mismo (el árbol usa biología: en flor/creciendo/brotando/en reposo; el hámster ya es «MADRE trabajando»): ⚖️ Auto (equilibrio, respeta tu sistema) · ❤️ Vivo (late) · 🌙 Calma. (2) El movimiento «Vivo» solo se notaba si ibas al mapa — sin presencia inmediata. Ahora el propio 🤱🏻 del título (lo PRIMERO que se ve, 0 scroll, en cualquier tamaño) late (`#madreHeart`, `@keyframes cmHeart`) en cuanto tocas ❤️ Vivo — ligado estrictamente a `body.cmMotionOn`, la MISMA clase que ya gatea el mapa (una sola fuente de verdad, cero mecanismo nuevo). Deliberadamente NO añadí más animaciones ambientales nuevas al resto del sitio — el propio revisor lo desaconsejó explícitamente («probaría primero este interruptor unos días» antes de seguir apilando movimiento), y coincide con el criterio de este chat de no fabricar trabajo. Verificado en vivo con reduced-motion activo: al tocar ❤️ Vivo, `#madreHeart` pasa de `animationName:none` a `cmHeart` en el mismo tick del clic (sin esperar ni scrollear); en ⚖️ Auto y 🌙 Calma vuelve a `none`; las 3 etiquetas y sus toasts muestran el texto nuevo; mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
     {fecha:"2026-07-11",titulo:"🎬 v1.30 — Un interruptor para ENCENDER la vida del cuaderno (y el botón «saltar» ya no tapa el idioma)",detalle:"Tony echaba en falta «cosas moviéndose». El diagnóstico (con evidencia, no a ojo) fue que su navegador tiene «reducir movimiento» activado: la web YA está viva para un visitante normal (35+ animaciones), pero su sistema se las apaga por accesibilidad y no había forma de anular esa supresión. La respuesta correcta NO era añadir más animaciones (el revisor llevaba turnos avisando del «árbol de navidad») sino dejar VER las que ya existen. Ahora hay UNA sola pastilla, junto al selector de idioma, que cicla 3 modos y recuerda tu elección (localStorage): «🎬 Auto» respeta tu sistema (por defecto — calma para quien la necesita de verdad) · «🎬 Vida» fuerza las animaciones ambientales de más impacto aunque el navegador pida menos movimiento: el mapa pequeño vuelve a respirar (halos que laten, ramas que flotan, la rama actual que brilla, las conexiones que despiertan) y los pulsos ambientales (¿qué es?, la cuenta atrás del veredicto) reviven · «🌙 Calma» apaga esos bucles aunque tu sistema no lo pida. Un control, un toque — NO un panel de ajustes (Tony y el revisor coincidieron: nada de 14 opciones ni sliders). Técnica sin riesgo: en vez de re-declarar cada animación (descuadraría tiempos), se GATEA la supresión de reduced-motion con `body:not(.cmMotionOn)` — la animación original, que ya vivía en el CSS, simplemente vuelve a correr. De paso, el BUG que Tony vio en su captura: el botón «saltar» de la génesis (solo 1ª visita) estaba fijo en la MISMA esquina que la pastilla de idioma (arriba a la derecha) y la tapaba — ahora se apila justo debajo (top:46px), sin solapar. Cuidado con los márgenes (aviso de Tony): las dos pastillas comparten la fila de arriba a la derecha ancladas al mismo borde, sin pisar los FABs de las esquinas de abajo. Verificado en vivo con reduced-motion emulado: en «Vida» el mapa pequeño respira y los pulsos laten (antes: quietos); en «Auto» todo como antes; en «Calma» los bucles se apagan; la pastilla no solapa con idioma en 375px; `#cmGenSkip` deja libre la esquina del idioma; mapa 12 nodos; 0 errores de consola; 375px sin overflow; node --check limpio (1 script nuevo)."},
     {fecha:"2026-07-11",titulo:"🌉 v1.29 — El salto de «la apuesta» a «por qué soy distinta» ya no era mudo",detalle:"Tony (arquitecto): congeló el hero explícitamente («no lo toquéis, cualquier cambio contaminaría el experimento») y pidió en su lugar el recorrido COMPLETO cronometrado (5s/10s/20s/40s/60s, buscando dónde el visitante tiene que pensar «¿y ahora qué?»). Hice el recorrido con coordenadas reales, no de memoria: hero (0-1376px) → mapa (1376-2263) → «ACTO I· lo que me juego» → el marcador de apuestas, con «lo que más miedo me da» a solo 346px de entrar en la tarjeta (bien situado) → 8 apuestas + notario (hasta 5542px). Ahí encontré el corte real: de la última línea del palmarés se saltaba EN SECO a «Una IA normal vs. MADRE / 0/4 destapadas» — medido en vivo, sin ninguna frase entre medias (5542px termina uno, 5624px ya habla de otra cosa). Exactamente el riesgo que describió Tony. Mismo patrón que ya usó v1.09 para el salto ACTO I→II (`.pdIntro`, una frase de conexión, no un `.tonySep` nuevo — esto sigue siendo ACTO I): «Ya sabes lo que me juego. Antes de seguir, esto es por qué creo que merece la pena arriesgarlo — en 10 segundos:» — engancha con el propio subtítulo de vsCard («La diferencia, en 10 segundos»), cero frase inventada suelta. El hero (v1.28) NO se tocó, tal como pidió Tony. Verificado en vivo: el puente aparece exactamente entre el fin del palmarés (5542px) y el inicio de vsCard (5624px); nth-of-type de las 6 tarjetas de control IDÉNTICO (8,10,11,40,41,42) — corazones 💗 intactos (es un `<p>`, no un `<div>`, mismo patrón seguro de siempre); mapa 12 nodos; 0 errores consola; 375px sin overflow; 49/49 node --check."},
     {fecha:"2026-07-11",titulo:"⏳ v1.28 — La primera pantalla acerca el conflicto y baja 3 widgets que miraban al visitante",detalle:"Tony (arquitecto), tras confirmar el cambio de fase a EDICIÓN: pidió no solo «quitar ruido» sino ACERCAR — «¿cuánto antes empieza el conflicto?». Y puso un guardarraíl clave, corrigiendo mi primer borrador: la personalidad (hámster, ASMR, caótico, dibujos, gato, identidad, voz, logros…) NUNCA se borra por limpieza — solo se esconde un poco si compite, y solo se elimina de verdad si algún día deja de aportar diversión. Dos piezas, ambas grounded, cero dato inventado: (1) **Acercar** — un teaser nuevo justo tras el hook («⏳ En 4 días, la realidad me juzga: se juzga si el cuello era la distribución») reusa EXACTAMENTE el mismo cálculo (`VERE`/`next`/`dias`) que ya usaba `#chipVeredicto`, enterrado más abajo — mismo dato real, 3 frases más cerca del H1. (2) **Bajar sin borrar** — los 3 widgets que miraban al visitante o a meta (🏆 logros, 🔦 ticker de cambios «Hoy, de verdad», 👀 número de visita) se reubican por `id` justo tras `#vsCard` — siguen existiendo, poblándose y visibles para quien explora, solo dejan de competir en los primeros 10 segundos. Ojo con `#cmSeguirChip` («¿Seguir donde lo dejaste?»): investigué y NO es el mismo widget que la visita — solo aparece en visitas 2ª+, nunca en la primera, así que no tocaba el problema real y se dejó intacto. Verificado en vivo: primera pantalla (390×844, sin scroll) pasa de 13 a 12 elementos pero con el conflicto concreto añadido y los 3 widgets fuera; los 3 reubicados siguen poblados correctamente tras `#vsCard`; nth-of-type de las 6 tarjetas de control (8,10,11,40,41,42) IDÉNTICO al medido antes de esta sesión — corazones 💗 intactos; mapa 12 nodos; 0 errores consola; 375px sin overflow; 49/49 node --check (1 script nuevo)."},
@@ -6241,7 +6251,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.30";
+  window.__cmVersion="v1.31";
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
