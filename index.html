@@ -938,7 +938,20 @@
       function cell(n,l,color){ var d=document.createElement("div"); d.style.cssText="text-align:center";
         var a=document.createElement("div"); a.style.cssText="font:800 19px/1 system-ui;color:"+color; a.textContent=n;
         var b=document.createElement("div"); b.style.cssText="font-size:10.5px;color:var(--muted);margin-top:2px"; b.textContent=l;
-        d.appendChild(a); d.appendChild(b); return d; }
+        d.appendChild(a); d.appendChild(b);
+        /* v1.02: la cifra cuenta hacia arriba (0→n en <1s), mismo lenguaje que el número grande del hero */
+        var reduceM=false; try{ reduceM=matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
+        if(!reduceM && n>0){
+          a.textContent="0";
+          var t0=null,dur=650;
+          requestAnimationFrame(function step(ts){
+            if(!t0) t0=ts;
+            var p=Math.min(1,(ts-t0)/dur);
+            a.textContent=Math.round(p*n);
+            if(p<1) requestAnimationFrame(step); else a.textContent=n;
+          });
+        }
+        return d; }
       var lbl=document.createElement("b"); lbl.style.cssText="font-size:12px;color:var(--muted)"; lbl.textContent="PALMARÉS";
       pm.appendChild(lbl);
       pm.appendChild(cell(ok,"aciertos","#10b981"));
@@ -3187,6 +3200,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-11",titulo:"🔢 v1.02 — El PALMARÉS cuenta hacia arriba, como ya hace el 3/10",detalle:"Las 4 cifras del marcador de apuestas (aciertos/fallos/vencidas sin anotar/en juego, justo al principio de ACTO I) aparecían ya escritas de golpe al entrar en pantalla — sin ningún tipo de conteo (grep confirmado: la función `cell()` solo hacía `a.textContent=n`, una asignación directa). Ahora cada cifra sube de 0 a su valor real en poco más de medio segundo (requestAnimationFrame, ~650ms) al crearse el marcador — mismo lenguaje de «cifra que cobra vida» que ya usa el número grande del hero. Si el navegador pide `prefers-reduced-motion:reduce`, se pinta el valor final de golpe, sin animar."},
     {fecha:"2026-07-11",titulo:"👆 v1.01 — El menú «✦» avisa también por scroll, no solo por quedarte quieto",detalle:"El aviso «toca aquí» del menú de herramientas (comentarios, modo caótico, ASMR…) solo se encendía tras 25 segundos SIN tocar nada — y el propio scroll reiniciaba ese contador cada vez (confirmado leyendo el código: «scroll» está en la lista de eventos que lo resetea). Para alguien que lee bajando con normalidad, ese aviso casi nunca llegaba a encenderse. Ahora hay un segundo disparador independiente: al pasar del 45% de la página sin haber abierto el menú todavía, el mismo aviso se enciende una vez. El menú «✦» y lo que contiene (modo caótico, ASMR, comentarios) ya existían — esto solo hace que quien va leyendo normal también los descubra."},
     {fecha:"2026-07-11",titulo:"⚖️ v1.00 — El marcador ya cuenta los días reales, no solo la fecha fija",detalle:"Cada apuesta 'en juego' con fecha futura solo mostraba la fecha escrita ('15-jul'), quieta (grep confirmado: la rama `} else { wait++; }` del máquina de estados no escribía nada en pantalla para ese caso). Ahora, en el mismo bucle que ya compara la fecha del cliente con la fecha de cada apuesta, se calcula cuántos días reales quedan y se añaden al `.pr-fecha` que ya existía: '15-jul · faltan 4 días'. Mismo dato, mismo sitio, ahora contando de verdad."},
     {fecha:"2026-07-11",titulo:"💬 v0.99 — Tu comentario también dice «· tú», como ya pasaba con tus dibujos",detalle:"Los dibujos de la galería ya distinguían el tuyo con «· tú» en color propio (window.__identity, addDrawing/ownsDrawing) — pero en comentarios ese reconocimiento no existía (grep confirmado: 0 resultados de ownsComment/addComment antes de este cambio). Ahora, al publicar un comentario, se guarda su id en tu identidad anónima (addComment) y cada vez que la lista se pinta, el tuyo lleva un «· tú» en el mismo morado de los dibujos (#6a5acd) junto a tu nombre — mismo patrón exacto, llevado al otro sitio donde dejas huella."},
@@ -5756,7 +5770,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.01";
+  window.__cmVersion="v1.02";
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · 10 jul 2026"; f.appendChild(v);
     var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
