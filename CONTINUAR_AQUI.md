@@ -5,6 +5,19 @@
 > funcionaron — P-001..P-007). Orden de Tony (11/12-jul): trabajar desde ahí, no improvisar; y cuando
 > algo "valga oro", proponer promocionarlo a patrón.
 >
+> **🎯 12-jul — EL LISTÓN CREATIVO integrado (docs, sin versión).** Tony trajo 13 reglas de excelencia
+> creativa del revisor ("el proyecto debe sentirse inevitable", "cada detalle candidato a premio", "la
+> prueba del silencio"...). Integradas SIN crear documento nuevo (test anti-burocracia respetado): texto
+> completo en `DISEÑO_HEURISTICAS.md §11`; el criterio de éxito de `CLAUDE.md` afilado (sustituye, no
+> apila); 3 brújulas nuevas que cambian decisiones — **B7** rompe tus mejores ideas (torneo de rivales
+> antes de construir lo creativo) · **B8** la peor parte debe ser extraordinaria · **B9** la prueba del
+> silencio como gate de "terminado" creativo. **Resolución de la tensión, explícita:** el listón sube la
+> AMBICIÓN; las brújulas/hipótesis siguen decidiendo QUÉ se construye — nunca justifica añadir por añadir.
+> **Primera aplicación real:** B8 + el recorrido de ayer → **H6 nueva (alta palanca): el FINAL de la
+> página es la parte más débil** (hoy termina en comentarios de prueba crudos + nota administrativa —
+> cero escena de cierre, en la web cuya historia es "la realidad me juzgará"). H6 exige torneo B7 antes
+> de construir y enseñar la ganadora a Tony (gate de identidad).
+>
 > **✅ v1.35 EN VIVO (12-jul) — H4 en Probando: el historial se desenrolla como pergamino. Commits
 > `ada1d26` (código) + `a956c03` (correcciones del revisor al sistema).** Lo importante de este ciclo no
 > es la animación — es que el sistema FUNCIONÓ dos veces antes de construir: el re-ranking anti-FIFO

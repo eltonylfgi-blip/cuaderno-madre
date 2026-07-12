@@ -56,6 +56,17 @@
   que la apuesta es un HECHO (medido, B4). Que eso "robe protagonismo" es una hipótesis, NO un hecho — falta
   probarla antes de actuar como si estuviera demostrada. (Revisor, 11-jul, corrigiendo mi propia conclusión
   precipitada tras medir I3.)
+- **B7 — "Rompe tus mejores ideas antes de construirlas."** Una idea excelente no se construye de inmediato:
+  genera 2-3 rivales que intenten superarla; construye solo la que nadie supere — y aun esa, en su versión
+  más simple (P-004). Aplica a decisiones CREATIVAS (escenas, identidad, momentos), no a fixes mecánicos.
+  (Listón creativo, 12-jul — ver `DISEÑO_HEURISTICAS.md §11` para el listón completo.)
+- **B8 — "La peor parte debe seguir siendo extraordinaria."** La calidad mínima manda: al buscar el
+  siguiente cuello, mirar también la sección MÁS DÉBIL, no solo la protagonista. Test medible: ¿qué
+  sección describiría un visitante con un "meh"? (Listón creativo, 12-jul.)
+- **B9 — "La prueba del silencio" (gate de "terminado" creativo).** Antes de declarar una escena lista:
+  imagina 10 personas excepcionales explorándola — no importa lo que digan; importan los 10 segundos de
+  silencio de después. Sin asombro/curiosidad en ese silencio → no está lista. Complementa (no sustituye)
+  la verificación técnica. (Listón creativo, 12-jul.)
 
 ---
 
@@ -106,6 +117,32 @@ principal y aumenta el impulso de seguir bajando."**
   Rechazada, el orden actual se queda (no se reordena por estética ni "porque aparece antes").
 - Reversible (no toca el motor, solo posición de secciones) pero es un cambio narrativo grande → medir/
   proponer explícitamente antes de construir, probablemente con el criterio de Tony antes de decidir solo.
+
+**H6 — "Si el FINAL de la página es una escena memorable, la impresión global mejora
+desproporcionadamente (regla pico-final: la gente recuerda el pico y el FINAL, no la media)."**
+- Estado: **☐ Sin probar.** Primera hipótesis nacida del listón creativo (B8: la peor parte manda).
+- **HECHO medido (12-jul, recorrido de transiciones):** hoy lo último que ve quien llega al fondo es:
+  comentarios de prueba crudos («ola gays» / «gay tu» como últimos comentarios visibles) → nota
+  administrativa de tarjetas internas → footer. **No existe escena de cierre** — la web más honesta y
+  viva del mundo termina... administrativamente. Para un sitio cuya historia es "la realidad me va a
+  juzgar", el final es la parte más "meh" de toda la experiencia.
+- **Qué intenta demostrar:** que el cierre pesa mucho más que su tamaño en lo que el visitante recuerda
+  y cuenta (¿qué historia contaría al día siguiente? — hoy la respuesta no incluye el final).
+- **Cómo sabremos si era verdad:** preguntar a una persona que la recorra entera: *"¿cómo termina la
+  web?"* Hoy la respuesta esperable es "no sé / unos comentarios". Tras construir la escena: la nombra.
+- **Cómo puede MORIR:** si casi nadie llega al fondo (medible), el final no es palanca → Rechazada, no
+  se construye. También muere si la escena de cierre compite con la apuesta (violaría el criterio de
+  siempre: protagonista es MADRE-vs-realidad).
+- **⚠️ B7 OBLIGATORIA antes de construir:** no construir la primera idea. Candidatos iniciales para el
+  torneo (ninguno elegido): (a) «MADRE cierra el cuaderno» — literal, la tapa se cierra contigo dentro;
+  (b) la despedida sabe cuánto viste (datos reales de TU sesión: ramas exploradas, tiempo, tu apuesta) y
+  te emplaza al veredicto más cercano; (c) la última línea la escribe la realidad: "esta página no sabe
+  cómo acaba su propia historia — vuelve el 15-jul". Generar más rivales antes de decidir.
+- **Nota de moderación (decisión de Tony, NO mía):** los comentarios crudos son datos compartidos de
+  producción — ocultarlos usa el campo `hidden` existente (mismo mecanismo ya usado 2 veces), pero
+  mutar producción necesita su OK (precedente: fila TEST-VERIF bloqueada, ver CONTINUAR_AQUI 11-jul).
+- **⚠️ GATED parcial:** una escena de cierre nueva = identidad/momento nuevo → enseñar a Tony la
+  ganadora del torneo antes de fijarla (gate de identidad de CLAUDE.md).
 
 ### 🟨 Media palanca (bajo riesgo, no tocan el motor del mapa)
 

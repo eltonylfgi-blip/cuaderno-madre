@@ -51,12 +51,15 @@ de botella de mayor impacto DENTRO del Cuaderno y resolverlo — no esperar una 
 - **Escalón de escala cuando el retorno cae** (ya no es "cerrar sesión"): componente → sección →
   flujo → narrativa → identidad/emoción → curiosidad/descubrimiento → inmersión → memorabilidad →
   sensación global. Si una escala se agota, sube a la siguiente antes de parar.
-- **Criterio de éxito de cada mejora (más exigente que "se nota" — sustituye al anterior, no se
-  apila):** ¿qué historia contaría el visitante al día siguiente, con sus propias palabras? Si una
-  mejora solo hace la web un poco más correcta pero no deja nada que contar, probablemente no era
-  la de mayor impacto. Piensa en ESCENAS que vive el visitante (el momento en que entiende por qué
-  existe MADRE, el momento en que el mapa deja de parecer un gráfico y se siente vivo), no en
-  funcionalidades sueltas — "¿qué botón añado?" es la pregunta equivocada.
+- **Criterio de éxito de cada mejora (afilado 12-jul con EL LISTÓN CREATIVO — sustituye al anterior,
+  no se apila):** ¿qué historia contaría el visitante al día siguiente, con sus propias palabras? Piensa
+  en ESCENAS, no en funcionalidades — y exige a cada escena el listón de `DISEÑO_HEURISTICAS.md §11`:
+  inevitable (cada decisión parece la única correcta), irrepetible (no copiable en un finde), candidata
+  a premio, y que pase **la prueba del silencio** (10 personas excepcionales la exploran: si los 10
+  segundos de silencio de después no transmiten asombro o necesidad de seguir, no está terminada).
+  **El listón sube la AMBICIÓN, no deroga la disciplina:** las brújulas y las hipótesis falsables siguen
+  decidiendo QUÉ se construye — el listón nunca justifica añadir por añadir; justifica no conformarse.
+  Y la calidad es UNIFORME: la peor sección de la página manda tanto como la estrella.
 - **Un solo backlog, no dos.** Fricciones (qué frena/rompe) y momentos memorables (qué falta por
   crear) compiten en el MISMO ranking — construye el que más suba la experiencia global, sea cual
   sea su categoría. La lente generativa ("qué momento inolvidable falta") es UNA lente más a usar

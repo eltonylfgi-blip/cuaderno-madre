@@ -138,3 +138,35 @@ Pensar en **3 capas** para que un clon sea barato:
 - **Innegociables** (siguen mandando sobre lo inmersivo): apagable, `prefers-reduced-motion`, **acción principal a un toque** (abuela↔borracho intacto), 0 coste de comprensión, móvil con factor `K` que recorta efectos.
 - **Patrón de referencia vivo:** el **mapa de MADRE** (`#mapaCard`): centro que late (halo pulsante), ramas que flotan, líneas con el COLOR de su «energía/estado», hover con glow, clic que revela. Inmersivo pero legible y apagable.
 - **Para clonar:** la capa inmersiva va en la **(C) PERFIL** (§4): preset `simple` la baja casi a cero (abuela), `fiesta` la sube. Por defecto, dosis media.
+
+## 11. EL LISTÓN CREATIVO (Tony + revisor, 12-jul-2026) — cómo de ALTO apuntar
+> El sistema de decisión (brújulas, hipótesis, patrones) dice QUÉ construir y CÓMO no engañarse.
+> Esto dice CUÁNTO exigirLE a lo que se construye. **No se contradicen: el listón sube la ambición;
+> las brújulas siguen vetando el árbol de navidad.** El listón NUNCA justifica añadir por añadir —
+> justifica no conformarse con lo que ya hay.
+
+1. **Inevitable** — al terminar, cada decisión debe parecer la única correcta. No "perfecta": inevitable.
+2. **Momentos que hacen historia** — pregunta continua: *¿qué parte contará alguien a un amigo?* Si esa
+   parte no existe, no has terminado.
+3. **Cada detalle, candidato a premio** — diseña cada sección como candidata a un premio internacional
+   (UX, narrativa, interacción, innovación). Sin rincones mediocres.
+4. **Irrepetible, no bonito** — si otro diseñador pudiera copiarlo en un fin de semana, aún no es
+   suficientemente original. (Ya era guardarraíl: la personalidad es el activo imposible de copiar.)
+5. **Descubrimientos durante años** — no diseñes solo el primer día; que dentro de 3 años alguien siga
+   encontrando cosas.
+6. **Obsesión por lo nunca visto** — antes de aceptar una solución: ¿existe algo parecido? ¿quién hace
+   esto? ¿cómo sería 10× más original?
+7. **Rompe tus mejores ideas** — una idea excelente no se construye de inmediato: genera rivales que
+   intenten superarla; construye solo la que nadie supere (y aún esa, en su versión más simple — P-004).
+8. **Escenas, no pantallas** — cada sección con identidad propia: entrar en otro lugar del mismo universo.
+9. **Calidad uniforme** — la PEOR parte de la página debe seguir siendo extraordinaria. La calidad
+   mínima manda tanto como el pico.
+10. **Director creativo obsesivo** — una mejora del 0,5% también se hace; cientos de veces. Se para
+    cuando lo restante es imperceptible, no cuando "ya está bien".
+11. **Emociones alternadas** — como una buena película: sorpresa, risa, calma, misterio, ternura,
+    admiración, reflexión. No una emoción constante.
+12. **La comunidad deja huella** — que el visitante quiera volver, compartir, descubrir secretos,
+    enseñar a otros, discutir teorías, dejar su marca.
+13. **La prueba del silencio (gate de "terminado" creativo)** — imagina 10 personas excepcionales
+    explorándolo; no importa lo que digan: importan los **10 segundos de silencio** después. Si ese
+    silencio no transmite asombro/curiosidad/necesidad de seguir explorando, no está listo.
