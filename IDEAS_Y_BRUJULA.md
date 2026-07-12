@@ -12,6 +12,10 @@
 > 1. Antes de un ciclo de mejora → repasa las 🧭 BRÚJULAS (filtran cualquier decisión) y coge la hipótesis
 >    de MÁS palanca en estado `☐ Sin probar` que no esté gateada. Las gateadas (tocan mapa/identidad) SÍ
 >    necesitan OK de Tony — eso no lo decide la autonomía, lo dice CLAUDE.md.
+>    **⚠️ Esto NO es una cola FIFO (revisor 12-jul):** antes de construir, re-preguntar *"¿sigue siendo
+>    ESTA la hipótesis de mayor retorno AHORA?"* — el orden escrito es la foto del último ranking, no
+>    una promesa. Construir "la siguiente porque toca" es exactamente lo que este documento existe
+>    para impedir.
 > 2. Cuando descubras una hipótesis que te ENCANTA → añádela aquí con su palanca estimada y estado
 >    `☐ Sin probar`. NO la construyas por impulso. **Toda hipótesis DEBE traer escrito CÓMO PUEDE MORIR**
 >    (revisor 12-jul: *"si una hipótesis no tiene una forma clara de quedar refutada, todavía no está

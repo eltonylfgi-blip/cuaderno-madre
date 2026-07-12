@@ -37,6 +37,9 @@ añade aquí. Si algo de esto deja de ser cierto, se CORRIGE, no se apila encima
 6. **No acumules reglas de proceso.** El riesgo real no es parar demasiado pronto — es pasar más
    tiempo evaluando/puntuando/creando workflows que construyendo. Por cada rato analizando, varios
    ratos implementando. Ante la duda entre preguntar y construir un cambio reversible: construye.
+   **Test para CUALQUIER documento de proceso nuevo (revisor 12-jul):** *"¿evita errores repetidos que
+   ya han costado varias sesiones?"* Si no, no merece existir. Hoy hay exactamente 2 de trabajo
+   (`IDEAS_Y_BRUJULA.md` + `PATRONES_OPERATIVOS.md`) — antes de crear un 3º, releer esta línea.
 
 ## Misión (aprobada por Tony, 11-jul-2026 — sustituye "esperar decisión" cuando no hay cuello claro)
 Este chat no existe para cerrar tareas sueltas: existe para que el Cuaderno se acerque, versión a

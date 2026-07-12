@@ -12,28 +12,34 @@
 > detecta y lo PROPONE — no guarda todo en automático.
 > **Cuándo se CONSULTA:** antes de una mejora, junto a `IDEAS_Y_BRUJULA.md`: *"¿esto se parece a un
 > patrón que ya sabemos que funciona?"*
+> **TOPE (revisor 12-jul): ~30-40 patrones máximo.** Pasado eso, deja de ser útil — *"mejor 18 patrones
+> excelentes que 140 buenas ideas"*. Al acercarse al tope, PODAR: se quedan solo los que hayan cambiado
+> VARIAS decisiones; el resto fuera (la poda es parte del mecanismo, no un fallo).
 > **Advertencia vigente (revisor):** si esto acaba con prioridades, etiquetas, dependencias y matrices,
-> habrá fracasado. Formato plano, 4 campos, y ya. Las brújulas de PRODUCTO (B1-B6) viven en
+> habrá fracasado. Formato plano, 5 campos, y ya. Las brújulas de PRODUCTO (B1-B6) viven en
 > `IDEAS_Y_BRUJULA.md` y NO se duplican aquí — esto es cómo DECIDIMOS, no qué cuenta la web.
 
 ---
 
 ## P-001 — Medir antes de tocar
-- **Qué pasó:** Tony dijo "hay paneles demasiado largos"; en vez de adivinar cuál, se midió el DOM real
-  (v1.32): `#prediccionesCard` = 3381px, el siguiente = 868px. La decisión salió de un dato.
+- **Origen:** v1.32 (11-jul-2026).
+- **Qué pasó:** Tony dijo "hay paneles demasiado largos"; en vez de adivinar cuál, se midió el DOM real:
+  `#prediccionesCard` = 3381px, el siguiente = 868px. La decisión salió de un dato.
 - **Por qué funcionó:** el culpable no era discutible; y reveló que el recorte correcto era narrativo
   (resueltas vs en juego), no "acortar todo".
 - **Generalización:** ante cualquier "esto está mal", buscar primero el cuello MEDIBLE (px, ms, conteos,
   coordenadas). Sin dato, no hay decisión — hay opinión.
 
 ## P-002 — No mezclar dos hipótesis en un mismo cambio
-- **Qué pasó:** en v1.34 se construyó el vínculo apuesta→rama pero NO se movió el árbol en la misma
-  versión, aunque ambas ideas estaban sobre la mesa.
+- **Origen:** v1.34 (11-jul-2026).
+- **Qué pasó:** se construyó el vínculo apuesta→rama pero NO se movió el árbol en la misma versión,
+  aunque ambas ideas estaban sobre la mesa.
 - **Por qué funcionó:** si algo mejora ahora, sabremos POR QUÉ. Dos cambios juntos = efecto inatribuible.
 - **Generalización:** una variable por MVP. Si dos cambios responden a hipótesis distintas, versiones
   distintas.
 
 ## P-003 — Separar el hecho medido de la conclusión
+- **Origen:** investigación del viaje, 11-jul-2026 (sin versión — nació de un error propio).
 - **Qué pasó:** medí que el árbol aparece ANTES que la apuesta (hecho) y concluí "roba protagonismo"
   (conclusión sin probar). El revisor lo separó: *"solo sabemos que aparece antes"*.
 - **Por qué funcionó:** evitó reordenar media web sobre una suposición disfrazada de dato.
@@ -42,15 +48,17 @@
   MADRE, buzón 12-jul.)*
 
 ## P-004 — Probar la versión ridículamente simple primero
+- **Origen:** v1.34 (11-jul-2026).
 - **Qué pasó:** el revisor propuso un vínculo apuesta↔rama con respiración/energía/cicatrices. Se
-  construyó SOLO "tocar insignia → destacar nodo" (v1.34) y la pregunta "¿ya se entiende?" decide si
-  hace falta más.
+  construyó SOLO "tocar insignia → destacar nodo" y la pregunta "¿ya se entiende?" decide si hace falta
+  más.
 - **Por qué funcionó:** el 80% del valor suele estar en hacer visible la relación, no en las metáforas;
   y si la hipótesis muere, murió barata.
 - **Generalización:** ante una idea grande, construir el MVP mínimo que la pruebe; no añadir capas hasta
   que la simple demuestre quedarse corta.
 
 ## P-005 — Reusar el vocabulario existente antes de inventar
+- **Origen:** v1.33 (11-jul-2026).
 - **Qué pasó:** para el botón de historial se comprobó (grep) qué emojis ya significaban algo: 📚 ya era
   la rama "Memoria/archivo" → descartado aunque lo sugirió el revisor; 📜 ya significaba "registro del
   pasado" en el changelog → elegido. Igual con ⏳ (reusado del chip "en juego").
@@ -59,6 +67,7 @@
   — y comprobar que el candidato no signifique ya OTRA cosa.
 
 ## P-006 — Evidencia ≠ tráfico
+- **Origen:** feedback del revisor sobre H1, 12-jul-2026.
 - **Qué pasó:** dije "falta evidencia real de uso" implicando esperar visitantes. El revisor lo corrigió:
   observar a UNA persona, cronometrar un recorrido, preguntar qué entendió — todo eso ya valida/refuta,
   sin miles de visitas.
@@ -67,6 +76,7 @@
   el tráfico es solo una de las fuentes, y casi nunca la primera disponible.
 
 ## P-007 — Toda mejora se formula como hipótesis falsable
+- **Origen:** reescritura del backlog, 12-jul-2026.
 - **Qué pasó:** el backlog pasó de "ideas" a hipótesis con estado (Sin probar/Probando/Confirmada/
   Rechazada) y con su forma de morir escrita.
 - **Por qué funcionó:** una idea puede vivir para siempre; una hipótesis está obligada a terminar su
