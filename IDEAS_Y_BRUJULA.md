@@ -126,7 +126,17 @@ principal y aumenta el impulso de seguir bajando."**
 **H6 — "Si el visitante termina la experiencia con una ESCENA DE CIERRE en lugar de comentarios de
 prueba + nota administrativa, recordará mejor el Cuaderno."** *(Reformulada 12-jul por el revisor:
 comparativa y falsable — "el final es malo" era el hecho, no la hipótesis. Regla pico-final → P-008.)*
-- Estado: **☐ Sin probar.** Primera hipótesis nacida del listón creativo (E2: la peor parte manda).
+- Estado: **☐ Probando** — Construida ✔ (v1.36, 12-jul, «LA ÚLTIMA LÍNEA»), evidencia pendiente.
+- **Registro del torneo E1 (12-jul, cumplido):** 6 candidatas, 4 muertas contra brújulas (tapa teatral
+  → copiable y "¿echar de menos?" negativo; espejo del visitante → compite con la protagonista; cierre
+  circular → truco, no escena; "testigo" con contador → mecánica nueva + gamificación). Ganadora
+  atacada por un adversarial independiente: 1 golpe MORTAL aceptado (fuera la frase "tú ya estabas..."
+  — anticipaba triunfo no ganado, B1/B2, y era falsa post-15-jul) + 2 ajustes obligatorios aplicados
+  (rótulo solo-hechos; pie de foto explicativo borrado) + su variante mejorada adoptada (evidencia
+  sobre promesa: la última línea YA escrita, leída del ledger real — se actualiza sola al anotarse
+  cada veredicto).
+- **Nota de proceso:** construida bajo el "adelante con lo de más beneficio" de Tony (12-jul) —
+  reversible en 1 Edit si al verla no le convence; no toca los 2 gates duros (mapa/marca).
 - **HECHO medido (12-jul, recorrido de transiciones):** hoy lo último que ve quien llega al fondo es:
   comentarios de prueba crudos («ola gays» / «gay tu» como últimos comentarios visibles) → nota
   administrativa de tarjetas internas → footer. **No existe escena de cierre** — la web más honesta y

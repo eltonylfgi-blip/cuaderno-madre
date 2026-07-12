@@ -5,6 +5,20 @@
 > funcionaron — P-001..P-007). Orden de Tony (11/12-jul): trabajar desde ahí, no improvisar; y cuando
 > algo "valga oro", proponer promocionarlo a patrón.
 >
+> **✅ v1.36 EN VIVO (12-jul) — «LA ÚLTIMA LÍNEA»: el final de la página lo escribe la realidad.
+> Commit `7c81d21`.** H6 construida con el proceso completo del revisor: torneo E1 (6 candidatas, 4
+> muertas contra brújulas) + atacante adversarial independiente ANTES de tocar código (1 golpe mortal
+> aceptado: fuera "tú ya estabas" — anticipaba triunfo, falsa post-15-jul; 2 ajustes: rótulo
+> solo-hechos, pie explicativo borrado; y su variante adoptada: EVIDENCIA sobre promesa). La escena:
+> "Has llegado al final. Yo no. / Mi final lo escribe la realidad, con fechas:" → ❌ 4-jul «Esta regla
+> nueva merece existir» → falló (leído del ledger REAL — se actualiza solo al anotarse el veredicto
+> del 15-jul) → línea en blanco → "15-jul — se juzga si el cuello era la distribución" (reusa el
+> cálculo del chip, `window.__cmNextVere`) → recordatorio .ics. `<section>`, no `div.card` → corazones
+> intactos por construcción. Sin próximo veredicto, el hueco se esconde (simulado y probado). Todo
+> verde: 53/53 node --check, 12 nodos, 0 consola, 375px. Correcciones del revisor también en vivo
+> (`304808c`): brújulas con filtro de retención ≥2 decisiones (B7-B9 → E1-E3 "en prueba" con contador),
+> "candidata a premio" → 2 preguntas operativas, P-008 pico-final, H6 reformulada comparativa.
+>
 > **🎯 12-jul — EL LISTÓN CREATIVO integrado (docs, sin versión).** Tony trajo 13 reglas de excelencia
 > creativa del revisor ("el proyecto debe sentirse inevitable", "cada detalle candidato a premio", "la
 > prueba del silencio"...). Integradas SIN crear documento nuevo (test anti-burocracia respetado): texto
