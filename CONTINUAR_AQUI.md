@@ -1,8 +1,26 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 mañana) — v1.46 EN VIVO. Sesión del 12-jul: 8
-> versiones (v1.39→v1.46). PAUSA DE DOCUMENTACIÓN sigue (VOZ_CANONICA.md fue la excepción
-> autorizada: corpus creativo pedido por GPT+Tony, no burocracia de proceso).**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo) — v1.48 EN VIVO y 🛑 FRENO DE VERSIONES DECLARADO: la sesión del
+> 12-jul produjo 10 versiones (v1.39→v1.48) y el revisor avisó con razón ("ya no sabes cuál produjo
+> el efecto; la realidad necesita tiempo para responder"). PRÓXIMO TURNO: NO construir por defecto —
+> observar, dejar que Tony pruebe, y el 15-jul llega el veredicto real. Solo se construye si Tony
+> trae un bug o lo pide explícito. PAUSA DE DOCUMENTACIÓN sigue.**
+>
+> **✅ v1.47+v1.48 — última tanda del día. Commit `e24148a`.**
+> - v1.47: **texturas ASMR repartidas de VERDAD** por el recorrido (1539→10130px; causa raíz: el
+>   resecuenciador v0.33 movía las tarjetas DESPUÉS de buildRibbons y quedaban huérfanas juntas — el
+>   re-reparto vive al EOF, después de todo) + **logros con chistes malos** al rozar cada textura
+>   (1 vez, localStorage `cm_tex_v1`, contador X/12, teaser de sorpresa a 6/12, premio a 12/12) +
+>   hum del mapa a menos de la mitad (Tony: "flojito"; 0.015/lfo 0.09 — el tic del nodo intacto) +
+>   pastillas apiladas en ≤560px (Vivo pisaba al idioma en su captura).
+> - v1.48: **terminaciones** (la regla del revisor, 3ª vez, POR FIN construida): puente Acto I ya no
+>   dice "ya sabes" (cierra) sino "¿me estoy engañando? júzgalo tú" (abre); y antes de EL GIRO:
+>   «Todo esto ya existía el 7 de julio. Y nadie lo había visto.» — el 8-jul aterriza como pago.
+> - **ENCOLADO con medición pendiente (NO construido):** texto que se sale de los círculos del mapa
+>   grande (Tony quiere tamaño según contenido — zona delicada, medir primero) · panel info del mapa
+>   denso en móvil · ruta guiada v2 (texto progresivo + colores que tiñen lo señalado) ·
+>   terminaciones de Acto I-final y Acto III (solo se hicieron los 2 puentes de mayor palanca) ·
+>   € en vez de % · huellas del recorrido.
 >
 > **✅ v1.45 — los 6 de las capturas de Tony. Commit `86b9c6c`.** El pliegue ya no corta el botón de
 > sellar (se re-mide tras montar los deslizadores — al final del script v1.41); sellar celebra
