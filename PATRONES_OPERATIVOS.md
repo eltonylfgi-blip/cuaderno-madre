@@ -83,3 +83,15 @@
   historia. Encaja con la identidad de MADRE (apuesta pública + realidad decide).
 - **Generalización:** si una mejora no puede quedar refutada por nada, todavía no está bien formulada —
   reescribirla hasta que tenga una muerte posible.
+
+## P-008 — El final pesa más que su tamaño (regla pico-final)
+- **Origen:** H6 / auditoría de transiciones, 12-jul-2026 (promovido por el revisor: "afecta a demos,
+  productos, presentaciones, vídeos, onboarding — es reutilizable").
+- **Qué pasó:** el recorrido reveló que lo último que ve el visitante son comentarios de prueba crudos
+  y una nota administrativa — el peor momento de la web justo donde la memoria pesa más (pico-final:
+  la gente recuerda el pico y el FINAL de una experiencia, no la media).
+- **Por qué funcionó:** redirigió el objetivo creativo hacia el cierre, que nadie miraba porque "el
+  final no compite" — y sí compite: define el recuerdo con el que se va el visitante.
+- **Generalización:** en cualquier experiencia (demo, producto, presentación, vídeo, onboarding),
+  diseñar el FINAL tan deliberadamente como el pico. Pregunta: ¿cuál es la última impresión REAL (no
+  la planeada)?

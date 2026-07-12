@@ -54,9 +54,10 @@ de botella de mayor impacto DENTRO del Cuaderno y resolverlo — no esperar una 
 - **Criterio de éxito de cada mejora (afilado 12-jul con EL LISTÓN CREATIVO — sustituye al anterior,
   no se apila):** ¿qué historia contaría el visitante al día siguiente, con sus propias palabras? Piensa
   en ESCENAS, no en funcionalidades — y exige a cada escena el listón de `DISEÑO_HEURISTICAS.md §11`:
-  inevitable (cada decisión parece la única correcta), irrepetible (no copiable en un finde), candidata
-  a premio, y que pase **la prueba del silencio** (10 personas excepcionales la exploran: si los 10
-  segundos de silencio de después no transmiten asombro o necesidad de seguir, no está terminada).
+  inevitable (cada decisión parece la única correcta), irrepetible (no copiable en un finde), y las dos
+  preguntas OPERATIVAS que sustituyen a "candidata a premio" (corrección del revisor: premio inspira
+  pero no decide): **¿la echaríamos de menos si desapareciera?** y **¿hace que alguien recuerde mejor
+  la historia?** — más la prueba del silencio como gate final (en prueba, ver IDEAS_Y_BRUJULA E3).
   **El listón sube la AMBICIÓN, no deroga la disciplina:** las brújulas y las hipótesis falsables siguen
   decidiendo QUÉ se construye — el listón nunca justifica añadir por añadir; justifica no conformarse.
   Y la calidad es UNIFORME: la peor sección de la página manda tanto como la estrella.

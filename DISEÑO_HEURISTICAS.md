@@ -149,7 +149,9 @@ Pensar en **3 capas** para que un clon sea barato:
 2. **Momentos que hacen historia** — pregunta continua: *¿qué parte contará alguien a un amigo?* Si esa
    parte no existe, no has terminado.
 3. **Cada detalle, candidato a premio** — diseña cada sección como candidata a un premio internacional
-   (UX, narrativa, interacción, innovación). Sin rincones mediocres.
+   (UX, narrativa, interacción, innovación). Sin rincones mediocres. *(Versión OPERATIVA — corrección
+   del revisor 12-jul: "premio" inspira pero no decide; para DECIDIR usa estas dos: ¿la echaríamos de
+   menos si desapareciera? · ¿hace que alguien recuerde mejor la historia?)*
 4. **Irrepetible, no bonito** — si otro diseñador pudiera copiarlo en un fin de semana, aún no es
    suficientemente original. (Ya era guardarraíl: la personalidad es el activo imposible de copiar.)
 5. **Descubrimientos durante años** — no diseñes solo el primer día; que dentro de 3 años alguien siga

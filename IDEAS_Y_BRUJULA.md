@@ -38,6 +38,11 @@
 
 ## 🧭 BRÚJULAS (principios que filtran TODA decisión — si una mejora las viola, no se construye)
 
+> **Filtro de retención (revisor 12-jul, contra la acumulación):** una brújula solo SE QUEDA si ha
+> cambiado **≥2 decisiones distintas** demostrables. Lo que no llegue es una *observación útil* (vive
+> abajo, en 🌡️ EN PRUEBA, con contador) — asciende al demostrar las 2, o se poda. Si algún día hay 18
+> brújulas, no se consultará ninguna: el tope implícito es ~media docena de verdad.
+
 - **B1 — "Aumenta la incertidumbre del PRESENTE, no el contraste del fracaso."** El fracaso pasado ya pasó;
   la tensión está en *"no sé qué pasará dentro de X días"*. Afecta hero, apuesta, contador, veredicto,
   revelación. (Revisor, 11-jul — "el recurso narrativo más valioso que tiene hoy el Cuaderno".)
@@ -56,17 +61,17 @@
   que la apuesta es un HECHO (medido, B4). Que eso "robe protagonismo" es una hipótesis, NO un hecho — falta
   probarla antes de actuar como si estuviera demostrada. (Revisor, 11-jul, corrigiendo mi propia conclusión
   precipitada tras medir I3.)
-- **B7 — "Rompe tus mejores ideas antes de construirlas."** Una idea excelente no se construye de inmediato:
-  genera 2-3 rivales que intenten superarla; construye solo la que nadie supere — y aun esa, en su versión
-  más simple (P-004). Aplica a decisiones CREATIVAS (escenas, identidad, momentos), no a fixes mecánicos.
-  (Listón creativo, 12-jul — ver `DISEÑO_HEURISTICAS.md §11` para el listón completo.)
-- **B8 — "La peor parte debe seguir siendo extraordinaria."** La calidad mínima manda: al buscar el
-  siguiente cuello, mirar también la sección MÁS DÉBIL, no solo la protagonista. Test medible: ¿qué
-  sección describiría un visitante con un "meh"? (Listón creativo, 12-jul.)
-- **B9 — "La prueba del silencio" (gate de "terminado" creativo).** Antes de declarar una escena lista:
-  imagina 10 personas excepcionales explorándola — no importa lo que digan; importan los 10 segundos de
-  silencio de después. Sin asombro/curiosidad en ese silencio → no está lista. Complementa (no sustituye)
-  la verificación técnica. (Listón creativo, 12-jul.)
+### 🌡️ EN PRUEBA (observaciones útiles — ascienden a brújula al cambiar 2 decisiones distintas)
+
+- **E1 (era B7) — "Rompe tus mejores ideas antes de construirlas."** Genera 2-3 rivales que intenten
+  superar la idea excelente; construye solo la que nadie supere — y aun esa, en su versión más simple
+  (P-004). Solo para decisiones CREATIVAS, no fixes mecánicos. **Decisiones cambiadas: 1/2** (torneo de
+  la escena de cierre, 12-jul — mató 4 de 6 candidatas antes de construir nada).
+- **E2 (era B8) — "La peor parte debe seguir siendo extraordinaria."** Al buscar el siguiente cuello,
+  mirar también la sección MÁS DÉBIL. Test: ¿qué sección describiría un visitante con un "meh"?
+  **Decisiones cambiadas: 1/2** (H6: el final de la página como objetivo, 12-jul).
+- **E3 (era B9) — "La prueba del silencio."** Gate de "terminado" creativo: los 10 segundos de silencio
+  tras explorar deben transmitir asombro/curiosidad. **Decisiones cambiadas: 0/2.**
 
 ---
 
@@ -118,9 +123,10 @@ principal y aumenta el impulso de seguir bajando."**
 - Reversible (no toca el motor, solo posición de secciones) pero es un cambio narrativo grande → medir/
   proponer explícitamente antes de construir, probablemente con el criterio de Tony antes de decidir solo.
 
-**H6 — "Si el FINAL de la página es una escena memorable, la impresión global mejora
-desproporcionadamente (regla pico-final: la gente recuerda el pico y el FINAL, no la media)."**
-- Estado: **☐ Sin probar.** Primera hipótesis nacida del listón creativo (B8: la peor parte manda).
+**H6 — "Si el visitante termina la experiencia con una ESCENA DE CIERRE en lugar de comentarios de
+prueba + nota administrativa, recordará mejor el Cuaderno."** *(Reformulada 12-jul por el revisor:
+comparativa y falsable — "el final es malo" era el hecho, no la hipótesis. Regla pico-final → P-008.)*
+- Estado: **☐ Sin probar.** Primera hipótesis nacida del listón creativo (E2: la peor parte manda).
 - **HECHO medido (12-jul, recorrido de transiciones):** hoy lo último que ve quien llega al fondo es:
   comentarios de prueba crudos («ola gays» / «gay tu» como últimos comentarios visibles) → nota
   administrativa de tarjetas internas → footer. **No existe escena de cierre** — la web más honesta y
@@ -133,11 +139,11 @@ desproporcionadamente (regla pico-final: la gente recuerda el pico y el FINAL, n
 - **Cómo puede MORIR:** si casi nadie llega al fondo (medible), el final no es palanca → Rechazada, no
   se construye. También muere si la escena de cierre compite con la apuesta (violaría el criterio de
   siempre: protagonista es MADRE-vs-realidad).
-- **⚠️ B7 OBLIGATORIA antes de construir:** no construir la primera idea. Candidatos iniciales para el
-  torneo (ninguno elegido): (a) «MADRE cierra el cuaderno» — literal, la tapa se cierra contigo dentro;
-  (b) la despedida sabe cuánto viste (datos reales de TU sesión: ramas exploradas, tiempo, tu apuesta) y
-  te emplaza al veredicto más cercano; (c) la última línea la escribe la realidad: "esta página no sabe
-  cómo acaba su propia historia — vuelve el 15-jul". Generar más rivales antes de decidir.
+- **⚠️ E1 OBLIGATORIA antes de construir (torneo de rivales):** no construir la primera idea. Candidatos
+  iniciales (ninguno elegido aún): (a) «MADRE cierra el cuaderno» — literal, la tapa se cierra contigo
+  dentro; (b) la despedida sabe cuánto viste (datos reales de TU sesión) y te emplaza al veredicto más
+  cercano; (c) la última línea la escribe la realidad: "esta página no sabe cómo acaba su propia
+  historia — vuelve el 15-jul". Generar más rivales antes de decidir.
 - **Nota de moderación (decisión de Tony, NO mía):** los comentarios crudos son datos compartidos de
   producción — ocultarlos usa el campo `hidden` existente (mismo mecanismo ya usado 2 veces), pero
   mutar producción necesita su OK (precedente: fila TEST-VERIF bloqueada, ver CONTINUAR_AQUI 11-jul).
