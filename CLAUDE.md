@@ -10,6 +10,12 @@ versión), `DISEÑO_HEURISTICAS.md` + `MADRE_UI_REFERENCIAS.md` (arsenal de dise
 antes de improvisar UI). Este fichero es solo el CONTRATO de cómo trabajar, no el estado del
 proyecto — eso vive en los de arriba.
 
+## 🛑 DISCIPLINA TEMPORAL EN VIGOR (GPT, 12-jul — caduca cuando Tony diga "ya podéis construir de nuevo")
+El sitio empezó a acumular frentes (H7/H8/H11, olas paralelas, "Modelo:" en cada pie). Corrección: **UN
+solo cuello de botella a la vez, nunca una lista.** Hasta nueva orden: **ninguna versión añade una
+sección/mecanismo nuevo — solo QUITA ruido o REFUERZA una escena que ya existe.** Antes de tocar código,
+pregunta: "¿esto es quitar o reforzar, o es añadir?" Si es añadir, se apunta en IDEAS_Y_BRUJULA y espera.
+
 ## Modo de trabajo (validado la noche del 10/11-jul-2026, confirmado varias veces por Tony)
 
 Esto no es una lista que crece cada sesión — si una idea nueva no cambia una decisión real, no se
