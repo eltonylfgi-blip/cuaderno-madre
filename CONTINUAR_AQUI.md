@@ -1,7 +1,35 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 noche) — v1.39 EN VIVO, un cuello resuelto, el resto del
-> bloque de abajo SIGUE ABIERTO (no lo trates como cerrado por esto).**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 noche·2) — v1.40 EN VIVO; el siguiente cuello ya está
+> ELEGIDO y AUDITADO con datos: las TERMINACIONES de los actos. PAUSA DE DOCUMENTACIÓN en vigor
+> (crítica aceptada por Tony: "no añadáis más H/B/P/documentos, solo construid unas versiones") —
+> NO crear hipótesis/brújulas/patrones nuevos; registrar solo aquí.**
+>
+> **✅ v1.40 — capa de sonido UI. Commit `42699f4`.** Directiva de Tony en caps («sonidos al
+> interactuar, o ambiente si es zona VIP como el mapa») = autorización que levanta el "solo quitar"
+> SOLO para esto. 5 toques curados (nodo del mapa, gato-maullido 2 notas, votar apuesta, botones de
+> desplegar, pastilla de movimiento) + hum grave casi subliminal (108Hz batiendo, vol 0.035) mientras
+> el mapa grande está abierto. Todo sintetizado (criterio v0.12, cero mp3 — NO usar las webs de
+> samples que sugirió Gemini, ya se decidió síntesis), capa autocontenida (ctx propio, observer
+> externo sobre `#mapBig-ov`, cero toque a motores). 🌙 Calma = capa en silencio. **PENDIENTE DEL
+> OÍDO DE TONY: el timbre/volumen** (el entorno de verificación no puede oír; volumen elegido bajo a
+> propósito). Si no le gusta: 1 Edit lo borra entero.
+>
+> **🎯 SIGUIENTE CUELLO (elegido, evidencia lista, NO construido) — cómo TERMINAN los actos.**
+> Refinamiento de GPT aceptado por Tony: la solución NO es que cada separador mencione la apuesta,
+> es que ningún bloque CIERRE la tensión que el siguiente necesita — auditar "¿cómo termina este
+> bloque: pregunta viva o conclusión?". **Auditoría hecha (12-jul, DOM real):** ACTO I termina en un
+> índice de desplegables (cerrado-administrativo); su puente dice «Ya sabes lo que me juego» (cierra
+> literalmente); ACTO II termina en «tu comentario se ve como mucho en 6 horas» (infraestructura);
+> ACTO III termina en «Actualizado: 2026-07-05» (sello administrativo). La ÚNICA terminación abierta
+> de toda la página es la escena final de v1.36. El próximo build: reescribir cómo terminan ACTO I y
+> ACTO II (una variable, borradores primero — es trabajo de VOZ, enseñar a Tony antes de fijar).
+> Queda detrás en la cola, pedido por Tony el mismo día: más vida constante bajo ❤️ Vivo (hilo abierto
+> de v1.30-31: hoy solo mapa+breathe+pulse de 35 animaciones; NUNCA saltarse reduced-motion en Auto).
+>
+> ---
+>
+> ▶️ **(bloque anterior — v1.39, sigue siendo contexto válido)**
 >
 > **✅ v1.39 — el marcador se pliega (difuminado + «Ver el marcador entero»). Commit `4c95eb1`.** Tony
 > volvió a ver "paneles demasiado largos" y dio el propio marcador como ejemplo — medido de nuevo:
