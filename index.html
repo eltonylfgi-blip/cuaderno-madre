@@ -1116,15 +1116,16 @@
     });
     var pm=document.getElementById("palmares");
     if(pm && (ok+ko+wait+due)>0){
-      pm.style.cssText="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:10px 0 0;padding:9px 12px;border:1.5px solid var(--line);border-radius:11px;background:var(--card)";
+      pm.style.cssText="display:flex;flex-direction:column;gap:10px;margin:10px 0 0";
+      /* --- Resumen numérico (mismo que antes, compacto) --- */
+      var wrap=document.createElement("div");
+      wrap.style.cssText="display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:9px 12px;border:1.5px solid var(--line);border-radius:11px;background:var(--card)";
       function cell(n,l,color){ var d=document.createElement("div"); d.style.cssText="text-align:center";
         var a=document.createElement("div"); a.style.cssText="font:800 19px/1 system-ui;color:"+color; a.textContent=n;
         var b=document.createElement("div"); b.style.cssText="font-size:10.5px;color:var(--muted);margin-top:2px"; b.textContent=l;
         d.appendChild(a); d.appendChild(b);
-        /* v1.02: la cifra cuenta hacia arriba (0→n en <1s), mismo lenguaje que el número grande del hero */
         var reduceM=false; try{ reduceM=matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
-        if(!reduceM && n>0){
-          a.textContent="0";
+        if(!reduceM && n>0){ a.textContent="0";
           var t0=null,dur=650;
           requestAnimationFrame(function step(ts){
             if(!t0) t0=ts;
@@ -1135,11 +1136,45 @@
         }
         return d; }
       var lbl=document.createElement("b"); lbl.style.cssText="font-size:12px;color:var(--muted)"; lbl.textContent="PALMARÉS";
-      pm.appendChild(lbl);
-      pm.appendChild(cell(ok,"aciertos","#10b981"));
-      pm.appendChild(cell(ko,"fallos (se quedan)","#ef4444"));
-      if(due) pm.appendChild(cell(due,"vencidas, sin anotar","#f59e0b"));
-      pm.appendChild(cell(wait,"en juego","#d97706"));
+      wrap.appendChild(lbl);
+      wrap.appendChild(cell(ok,"aciertos","#10b981"));
+      wrap.appendChild(cell(ko,"fallos (se quedan)","#ef4444"));
+      if(due) wrap.appendChild(cell(due,"vencidas, sin anotar","#f59e0b"));
+      wrap.appendChild(cell(wait,"en juego","#d97706"));
+      pm.appendChild(wrap);
+
+      /* --- Historial liquidado VISIBLE (no detrás de botón) --- */
+      var ul=document.querySelector("#prediccionesCard .predList");
+      var liquidadas=ul?Array.prototype.slice.call(ul.querySelectorAll("li.ok,li.ko")).reverse():[];
+      if(liquidadas.length){
+        var hist=document.createElement("div");
+        hist.style.cssText="display:flex;flex-direction:column;gap:8px";
+        var tit=document.createElement("b"); tit.style.cssText="font-size:12px;color:var(--muted)"; tit.textContent="Historial liquidado (el último primero)";
+        hist.appendChild(tit);
+        liquidadas.forEach(function(li){
+          var esOk=li.classList.contains("ok");
+          var card=document.createElement("div");
+          card.style.cssText="display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;border-left:4px solid "+(esOk?"#10b981":"#ef4444")+" background:var(--card);border:1px solid var(--line)";
+          var chip=document.createElement("span");
+          chip.style.cssText="flex:0 0 auto;font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;color:#fff;white-space:nowrap;margin-top:2px;background:"+(esOk?"#10b981":"#ef4444");
+          chip.textContent=esOk?"✅ acertó":"❌ falló";
+          var body=document.createElement("div"); body.style.cssText="flex:1;min-width:0";
+          var cree=li.querySelector(".pr-cree"); var res=li.querySelector(".pr-res"); var fecha=li.querySelector(".pr-fecha"); var rama=li.querySelector(".pr-rama");
+          var pred=document.createElement("div"); pred.style.cssText="font-weight:600;color:var(--ink);font-size:13.5px;margin-bottom:3px"; pred.textContent=cree?cree.textContent.replace(/^«|»$/g,''):"";
+          body.appendChild(pred);
+          if(res){
+            var resDiv=document.createElement("div"); resDiv.style.cssText="font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4"; resDiv.textContent=res.textContent;
+            body.appendChild(resDiv);
+          }
+          var meta=document.createElement("div"); meta.style.cssText="display:flex;gap:8px;align-items:center;margin-top:6px;font-size:11.5px;color:var(--muted);opacity:.8";
+          if(fecha){ var f=document.createElement("span"); f.style.cssText="font-weight:800"; f.textContent=fecha.textContent; meta.appendChild(f); }
+          if(rama){ var r=document.createElement("span"); r.style.cssText="font-size:14px"; r.textContent=rama.textContent; meta.appendChild(r); }
+          body.appendChild(meta);
+          card.appendChild(chip); card.appendChild(body);
+          hist.appendChild(card);
+        });
+        pm.appendChild(hist);
+      }
     }
   }catch(e){ console.warn("marcador",e); } })();
   </script>
