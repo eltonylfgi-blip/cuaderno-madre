@@ -1681,10 +1681,12 @@
       var chips=document.querySelector(".chips"); if(chips) chips.insertBefore(chip, chips.firstChild);
 /* v1.28 -- mismo dato (next/dias), pintado a 3 frases del H1 en vez de enterrado en la tira
           "de un vistazo" -- acerca el conflicto (Tony) sin inventar ni duplicar ningun numero.
-          v1.51 -- teaser fijo: la realidad decide, no el calendario. */
+          v1.51 -- teaser fijo: la realidad decide, no el calendario; usa datos reales. */
       var oc=document.getElementById("obConflict");
       if(oc){ oc.hidden=false;
-        oc.textContent="El 15 de julio la realidad dirá si acerté o me equivoqué.";
+        var MZ=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+        var fechaCorta=next[0].getDate()+" de "+MZ[next[0].getMonth()];
+        oc.textContent="La realidad dirá si acerté el "+fechaCorta+".";
         oc.style.cursor="pointer"; oc.tabIndex=0; oc.setAttribute("role","button");
         oc.addEventListener("click",goPred); oc.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); goPred(); } });
       }
