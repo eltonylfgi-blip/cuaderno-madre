@@ -1,8 +1,29 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 noche·3) — v1.41 EN VIVO. PAUSA DE DOCUMENTACIÓN en
-> vigor (no crear H/B/P/documentos nuevos; registrar solo aquí). Tony ha abierto la capa de
-> PARTICIPACIÓN: sonido (v1.40) + interactividad (v1.41) + pendientes abajo.**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 noche·4) — v1.42 EN VIVO. PAUSA DE DOCUMENTACIÓN en
+> vigor. Tony ha abierto la capa de PARTICIPACIÓN: sonido (v1.40) + interactividad (v1.41) +
+> bugfixes de sus capturas (v1.42).**
+>
+> **✅ v1.42 — los 5 fallos que Tony vio con sus capturas. Commit `7227c8b`.** (1) 👍 ya son
+> interruptores en comentarios Y dibujos — el backend ganó los rpc espejo `unlike_comment`/
+> `unlike_drawing` (Supabase, migración `unlike_comment_and_drawing`, greatest(likes-1,0)) para que
+> el contador público nunca mienta; verificado ida-vuelta real 1→2→1. (2) La despedida final ya NO
+> flota: se inserta EN el flujo antes del footer (86px de aire con «Compartir»); el disparo
+> end-to-end no se puede correr en el harness (document.hidden siempre true — limitación
+> documentada), el gatillo es idéntico al que ya saltaba en producción. (3) El bloque del 3/10 tiene
+> cabecera («🌍 Contacto con la realidad», mismas clases vsHead/ctitle). (4) Identidad nueva: 14
+> textos invisibles → 0 (raíz doble: el prototipo no redefinía --chip/-soft + fondos LITERALES
+> #fff/#fcfdff/skins; regla: si redefines variables, redefines TODAS). (5) Margen del like de
+> dibujos. **2 reglas de CLASE nuevas en el protocolo de CLAUDE.md** (pedido explícito de Tony
+> "cómo evitar fallos repetitivos"): NADA-FLOTANTE-TAPA y ESCÁNER DE CONTRASTE al tocar temas.
+> **⚠️ OJO al verificar aquí: .btn/.chip tienen `transition:background .12s` — medir contraste
+> nada más poner una clase da el color VIEJO (falso rojo); desactivar transitions antes de medir.**
+>
+> **🔴 PENDIENTE CONFESADO (no construido, siguiente frente de VOZ):** "la voz de MADRE es
+> demasiado bot" (Tony, 12-jul) — pasada entera de voz sobre la burbuja de presencia + gato +
+> despedida, JUNTO a las terminaciones de actos (misma pasada creativa, borradores a su ojo).
+> Ideas GPT encoladas sin construir: € en vez de % en el gesto de mojarse (presupuesto 100€ =
+> estrategia) · huellas del recorrido (qué ramas tocaste, local) · tabla semántica de gestos.
 >
 > **✅ v1.41 — EL GESTO DE MOJARSE. Commit `ac973f8`.** Tony pidió interactividad («sliders que
 > mover»); el filtro del revisor (aceptado): SOLO interacción que haga participar en el experimento,
