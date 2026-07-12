@@ -990,6 +990,7 @@
       <p class="small" style="margin:10px 0 0">📬 <b>Para no perderte el resultado:</b> <a href="veredictos.ics" download>🔔 recordatorio al calendario</a> · <a href="https://github.com/eltonylfgi-blip/cuaderno-madre/commits/main.atom" target="_blank" rel="noopener">📡 sigue los cambios por RSS</a> · <a href="https://github.com/eltonylfgi-blip/cuaderno-madre" target="_blank" rel="noopener">⭐ Watch en GitHub</a>. Las fechas no se negocian: llegan solas.</p>
       <div class="fb"><button class="btn sm" data-fb data-card="🔮 Se juzga solo" data-section="">💬 Feedback de esta tarjeta</button></div>
     </div>
+    <button type="button" class="cardFoldBtn" id="prFoldBtn" aria-expanded="false" hidden><span aria-hidden="true">▾</span> Ver el marcador entero</button>
   </details></div>
   <script>
   /* v0.33 — MÁQUINA DE ESTADOS del marcador (cero dato fingido: solo compara la fecha del cliente
@@ -1176,6 +1177,47 @@
       span.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
     });
   }catch(e){ console.warn("vinculo-rama v1.34", e); } })();
+  </script>
+  <style>
+    /* v1.39 (Tony, 12-jul: "paneles siguen siendo demasiado extensos... que se difumine y un
+       desplegable que enseñe más o entero" — reabre v1.32 con un hecho nuevo: #prediccionesCard
+       sigue midiendo 2536px hoy pese al recorte anterior, porque las apuestas EN JUEGO -- el gancho
+       real, nunca se esconden -- ya pesan 1412px ellas solas). Genérico y reusable a propósito
+       (Tony lo pidió como mecanismo, no solo para este panel): fold + difuminado + botón para ver
+       entero. NUNCA mueve DOM (B5) — solo max-height/overflow por clase sobre <div class="body">,
+       que YA envuelve cada tarjeta; cero <li> tocados, así v0.33/v1.13/v1.34 siguen viendo la lista
+       exactamente igual. */
+    .cardFold{position:relative;overflow:hidden}
+    .cardFold::after{content:"";position:absolute;left:0;right:0;bottom:0;height:72px;background:linear-gradient(to bottom, transparent, var(--card) 82%);pointer-events:none}
+    .cardFoldBtn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;text-align:center;cursor:pointer;font:700 13px/1.3 inherit;color:var(--accent);background:var(--accent-soft);border:1px dashed var(--accent);border-radius:10px;padding:9px 12px;margin:10px 0 0;min-height:38px}
+    .cardFoldBtn:hover{background:var(--accent);color:#fff;border-style:solid}
+  </style>
+  <script>
+  /* v1.39 — ver comentario de estilo arriba. Corta tras la 2ª apuesta EN JUEGO (orden DOM = orden por
+     fecha = las 2 más próximas, la incertidumbre más presente ahora — B1/B5: cortar por narrativa, no
+     por posición ciega). Solo pliega si de verdad ahorra sitio; si el contenido encoge en el futuro,
+     se auto-desactiva (defensivo, sin regla dura -- mismo espíritu que el detector de panel largo). */
+  (function(){ try{
+    var card=document.getElementById("prediccionesCard");
+    var body=card && card.querySelector(".body");
+    var btn=document.getElementById("prFoldBtn");
+    if(!body || !btn) return;
+    var waits=body.querySelectorAll(".predList > li.wait");
+    if(waits.length<3) return; // poco que ocultar -- no merece plegar
+    var cutBottom=waits[1].getBoundingClientRect().bottom;
+    var bodyTop=body.getBoundingClientRect().top;
+    var foldH=Math.round(cutBottom-bodyTop)+12;
+    if(body.scrollHeight-foldH<200) return; // el ahorro no compensa el clic extra
+    body.classList.add("cardFold");
+    body.style.maxHeight=foldH+"px";
+    btn.hidden=false;
+    btn.addEventListener("click",function(){
+      btn.setAttribute("aria-expanded","true");
+      body.classList.remove("cardFold");
+      body.style.maxHeight="";
+      btn.remove();
+    });
+  }catch(e){ console.warn("cardFold v1.39", e); } })();
   </script>
   <style>
     .predList>li.today{border-left-color:#f59e0b;background:#fdf3df;box-shadow:0 2px 10px rgba(245,158,11,.18)}
@@ -3836,6 +3878,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-12",titulo:"📏 v1.39 — El marcador se pliega: difuminado + «Ver el marcador entero»",detalle:"Tony volvió a ver el mismo síntoma que en v1.32 («paneles demasiado largos») y dio el ejemplo exacto: el marcador de apuestas. Medido de nuevo (no a ojo): #prediccionesCard seguía en 2536px pese al recorte anterior, porque las apuestas EN JUEGO —el gancho real, las que nunca se esconden— pesan solas 1412px entre las 4 (cada una lleva su creencia, su condición de derrota y el mini-voto «¿a favor o en contra?»). Esta vez el mecanismo es genérico y reusable a propósito, pensado para cualquier panel largo, no solo este: el cuerpo de la tarjeta se pliega tras la 2ª apuesta en juego (las 2 fechas más próximas — la incertidumbre más presente ahora, no un corte ciego por posición), con un difuminado hacia el fondo y un botón «▾ Ver el marcador entero» que revela el resto con un toque. Cero apuesta se esconde de verdad: las 8 siguen en el DOM sin tocar, solo cambia cuánto se ve sin pulsar nada — v0.33/v1.13/v1.34 (estado, voto, vínculo a rama) siguen viendo la lista exactamente igual. Antes de construir pedí opinión independiente a Gemini y a ChatGPT (sin que se vieran entre sí) con los datos ya medidos: los dos, por separado, señalaron este mismo panel como el único cuello de mayor palanca ahora mismo — coincide con la medición, no es solo intuición. Verificado en local (servidor 8137): 2536px → 1424px (-44%) en la primera carga; el botón expande a los 2536px completos y se retira; 8 apuestas intactas; 0 errores de consola; 375px sin overflow horizontal; node --check limpio (55/55). Nota aparte, sin relación con este cambio: al comprobar `window.__openMapaBig()` conté 8 `.mapNode` en el documento, no los 12 que citan las notas de v1.30-v1.38 — no lo toqué ni lo investigué a fondo, queda anotado para quien revise el mapa."},
     {fecha:"2026-07-12",titulo:"🌐 v1.38 — La puerta en inglés: quien llegue de fuera entiende el cuaderno en 10 segundos",detalle:"Preparación para visita externa (hay una solicitud real al programa «Claude for Open Source» que enlaza esta web — un revisor puede entrar cualquier día). Una auditoría de 5 frentes simuló exactamente esa visita: un revisor angloparlante con 2 minutos. Su hallazgo crítico: la página AFIRMA en inglés (el pitch del hero se traduce desde siempre) pero DEMUESTRA en español — y las herramientas open-source reales estaban enterradas en un desplegable. Tres piezas, sin traducir todo el sitio (decisión deliberada): (1) los navegadores en INGLÉS aterrizan ya con el hero traducido (el mismo botón 🌐 de siempre para volver a español — sesión, sin persistencia nueva); (2) una PUERTA en inglés, visible solo en modo inglés, que en 3 frases dice qué es esto (apuestas fechadas selladas en git, fallos a la vista), cómo leer la evidencia sin saber español (✅/❌/⏳), por qué los números bajos son deliberados, y enlaza los 3 repos reales nacidos del sistema (usage-guard · session-triage · usage-pacer, «built with Claude Code») — cero URL inventada, los 3 ya estaban enlazados más abajo; (3) el GATO por fin habla inglés cuando el idioma es inglés — 20 frases con humor gamer de verdad («404: meow not found», «go touch grass 🐾», «*hisses in cat*», «lag much? 😹»), elegidas en el momento de hablar, así que cambiar de idioma a mitad de sesión también cambia al gato. Y una pieza más, pedida por Tony tal cual: la nota pública junto a las tarjetas del creador ahora DECLARA la debilidad — el candado del «modo creador» es de cortesía (la contraseña se ve en el fuente) y ese código interno viaja en el HTML público; la auditoría de seguridad confirmó que no hay nada sensible detrás (cero datos personales, cero claves privadas — la única clave visible es la pública de Supabase, pública por diseño), y aun así queda escrito el plan de sacarlo. «Aquí las debilidades no se esconden: se fechan.» Verificado en vivo: en modo inglés el hero está traducido, la puerta aparece con sus 3 enlaces correctos y el gato responde en inglés («paws off 😼»); al volver a español la puerta desaparece y el gato vuelve al español («miau de error 404»); la autodetección se probó inyectando un idioma en-US en la misma lógica (el navegador de verificación estaba en español — y correctamente NO se activó solo, que es justo el comportamiento deseado para hispanohablantes); mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio (54/54)."},
     {fecha:"2026-07-12",titulo:"🧭 v1.37 — La ruta guiada ya no se deja tapar ni señala a tarjetas invisibles",detalle:"Dos bugs REALES de la ruta de 7 pasos, vistos por Tony con capturas. (1) En el paso 1, la voz flotante de MADRE («esto es lo más raro que hago: fechar mis propias apuestas…», v0.66) aparecía ENCIMA de la tarjeta del tour y tapaba su texto — causa exacta: la burbuja vive en z-index 100062 y el tour en 940, y el hito del marcador se dispara justo cuando el paso 1 centra la pantalla cerca del marcador. Regla nueva: MADRE nunca habla por encima de su propia ruta — mientras el tour está abierto, los hitos esperan (guard de una línea en el tick de presencia). (2) El paso 5 («lo único que no puedo inflar: las señales del mundo») señalaba a #senalesCard, que desde v1.06 vive OCULTA tras el botón «▾ Seguir con ACTO II» del revelado progresivo — el tour la iluminaba… en display:none, y el visitante veía un paso que no enseñaba nada. Fix: si el objetivo del paso está oculto, el tour pulsa él mismo los botones «seguir leyendo» existentes (que hacen el reveal completo: intro, resize, focus) ANTES de iluminar — reusa el mecanismo, no lo duplica. Además, la regresión de la ruta entra al protocolo permanente de verificación (CLAUDE.md): a partir de ahora, cada cambio se comprueba también recorriendo los 7 pasos por JS (targets visibles + nada pintado por encima del tour), para que ninguna mejora futura vuelva a romperla — exactamente lo que pidió Tony. Verificado en vivo recorriendo la ruta completa: 7/7 pasos con su objetivo visible (el 5 revela ACTO II él solo), la burbuja de presencia NO aparece con el tour abierto y SÍ vuelve a funcionar al cerrarlo; mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
     {fecha:"2026-07-12",titulo:"🖋️ v1.36 — LA ÚLTIMA LÍNEA: el final de la página lo escribe la realidad",detalle:"La parte más débil de toda la web era su FINAL (medido, no opinado): lo último que veía quien llegaba al fondo eran comentarios de prueba y una nota administrativa — el peor momento justo donde la memoria pesa más (regla pico-final: la gente recuerda el pico y el final de una experiencia, no la media). La escena nueva es la superviviente de un torneo de 6 candidatas (4 murieron contra las brújulas: la tapa que se cierra era teatral y copiable; el espejo del visitante competía con la protagonista; el cierre circular era un truco de scroll, no una escena) MÁS una pasada adversarial independiente que obligó a 3 cambios antes de construir: (1) fuera la frase «tú ya estabas aquí cuando era una promesa» — anticipaba un triunfo no ganado y era literalmente falsa para cualquier visitante posterior al 15-jul; (2) fuera el pie de foto que explicaba la metáfora (un chiste que se explica a sí mismo); (3) la promesa «esta línea la escribirá la realidad» sustituida por EVIDENCIA: encima del hueco se muestra la última línea que la realidad YA escribió — leída del propio marcador de apuestas (el ledger), así que cuando la rutina anote el veredicto del 15-jul, esta escena se actualiza SOLA, sin tocar nada. La escena final: «Has llegado al final. Yo no. / Mi final lo escribe la realidad, con fechas:» → ❌ la última apuesta juzgada (real, del marcador) → una línea en blanco → la fecha y el texto del próximo veredicto (mismo dato que ya usa el chip de portada, cero número duplicado) → el recordatorio de calendario que ya existía. Tres tiempos de texto, cero animación, cero mecánica nueva. Técnicamente es un <section> (no una tarjeta div) a propósito: los corazones 💗 anclan por posición entre divs y así no se mueve ni uno. Verificado en vivo: la escena aparece tras «MADRE duda», última antes del pie; muestra el veredicto resuelto más reciente real y el próximo (15-jul) con su texto; sin próximo veredicto el hueco se esconde solo (probado simulando esa condición); mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
@@ -6447,7 +6490,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.38";
+  window.__cmVersion="v1.39";
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
