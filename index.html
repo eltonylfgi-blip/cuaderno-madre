@@ -68,6 +68,8 @@
   .btn.sm{padding:5px 9px;font-size:12px;border-radius:8px}
   .btn.ok{color:var(--green);border-color:#bfe6d2}
   .btn.no{color:var(--red);border-color:#f3c8c2}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .skipLink:focus{position:fixed;left:16px;top:16px;width:auto;height:auto;padding:10px 14px;background:var(--accent);color:#fff;border-radius:8px;font-weight:700;z-index:100001}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
     margin-bottom:11px;box-shadow:var(--shadow);overflow:hidden}
@@ -240,6 +242,7 @@
 </style>
 </head>
 <body>
+<a href="#main" class="skipLink" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:100000">Saltar al contenido principal</a>
 <style id="overhaulCss">
 /* --- v0.9: claridad + jerarquía + separar públicos (visitante vs Tony) --- */
 #promesa{font-size:17px;line-height:1.45;font-weight:600;color:var(--ink);background:linear-gradient(135deg,var(--accent-soft),transparent);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:12px 14px;margin:6px 0 8px}
@@ -307,7 +310,7 @@
 .secretGlow{animation:secretShimmer 8s ease-in-out infinite}
 @media(prefers-reduced-motion:reduce){.secretGlow{animation:none}}
 </style>
-<div class="wrap">
+<div class="wrap" id="main">
 
   <div class="ttwrap" style="flex-wrap:wrap;margin-bottom:2px">
     <h1 id="madreTitle" style="margin:0;cursor:help"><span id="madreHeart">🤱🏻</span> Cuaderno MADRE</h1>
@@ -6678,7 +6681,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     if(cc0&&cc0.fecha){ var dcv=new Date(cc0.fecha+"T00:00:00");
       if(!isNaN(dcv.getTime())) cmVerFecha=dcv.toLocaleDateString("es-ES",{day:"2-digit",month:"short",year:"numeric"}).replace(/\.$/,""); } }catch(e){}
   try{ var f=document.querySelector("footer"); if(f){ var v=document.createElement("div"); v.id="cmVer"; v.textContent="Cuaderno MADRE "+window.__cmVersion+" · "+cmVerFecha; f.appendChild(v);
-    var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:rgba(120,110,150,.7);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
+    var st0=document.createElement("style"); st0.textContent="#cmVer{margin-top:10px;font:600 11px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--muted);text-align:center;letter-spacing:.02em}"; document.head.appendChild(st0); } }catch(e){}
 
   // --- skins de panel: variedad visual, estable 24h y distinta cada día (PRNG sembrado por fecha) ---
   try{
