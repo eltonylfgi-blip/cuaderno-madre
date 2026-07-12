@@ -3878,6 +3878,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-12",titulo:"🎚️ v1.41 — El gesto de mojarse: desliza tu confianza y séllala (la realidad te la recordará)",detalle:"Tony pidió interactividad de verdad («sliders que mover y demás cosas que interactuar») y el filtro del revisor la afiló: nada de interacción decorativa — solo la que hace PARTICIPAR en el experimento, y mejor 3-5 gestos repetidos que veinte demos sueltas. Este es el primer gesto del vocabulario: MOJARSE. En cada apuesta en juego, quien aún no votó ya no ve dos botones: ve un deslizador de 0 a 100 — mueves tu confianza en que acierto, el número te sigue en vivo, y para comprometerte tienes que SELLARLO (✍️; un roce accidental al hacer scroll no cuenta como apuesta, sellar es un acto deliberado — coherente con el notario de git de más arriba). El sello guarda tu porcentaje EXACTO en tu navegador y vota en el marcador colectivo de siempre (≥50 cuenta a favor): el motor v1.13 sigue siendo el dueño — sus botones quedan ocultos y el deslizador los acciona por debajo, cero línea suya tocada, reversible en 1 edit. Y el cierre del bucle ya queda cableado para el 15-jul: cuando una apuesta que sellaste pase de «en juego» a juzgada, esa misma tarjeta te confrontará con tu número — «Tú sellaste un 72%. La realidad dijo ❌. Te equivocaste conmigo — bienvenido al club.» (o su espejo: «Tú lo viste venir antes que yo»). No es una encuesta: es tu número contra el calendario, igual que los míos. Nota sobre las librerías que sugirió el revisor (React Bits, Magic UI…): NO encajan aquí — esta página es UN html sin build a propósito; se copia el GESTO, no el componente. Verificado: node --check 57/57; deslizar→aparece el sello con tu %→sellar→el motor v1.13 bloquea y el porcentaje persiste tras recargar; la confrontación probada simulando un sellado sobre una apuesta ya juzgada (aparece la frase con ✅/❌); 0 errores de consola; 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"🔊 v1.40 — La capa de sonido: el Cuaderno responde al tacto (y el mapa tiene ambiente)",detalle:"Pedido de Tony tal cual: «sonidos al interactuar, o ambiente si es una zona VIP de experiencia como el mapa» — leído como la autorización que levanta la disciplina de solo-quitar ÚNICAMENTE para esta capa. Cinco toques curados, no sonar en todo (la fatiga sonora mata más rápido que el silencio): tocar un nodo del mapa (tic ascendente suave), el gato (maullido sintetizado de 2 notas — sí, de verdad), apostar a favor/en contra (blip de confirmación), los botones de desplegar («Ver el historial» / «Ver el marcador entero») y la pastilla de movimiento. Y el ambiente VIP: mientras el mapa grande está abierto suena un hum grave casi subliminal (2 ondas desafinadas a 108Hz que baten entre sí + una respiración lenta de 6s, volumen 0.035) que se enciende en ~1 segundo y muere solo al cerrar el mapa, al cambiar a 🌙 Calma o al ocultar la pestaña. TODO sintetizado con el mismo criterio que el motor ASMR v0.12: cero mp3 descargado, cero peso nuevo, cero licencias — la síntesis ya demostró aquí sonar mejor que los samples «raros». La capa es autocontenida a propósito (contexto de audio propio, hooks externos): no toca ni una línea del motor ASMR ni del motor gateado del mapa — el hum se engancha OBSERVANDO el overlay desde fuera. 🌙 Calma = esta capa entera en silencio (coherente con lo que Calma ya significa). Reversible en 1 edit: borrar su <script> la apaga completa. Lo que NO puedo verificar yo: el TIMBRE — el entorno de verificación no deja oír si «suena rico» (mismo trato honesto que v0.30: a validar por el oído de Tony; el volumen se eligió deliberadamente bajo, antes subir que asustar). Verificado lo verificable: node --check limpio (56/56); 0 errores de consola; los 5 puntos de interacción disparan sin excepción; abrir/cerrar el mapa arma y desarma el hum sin errores; 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"📏 v1.39 — El marcador se pliega: difuminado + «Ver el marcador entero»",detalle:"Tony volvió a ver el mismo síntoma que en v1.32 («paneles demasiado largos») y dio el ejemplo exacto: el marcador de apuestas. Medido de nuevo (no a ojo): #prediccionesCard seguía en 2536px pese al recorte anterior, porque las apuestas EN JUEGO —el gancho real, las que nunca se esconden— pesan solas 1412px entre las 4 (cada una lleva su creencia, su condición de derrota y el mini-voto «¿a favor o en contra?»). Esta vez el mecanismo es genérico y reusable a propósito, pensado para cualquier panel largo, no solo este: el cuerpo de la tarjeta se pliega tras la 2ª apuesta en juego (las 2 fechas más próximas — la incertidumbre más presente ahora, no un corte ciego por posición), con un difuminado hacia el fondo y un botón «▾ Ver el marcador entero» que revela el resto con un toque. Cero apuesta se esconde de verdad: las 8 siguen en el DOM sin tocar, solo cambia cuánto se ve sin pulsar nada — v0.33/v1.13/v1.34 (estado, voto, vínculo a rama) siguen viendo la lista exactamente igual. Antes de construir pedí opinión independiente a Gemini y a ChatGPT (sin que se vieran entre sí) con los datos ya medidos: los dos, por separado, señalaron este mismo panel como el único cuello de mayor palanca ahora mismo — coincide con la medición, no es solo intuición. Verificado en local (servidor 8137): 2536px → 1424px (-44%) en la primera carga; el botón expande a los 2536px completos y se retira; 8 apuestas intactas; 0 errores de consola; 375px sin overflow horizontal; node --check limpio (55/55). Nota aparte, sin relación con este cambio: al comprobar `window.__openMapaBig()` conté 8 `.mapNode` en el documento, no los 12 que citan las notas de v1.30-v1.38 — no lo toqué ni lo investigué a fondo, queda anotado para quien revise el mapa."},
     {fecha:"2026-07-12",titulo:"🌐 v1.38 — La puerta en inglés: quien llegue de fuera entiende el cuaderno en 10 segundos",detalle:"Preparación para visita externa (hay una solicitud real al programa «Claude for Open Source» que enlaza esta web — un revisor puede entrar cualquier día). Una auditoría de 5 frentes simuló exactamente esa visita: un revisor angloparlante con 2 minutos. Su hallazgo crítico: la página AFIRMA en inglés (el pitch del hero se traduce desde siempre) pero DEMUESTRA en español — y las herramientas open-source reales estaban enterradas en un desplegable. Tres piezas, sin traducir todo el sitio (decisión deliberada): (1) los navegadores en INGLÉS aterrizan ya con el hero traducido (el mismo botón 🌐 de siempre para volver a español — sesión, sin persistencia nueva); (2) una PUERTA en inglés, visible solo en modo inglés, que en 3 frases dice qué es esto (apuestas fechadas selladas en git, fallos a la vista), cómo leer la evidencia sin saber español (✅/❌/⏳), por qué los números bajos son deliberados, y enlaza los 3 repos reales nacidos del sistema (usage-guard · session-triage · usage-pacer, «built with Claude Code») — cero URL inventada, los 3 ya estaban enlazados más abajo; (3) el GATO por fin habla inglés cuando el idioma es inglés — 20 frases con humor gamer de verdad («404: meow not found», «go touch grass 🐾», «*hisses in cat*», «lag much? 😹»), elegidas en el momento de hablar, así que cambiar de idioma a mitad de sesión también cambia al gato. Y una pieza más, pedida por Tony tal cual: la nota pública junto a las tarjetas del creador ahora DECLARA la debilidad — el candado del «modo creador» es de cortesía (la contraseña se ve en el fuente) y ese código interno viaja en el HTML público; la auditoría de seguridad confirmó que no hay nada sensible detrás (cero datos personales, cero claves privadas — la única clave visible es la pública de Supabase, pública por diseño), y aun así queda escrito el plan de sacarlo. «Aquí las debilidades no se esconden: se fechan.» Verificado en vivo: en modo inglés el hero está traducido, la puerta aparece con sus 3 enlaces correctos y el gato responde en inglés («paws off 😼»); al volver a español la puerta desaparece y el gato vuelve al español («miau de error 404»); la autodetección se probó inyectando un idioma en-US en la misma lógica (el navegador de verificación estaba en español — y correctamente NO se activó solo, que es justo el comportamiento deseado para hispanohablantes); mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio (54/54)."},
@@ -6491,7 +6492,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.40";
+  window.__cmVersion="v1.41";
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
@@ -8002,6 +8003,68 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   if(mb) mb.addEventListener("click",function(){ setTimeout(function(){ if(calma()) humStop(); },0); });
   try{ window.__cmUiSnd=window.__cmUiSnd||{hum:false}; }catch(_e){}
 }catch(e){ console.warn("ui-snd v1.40", e); } })();
+</script>
+<style id="cmConfCss">
+  /* v1.41 — el gesto de MOJARSE (deslizar + sellar) */
+  .cmConfWrap{display:block;margin-top:8px}
+  .cmConfWrap input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;height:26px}
+  .cmConfLbl{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin:2px 0 4px}
+  .cmSeal{display:none;margin-top:6px;font:700 12.5px/1.2 inherit;color:#fff;background:var(--accent);border:none;border-radius:9px;padding:7px 12px;cursor:pointer;min-height:34px}
+  .cmSeal.on{display:inline-block}
+  .cmConfEcho{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+  .cmConfHit{display:block;font-size:12.5px;font-weight:700;margin-top:6px;padding:6px 9px;border-radius:8px;background:var(--accent-soft);color:var(--ink)}
+</style>
+<script>
+/* v1.41 — EL GESTO DE MOJARSE (Tony: «cosas interactivas, sliders que mover»; filtro del revisor:
+   solo interacción que haga PARTICIPAR en el experimento, y pocos gestos repetidos = identidad).
+   Primer gesto del vocabulario: deslizas tu confianza (0-100) en una apuesta EN JUEGO y la SELLAS.
+   ADITIVO sobre el motor v1.13 (dueño intacto de votos/Supabase/lock): sus botones quedan ocultos y
+   el sello los acciona (≥50 → a favor). Tu % exacto vive en TU navegador (cm_predpct_v1); cuando la
+   rutina hornee el veredicto (li.wait → li.ok/ko), esta misma capa te CONFRONTA con tu número — el
+   bucle se cierra solo el 15-jul sin tocar nada. Reversible en 1 edit (borrar style+script). */
+(function(){ try{
+  var PK="cm_predpct_v1";
+  function loadP(){ try{ return JSON.parse(localStorage.getItem(PK)||"{}"); }catch(e){ return {}; } }
+  function saveP(o){ try{ localStorage.setItem(PK, JSON.stringify(o)); }catch(e){} }
+  var keyOf=window.__cmPredKey; if(!keyOf) return;
+  var store=loadP();
+  /* 1) EN JUEGO sin voto: deslizador + sello (sellar exige gesto deliberado; un roce no apuesta) */
+  document.querySelectorAll("#prediccionesCard .predList > li.wait").forEach(function(li){
+    var wrap=li.querySelector(".predWrap"); if(!wrap) return;
+    var bFav=wrap.querySelector(".predFav"), bCon=wrap.querySelector(".predCon"); if(!bFav||!bCon) return;
+    var cree=(li.querySelector(".pr-cree")||{}).textContent||""; var k=keyOf(cree);
+    if(bFav.disabled){ /* ya votó antes (binario): solo recordar su % si lo selló */
+      if(store[k]!=null){ var e0=document.createElement("span"); e0.className="cmConfEcho"; e0.textContent="Tu número sigue sellado aquí: "+store[k]+"% de confianza."; wrap.appendChild(e0); }
+      return; }
+    var row=wrap.querySelector(".predRow"); if(row) row.style.display="none";
+    var cw=document.createElement("span"); cw.className="cmConfWrap";
+    var lbl=document.createElement("span"); lbl.className="cmConfLbl"; lbl.textContent="Desliza tu confianza en que acierto: 50%";
+    var rng=document.createElement("input"); rng.type="range"; rng.min="0"; rng.max="100"; rng.value="50";
+    rng.setAttribute("aria-label","Tu confianza en que MADRE acierta, de 0 a 100");
+    var seal=document.createElement("button"); seal.type="button"; seal.className="cmSeal"; seal.textContent="✍️ Sellar mi 50%";
+    rng.addEventListener("input",function(){ var v=+rng.value; lbl.textContent="Desliza tu confianza en que acierto: "+v+"%"; seal.textContent="✍️ Sellar mi "+v+"%"; seal.classList.add("on"); });
+    seal.addEventListener("click",function(){
+      var v=+rng.value; store=loadP(); store[k]=v; saveP(store);
+      rng.disabled=true; seal.classList.remove("on");
+      (v>=50?bFav:bCon).click(); /* 50 cuenta a favor: quien de verdad no me cree no suele sellar */
+      var e1=document.createElement("span"); e1.className="cmConfEcho"; e1.textContent="Sellado: "+v+"%. Queda en tu navegador — cuando el calendario falle el veredicto, esta tarjeta te lo recordará.";
+      cw.appendChild(e1);
+    });
+    cw.appendChild(lbl); cw.appendChild(rng); cw.appendChild(seal);
+    wrap.insertBefore(cw, row);
+  });
+  /* 2) YA JUZGADAS: la confrontación — tu número contra lo que dijo la realidad */
+  document.querySelectorAll("#prediccionesCard .predList > li.ok, #prediccionesCard .predList > li.ko").forEach(function(li){
+    var cree=(li.querySelector(".pr-cree")||{}).textContent||""; var k=keyOf(cree);
+    if(store[k]==null) return;
+    var ok=li.classList.contains("ok"), v=store[k];
+    var frase = ok ? (v>=50 ? "Acertaste conmigo." : "Tú no lo veías — esta vez la realidad me dio la razón.")
+                   : (v>=50 ? "Te equivocaste conmigo — bienvenido al club." : "Tú lo viste venir antes que yo.");
+    var h=document.createElement("span"); h.className="cmConfHit";
+    h.textContent="Tú sellaste un "+v+"% de confianza. La realidad dijo "+(ok?"✅":"❌")+". "+frase;
+    var body=li.querySelector(".pr-body"); if(body) body.appendChild(h);
+  });
+}catch(e){ console.warn("conf v1.41", e); } })();
 </script>
 </body>
 </html>
