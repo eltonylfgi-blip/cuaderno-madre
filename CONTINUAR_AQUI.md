@@ -1,10 +1,19 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo) — v1.48 EN VIVO y 🛑 FRENO DE VERSIONES DECLARADO: la sesión del
-> 12-jul produjo 10 versiones (v1.39→v1.48) y el revisor avisó con razón ("ya no sabes cuál produjo
-> el efecto; la realidad necesita tiempo para responder"). PRÓXIMO TURNO: NO construir por defecto —
-> observar, dejar que Tony pruebe, y el 15-jul llega el veredicto real. Solo se construye si Tony
-> trae un bug o lo pide explícito. PAUSA DE DOCUMENTACIÓN sigue.**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo) — 🛑 FRENO DE VERSIONES, y esta vez DE VERDAD (el revisor cazó que
+> "declarar el freno" en la versión nº 10 no es frenar). REGLA HASTA NUEVO AVISO DE TONY: VARIOS DÍAS
+> sin tocar NADA salvo bugs que él traiga. Ni ideas buenas (van al 📦 CAJÓN al final de
+> `IDEAS_Y_BRUJULA.md` — TODO lo pendiente está ahí, nada quedó fuera), ni "mejoras pequeñas", ni
+> docs nuevos. La semana es de OBSERVACIÓN, con el criterio de las 3 preguntas (están en el cajón):
+> dónde se para la gente · qué recuerdan 1h después · qué cuentan al compartir. Si la respuesta es
+> "el sonido/los logros" → dirección equivocada; si es "la IA que apuesta en público y en 3 días
+> sabrá si se equivocó" → todo lo demás está sirviendo a la historia. El 15-jul habla la realidad.**
+>
+> **Última corrección aplicada bajo el freno (integridad de voz, no feature):** el teaser de 6/12
+> («abajo hay algo que casi nadie ha visto») se RETIRÓ el mismo día — no pasó la prueba «¿MADRE
+> diría esto aunque nadie midiera retención?»: era un gancho, no una frase suya. La retirada quedó
+> CONTADA en el propio changelog v1.47 (esconder la corrección sería peor que el error). El logro
+> 12/12 se queda: ese sí lo diría.
 >
 > **✅ v1.47+v1.48 — última tanda del día. Commit `e24148a`.**
 > - v1.47: **texturas ASMR repartidas de VERDAD** por el recorrido (1539→10130px; causa raíz: el

@@ -307,3 +307,52 @@ IAvsMADRE(5051,h511) · QuéEsMADRE(5726,h808) · 8-jul(6812,h345) · Comentario
 - Consecuencia: no hay transición muda que arreglar hoy; H5 debilitada; la pregunta pendiente del viaje
   es si los SEPARADORES cumplen su papel — y eso es evidencia humana (recorrido con una persona), no más
   medición.
+
+---
+
+## 📦 CAJÓN DE IDEAS MUY BUENAS (12-jul-2026, freno de versiones activo — orden de Tony: "no dejes nada fuera")
+> Nada de aquí se construye durante el freno. Al retomarlo: re-preguntar cuál tiene MÁS palanca AHORA
+> (no es cola FIFO), pasar el filtro de 3 preguntas, y UNA a la vez.
+
+**🔭 EL CRITERIO PARA LA PRÓXIMA VERSIÓN (revisor, 12-jul — semana de observación):**
+responder 3 preguntas antes de construir nada: (1) ¿dónde se para la gente espontáneamente?
+(2) ¿qué recuerda alguien 1 hora después? (3) ¿qué cuenta cuando enseña el enlace a otra persona?
+Respuesta buena = «la IA que apuesta en público y en 3 días sabrá si estaba equivocada».
+Respuesta mala = «el sonido» / «los logros» → habríamos ido en dirección equivocada.
+
+**De Tony (12-jul):**
+- Ruta guiada v2: el texto va APARECIENDO y palabras de color tiñen lo señalado (referencia visual viva).
+- Mapa grande: el texto se sale de los círculos → círculos/«ambientes» según lo que haya dentro del
+  nodo. Zona delicada (motor gateado al lado): MEDIR primero, cambio de presentación solamente.
+- Panel de info del mapa denso en móvil + «el cuaderno no es muy explicativo, cuesta verlo todo».
+- PRINCIPIO GENERAL suyo: primera impresión SIMPLE; ahondar clicando (colapsables, referencias,
+  «explícame más»). Auditar dónde no se cumple aún.
+- Sorpresa REAL al final: el teaser se retiró por gancho (no pasó «¿lo diría MADRE sin medir
+  retención?»); si algún día EXISTE una sorpresa real al final, mencionarla dejará de ser gancho.
+- H13 remate: si las marcas lavanda de la barra siguen sin entenderse, label persistente al pasar.
+
+**De GPT (12-jul), filtradas por «¿hace participar en el experimento?»:**
+- 💶 € en vez de % en el gesto de mojarse; versión fuerte: presupuesto de 100€ ficticios entre TODAS
+  las apuestas → aparece estrategia, y la pérdida duele más que un porcentaje.
+- 👣 Huellas del recorrido: el Cuaderno recuerda qué ramas tocaste (local, sin login) — al volver no
+  eres un visitante nuevo.
+- ✋ Vocabulario de gestos (3-5 repetidos = identidad; tabla semántica): Deslizar=Apostar ·
+  Arrastrar=Priorizar · Tirar=Revelar · Conectar=Relaciones · Sellar=Comprometerse. Candidatos:
+  rascar un veredicto (lotería) · palanca física para Vivo · sobre/pestaña para mensajes de MADRE ·
+  cable apuesta↔rama · arrastrar prioridades (tu orden vs el orden real de MADRE — contraste, no
+  acierto) · antes/después deslizable · balanza evidencia/intuición · sellos APROBADO/RECHAZADO ·
+  máquina de escribir · lupa/linterna/imán/tensor (solo si sirven al experimento).
+- 🎙️ Voz hablada: si Elvira no convence → torneo a CIEGAS de 10-15 voces gratuitas (mismo texto,
+  rondas). Variante con significado: voz por ESTADO (normal/duda/falló/acertó), NUNCA aleatoria.
+  TTS dinámico: generar audio de mensajes nuevos automáticamente (edge-tts pipeline).
+- ✍️ Voz escrita: una temporada RECOLECTANDO frases (las que «solo MADRE diría» Y las que suenan a
+  asistente) → el corpus crece con ejemplos, no reglas. Luego: pasada a textos largos + autopsia de
+  frases-asistente restantes.
+- 🧵 Terminaciones pendientes: el final de ACTO I (hoy: índice de desplegables) y el de ACTO III
+  (hoy: «Actualizado: fecha») — solo se construyeron los 2 puentes de mayor palanca (v1.48).
+- 🌳 Tensión abierta: brújula-del-mapa ↔ H3 (¿llevar más gente al mapa ayuda al recorrido o le roba
+  protagonismo a la apuesta?). La responde la observación, no otra build.
+- ⚰️ Protocolos con derecho a morir: en ~1 mes, podar los que no hayan cambiado 2 decisiones reales.
+- 🎮 VIGILANCIA anti-videojuego (aviso repetido): sonido+vibración+logros+partículas+ambiente+voz
+  COMPITEN entre sí. Celebrar solo lo que importa (un veredicto, un sello, un descubrimiento real).
+  Antes de añadir otra interacción: «¿hace ENTENDER mejor el experimento?» — no «¿qué más puede tocar?».
