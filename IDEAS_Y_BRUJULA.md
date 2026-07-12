@@ -110,16 +110,26 @@ principal y aumenta el impulso de seguir bajando."**
 ### 🟨 Media palanca (bajo riesgo, no tocan el motor del mapa)
 
 **H4 — "El historial se despliega como un pergamino (no aparece de golpe) refuerza el significado de 📜."**
-- Estado: **☐ Sin probar.** CSS puro, respeta el interruptor de movimiento (v1.30), no toca el mapa. Listo
-  para construir cuando toque un ciclo de pulido pequeño.
-- **Cómo puede MORIR:** si al enseñárselo a una persona no lo nota, o le estorba para leer → se queda el
-  corte actual (aparecer de golpe no está roto, solo es menos expresivo).
+- Estado: **☐ Probando** — Construida ✔ (v1.35, 12-jul), evidencia pendiente. Elegida tras el re-ranking
+  anti-FIFO del 12-jul: el recorrido de transiciones ELIMINÓ con datos a los otros candidatos (ver Foto
+  del viaje abajo), y H4 era la acción de mayor retorno que no esperaba evidencia humana.
+- **Qué intenta demostrar:** que la coherencia símbolo↔comportamiento (📜 = pergamino que se desenrolla)
+  se percibe, aunque nadie sepa explicarla.
+- **Cómo sabremos si era verdad:** al enseñárselo a una persona en ❤️ Vivo (o sin reduced-motion), nota
+  el desenrollado sin que se lo señalen, o lo menciona ("se abre como una lista que cae").
+- **Cómo puede MORIR:** si no lo nota, o le estorba para leer → se quita (un Edit reversible) y se queda
+  el corte de golpe, que no está roto.
+- MVP: escalonado 0/.13/.26/.39s con el muelle ya existente (P-005); gates de movimiento idénticos al
+  resto del sitio (reduced-motion sin opt-in → sin animar; Calma → nunca). Cero DOM movido.
 
 **H5 — "¿Qué se está jugando MADRE HOY? como línea-brújula uniendo secciones aumenta la sensación de
 viaje continuo (B3)."**
-- Estado: **☐ Sin probar.** Copy, bajo riesgo. Definir bien el texto antes de colocarlo en varias secciones.
+- Estado: **☐ Sin probar.** ⚠️ PREMISA DEBILITADA 12-jul: el recorrido de transiciones demostró que el
+  hilo conductor YA existe (5 separadores de acto + 1 puente, en runtime — ver Foto del viaje). H5 solo
+  tiene sentido si la evidencia dice que los actos NO bastan; no construir antes de eso.
 - **Cómo puede MORIR:** si tras el recorrido nadie usa esa idea al contar de qué va la web (la frase no
-  une nada en la práctica) → fuera, sin duelo.
+  une nada en la práctica) → fuera, sin duelo. Muere también si los separadores de acto ya cumplen (el
+  hallazgo del 12-jul apunta ahí).
 
 ### 🟦 Deuda técnica de baja prioridad (real, pero NO es el cuello hoy)
 
@@ -138,6 +148,8 @@ viaje continuo (B3)."**
 - v1.32 — Recorte del panel de apuestas (en juego vs historial), midiendo antes (B4, B5).
 - v1.33 — Etiquetas "en juego" / "📜 historial" reforzando la separación.
 - v1.34 — H1 en `☐ Probando`: vínculo mínimo apuesta→rama (ver arriba).
+- v1.35 — H4 en `☐ Probando`: el historial se desenrolla como pergamino (la ÚNICA excepción al cierre
+  del marcador que el propio revisor dejó carved: "eso sí sería una mejora perceptible").
 - (El marcador de apuestas queda CERRADO por decisión del revisor — no construir más ahí sin un hecho nuevo.)
 
 ---
@@ -146,3 +158,15 @@ viaje continuo (B3)."**
 Hero(56,h606) · En directo(929,h522) · **🌳 Mapa(1465,h808)** · **⚖️ Apuesta(2364,h2604)** ·
 IAvsMADRE(5051,h511) · QuéEsMADRE(5726,h808) · 8-jul(6812,h345) · Comentarios(8153,h868) · Duda(9035,h251).
 → HECHO: el árbol (pos 3) precede a la apuesta (pos 4). Si eso perjudica es H3, sin probar (ver arriba).
+
+**Auditoría de TRANSICIONES (12-jul, runtime real — corrige dos conclusiones precipitadas):**
+- Las fronteras entre bloques NO están mudas: hay **5 separadores de acto + 1 puente**, todos visibles,
+  insertados por el resecuenciador v0.33 en runtime (por eso una medición ingenua de tarjetas no los ve):
+  ACTO I «Lo que me juego» (2295px, JUSTO entre mapa y apuesta) · puente v1.29 (5002) · ACTO II (6577) ·
+  EL GIRO (6763) · ACTO III (7199) · «Tu parte · solo Tony» (7984).
+- ⚠️ Dos FALSAS ALARMAS paradas por P-003: (1) "mapa→apuesta es un corte seco" — FALSO, ahí está el
+  separador de ACTO I presentando la apuesta; (2) "hay ~1000px vacíos antes de comentarios" — FALSO, es
+  la zona de revelado progresivo de v1.06 (tarjetas colapsadas de ACTO II/III + separadores).
+- Consecuencia: no hay transición muda que arreglar hoy; H5 debilitada; la pregunta pendiente del viaje
+  es si los SEPARADORES cumplen su papel — y eso es evidencia humana (recorrido con una persona), no más
+  medición.

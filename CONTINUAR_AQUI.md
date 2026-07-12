@@ -5,6 +5,19 @@
 > funcionaron — P-001..P-007). Orden de Tony (11/12-jul): trabajar desde ahí, no improvisar; y cuando
 > algo "valga oro", proponer promocionarlo a patrón.
 >
+> **✅ v1.35 EN VIVO (12-jul) — H4 en Probando: el historial se desenrolla como pergamino. Commits
+> `ada1d26` (código) + `a956c03` (correcciones del revisor al sistema).** Lo importante de este ciclo no
+> es la animación — es que el sistema FUNCIONÓ dos veces antes de construir: el re-ranking anti-FIFO
+> (el revisor avisó: "no construyáis H4 porque toca") disparó un recorrido de TRANSICIONES en runtime, y
+> ese recorrido mató DOS conclusiones precipitadas mías con P-003: "mapa→apuesta es corte seco" (FALSO —
+> ahí está el separador ACTO I, insertado en runtime por v0.33, invisible a la medición ingenua) y "hay
+> ~1000px vacíos antes de comentarios" (FALSO — es la zona colapsada de v1.06). Sin el sistema habría
+> construido un puente innecesario. Con los candidatos eliminados por datos, H4 quedó como la acción de
+> mayor retorno sin dependencia humana → construida con gates de movimiento idénticos a v1.30 (Vivo
+> anima escalonado 0/.13/.26/.39s; Auto bajo reduced-motion y Calma → sin animar), verificada (52/52,
+> 12 nodos, 0 consola, 375px) y desplegada. H5 queda DEBILITADA (el hilo conductor ya existe: 5 seps + 1
+> puente). NOTA: Tony añadió licencia MIT al repo (`f1a0be9`) — rebasado sin conflicto.
+>
 > **✅ 12-jul — mecanismo de patrones + backlog falsable (docs, sin versión).** (1) Creado
 > `PATRONES_OPERATIVOS.md`: 7 patrones semilla, filtro de entrada estricto (cambió una decisión real +
 > reutilizable), formato plano de 4 campos — advertencia del revisor vigente: si crece en metadatos, ha
