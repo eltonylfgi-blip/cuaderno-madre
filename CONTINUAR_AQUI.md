@@ -1,6 +1,40 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 tarde) — foto viva, léela entera antes de tocar código.**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 noche) — v1.39 EN VIVO, un cuello resuelto, el resto del
+> bloque de abajo SIGUE ABIERTO (no lo trates como cerrado por esto).**
+>
+> **✅ v1.39 — el marcador se pliega (difuminado + «Ver el marcador entero»). Commit `4c95eb1`.** Tony
+> volvió a ver "paneles demasiado largos" y dio el propio marcador como ejemplo — medido de nuevo:
+> seguía en 2536px pese al recorte de v1.32 (las 4 apuestas EN JUEGO, el gancho real que nunca se
+> esconde, pesaban solas 1412px). Antes de construir, se pidió opinión independiente a Gemini y a
+> ChatGPT (cada uno sin ver la respuesta del otro) con los 3 hallazgos frescos + el ranking de abajo ya
+> puestos sobre la mesa: **los dos, por separado, señalaron este mismo panel como el único cuello de
+> mayor palanca ahora mismo** — converge con la medición, no es solo intuición de una fuente. Mecanismo
+> genérico y reusable (`.cardFold`/`.cardFoldBtn`, pensado para cualquier panel largo, no solo este):
+> el cuerpo de la tarjeta se pliega tras la 2ª apuesta en juego, difuminado abajo, botón que revela el
+> resto. Cero DOM movido, cero apuesta oculta de verdad (las 8 siguen ahí). Verificado local (server
+> 8137, NUNCA screenshot — cuelga en esta página) y luego en producción: 2536px→1424px (-44%), botón
+> expande a completo, 0 consola, 375px sin overflow, node --check 55/55. **Nota suelta, sin relación:**
+> `window.__openMapaBig()` da 8 `.mapNode` en el documento, no los 12 que citan las notas de v1.30-v1.38
+> — no investigado a fondo, queda anotado por si alguien revisa el mapa.
+>
+> **🆕 Otros 2 hallazgos verificados el mismo turno, NO construidos (aparcados como hipótesis, no
+> perdidos) — ver `IDEAS_Y_BRUJULA.md` H13/H14:**
+> - Las marcas de la barra de progreso fija (saltan a cada Acto) son 3×6px, casi ilegibles, y su
+>   significado depende de `title`/hover — no funciona en táctil. Tony las vio y las llamó "palitos
+>   negros" sin saber qué eran.
+> - Las 12 zonas de textura ASMR están TODAS seguidas en un único bloque (~600px), nada intercalado
+>   entre secciones — Tony pidió repartirlas (máx. 1 entre paneles), orden preferido: burbujas, madera,
+>   cristal, slime, arena, cremallera, muelle, pana última. Investigar antes de construir: un comentario
+>   en el código avisa de una "ruta CSS estable" al insertar texturas — confirmar que no se rompe.
+>
+> **Próximo turno: NO asumas que con v1.39 ya está "el cuello" resuelto para siempre.** Vuelve a
+> `IDEAS_Y_BRUJULA.md` (ahora con H13/H14 nuevas) + el ranking de GPT de abajo, re-pregunta cuál es el
+> siguiente de mayor palanca (no es FIFO), pasa el filtro de 3 preguntas, y sigue con UN solo cuello.
+>
+> ---
+>
+> ▶️ **(bloque anterior, 12-jul-2026 tarde) — sigue vigente salvo lo ya resuelto arriba.**
 >
 > **🛑 DISCIPLINA EN VIGOR (GPT, no tocar hasta que Tony diga "ya podéis construir de nuevo"):**
 > ninguna versión añade sección/mecanismo nuevo — SOLO quitar ruido o reforzar algo que ya existe.

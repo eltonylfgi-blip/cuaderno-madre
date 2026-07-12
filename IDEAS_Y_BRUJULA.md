@@ -165,6 +165,28 @@ comparativa y falsable — "el final es malo" era el hecho, no la hipótesis. Re
 
 ### 🟨 Media palanca (bajo riesgo, no tocan el motor del mapa)
 
+**H13 — "Si las marcas de la barra de progreso (saltan a cada Acto) son legibles a simple vista, no
+solo por hover, más visitantes las usan para navegar en vez de verlas como ruido."** *(Tony, 12-jul —
+las vio y las describió como "palitos negros" sin saber qué eran.)*
+- Estado: **☐ Sin probar.** Hecho medido (12-jul): `.tonyProgMark` son marcas de 3×6px, color oscuro
+  sólido, cuyo significado (qué Acto es) solo se revela por `title`/hover — inexistente en táctil/móvil.
+- **Cómo puede morir:** si tras darles más pista visual (label persistente, o que el primer toque la
+  enseñe) Tony sigue sin identificarlas como navegación, o si nadie las usa más que antes → Rechazada,
+  se dejan como decoración menor de la barra o se quitan.
+
+**H14 — "Si las 12 zonas de textura ASMR se reparten ENTRE secciones del recorrido en vez de ir todas
+juntas, se sienten como una recompensa sorpresa distribuida por el viaje, no un carrusel al que hay que
+llegar a propósito."** *(Tony, 12-jul: "deberían estar entre paneles, no juntas".)*
+- Estado: **☐ Sin probar.** Hecho medido (12-jul): las 12 están TODAS seguidas en un único bloque de
+  ~600px (top 7234→7791px), nada intercalado. Orden preferido por Tony si se agrupan al final: burbujas,
+  madera, cristal, slime, arena, cremallera, muelle, y pana la última — máximo 1 seguida entre paneles.
+- **⚠️ Investigar antes de construir:** el comentario de línea ~4234 avisa de una "ruta CSS estable... 
+  insertar `<aside>` de texturas no la rompe" — repartirlas exige mover DÓNDE se insertan; confirmar que
+  no rompe esa ruta antes de tocar el DOM (B5).
+- **Cómo puede morir:** si repartirlas no se puede hacer sin tocar la ruta estable → aparcar hasta tener
+  un mecanismo que no la rompa. También muere si, repartidas, se sienten MENOS memorables que el bloque
+  compacto actual (no asumido, a probar con una persona).
+
 **H4 — "El historial se despliega como un pergamino (no aparece de golpe) refuerza el significado de 📜."**
 - Estado: **☐ Probando** — Construida ✔ (v1.35, 12-jul), evidencia pendiente. Elegida tras el re-ranking
   anti-FIFO del 12-jul: el recorrido de transiciones ELIMINÓ con datos a los otros candidatos (ver Foto
@@ -261,7 +283,11 @@ recorte/refuerzo, no como checklist de construcción.)*
 - v1.34 — H1 en `☐ Probando`: vínculo mínimo apuesta→rama (ver arriba).
 - v1.35 — H4 en `☐ Probando`: el historial se desenrolla como pergamino (la ÚNICA excepción al cierre
   del marcador que el propio revisor dejó carved: "eso sí sería una mejora perceptible").
-- (El marcador de apuestas queda CERRADO por decisión del revisor — no construir más ahí sin un hecho nuevo.)
+- v1.39 — El marcador se pliega tras la 2ª apuesta en juego (difuminado + «Ver el marcador entero»):
+  2536px→1424px. Reabierto con un hecho nuevo (Tony lo volvió a ver + medición al día de hoy) — Gemini
+  y ChatGPT, en independiente, convergieron en este mismo panel como único cuello de mayor palanca.
+  Mecanismo genérico (`.cardFold`/`.cardFoldBtn`), reusable en otros paneles largos si hiciera falta.
+- (El marcador queda CERRADO otra vez tras v1.39 — mismo principio: no seguir aquí sin un hecho nuevo.)
 
 ---
 
