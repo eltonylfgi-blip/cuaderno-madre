@@ -318,6 +318,7 @@
     <button type="button" class="quees breathe" id="queesBtn" title="Ir a la explicación">¿qué es?</button>
     <div class="ttbub" id="madreTip">🤱🏻 <b>MADRE</b> es un sistema que intenta <b>decidir mejor</b>, <b>aprender de la realidad</b> y <b>generar valor en el mundo real</b> — no es un bot de dinero ni un almacén de notas. (Mantén pulsado / pasa el ratón para esto.)</div>
   </div>
+  <div id="a11yAnnounce" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
   <!-- ===== ONBOARDING: un solo bloque (v0.11) — funde sub/promesa/feedback en uno ===== -->
   <style>
     /* v0.20: la cabecera cuenta UNA historia (crítica de posicionamiento: 1 idea, evidencia, promesa) */
@@ -475,12 +476,17 @@
         else if(n.dataset.esBak!==undefined){ n.innerHTML=n.dataset.esBak; }
       });
     }
+    function announce(msg){
+      var r=document.getElementById("a11yAnnounce");
+      if(r){ r.textContent=""; r.textContent=msg; }
+    }
     btn.addEventListener("click",function(){
       on=!on;
       apply(on);
       btn.setAttribute("aria-pressed", on?"true":"false");
       btn.textContent = on ? "🌐 Español" : "🌐 English";
       document.documentElement.lang = on ? "en" : "es";
+      announce(on ? "Idioma cambiado a español" : "Language changed to English");
       var lf=document.getElementById("langFullWrap"); if(lf) lf.hidden=!on;
     });
   }catch(e){} })();
@@ -1552,6 +1558,8 @@
         mode=modes[(modes.indexOf(mode)+1)%modes.length];
         try{ localStorage.setItem(KEY,mode); }catch(e){}
         applyClass(mode); refresh(); toast(meta[mode].toast);
+        var r=document.getElementById("a11yAnnounce");
+        if(r){ r.textContent=""; r.textContent=meta[mode].toast; }
       });
       document.body.appendChild(btn);
     }
