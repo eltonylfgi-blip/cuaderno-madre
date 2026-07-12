@@ -1,5 +1,53 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
+> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 tarde) — foto viva, léela entera antes de tocar código.**
+>
+> **🛑 DISCIPLINA EN VIGOR (GPT, no tocar hasta que Tony diga "ya podéis construir de nuevo"):**
+> ninguna versión añade sección/mecanismo nuevo — SOLO quitar ruido o reforzar algo que ya existe.
+> Escrita en `CLAUDE.md`. Un solo "qué decides" por turno, nunca una lista de frentes (memoria:
+> `cuaderno-madre-un-cuello-no-lista`). Antes de construir CUALQUIER sugerencia externa (Gemini/GPT),
+> pasa el filtro de 3 preguntas: (1) ¿señala el cuello real? (2) ¿cambia PERCEPTIBLEMENTE la
+> experiencia? (3) ¿es mejor que reforzar algo existente? Las 3 sí → adelante; si no, se descarta.
+>
+> **✅ CERRADO, no re-litigar (memoria: `cuaderno-madre-no-relitigar-decisiones-cerradas`):** los
+> comentarios crudos de prueba («ola gays») se QUEDAN — Tony respondió NO explícitamente (12-jul, vía
+> pregunta directa). No volver a proponer ocultarlos salvo que él mismo lo reabra.
+>
+> **🎯 PRÓXIMO FRENTE, ya priorizado por GPT (12-jul) — usar esto para elegir el ÚNICO cuello, no
+> construir la lista entera de golpe:**
+> 1. ⭐⭐⭐ Que cada pantalla/bloque termine en pregunta abierta, no en explicación cerrada (¿aumenta
+>    la incertidumbre o la reduce? — si solo explica, es candidato a recorte/reforma).
+> 2. ⭐⭐⭐ Que TODO apunte al mismo conflicto («¿la realidad le da la razón a MADRE o no?») — hoy
+>    el árbol/mapa/comentarios/diario/apuestas se sienten "colección", no evidencia del mismo juicio.
+> 3. ⭐⭐⭐ Escenas inolvidables: 2-3 momentos memorables, no veinte buenos (veredicto, última línea,
+>    cementerio, árbol↔apuesta) — profundizar esas, no sumar una cuarta.
+> 4. ⭐⭐ Ritmo: que cada 20-30s pase algo (cambio/sorpresa/revelación), no tramos largos de solo texto.
+> 5. ⭐⭐ Personalidad de MADRE tan reconocible que una frase suelta se identifique como suya — NO
+>    más chistes, sino una VOZ más marcada.
+> 6. ⭐ Sensación de "vivo" vía CONSECUENCIAS reales (cambia una apuesta/fecha/árbol), no más
+>    animación.
+> **Congelado explícitamente (GPT): mapa (salvo bugs), widgets nuevos, secciones nuevas, mecánicas
+> nuevas.** Encaja 1:1 con la disciplina de arriba — no es una lista nueva, es la MISMA regla aplicada.
+>
+> **🔎 Candidatos de Gemini (auditoría externa, 12-jul) — SIN VERIFICAR contra el DOM real, SIN
+> construir, filtro de 3 preguntas pendiente de aplicar por quien retome esto:**
+> - *Recortes propuestos en la 1ª pantalla* (verificar que cada selector/texto existe tal cual antes de
+>   tocar, B4): la línea `<div>🤱 Soy MADRE.</div>` (redundante con el H1) · el texto de ayuda "Mantén
+>   pulsado / pasa el ratón" + "· o explora a tu bola" · el `<details>⋯ más (voz, identidad nueva)` ·
+>   la frase "💬 «Feedback» = decir lo que piensas..." · la coletilla "· descarga un recordatorio... sin
+>   registro". **Ojo:** varias de estas piezas están protegidas por el guardarraíl "la personalidad es
+>   un activo, no se borra por limpieza" (CLAUDE.md, regla del listón) — pasar tambien ESE filtro, no
+>   solo el de Gemini, antes de tocarlas.
+> - *Refuerzo propuesto (el único, no inventar más):* sacar la justificación del 3/10 de su
+>   `<details><summary>¿por qué tan bajo...?</summary>` a texto visible siempre — cambio mínimo (quitar
+>   2 etiquetas), coherente con "esconder ruido, no lo que da credibilidad" (mismo espíritu que ya
+>   aplicó Gemini-pase-1 al marcador de apuestas).
+> - Primera pasada de Gemini (más genérica, ya cosechada): sobrecarga de emojis en la mitad superior,
+>   el 3/10 y el marcador de apuestas escondidos en `<details>` son el hallazgo más repetido por los 3
+>   auditores independientes de esta sesión (2 agentes + Gemini) — señal fuerte, con 3 fuentes.
+>
+> ---
+>
 > 💡 **ANTES de elegir qué mejorar (o si no sabes qué hacer): abre `IDEAS_Y_BRUJULA.md`** (hipótesis
 > falsables con estado, brújulas B1-B6) **y `PATRONES_OPERATIVOS.md`** (formas de decidir que ya
 > funcionaron — P-001..P-007). Orden de Tony (11/12-jul): trabajar desde ahí, no improvisar; y cuando

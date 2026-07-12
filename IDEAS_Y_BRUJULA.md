@@ -229,6 +229,19 @@ cada ~30 min: hay que coordinarlo con ella (propuesta al buzón cuando toque), n
 Victoria segura pequeña: externalizar `cmCorpus` a corpus.js (−9KB, consumidores con fallback). NO
 tocar (medido): minificar/CRLF/indentación — gzip ya lo hace gratis. Estado: ☐ Sin probar.
 
+**H12 — "Si TODO el sitio apunta al mismo conflicto (¿la realidad le da la razón a MADRE?) y cada
+bloque termina en pregunta abierta en vez de explicación cerrada, el recorrido se siente inevitable
+en vez de una colección de piezas buenas."** *(Marco de GPT, 12-jul — usar para ELEGIR el próximo
+recorte/refuerzo, no como checklist de construcción.)*
+- Estado: **☐ Sin probar.** Ver el ranking completo (6 puntos) en `CONTINUAR_AQUI.md`, bloque de
+  arranque. Filtro obligatorio antes de construir CUALQUIER pieza de aquí: las 3 preguntas de
+  [[cuaderno-madre-un-cuello-no-lista]] (memoria).
+- **Candidatos de Gemini sin verificar** (recortes en la 1ª pantalla + sacar el 3/10 de su
+  `<details>`): anotados en `CONTINUAR_AQUI.md`, pendientes de (a) confirmar que existen tal cual en
+  el DOM real (B4) y (b) pasar el guardarraíl "la personalidad es un activo" antes de tocarlos.
+- **Cómo puede MORIR:** si al aplicar el filtro de 3 preguntas ningún candidato pasa las 3, esta
+  hipótesis se aparca sin construir nada — es un marco de PRIORIZACIÓN, no una obligación de build.
+
 ### 🟦 Deuda técnica de baja prioridad (real, pero NO es el cuello hoy)
 
 - **H6 — `<span role="button">` → `<button>` nativo** (p.ej. `#queesBtn`). Estado: ☐ Sin probar, no urge.
