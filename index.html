@@ -501,6 +501,49 @@
   }catch(e){} })();
   </script>
 
+  <!-- Apuesta activa: se muestra justo debajo del hero, usando los mismos datos del teaser -->
+  <div class="card" id="apuestaActivaCard" style="margin-top:14px">
+    <div class="card head" style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--accent-soft);border-radius:14px 14px 0 0">
+      <span style="font-size:18px">⏳</span>
+      <span style="font-weight:700;font-size:14px;color:var(--ink)">Apuesta en juego</span>
+    </div>
+    <div class="body" style="padding:12px 14px 14px">
+      <p id="apuestaActivaTexto" style="margin:0;font-size:14px;line-height:1.5;color:var(--ink)"></p>
+      <p id="apuestaActivaFecha" style="margin:6px 0 0;font-size:12.5px;color:var(--muted)"></p>
+      <button type="button" class="btn sm" id="irApuestaActiva" style="margin-top:10px">Ver la apuesta completa ›</button>
+    </div>
+  </div>
+
+  <script>
+  /* v1.51 — Apuesta activa visible bajo el hero: usa los mismos datos VERE que el teaser */
+  (function(){ try{
+    var VERE=window.VERE; if(!VERE||!VERE.length) return;
+    var hoy=new Date(); hoy.setHours(0,0,0,0);
+    var next=null;
+    for(var i=0;i<VERE.length;i++){
+      var d=new Date(VERE[i][0]+"T00:00:00");
+      if(d>=hoy){ next=[d,VERE[i][1]]; break; }
+    }
+    if(!next) return;
+    var MZ=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+    var fechaCorta=next[0].getDate()+" de "+MZ[next[0].getMonth()];
+    var t=document.getElementById("apuestaActivaTexto");
+    var f=document.getElementById("apuestaActivaFecha");
+    var b=document.getElementById("irApuestaActiva");
+    if(t) t.textContent="«"+next[1]+"»";
+    if(f) f.textContent="Se juzga el "+fechaCorta+".";
+    if(b){
+      b.addEventListener("click",function(){
+        var c=document.getElementById("prediccionesCard");
+        if(c){
+          try{ c.querySelector("details").open=true; }catch(e){}
+          c.scrollIntoView({behavior:"smooth",block:"start"});
+        }
+      });
+    }
+  }catch(e){} })();
+  </script>
+
   <!-- línea secundaria pequeña: modo creador (antes "Soy Tony", parecía login) -->
   <div id="topSecondary"><div id="gateBar"></div></div>
   <div id="novBanner"></div>
