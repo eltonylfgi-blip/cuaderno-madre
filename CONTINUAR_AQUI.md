@@ -1,13 +1,25 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo) — 🛑 FRENO DE VERSIONES, y esta vez DE VERDAD (el revisor cazó que
-> "declarar el freno" en la versión nº 10 no es frenar). REGLA HASTA NUEVO AVISO DE TONY: VARIOS DÍAS
-> sin tocar NADA salvo bugs que él traiga. Ni ideas buenas (van al 📦 CAJÓN al final de
-> `IDEAS_Y_BRUJULA.md` — TODO lo pendiente está ahí, nada quedó fuera), ni "mejoras pequeñas", ni
-> docs nuevos. La semana es de OBSERVACIÓN, con el criterio de las 3 preguntas (están en el cajón):
-> dónde se para la gente · qué recuerdan 1h después · qué cuentan al compartir. Si la respuesta es
-> "el sonido/los logros" → dirección equivocada; si es "la IA que apuesta en público y en 3 días
-> sabrá si se equivocó" → todo lo demás está sirviendo a la historia. El 15-jul habla la realidad.**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo) — v1.49 EN VIVO. Tony levantó el freno él mismo ("ponte a construir,
+> no pares") para vaciar la lista concreta del cajón — NO fue romper el freno, fue usarlo bien: se
+> construyó lo que YA estaba medido y encolado, cero improvisación nueva. Al acabar esa lista, el
+> freno vuelve a estar en vigor (misma regla de abajo). Corrección de GPT aceptada sobre el freno
+> anterior: no es una fecha de calendario, es "hasta que una observación real reclame algo del cajón
+> o Tony traiga un bug" — el 15-jul sigue siendo el próximo dato duro, pero no es el único gatillo.**
+>
+> **✅ v1.49 — 6 arreglos del cajón, todos con la misma raíz (primera impresión simple, ahondar es un
+> toque). Commit `3903976`.** Terminaciones de Acto I y Acto III (dejan pregunta viva, no timestamp) ·
+> glosario+cementerio plegados (mismo mecanismo del marcador) · ruta guiada v2 (texto palabra a
+> palabra + frases moradas que hacen flash del target — texto y referencia unidos, sin color nuevo) ·
+> labels del mapa grande envueltas en `<tspan>` (medido: 175px en círculos de 92px → ahora 2 líneas;
+> CERO toque al motor de tap, verificado con teclado real) · panel de rama en móvil 675px→326px
+> (avance/rendimiento/juicio tras "Ver más", desktop intacto). **2 bugs propios cazados en el
+> camino** (documentados en el commit): el fold del glosario medía con el `<details>` aún cerrado →
+> 8px casi invisible; un botón duplicado por falta de guarda de idempotencia en toggles repetidos —
+> ambos arreglados y re-verificados antes de publicar, no se dejaron pasar.
+>
+> **🛑 FRENO DE VERSIONES otra vez en vigor** (regla de abajo, sin cambios — solo se pausó para vaciar
+> la lista de arriba, ya vaciada). Ni ideas buenas nuevas (cajón), ni "mejoras pequeñas", ni docs.
 >
 > **Última corrección aplicada bajo el freno (integridad de voz, no feature):** el teaser de 6/12
 > («abajo hay algo que casi nadie ha visto») se RETIRÓ el mismo día — no pasó la prueba «¿MADRE
