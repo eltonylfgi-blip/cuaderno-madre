@@ -347,8 +347,30 @@
          decenas de sitios: enlaces, "+", "¿qué es?"). #a78bfa da 6.67:1, mismo tono violeta. */
       --bg:#080a18; --card:#0f1330; --ink:#e7ebff; --muted:#9aa3d6; --line:#262c5e;
       --accent:#a78bfa; --accent-soft:rgba(167,139,250,.16);
+      /* v1.42 (bug real de Tony: "hay texto que desaparece por el color") — el prototipo redefinía 7
+         variables pero NO --chip ni las -soft de estado: todo lo que usa var(--chip) (chips, summaries)
+         quedaba CLARO con la tinta nueva CLARA encima (ratio medido ~1.0-1.4 = invisible). Regla de
+         clase: si el prototipo redefine variables, las redefine TODAS. */
+      --chip:#1a2150;
+      --green-soft:rgba(21,163,106,.18); --amber-soft:rgba(201,136,26,.18); --red-soft:rgba(211,73,59,.18);
       color-scheme: dark;
     }
+    /* v1.42, segunda familia del mismo bug: fondos LITERALES claros (no variables) que se quedaban
+       claros bajo el prototipo con texto claro encima. !important para ganar también a estilos inline
+       (staleBanner se crea con cssText). */
+    body.cmIdentityPreview .btn:not(.primary){background:var(--card)!important;color:var(--ink)!important;border-color:var(--line)!important}
+    body.cmIdentityPreview #langEn,body.cmIdentityPreview #cmMotionBtn{background:var(--card)!important;color:var(--ink)!important;border-color:var(--line)!important}
+    body.cmIdentityPreview .skin-papel-crema,body.cmIdentityPreview .skin-papel-melocot,body.cmIdentityPreview .skin-borde-ambar{background:var(--card)!important}
+    body.cmIdentityPreview #comentarios .cmt,body.cmIdentityPreview #cmtPanel .cmt{background:var(--card)!important}
+    body.cmIdentityPreview .cmt .acts button{background:var(--card)!important;color:var(--muted)!important}
+    body.cmIdentityPreview .dbjsCard{background:var(--card)!important}
+    body.cmIdentityPreview #staleBanner{background:var(--card)!important}
+    body.cmIdentityPreview details.def .d{color:var(--ink)!important}
+    body.cmIdentityPreview details.x{background:var(--card)!important}
+    body.cmIdentityPreview details.x .xb{color:var(--ink)!important}
+    /* las texturas ASMR conservan su piel de material (clara) también bajo el prototipo — la tinta
+       de su etiqueta debe seguir siendo oscura ahí */
+    body.cmIdentityPreview .cmTexLbl{color:#39414f!important}
     body.cmIdentityPreview .card,body.cmIdentityPreview .hero{box-shadow:0 0 0 1px rgba(167,139,250,.12),0 8px 28px rgba(90,50,210,.15)}
     body.cmIdentityPreview .btn.primary,body.cmIdentityPreview #tourBtn{box-shadow:0 0 18px rgba(167,139,250,.55)}
     body.cmIdentityPreview .bigscore,body.cmIdentityPreview .ob-hi{text-shadow:0 0 16px rgba(167,139,250,.6)}
@@ -494,6 +516,13 @@
   </div>
 
   <div class="hero">
+    <!-- v1.42 (bug de Tony: "una de las primeras secciones no tiene título, parece texto volcado") —
+         misma cabecera que ya usan giroCard/vsCard (vsHead+num+ctitle), cero clase nueva -->
+    <div class="vsHead" style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <span class="num">🌍</span>
+      <span class="ctitle"><span class="t">Contacto con la realidad</span>
+        <span class="s">La nota que me pongo yo — y por qué la enseño aunque sea baja.</span></span>
+    </div>
     <p class="heroLead">Este número me lo pongo yo, y mide una sola cosa: <b>cuánto he tocado el mundo real</b>.</p>
     <div class="scoreRow">
       <div class="scoreLabel">Contacto<br>con la realidad</div>
@@ -3878,6 +3907,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-12",titulo:"🧹 v1.42 — Los 5 fallos que Tony vio con sus propios ojos (y las reglas para que no vuelvan)",detalle:"Sesión de caza tras las capturas reales de Tony. (1) Los 👍 ya son interruptores de verdad: tocar otra vez QUITA el like — en comentarios y en dibujos. Antes un return lo bloqueaba; y para que el contador público no mintiera, el backend ganó los espejos reales (unlike_comment / unlike_drawing, con suelo en 0): tu pulgar baja el número de verdad, no solo en tu pantalla. (2) La despedida del final («Llegaste hasta el final…») TAPABA el botón de compartir — era una burbuja flotante que aparecía justo encima. Ya no flota: se inserta EN el flujo de la página, encima del pie, donde no puede tapar nada por construcción. Regla de clase nueva en el protocolo: las despedidas van en el flujo; lo que deba flotar se verifica contra los controles visibles (hermana de la regla del tour v1.37). (3) La sección del 3/10 empezaba en texto plano sin título («parece texto volcado») — ahora abre con la misma cabecera que las demás: 🌍 Contacto con la realidad. (4) Al probar la identidad nueva había texto INVISIBLE (medido: ratio de contraste ~1.0-1.4 en botones, chips, summaries, el banner de la foto vieja, tarjetas de comentarios y dibujos). Causa raíz doble: el prototipo redefinía 7 variables pero se olvidaba de --chip y las -soft, y hay fondos literales (#fff, skins de papel) que no cambian con variables. Arreglado en la fuente y regla de clase nueva: si un prototipo redefine variables, las redefine TODAS + escáner de contraste obligatorio al tocar cualquier tema. (5) El chip de like de los dibujos iba pegado a los bordes — ahora respira (margen y padding lateral). Pendiente CONFESADO, no escondido: la voz de MADRE «demasiado bot» (dicho por Tony) — no se maquilla en una esquina de un bugfix; merece su propia pasada entera de voz, junto a las terminaciones de los actos, que es el siguiente frente. Verificado: node --check limpio; escáner de contraste re-pasado con la identidad puesta (los 14 invisibles → 0); like/unlike ida y vuelta contra el backend real; la despedida insertada en flujo sin tapar Compartir; 375px sin overflow; 0 errores de consola."},
     {fecha:"2026-07-12",titulo:"🎚️ v1.41 — El gesto de mojarse: desliza tu confianza y séllala (la realidad te la recordará)",detalle:"Tony pidió interactividad de verdad («sliders que mover y demás cosas que interactuar») y el filtro del revisor la afiló: nada de interacción decorativa — solo la que hace PARTICIPAR en el experimento, y mejor 3-5 gestos repetidos que veinte demos sueltas. Este es el primer gesto del vocabulario: MOJARSE. En cada apuesta en juego, quien aún no votó ya no ve dos botones: ve un deslizador de 0 a 100 — mueves tu confianza en que acierto, el número te sigue en vivo, y para comprometerte tienes que SELLARLO (✍️; un roce accidental al hacer scroll no cuenta como apuesta, sellar es un acto deliberado — coherente con el notario de git de más arriba). El sello guarda tu porcentaje EXACTO en tu navegador y vota en el marcador colectivo de siempre (≥50 cuenta a favor): el motor v1.13 sigue siendo el dueño — sus botones quedan ocultos y el deslizador los acciona por debajo, cero línea suya tocada, reversible en 1 edit. Y el cierre del bucle ya queda cableado para el 15-jul: cuando una apuesta que sellaste pase de «en juego» a juzgada, esa misma tarjeta te confrontará con tu número — «Tú sellaste un 72%. La realidad dijo ❌. Te equivocaste conmigo — bienvenido al club.» (o su espejo: «Tú lo viste venir antes que yo»). No es una encuesta: es tu número contra el calendario, igual que los míos. Nota sobre las librerías que sugirió el revisor (React Bits, Magic UI…): NO encajan aquí — esta página es UN html sin build a propósito; se copia el GESTO, no el componente. Verificado: node --check 57/57; deslizar→aparece el sello con tu %→sellar→el motor v1.13 bloquea y el porcentaje persiste tras recargar; la confrontación probada simulando un sellado sobre una apuesta ya juzgada (aparece la frase con ✅/❌); 0 errores de consola; 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"🔊 v1.40 — La capa de sonido: el Cuaderno responde al tacto (y el mapa tiene ambiente)",detalle:"Pedido de Tony tal cual: «sonidos al interactuar, o ambiente si es una zona VIP de experiencia como el mapa» — leído como la autorización que levanta la disciplina de solo-quitar ÚNICAMENTE para esta capa. Cinco toques curados, no sonar en todo (la fatiga sonora mata más rápido que el silencio): tocar un nodo del mapa (tic ascendente suave), el gato (maullido sintetizado de 2 notas — sí, de verdad), apostar a favor/en contra (blip de confirmación), los botones de desplegar («Ver el historial» / «Ver el marcador entero») y la pastilla de movimiento. Y el ambiente VIP: mientras el mapa grande está abierto suena un hum grave casi subliminal (2 ondas desafinadas a 108Hz que baten entre sí + una respiración lenta de 6s, volumen 0.035) que se enciende en ~1 segundo y muere solo al cerrar el mapa, al cambiar a 🌙 Calma o al ocultar la pestaña. TODO sintetizado con el mismo criterio que el motor ASMR v0.12: cero mp3 descargado, cero peso nuevo, cero licencias — la síntesis ya demostró aquí sonar mejor que los samples «raros». La capa es autocontenida a propósito (contexto de audio propio, hooks externos): no toca ni una línea del motor ASMR ni del motor gateado del mapa — el hum se engancha OBSERVANDO el overlay desde fuera. 🌙 Calma = esta capa entera en silencio (coherente con lo que Calma ya significa). Reversible en 1 edit: borrar su <script> la apaga completa. Lo que NO puedo verificar yo: el TIMBRE — el entorno de verificación no deja oír si «suena rico» (mismo trato honesto que v0.30: a validar por el oído de Tony; el volumen se eligió deliberadamente bajo, antes subir que asustar). Verificado lo verificable: node --check limpio (56/56); 0 errores de consola; los 5 puntos de interacción disparan sin excepción; abrir/cerrar el mapa arma y desarma el hum sin errores; 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"📏 v1.39 — El marcador se pliega: difuminado + «Ver el marcador entero»",detalle:"Tony volvió a ver el mismo síntoma que en v1.32 («paneles demasiado largos») y dio el ejemplo exacto: el marcador de apuestas. Medido de nuevo (no a ojo): #prediccionesCard seguía en 2536px pese al recorte anterior, porque las apuestas EN JUEGO —el gancho real, las que nunca se esconden— pesan solas 1412px entre las 4 (cada una lleva su creencia, su condición de derrota y el mini-voto «¿a favor o en contra?»). Esta vez el mecanismo es genérico y reusable a propósito, pensado para cualquier panel largo, no solo este: el cuerpo de la tarjeta se pliega tras la 2ª apuesta en juego (las 2 fechas más próximas — la incertidumbre más presente ahora, no un corte ciego por posición), con un difuminado hacia el fondo y un botón «▾ Ver el marcador entero» que revela el resto con un toque. Cero apuesta se esconde de verdad: las 8 siguen en el DOM sin tocar, solo cambia cuánto se ve sin pulsar nada — v0.33/v1.13/v1.34 (estado, voto, vínculo a rama) siguen viendo la lista exactamente igual. Antes de construir pedí opinión independiente a Gemini y a ChatGPT (sin que se vieran entre sí) con los datos ya medidos: los dos, por separado, señalaron este mismo panel como el único cuello de mayor palanca ahora mismo — coincide con la medición, no es solo intuición. Verificado en local (servidor 8137): 2536px → 1424px (-44%) en la primera carga; el botón expande a los 2536px completos y se retira; 8 apuestas intactas; 0 errores de consola; 375px sin overflow horizontal; node --check limpio (55/55). Nota aparte, sin relación con este cambio: al comprobar `window.__openMapaBig()` conté 8 `.mapNode` en el documento, no los 12 que citan las notas de v1.30-v1.38 — no lo toqué ni lo investigué a fondo, queda anotado para quien revise el mapa."},
@@ -4464,6 +4494,7 @@ const LK="cmt_likes_v1";
 function likeSet(){ try{ return JSON.parse(localStorage.getItem(LK)||"{}"); }catch(e){ return {}; } }
 function isLiked(id){ return !!likeSet()[id]; }
 function markLiked(id){ const o=likeSet(); o[id]=1; try{ localStorage.setItem(LK,JSON.stringify(o)); }catch(e){} }
+function unmarkLiked(id){ const o=likeSet(); delete o[id]; try{ localStorage.setItem(LK,JSON.stringify(o)); }catch(e){} }
 
 let all=[];
 // ---- bloqueo duro de acusaciones graves (pedofilia) — normaliza para cazar variantes ----
@@ -4587,9 +4618,18 @@ async function post(parentId, name, body, file){
   return {id: data && data.id};
 }
 async function like(id){
-  if(isLiked(id)) return; markLiked(id);
+  const c=all.find(x=>x.id===id);
+  /* v1.42 (bug de Tony: "no deja quitar los likes") — el 👍 ya es interruptor. El backend tiene su
+     espejo real (rpc unlike_comment, greatest(likes-1,0)): el contador público no miente nunca. */
+  if(isLiked(id)){
+    unmarkLiked(id);
+    if(c){ c.likes=Math.max((c.likes||0)-1,0); renderAll(); }
+    const { error }=await sb.rpc("unlike_comment",{ cid:id }); if(error) console.warn("unlike:", error.message);
+    return;
+  }
+  markLiked(id);
   try{ if(window.__cmBuzz) window.__cmBuzz(8); }catch(e){}
-  const c=all.find(x=>x.id===id); if(c){ c.likes=(c.likes||0)+1; renderAll(); }
+  if(c){ c.likes=(c.likes||0)+1; renderAll(); }
   const { error }=await sb.rpc("like_comment",{ cid:id }); if(error) console.warn("like:", error.message);
 }
 
@@ -4626,7 +4666,7 @@ function makeComment(c, isReply){
   w.appendChild(m); w.appendChild(tx);
   if(c.image_url){ const im=document.createElement("img"); im.src=c.image_url; im.loading="lazy"; im.alt="imagen adjunta de "+(c.name||"anónimo"); im.style.cssText="max-width:100%;max-height:240px;border-radius:8px;margin:5px 0;display:block"; w.appendChild(im); }
   const acts=document.createElement("div"); acts.className="acts";
-  const lb=document.createElement("button"); lb.textContent="👍 "+(c.likes||0); lb.title="Me gusta"; lb.setAttribute("aria-pressed", isLiked(c.id)?"true":"false"); if(isLiked(c.id)) lb.classList.add("on"); lb.onclick=()=>like(c.id); acts.appendChild(lb);
+  const lb=document.createElement("button"); lb.textContent="👍 "+(c.likes||0); lb.title="Me gusta · toca otra vez para quitarlo"; lb.setAttribute("aria-pressed", isLiked(c.id)?"true":"false"); if(isLiked(c.id)) lb.classList.add("on"); lb.onclick=()=>like(c.id); acts.appendChild(lb);
   w.appendChild(acts);
   if(!isReply){
     const rb=document.createElement("button"); rb.textContent="Responder"; acts.appendChild(rb);
@@ -4913,7 +4953,7 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
 .dbjsCard{background:#fff;border-radius:12px;padding:6px;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;flex-direction:column;gap:4px;animation:dbjsPop .35s ease both}
 .dbjsCard img{width:100%;height:auto;border-radius:8px;display:block;background:#fafafa}
 .dbjsCardName{font-size:.72rem;color:#555;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-.dbjsLike{cursor:pointer;border:none;background:#f3effd;color:#6a5acd;border-radius:999px;font-size:.74rem;font-weight:700;padding:4px 0;transition:transform .12s,background .12s}
+.dbjsLike{cursor:pointer;border:none;background:#f3effd;color:#6a5acd;border-radius:999px;font-size:.74rem;font-weight:700;padding:4px 10px;margin:0 2px 2px;transition:transform .12s,background .12s}
 .dbjsLike:hover{background:#e7dffb;transform:scale(1.05)}
 .dbjsLike.dbjsLiked{background:#6a5acd;color:#fff}
 .dbjsLike.dbjsBump{animation:dbjsBump .4s}
@@ -5433,8 +5473,17 @@ function renderGallery(rows){
     if(done)lk.classList.add('dbjsLiked');
     lk.textContent='👍 '+n;
     lk.addEventListener('click',function(){
-      if(lk.classList.contains('dbjsLiked'))return;
-      var arr=lget();if(arr.indexOf(r.id)<0){arr.push(r.id);lsave(arr);}
+      var arr=lget();
+      /* v1.42 (bug de Tony): el 👍 de un dibujo también es interruptor — antes un return lo bloqueaba */
+      if(lk.classList.contains('dbjsLiked')){
+        var ix=arr.indexOf(r.id); if(ix>=0){ arr.splice(ix,1); lsave(arr); }
+        n=Math.max(n-1,0); lk.textContent='👍 '+n; lk.classList.remove('dbjsLiked');
+        r.likes=n;
+        waitSb(function(sb){sb.rpc('unlike_drawing',{did:r.id}).then(function(res){if(res&&res.error)console.warn('unlike',res.error);}).catch(function(e){console.warn('unlike',e);});},function(){});
+        setTimeout(reorder,420);
+        return;
+      }
+      if(arr.indexOf(r.id)<0){arr.push(r.id);lsave(arr);}
       n++;lk.textContent='👍 '+n;lk.classList.add('dbjsLiked','dbjsBump');
       try{ if(window.__cmBuzz) window.__cmBuzz(8); }catch(e){}
       r.likes=n;
@@ -6492,7 +6541,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.41";
+  window.__cmVersion="v1.42";
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
@@ -7852,7 +7901,15 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     });
     if(!shown.__final){
       var footer=document.querySelector('footer'); if(footer){ var fr=footer.getBoundingClientRect();
-        if(fr.top<=vh){ shown.__final=true; say('🤱 Llegaste hasta el final. La mayoría no lo hace — gracias por la curiosidad.'); } }
+        if(fr.top<=vh){ shown.__final=true;
+          /* v1.42 (bug de Tony: la burbuja flotante TAPABA «Compartir este cuaderno») — regla de
+             clase, hermana de la de v1.37: las despedidas van EN EL FLUJO, no flotando; un elemento
+             en flujo no puede tapar nada por construcción. */
+          var fin=document.createElement('div'); fin.id='cmFinLine'; fin.setAttribute('role','status');
+          fin.style.cssText='margin:14px auto 10px;max-width:min(88vw,420px);text-align:center;background:var(--card);color:var(--ink);border:1px solid var(--line);padding:10px 16px;border-radius:12px;font:600 12.5px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.08)';
+          fin.textContent='🤱 Llegaste hasta el final. La mayoría no lo hace — gracias por la curiosidad.';
+          footer.parentNode.insertBefore(fin, footer);
+        } }
     }
     if(shown.__final && ivPresencia){ clearInterval(ivPresencia); ivPresencia=null; }   // v0.79: ya no queda ningun hito por descubrir -- para el timer
   }

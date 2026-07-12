@@ -110,6 +110,17 @@ de botella de mayor impacto DENTRO del Cuaderno y resolverlo — no esperar una 
   el paso 5 vive tras el revelado progresivo y el tour lo revela solo), y (b) ninguna burbuja/toast
   flotante se pinta por encima de `#tourBox` mientras el tour está abierto (la presencia de MADRE
   v0.66 tiene guard `if(tourOv) return` — cualquier burbuja NUEVA debe llevar el mismo guard).
+- **Regla NADA-FLOTANTE-TAPA (v1.42, clase del bug "la despedida tapaba Compartir"):** los avisos
+  permanentes/despedidas van EN EL FLUJO (insertBefore), no flotando — un elemento en flujo no puede
+  tapar nada por construcción. Si algo DEBE flotar (toasts efímeros), antes de dar por bueno el
+  cambio: por JS, comprobar que su rect NO intersecta ningún `a/button` visible del viewport en el
+  momento de mostrarse (patrón hermano del guard del tour v1.37).
+- **ESCÁNER DE CONTRASTE (v1.42, clase del bug "texto que desaparece con la identidad nueva"):** al
+  tocar CUALQUIER tema/paleta/skin (incl. `cmIdentityPreview` y dark), correr el escáner de
+  luminancia por JS (recorrer elementos con texto visible, color vs fondo efectivo subiendo por los
+  padres; ratio (L1+.05)/(L2+.05)) con el modo PUESTO: ningún texto por debajo de ~2.2 de ratio. La
+  causa raíz típica: el modo redefine variables pero se olvida alguna (--chip, -soft) o hay fondos
+  LITERALES (#fff, skins) que no cambian — si un prototipo redefine variables, las redefine TODAS.
 - Changelog: array `cambios` (buscar `var cambios=[`) — nueva entrada como PRIMER elemento, mismo
   estilo que las de abajo. Versión: `window.__cmVersion`.
 - Commit + push inmediato tras verificar (no dejar el árbol sucio mucho rato — mitiga colisión con
