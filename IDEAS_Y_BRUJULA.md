@@ -13,12 +13,18 @@
 >    de MÁS palanca en estado `☐ Sin probar` que no esté gateada. Las gateadas (tocan mapa/identidad) SÍ
 >    necesitan OK de Tony — eso no lo decide la autonomía, lo dice CLAUDE.md.
 > 2. Cuando descubras una hipótesis que te ENCANTA → añádela aquí con su palanca estimada y estado
->    `☐ Sin probar`. NO la construyas por impulso.
+>    `☐ Sin probar`. NO la construyas por impulso. **Toda hipótesis DEBE traer escrito CÓMO PUEDE MORIR**
+>    (revisor 12-jul: *"si una hipótesis no tiene una forma clara de quedar refutada, todavía no está
+>    bien formulada"* — MADRE gana precisamente cuando descubre que estaba equivocada).
 > 3. Al construir el MVP de una hipótesis → pasa a `☐ Probando` (construida y en vivo, SIN validar con
->    tráfico/reacción real todavía — técnicamente desplegado ≠ operativamente confirmado).
-> 4. Cuando haya evidencia real (reacción de Tony, datos, o un fallo claro) → pasa a `☑ Confirmada` o
->    `☒ Rechazada`, con la evidencia anotada. Una hipótesis confirmada puede escalar a la siguiente versión
->    de sí misma; una rechazada NO se reintenta sin un dato nuevo que la reabra.
+>    evidencia real todavía — técnicamente desplegado ≠ operativamente confirmado).
+> 4. Cuando haya evidencia real → pasa a `☑ Confirmada` o `☒ Rechazada`, con la evidencia anotada. Una
+>    confirmada puede escalar a la siguiente versión de sí misma; una rechazada NO se reintenta sin un
+>    dato nuevo que la reabra. **Evidencia ≠ tráfico** (P-006): observar a UNA persona usarla (Tony
+>    vale), un recorrido cronometrado, preguntar qué entendió, pedir que señale/dibuje — todo eso ya
+>    confirma o mata, sin esperar visitas.
+> 5. Antes de decidir, mirar también `PATRONES_OPERATIVOS.md` (formas de decidir que ya funcionaron
+>    aquí): *"¿esto se parece a un patrón conocido?"*
 > - **Nunca mezclar dos hipótesis en el mismo cambio** (lección de esta sesión): si cambias el vínculo Y el
 >   orden del árbol a la vez, y algo mejora, no sabrás cuál de las dos lo causó. Una variable por MVP.
 > - Palanca = cuánto cambia la EXPERIENCIA del visitante (qué recordaría/contaría al día siguiente), no
@@ -53,21 +59,25 @@
 
 ### 🟥 Alta palanca
 
-**H1 — "Si una apuesta ilumina/conecta con su rama, el visitante entiende mejor qué se está jugando."**
-- Estado: **☐ Probando** (MVP en vivo desde v1.34, 11-jul — sin reacción/datos reales todavía).
-- MVP construido (deliberadamente el más barato posible, UNA sola dirección): cada insignia de rama de una
-  apuesta (📓🎬🧠🛡️📚) ya es tocable — toca/Enter → abre el mapa si estaba cerrado, hace scroll, y destaca
-  el nodo exacto con un borde de acento (siempre visible, sin depender de movimiento) + un brillo si el
-  interruptor de v1.30 lo permite. Cero riesgo al motor: localizado por consulta DOM externa comparando el
-  emoji ya renderizado (`.mn-emoji`), CERO llamada a `onNodeClick`/`routeTap`/`nodeAtPoint`/`focusBranch`
-  (confirmado por grep antes y después de construir).
-- Deliberadamente NO construido todavía (para no mezclar hipótesis, B6): el sentido inverso (tocar la rama
-  resalta sus apuestas), la respiración/energía/cicatriz que proponía el revisor, y CUALQUIER cambio al
-  orden de las secciones (eso es H3, aparte).
-- **Cómo se confirma/rechaza:** si en próximas sesiones Tony (o un visitante) usa el vínculo y dice que le
-  ayuda a entender la apuesta → `☑ Confirmada`, y entonces sí se plantea I1 (mapa de compromisos) o el
-  sentido inverso. Si nadie lo toca o no aporta nada → `☒ Rechazada`, se retira sin más inversión.
-- Palanca si se confirma: alta (validaría además la premisa de I1, el reencuadre grande del árbol).
+**H1 — "Si el visitante puede saltar al instante desde una apuesta a la rama afectada, entenderá mejor
+QUÉ PARTE de MADRE está comprometida con esa apuesta."**
+*(Reformulada 12-jul para ser FALSABLE — antes decía "añadir un vínculo", que no se puede refutar.)*
+- Estado: **☐ Probando** — Construida ✔ (MVP en vivo desde v1.34), evidencia pendiente.
+- **Qué intenta demostrar:** que la relación apuesta↔rama (hoy implícita en los datos) es algo que el
+  visitante NECESITA ver para entender qué se juega MADRE — no un adorno.
+- **Cómo sabremos si era verdad (evidencia barata, sin esperar tráfico — P-006):** con UNA persona (Tony
+  vale): preguntarle "¿qué parte de MADRE depende de esta apuesta?" antes y después de descubrir el
+  vínculo. Si la respuesta pasa de vaga a concreta ("la rama 🛡️ Activos") → `☑ Confirmada`.
+- **Cómo puede MORIR:** si quien lo usa responde igual de vago después de tocarlo (el salto no añade
+  comprensión), o si en varias sesiones nadie lo descubre de forma natural → `☒ Rechazada`, se retira
+  sin más inversión y NO se construye H2 sobre ella.
+- MVP construido (el más barato posible, UNA sola dirección): insignia de rama (📓🎬🧠🛡️📚) tocable →
+  abre el mapa, scroll, destaca el nodo exacto (borde de acento siempre visible; brillo solo si el
+  interruptor v1.30 lo permite). Cero riesgo al motor: consulta DOM externa (`.mn-emoji`), CERO llamada a
+  `onNodeClick`/`routeTap`/`nodeAtPoint`/`focusBranch` (confirmado por grep).
+- Deliberadamente NO construido (P-002, una variable por MVP): el sentido inverso (rama→apuestas), la
+  respiración/energía/cicatriz del revisor, y cualquier cambio al orden de secciones (eso es H3).
+- Palanca si se confirma: alta — validaría además la premisa de H2 (mapa de compromisos).
 
 **H2 — "El árbol como MAPA DE COMPROMISOS (no como estado) mantiene la incertidumbre y da más significado."**
 - Estado: **☐ Sin probar.** Reencuadre de qué SIGNIFICA el árbol: cada rama con una apuesta abierta está
@@ -75,6 +85,9 @@
   (`data-rama` desde v1.25).
 - **Depende de H1:** no tiene sentido construir el reencuadre completo del árbol si el vínculo mínimo (H1)
   ni siquiera demuestra ser útil. Esperar a que H1 tenga evidencia.
+- **Cómo puede MORIR:** si tras confirmar H1, al probar el reencuadre una persona sigue describiendo el
+  árbol como "estado/decoración" (no como "dónde se juega algo") — o si implementarlo exige anticipar
+  resultados (violaría B2) → Rechazada.
 - **⚠️ GATED** (toca semántica/render del mapa) → necesita OK de Tony cuando llegue el momento.
 
 **H3 — "Reordenar el viaje (árbol DESPUÉS de la apuesta/veredicto) alinea el recorrido con la historia
@@ -84,8 +97,9 @@ principal y aumenta el impulso de seguir bajando."**
   el revisor lo señaló explícitamente: *"solo sabemos que aparece antes, no sabemos si eso perjudica"*.
 - **No mezclar con H1** (ya construida): si se reordena el árbol AHORA, cualquier cambio de reacción de
   Tony no se sabría si vino del vínculo (H1) o del reorden (H3). Esperar a tener lectura de H1 primero.
-- Antes de tocar el orden: la prueba mental del revisor — comparar A (árbol→apuesta, actual) vs B
-  (apuesta→árbol) y preguntar *"¿cuál da más SIGNIFICADO al árbol?"* — no asumir que B gana solo por orden.
+- **Cómo puede MORIR:** la prueba del revisor con una persona — enseñar A (árbol→apuesta, actual) vs B
+  (apuesta→árbol) y preguntar *"¿cuál da más SIGNIFICADO al árbol?"*. Si B no gana con claridad →
+  Rechazada, el orden actual se queda (no se reordena por estética ni "porque aparece antes").
 - Reversible (no toca el motor, solo posición de secciones) pero es un cambio narrativo grande → medir/
   proponer explícitamente antes de construir, probablemente con el criterio de Tony antes de decidir solo.
 
@@ -94,10 +108,14 @@ principal y aumenta el impulso de seguir bajando."**
 **H4 — "El historial se despliega como un pergamino (no aparece de golpe) refuerza el significado de 📜."**
 - Estado: **☐ Sin probar.** CSS puro, respeta el interruptor de movimiento (v1.30), no toca el mapa. Listo
   para construir cuando toque un ciclo de pulido pequeño.
+- **Cómo puede MORIR:** si al enseñárselo a una persona no lo nota, o le estorba para leer → se queda el
+  corte actual (aparecer de golpe no está roto, solo es menos expresivo).
 
 **H5 — "¿Qué se está jugando MADRE HOY? como línea-brújula uniendo secciones aumenta la sensación de
 viaje continuo (B3)."**
 - Estado: **☐ Sin probar.** Copy, bajo riesgo. Definir bien el texto antes de colocarlo en varias secciones.
+- **Cómo puede MORIR:** si tras el recorrido nadie usa esa idea al contar de qué va la web (la frase no
+  une nada en la práctica) → fuera, sin duelo.
 
 ### 🟦 Deuda técnica de baja prioridad (real, pero NO es el cuello hoy)
 

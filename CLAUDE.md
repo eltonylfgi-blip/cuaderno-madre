@@ -60,8 +60,13 @@ de botella de mayor impacto DENTRO del Cuaderno y resolverlo — no esperar una 
   cuando haga falta, NO una fase fija del ciclo ni un agente permanente añadido a cada ronda.
   **Ese backlog VIVE en `IDEAS_Y_BRUJULA.md` (raíz del repo) — LÉELO antes de elegir qué mejorar y
   SIEMPRE que no sepas qué hacer** (orden de Tony, 11-jul-2026). Ahí están las 🧭 BRÚJULAS (principios que
-  filtran cada decisión) y las ideas rankeadas por palanca. Cuando descubras una idea que te ENCANTE,
-  NO la construyas por impulso: apúntala ahí con su palanca; al construir una, muévela a ✅ CONSTRUIDO.
+  filtran cada decisión) y las HIPÓTESIS con estado (Sin probar/Probando/Confirmada/Rechazada — toda
+  hipótesis lleva escrito cómo puede morir). Cuando descubras una idea que te ENCANTE, NO la construyas
+  por impulso: apúntala ahí como hipótesis falsable; al construir su MVP, pásala a Probando.
+  **Junto a él vive `PATRONES_OPERATIVOS.md`** (formas de DECIDIR que ya funcionaron — entra solo lo que
+  cambió una decisión real Y es reutilizable): consúltalo antes de una mejora, y cuando Tony/un revisor
+  digan "vale oro / esto cambia muchas decisiones / la mejor corrección", PROPÓN promocionar ese
+  aprendizaje a patrón (orden de Tony, 12-jul-2026).
 - **Quitar cuenta como mejorar** — si eliminar algo sube más la calidad que añadir, elimina.
 - **Nunca fabriques trabajo ni declares un frente agotado por costumbre** — solo cuando de verdad
   no encuentres un cambio razonable que suba más la calidad (regla 5: con evidencia, no de palabra).

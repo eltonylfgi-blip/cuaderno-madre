@@ -1,8 +1,19 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> 💡 **ANTES de elegir qué mejorar (o si no sabes qué hacer): abre `IDEAS_Y_BRUJULA.md`** — es el backlog
-> vivo (brújulas + ideas por palanca). Orden de Tony (11-jul): documentar ahí las ideas con más palanca y
-> atacarlas desde ahí, no improvisar.
+> 💡 **ANTES de elegir qué mejorar (o si no sabes qué hacer): abre `IDEAS_Y_BRUJULA.md`** (hipótesis
+> falsables con estado, brújulas B1-B6) **y `PATRONES_OPERATIVOS.md`** (formas de decidir que ya
+> funcionaron — P-001..P-007). Orden de Tony (11/12-jul): trabajar desde ahí, no improvisar; y cuando
+> algo "valga oro", proponer promocionarlo a patrón.
+>
+> **✅ 12-jul — mecanismo de patrones + backlog falsable (docs, sin versión).** (1) Creado
+> `PATRONES_OPERATIVOS.md`: 7 patrones semilla, filtro de entrada estricto (cambió una decisión real +
+> reutilizable), formato plano de 4 campos — advertencia del revisor vigente: si crece en metadatos, ha
+> fracasado. (2) H1 reformulada FALSABLE (qué demuestra / cómo se confirma / cómo muere) y H2-H5 con su
+> condición de muerte — regla nueva: hipótesis sin forma de morir no está formulada. (3) Corrección del
+> revisor incorporada: **evidencia ≠ tráfico** — H1 se valida con UNA persona (Tony: "¿qué parte de MADRE
+> depende de esta apuesta?" antes/después de tocar la insignia), no esperando visitas. (4) Ley general
+> "separar hecho medido de conclusión" PROPUESTA a MADRE por el buzón
+> (`DESDE_CLAUDE_2026-07-12_ley-hecho-vs-conclusion-y-patrones.txt`).
 
 > **✅ v1.33 EN VIVO (11-jul) — «4 apuestas más» no eran «4 elementos iguales», eran el pasado.
 > Commit `441dd1f`.** El revisor validó v1.32 (recorte del panel) pero pidió reforzar la separación
