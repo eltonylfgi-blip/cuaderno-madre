@@ -70,6 +70,7 @@
   .btn.no{color:var(--red);border-color:#f3c8c2}
   .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .skipLink:focus{position:fixed;left:16px;top:16px;width:auto;height:auto;padding:10px 14px;background:var(--accent);color:#fff;border-radius:8px;font-weight:700;z-index:100001}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
     margin-bottom:11px;box-shadow:var(--shadow);overflow:hidden}
@@ -500,10 +501,8 @@
   <p class="fbhint">💬 «Feedback» = decir lo que piensas. Tienes un botón en cada tarjeta; no hace falta registrarse.</p>
 
   <div class="card key" id="vsCard">
+    <h2 class="sr-only">Una IA normal vs. MADRE</h2>
     <div class="vsHead">
-      <span class="num">⚖️</span>
-      <span class="ctitle"><span class="t">Una IA normal vs. MADRE</span>
-        <span class="s">La diferencia, en 10 segundos.</span></span>
     </div>
     <div class="cmVs" role="table" aria-label="IA normal frente a MADRE" id="cmVsTable">
       <div class="vh">Una IA normal</div><div class="vmid"></div><div class="vh b">MADRE</div>
@@ -520,6 +519,7 @@
     <div class="fb"><button class="btn sm" data-fb data-card="⚖️ IA normal vs MADRE" data-section="">💬 Feedback de esta tarjeta</button></div>
   </div>
 
+  <h2 class="sr-only">Contacto con la realidad</h2>
   <div class="hero">
     <!-- v1.42 (bug de Tony: "una de las primeras secciones no tiene título, parece texto volcado") —
          misma cabecera que ya usan giroCard/vsCard (vsHead+num+ctitle), cero clase nueva -->
@@ -554,6 +554,7 @@
     <p class="small" style="margin:12px 0 0">📸 Última foto del estado: <b id="actualizado">ver Evolución (abajo)</b> · MADRE se refresca sola varias veces al día · tu feedback le llega en la siguiente pasada.</p>
   </div>
 
+  <h2 class="sr-only">MADRE en directo</h2>
   <!-- ===== MADRE EN DIRECTO (v0.11): latido honesto + ánimo del día + "lo que no te cuento" ===== -->
   <div id="envivo">
     <div class="ev-top">
@@ -608,6 +609,7 @@
     .dv-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     @media(prefers-reduced-motion:reduce){ .dv-pulse,.dv-new{animation:none} }
   </style>
+  <h2 class="sr-only">Diario vivo</h2>
   <div id="diarioVivo" hidden>
     <div class="dv-head">
       <span class="dv-pulse" aria-hidden="true"></span>
@@ -921,6 +923,7 @@
     </div>
   </details></div>
 
+  <h2 class="sr-only">Señales del mundo</h2>
   <div class="card key" id="senalesCard"><details open>
     <summary>
       <span class="num">🌍</span>
@@ -986,6 +989,7 @@
     .pr-ramaLink:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
     @media (max-width:520px){ .predList>li{flex-wrap:wrap} .pr-fecha{order:-1;width:100%} }
   </style>
+  <h2 class="sr-only">El marcador: se juzga sola</h2>
   <div class="card key" id="prediccionesCard"><details open>
     <summary>
       <span class="num">⚖️</span>
@@ -1688,6 +1692,7 @@
   }catch(e){ console.warn("volver",e); } })();
   </script>
 
+  <h2 class="sr-only">Camino al 10/10</h2>
   <div class="card key" id="caminoCard"><details open>
     <summary>
       <span class="num">🎯</span>
@@ -1769,6 +1774,7 @@
     @keyframes prRamaPulse{0%,100%{filter:none}50%{filter:drop-shadow(0 0 10px var(--accent))}}
     @media(prefers-reduced-motion:reduce){ body:not(.cmMotionOn) .mapNode.pr-ramaPulse .mn-c{animation:none} }
   </style>
+  <h2 class="sr-only">El mapa de MADRE</h2>
   <div class="card key" id="mapaCard">
     <div class="mapHead">
       <span class="num">🌳</span>
