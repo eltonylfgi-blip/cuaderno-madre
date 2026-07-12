@@ -1,31 +1,73 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo) — v1.49 EN VIVO. Tony levantó el freno él mismo ("ponte a construir,
-> no pares") para vaciar la lista concreta del cajón — NO fue romper el freno, fue usarlo bien: se
-> construyó lo que YA estaba medido y encolado, cero improvisación nueva. Al acabar esa lista, el
-> freno vuelve a estar en vigor (misma regla de abajo). Corrección de GPT aceptada sobre el freno
-> anterior: no es una fecha de calendario, es "hasta que una observación real reclame algo del cajón
-> o Tony traiga un bug" — el 15-jul sigue siendo el próximo dato duro, pero no es el único gatillo.**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo — foto viva del 12-jul, léela ENTERA antes de tocar nada). v1.50 EN
+> VIVO.** La web está estable y desplegada en `https://eltonylfgi-blip.github.io/cuaderno-madre/`.
+> La sesión del 12-jul produjo v1.39→v1.50 (todo verificado y en producción). El repo vivo es
+> `C:\Users\anton\cuaderno-madre-pub` (NO `repos\cuaderno-madre`, ese es viejo).
 >
-> **✅ v1.49 — 6 arreglos del cajón, todos con la misma raíz (primera impresión simple, ahondar es un
-> toque). Commit `3903976`.** Terminaciones de Acto I y Acto III (dejan pregunta viva, no timestamp) ·
-> glosario+cementerio plegados (mismo mecanismo del marcador) · ruta guiada v2 (texto palabra a
-> palabra + frases moradas que hacen flash del target — texto y referencia unidos, sin color nuevo) ·
-> labels del mapa grande envueltas en `<tspan>` (medido: 175px en círculos de 92px → ahora 2 líneas;
-> CERO toque al motor de tap, verificado con teclado real) · panel de rama en móvil 675px→326px
-> (avance/rendimiento/juicio tras "Ver más", desktop intacto). **2 bugs propios cazados en el
-> camino** (documentados en el commit): el fold del glosario medía con el `<details>` aún cerrado →
-> 8px casi invisible; un botón duplicado por falta de guarda de idempotencia en toggles repetidos —
-> ambos arreglados y re-verificados antes de publicar, no se dejaron pasar.
+> **🛑 FRENO DE VERSIONES EN VIGOR (regla dura hasta que Tony diga lo contrario).** NO construir por
+> defecto. Solo se toca código si: (a) Tony trae un bug/pide algo explícito, o (b) una observación
+> REAL con una persona reclama algo del cajón. Todo lo pendiente vive en el 📦 CAJÓN al final de
+> `IDEAS_Y_BRUJULA.md` — NADA quedó fuera (gestos, € vs %, huellas, voz por estados, terminaciones
+> restantes de Acto I-final/Acto III, etc.). Ni ideas nuevas, ni "mejoras pequeñas", ni docs nuevos.
+> **Cuando Tony SÍ pida construir:** una cosa a la vez, del cajón, la de más palanca AHORA (no FIFO).
 >
-> **🛑 FRENO DE VERSIONES otra vez en vigor** (regla de abajo, sin cambios — solo se pausó para vaciar
-> la lista de arriba, ya vaciada). Ni ideas buenas nuevas (cajón), ni "mejoras pequeñas", ni docs.
+> **Próximo dato duro: 15-jul** — primer veredicto real de una apuesta pública (se juzga «¿el cuello
+> era la distribución?»). El marcador y la escena final se actualizan SOLOS cuando la rutina anote
+> el veredicto (leen el ledger). La tarjeta confronta a quien haya sellado su % (gesto de mojarse v1.41).
 >
-> **Última corrección aplicada bajo el freno (integridad de voz, no feature):** el teaser de 6/12
-> («abajo hay algo que casi nadie ha visto») se RETIRÓ el mismo día — no pasó la prueba «¿MADRE
-> diría esto aunque nadie midiera retención?»: era un gancho, no una frase suya. La retirada quedó
-> CONTADA en el propio changelog v1.47 (esconder la corrección sería peor que el error). El logro
-> 12/12 se queda: ese sí lo diría.
+> **✅ v1.50 (último, commit `1229d5b`) — ASMR + fix solape.** Los 5 favoritos de Tony salen SIEMPRE
+> primero y en su orden (🫧 burbujas · 🔔 cristal · 🪵 madera · 🌀 muelle · 🧪 slime; `PRIORITY` en el
+> motor ASMR, el reparto v1.47 conserva el orden = salen arriba); 3 texturas crunchy nuevas (nieve,
+> cereales, grava — sintetizadas, cero mp3); «Marcar lo que te gusta» etiqueta las tiras como «Zona
+> ASMR: X» (ya funcionaba sobre `.cmTex`); y con el chat abierto se esconde el clúster del fab-hub
+> (`body:has(#cmtPanel.on)`) que antes tapaba «cerrar chat».
+>
+> **Lo que hizo el resto de la sesión (todo EN VIVO, no rehacer):** v1.39 marcador plegado · v1.40
+> sonido UI + hum del mapa · v1.41 gesto de mojarse (slider confianza + sello, bucle 15-jul) · v1.42
+> 5 bugs de capturas (likes-interruptor con backend, despedida en flujo, título del 3/10, contraste
+> identidad, margen) · v1.43 mandos (salir de identidad, cerrar chat, Vivo que brilla, brújula del
+> mapa) · v1.44 voz de MADRE (primera candidata) · v1.45 sellar celebra + mapa pequeño→grande + lupa
+> · v1.46 voz hablada Elvira (edge-tts) + `VOZ_CANONICA.md` · v1.47 texturas repartidas + logros ·
+> v1.48+v1.49 terminaciones de actos + primera impresión simple + ruta guiada v2 + mapa sin desbordar.
+>
+> **⏳ PENDIENTE que la nueva sesión hereda:**
+> - **Feedback de GPT NO recuperado:** se le preguntó (pestaña ChatGPT del navegador in-app) «¿cuál es
+>   el punto más débil de cara a que un visitante recuerde 'la IA que apuesta en público'?» pero la
+>   respuesta salió VACÍA (falló la generación). Si Tony quiere ese feedback, re-preguntar.
+> - Prueba REAL de Tony en su móvil (dedo + oído): ASMR nuevo, voz Elvira (botón 🔊 Escúchalo), ruta
+>   guiada v2, mapa grande. Es lo único que ninguna verificación automática puede juzgar.
+>
+> **🧭 GUARDARRAÍLES QUE LA NUEVA SESIÓN DEBE RESPETAR (no reaprender a base de romper):**
+> 1. **Verificación de CADA cambio** (protocolo en `CLAUDE.md`): extraer los `<script>` y `node --check`
+>    (deben dar 60/60 hoy); servidor local `python -m http.server 8137 --directory .` + medir por JS con
+>    `mcp__Claude_Browser__javascript_tool`. **NUNCA la herramienta de screenshot** — cuelga en esta
+>    página (documentado). Regresión estándar: `window.__openMapaBig()` = 12 nodos; 0 consola; 375px sin overflow.
+> 2. **Regresión de la RUTA GUIADA obligatoria** si tocas el tour: los 7 pasos con target visible y sin
+>    burbuja flotante por encima de `#tourBox`.
+> 3. **Changelog:** array `var cambios=[` (grep debe dar 1); nueva entrada como PRIMER elemento; subir
+>    `window.__cmVersion`. En LENGUAJE DE VISITANTE («qué cambia para ti»), no de desarrollador.
+> 4. **Motor del mapa GATEADO:** nunca llamar `onNodeClick`/`routeTap`/`nodeAtPoint`/`focusBranch`;
+>    engancharse por consulta DOM externa (patrón v1.34/v1.43/v1.49). Identidad/marca nueva = gate de Tony.
+> 5. **Toda línea nueva de MADRE pasa por `VOZ_CANONICA.md`** (18 frases reales + 5 leyes + 2 pruebas).
+>    Prueba de oro: «¿podría decir esto ChatGPT?» y «¿lo diría MADRE aunque nadie midiera retención?».
+>    Si la 2ª es NO → es un gancho, fuera (así murió el teaser 6/12, retirada CONTADA en el changelog v1.47).
+> 6. **Vigilancia anti-videojuego (GPT, repetida):** sonido+vibración+logros+partículas COMPITEN entre
+>    sí. Celebrar solo lo que importa (veredicto, sello, descubrimiento). Antes de añadir interacción:
+>    «¿hace ENTENDER mejor el experimento?», no «¿qué más puede tocar?».
+> 7. **Movimiento:** reduced-motion sin opt-in = CERO animación (señal médica, no estética). Gates
+>    `body.cmMotionOn`/`body.cmMotionOff` en cualquier cosa que se mueva.
+>
+> **📋 PROMPT LISTO PARA PEGAR en el chat nuevo (cero ediciones):**
+> ```
+> Continúo el Cuaderno MADRE (web pública de una IA que apuesta en público). Repo vivo:
+> C:\Users\anton\cuaderno-madre-pub (NO repos\cuaderno-madre). Lee CLAUDE.md y CONTINUAR_AQUI.md
+> (empieza por el bloque "▶️ EMPIEZA AQUÍ") e IDEAS_Y_BRUJULA.md (el 📦 CAJÓN del final tiene todo lo
+> pendiente) antes de tocar nada. FRENO DE VERSIONES en vigor: solo bugs que yo traiga u observación
+> real; NADA nuevo por defecto. Verifica cada cambio con node --check + medición JS en el navegador
+> (nunca screenshot, cuelga) y respeta los 7 guardarraíles del handoff. v1.50 está en vivo; el 15-jul
+> llega el primer veredicto real.
+> ```
 >
 > **✅ v1.47+v1.48 — última tanda del día. Commit `e24148a`.**
 > - v1.47: **texturas ASMR repartidas de VERDAD** por el recorrido (1539→10130px; causa raíz: el
