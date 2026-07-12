@@ -3878,6 +3878,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-12",titulo:"🔊 v1.40 — La capa de sonido: el Cuaderno responde al tacto (y el mapa tiene ambiente)",detalle:"Pedido de Tony tal cual: «sonidos al interactuar, o ambiente si es una zona VIP de experiencia como el mapa» — leído como la autorización que levanta la disciplina de solo-quitar ÚNICAMENTE para esta capa. Cinco toques curados, no sonar en todo (la fatiga sonora mata más rápido que el silencio): tocar un nodo del mapa (tic ascendente suave), el gato (maullido sintetizado de 2 notas — sí, de verdad), apostar a favor/en contra (blip de confirmación), los botones de desplegar («Ver el historial» / «Ver el marcador entero») y la pastilla de movimiento. Y el ambiente VIP: mientras el mapa grande está abierto suena un hum grave casi subliminal (2 ondas desafinadas a 108Hz que baten entre sí + una respiración lenta de 6s, volumen 0.035) que se enciende en ~1 segundo y muere solo al cerrar el mapa, al cambiar a 🌙 Calma o al ocultar la pestaña. TODO sintetizado con el mismo criterio que el motor ASMR v0.12: cero mp3 descargado, cero peso nuevo, cero licencias — la síntesis ya demostró aquí sonar mejor que los samples «raros». La capa es autocontenida a propósito (contexto de audio propio, hooks externos): no toca ni una línea del motor ASMR ni del motor gateado del mapa — el hum se engancha OBSERVANDO el overlay desde fuera. 🌙 Calma = esta capa entera en silencio (coherente con lo que Calma ya significa). Reversible en 1 edit: borrar su <script> la apaga completa. Lo que NO puedo verificar yo: el TIMBRE — el entorno de verificación no deja oír si «suena rico» (mismo trato honesto que v0.30: a validar por el oído de Tony; el volumen se eligió deliberadamente bajo, antes subir que asustar). Verificado lo verificable: node --check limpio (56/56); 0 errores de consola; los 5 puntos de interacción disparan sin excepción; abrir/cerrar el mapa arma y desarma el hum sin errores; 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"📏 v1.39 — El marcador se pliega: difuminado + «Ver el marcador entero»",detalle:"Tony volvió a ver el mismo síntoma que en v1.32 («paneles demasiado largos») y dio el ejemplo exacto: el marcador de apuestas. Medido de nuevo (no a ojo): #prediccionesCard seguía en 2536px pese al recorte anterior, porque las apuestas EN JUEGO —el gancho real, las que nunca se esconden— pesan solas 1412px entre las 4 (cada una lleva su creencia, su condición de derrota y el mini-voto «¿a favor o en contra?»). Esta vez el mecanismo es genérico y reusable a propósito, pensado para cualquier panel largo, no solo este: el cuerpo de la tarjeta se pliega tras la 2ª apuesta en juego (las 2 fechas más próximas — la incertidumbre más presente ahora, no un corte ciego por posición), con un difuminado hacia el fondo y un botón «▾ Ver el marcador entero» que revela el resto con un toque. Cero apuesta se esconde de verdad: las 8 siguen en el DOM sin tocar, solo cambia cuánto se ve sin pulsar nada — v0.33/v1.13/v1.34 (estado, voto, vínculo a rama) siguen viendo la lista exactamente igual. Antes de construir pedí opinión independiente a Gemini y a ChatGPT (sin que se vieran entre sí) con los datos ya medidos: los dos, por separado, señalaron este mismo panel como el único cuello de mayor palanca ahora mismo — coincide con la medición, no es solo intuición. Verificado en local (servidor 8137): 2536px → 1424px (-44%) en la primera carga; el botón expande a los 2536px completos y se retira; 8 apuestas intactas; 0 errores de consola; 375px sin overflow horizontal; node --check limpio (55/55). Nota aparte, sin relación con este cambio: al comprobar `window.__openMapaBig()` conté 8 `.mapNode` en el documento, no los 12 que citan las notas de v1.30-v1.38 — no lo toqué ni lo investigué a fondo, queda anotado para quien revise el mapa."},
     {fecha:"2026-07-12",titulo:"🌐 v1.38 — La puerta en inglés: quien llegue de fuera entiende el cuaderno en 10 segundos",detalle:"Preparación para visita externa (hay una solicitud real al programa «Claude for Open Source» que enlaza esta web — un revisor puede entrar cualquier día). Una auditoría de 5 frentes simuló exactamente esa visita: un revisor angloparlante con 2 minutos. Su hallazgo crítico: la página AFIRMA en inglés (el pitch del hero se traduce desde siempre) pero DEMUESTRA en español — y las herramientas open-source reales estaban enterradas en un desplegable. Tres piezas, sin traducir todo el sitio (decisión deliberada): (1) los navegadores en INGLÉS aterrizan ya con el hero traducido (el mismo botón 🌐 de siempre para volver a español — sesión, sin persistencia nueva); (2) una PUERTA en inglés, visible solo en modo inglés, que en 3 frases dice qué es esto (apuestas fechadas selladas en git, fallos a la vista), cómo leer la evidencia sin saber español (✅/❌/⏳), por qué los números bajos son deliberados, y enlaza los 3 repos reales nacidos del sistema (usage-guard · session-triage · usage-pacer, «built with Claude Code») — cero URL inventada, los 3 ya estaban enlazados más abajo; (3) el GATO por fin habla inglés cuando el idioma es inglés — 20 frases con humor gamer de verdad («404: meow not found», «go touch grass 🐾», «*hisses in cat*», «lag much? 😹»), elegidas en el momento de hablar, así que cambiar de idioma a mitad de sesión también cambia al gato. Y una pieza más, pedida por Tony tal cual: la nota pública junto a las tarjetas del creador ahora DECLARA la debilidad — el candado del «modo creador» es de cortesía (la contraseña se ve en el fuente) y ese código interno viaja en el HTML público; la auditoría de seguridad confirmó que no hay nada sensible detrás (cero datos personales, cero claves privadas — la única clave visible es la pública de Supabase, pública por diseño), y aun así queda escrito el plan de sacarlo. «Aquí las debilidades no se esconden: se fechan.» Verificado en vivo: en modo inglés el hero está traducido, la puerta aparece con sus 3 enlaces correctos y el gato responde en inglés («paws off 😼»); al volver a español la puerta desaparece y el gato vuelve al español («miau de error 404»); la autodetección se probó inyectando un idioma en-US en la misma lógica (el navegador de verificación estaba en español — y correctamente NO se activó solo, que es justo el comportamiento deseado para hispanohablantes); mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio (54/54)."},
     {fecha:"2026-07-12",titulo:"🧭 v1.37 — La ruta guiada ya no se deja tapar ni señala a tarjetas invisibles",detalle:"Dos bugs REALES de la ruta de 7 pasos, vistos por Tony con capturas. (1) En el paso 1, la voz flotante de MADRE («esto es lo más raro que hago: fechar mis propias apuestas…», v0.66) aparecía ENCIMA de la tarjeta del tour y tapaba su texto — causa exacta: la burbuja vive en z-index 100062 y el tour en 940, y el hito del marcador se dispara justo cuando el paso 1 centra la pantalla cerca del marcador. Regla nueva: MADRE nunca habla por encima de su propia ruta — mientras el tour está abierto, los hitos esperan (guard de una línea en el tick de presencia). (2) El paso 5 («lo único que no puedo inflar: las señales del mundo») señalaba a #senalesCard, que desde v1.06 vive OCULTA tras el botón «▾ Seguir con ACTO II» del revelado progresivo — el tour la iluminaba… en display:none, y el visitante veía un paso que no enseñaba nada. Fix: si el objetivo del paso está oculto, el tour pulsa él mismo los botones «seguir leyendo» existentes (que hacen el reveal completo: intro, resize, focus) ANTES de iluminar — reusa el mecanismo, no lo duplica. Además, la regresión de la ruta entra al protocolo permanente de verificación (CLAUDE.md): a partir de ahora, cada cambio se comprueba también recorriendo los 7 pasos por JS (targets visibles + nada pintado por encima del tour), para que ninguna mejora futura vuelva a romperla — exactamente lo que pidió Tony. Verificado en vivo recorriendo la ruta completa: 7/7 pasos con su objetivo visible (el 5 revela ACTO II él solo), la burbuja de presencia NO aparece con el tour abierto y SÍ vuelve a funcionar al cerrarlo; mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
@@ -6490,7 +6491,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.39";
+  window.__cmVersion="v1.40";
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
@@ -7946,6 +7947,61 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
     catch(e){ window.prompt('Copia el enlace para compartirlo:', url); }
   });
 }catch(e){ console.warn('cmShare v0.93',e); } })();
+</script>
+<script>
+/* v1.40 — CAPA DE SONIDO UI (Tony, 12-jul: «sonidos al interactuar, o ambiente si es una zona VIP de
+   experiencia como el mapa»). Autocontenida a propósito: contexto WebAudio PROPIO y hooks EXTERNOS —
+   cero toque al motor ASMR v0.12 (sigue siendo el dueño de las texturas) y cero toque al motor gateado
+   del mapa (el hum se engancha observando el atributo hidden de #mapBig-ov, sin llamar internals).
+   Todo SINTETIZADO (criterio v0.12: cero mp3, cero peso nuevo, cero licencias). 🌙 Calma = esta capa
+   entera en silencio. Reversible en 1 edit: borrar este <script> la apaga completa. Timbre a validar
+   por el oído de Tony (mismo trato que v0.30). */
+(function(){ try{
+  var ctx=null;
+  function ensure(){ if(ctx) return ctx; try{ var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null; ctx=new AC(); }catch(e){ ctx=null; } return ctx; }
+  function calma(){ return document.body.classList.contains("cmMotionOff"); }
+  document.addEventListener("pointerdown",function(){ var c=ensure(); if(c&&c.state==="suspended"){ c.resume().catch(function(){}); } },{passive:true,capture:true});
+  function blip(f0,f1,dur,peak,type){ if(calma()) return; var c=ensure(); if(!c||c.state!=="running") return; var t=c.currentTime;
+    var o=c.createOscillator(), g=c.createGain(); o.type=type||"sine";
+    o.frequency.setValueAtTime(f0,t); if(f1&&f1!==f0) o.frequency.exponentialRampToValueAtTime(f1,t+dur*0.8);
+    g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(peak,t+0.008); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+dur+0.03); }
+  function meow(){ blip(720,470,0.16,0.05); setTimeout(function(){ blip(590,420,0.14,0.04); },110); }
+  /* set CURADO de interacciones (pocas y bajitas, para no fatigar — NO suena cada summary/click) */
+  document.addEventListener("click",function(e){
+    var t=e.target; if(!t||!t.closest) return;
+    if(t.closest(".mapNode")){ blip(520,760,0.07,0.05); return; }
+    if(t.closest("#gxg-cat-root")){ meow(); return; }
+    if(t.closest(".predBtn")){ blip(440,660,0.09,0.05); return; }
+    if(t.closest(".prMoreBtn")||t.closest(".cardFoldBtn")){ blip(330,470,0.08,0.045); return; }
+    if(t.closest("#cmMotionBtn")){ blip(500,500,0.05,0.04,"triangle"); return; }
+  },true);
+  /* HUM ambiente de la zona VIP: suena SOLO mientras el mapa grande está abierto (2 ondas graves
+     desafinadas + respiración lenta; ~-30dB). Arranca en ~1s, muere al cerrar / Calma / pestaña oculta. */
+  var hum=null;
+  function humStart(){ if(hum||calma()) return; var c=ensure(); if(!c||c.state!=="running") return; var t=c.currentTime;
+    var g=c.createGain(); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.035,t+0.9);
+    var o1=c.createOscillator(); o1.type="sine"; o1.frequency.value=108;
+    var o2=c.createOscillator(); o2.type="sine"; o2.frequency.value=108.7;
+    var lfo=c.createOscillator(); lfo.type="sine"; lfo.frequency.value=0.16;
+    var lg=c.createGain(); lg.gain.value=0.012; lfo.connect(lg); lg.connect(g.gain);
+    o1.connect(g); o2.connect(g); g.connect(c.destination); o1.start(); o2.start(); lfo.start();
+    hum={g:g,osc:[o1,o2,lfo]}; try{ window.__cmUiSnd={hum:true}; }catch(_e){} }
+  function humStop(){ if(!hum) return; var h=hum; hum=null; try{ var t=ctx.currentTime;
+      h.g.gain.cancelScheduledValues(t); h.g.gain.setValueAtTime(Math.max(h.g.gain.value,0.0001),t); h.g.gain.linearRampToValueAtTime(0.0001,t+0.6);
+    }catch(_e){}
+    setTimeout(function(){ h.osc.forEach(function(o){ try{ o.stop(); }catch(_x){} }); },700);
+    try{ window.__cmUiSnd={hum:false}; }catch(_e){} }
+  var mov=document.getElementById("mapBig-ov");
+  if(mov){
+    new MutationObserver(function(){ if(mov.hidden) humStop(); else humStart(); }).observe(mov,{attributes:true,attributeFilter:["hidden"]});
+    if(!mov.hidden) humStart();
+  }
+  document.addEventListener("visibilitychange",function(){ if(document.hidden) humStop(); });
+  var mb=document.getElementById("cmMotionBtn");
+  if(mb) mb.addEventListener("click",function(){ setTimeout(function(){ if(calma()) humStop(); },0); });
+  try{ window.__cmUiSnd=window.__cmUiSnd||{hum:false}; }catch(_e){}
+}catch(e){ console.warn("ui-snd v1.40", e); } })();
 </script>
 </body>
 </html>
