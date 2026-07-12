@@ -1,7 +1,30 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 madrugada) — v1.44 EN VIVO. PAUSA DE DOCUMENTACIÓN
-> sigue. Sesión de hoy: 6 versiones (v1.39→v1.44).**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 mañana) — v1.46 EN VIVO. Sesión del 12-jul: 8
+> versiones (v1.39→v1.46). PAUSA DE DOCUMENTACIÓN sigue (VOZ_CANONICA.md fue la excepción
+> autorizada: corpus creativo pedido por GPT+Tony, no burocracia de proceso).**
+>
+> **✅ v1.45 — los 6 de las capturas de Tony. Commit `86b9c6c`.** El pliegue ya no corta el botón de
+> sellar (se re-mide tras montar los deslizadores — al final del script v1.41); sellar celebra
+> (lluvia ✍️⚖️✨ con gates de movimiento + vibración); nodos del mapa pequeño → abren el grande
+> (hook externo, motor intacto) + lupa «🔍 en grande» flotando sobre el mapa + nodos crecen al hover;
+> marcas de la barra de progreso lavanda (2ª vez que confundían como "líneas negras" → fix, no
+> aparcarlo); ❤️ Vivo promete al hover («Ver a MADRE respirar»); aire entre #hoyReal/#visitLine.
+> **v1.44 re-titulada** a «Primera voz candidata» (GPT: la voz se descubre, no se declara — cierto).
+>
+> **✅ v1.46 — UNA voz hablada (candidata) + corpus. Commit `77ff667`.** `sounds/voz-historia.mp3`
+> generado con **es-ES-ElviraNeural** (edge-tts, gratis, rate −6%) — v0.68 lo prioriza solo, cero
+> código tocado; todos oyen la MISMA voz. Regenerar: comando en `VOZ_CANONICA.md`. **Tony la
+> escucha y decide**; si no le gusta → torneo a ciegas de voces (plan en el mismo doc).
+> `VOZ_CANONICA.md` = 18 frases reales extraídas + prohibidas + 5 leyes + las 2 pruebas — TODA
+> línea nueva de MADRE pasa por ahí. Voz escrita y hablada se juzgan POR SEPARADO.
+>
+> **📌 ENCOLADO de este turno (no construido):** ruta guiada v2 (texto que va apareciendo +
+> palabras de color que tiñen lo señalado — idea de Tony, merece versión propia) · tensión
+> brújula-del-mapa ↔ H3 (si el recorrido real dice que el mapa distrae de la apuesta, la brújula
+> se revisa — anotado también en el changelog v1.45) · "texto muy junto" general (solo se arregló
+> la franja bajo vsCard; si Tony ve más, que señale UNA) · terminaciones de actos (borradores
+> siguen esperando su ojo) · € en vez de % · huellas del recorrido.
 >
 > **✅ v1.43+v1.44 — mandos + LA VOZ. Commit `86005b6`.**
 > - v1.43 (capturas de Tony): píldora de escape del prototipo de identidad («🎨 identidad: nueva ✕»,
