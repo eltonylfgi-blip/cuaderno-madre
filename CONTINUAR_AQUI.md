@@ -5,6 +5,27 @@
 > funcionaron — P-001..P-007). Orden de Tony (11/12-jul): trabajar desde ahí, no improvisar; y cuando
 > algo "valga oro", proponer promocionarlo a patrón.
 >
+> **🚨 MISIÓN REVISOR (12-jul, EN CURSO) — Tony solicitó «Claude for Open Source» enlazando la web;
+> un revisor de Anthropic puede entrar CUALQUIER DÍA. Sesión de preparación: v1.37 + v1.38 en vivo.**
+> - **Auditoría de 5 frentes hecha** (revisor-2min, seguridad, peso, gato, ruta — registro en este
+>   handoff + hallazgos en IDEAS H9-H11). Los 2 críticos del revisor: la página afirmaba en inglés
+>   pero demostraba en español; y las herramientas OSS reales estaban enterradas. Fortalezas a NO
+>   tocar: el ledger de apuestas con notario git y la artesanía verificable del fuente.
+> - **v1.37**: los 2 bugs de la ruta que Tony vio (burbuja de presencia tapando el paso 1 — guard
+>   "MADRE no habla con el tour abierto"; paso 5 apuntando a tarjeta oculta — el tour revela los actos
+>   él mismo). Regresión de la ruta AÑADIDA AL PROTOCOLO permanente de CLAUDE.md.
+> - **v1.38**: puerta en inglés (navegador EN aterriza traducido + #enDoor con los 3 repos reales +
+>   "built with Claude Code"), gato bilingüe con humor gamer, y la debilidad del modo creador
+>   DECLARADA públicamente con plan (pedido de Tony: "las debilidades no se esconden: se fechan").
+> - **Seguridad (veredicto auditoría): APTO para revisión externa.** Cero PII, cero claves privadas.
+>   ⚠️ 2 avisos para Tony en IDEAS H10: contraseña «Jabado» en texto plano (¿la reutiliza en otro
+>   sitio?) y las «decisiones» web deben tratarse como no verificadas por la rutina.
+> - **Peso: NO ejecutado a propósito** (252KB gzip reales; el plan completo quedó en H11 — la única
+>   victoria grande exige coordinarse con la rutina que reescribe el fichero).
+> - **Pendiente de esta misión:** tour en inglés (backlog), H7 logros-top en ramas (gated: enseñar
+>   borrador), H8 incentivo de scroll, moderar comentarios crudos («ola gays» — SIGUE esperando el OK
+>   de Tony, es producción compartida).
+>
 > **✅ v1.36 EN VIVO (12-jul) — «LA ÚLTIMA LÍNEA»: el final de la página lo escribe la realidad.
 > Commit `7c81d21`.** H6 construida con el proceso completo del revisor: torneo E1 (6 candidatas, 4
 > muertas contra brújulas) + atacante adversarial independiente ANTES de tocar código (1 golpe mortal

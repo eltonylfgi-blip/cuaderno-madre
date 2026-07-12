@@ -65,7 +65,10 @@
 
 - **E1 (era B7) — "Rompe tus mejores ideas antes de construirlas."** Genera 2-3 rivales que intenten
   superar la idea excelente; construye solo la que nadie supere — y aun esa, en su versión más simple
-  (P-004). Solo para decisiones CREATIVAS, no fixes mecánicos. **Decisiones cambiadas: 1/2** (torneo de
+  (P-004). **ALCANCE CALIBRADO (GPT 12-jul, tras v1.36): el proceso COMPLETO (torneo + atacante
+  independiente) SOLO para escenas de IDENTIDAD del Cuaderno (hero, cierre, mapa, veredicto) — para
+  mejoras medianas basta el criterio + brújulas; el proceso no puede costar más que el producto.**
+  Solo para decisiones CREATIVAS, no fixes mecánicos. **Decisiones cambiadas: 1/2** (torneo de
   la escena de cierre, 12-jul — mató 4 de 6 candidatas antes de construir nada).
 - **E2 (era B8) — "La peor parte debe seguir siendo extraordinaria."** Al buscar el siguiente cuello,
   mirar también la sección MÁS DÉBIL. Test: ¿qué sección describiría un visitante con un "meh"?
@@ -183,6 +186,48 @@ viaje continuo (B3)."**
 - **Cómo puede MORIR:** si tras el recorrido nadie usa esa idea al contar de qué va la web (la frase no
   une nada en la práctica) → fuera, sin duelo. Muere también si los separadores de acto ya cumplen (el
   hallazgo del 12-jul apunta ahí).
+
+**H7 — "Si cada rama enseña sus LOGROS TOP reales (los avances de verdad, no más texto), quien explora
+—incluido un revisor de Anthropic— entiende el valor real del proyecto sin quedarse con hambre."**
+- Estado: **☐ Sin probar** (pedida por Tony 12-jul con la misión del revisor). Solo puede usar datos
+  REALES ya existentes (148 cambios, apuestas selladas en git, señales del 8-jul, sistema de rutinas) —
+  cero inventos (B2). Toca CONTENIDO de los nodos, no el motor (los textos no son hit-test), pero mejor
+  enseñar borrador a Tony por ser identidad del mapa.
+- **Cómo puede MORIR:** si al añadir logros las ramas se vuelven más largas pero nadie las lee mejor
+  (test con una persona), era bloat — fuera.
+
+**H8 — "Si hay una señal de que «lo mejor está más abajo» (el mapa), más visitantes llegan hasta él."**
+- Estado: **☐ Sin probar** (pedida por Tony 12-jul: "incentivos para seguir bajando... que esté
+  reluciente"). Medible con el tracker de profundidad que YA existe (`cm_deepest_v1`): comparar hasta
+  dónde llega la gente antes/después.
+- **Cómo puede MORIR:** si la señal no cambia la profundidad media de scroll, o si añade ruido a la
+  primera pantalla (violaría la edición de v1.28) — fuera.
+
+**H9 — "Si un visitante angloparlante recibe la puerta (hero auto-EN + 3 frases + repos enlazados),
+entiende en 10 segundos qué es el Cuaderno y encuentra el software real."** *(Misión revisor, 12-jul.)*
+- Estado: **☐ Probando** — Construida ✔ (v1.38). Ataca los 2 críticos de la auditoría de revisor: "la
+  página afirma en inglés pero demuestra en español" y "las herramientas OSS están enterradas".
+- **Cómo puede MORIR:** si un angloparlante real (o el propio revisor de Anthropic) sigue sin poder
+  decir qué es esto o no encuentra los repos → la puerta no basta y toca traducir el ledger (el paso
+  grande que hoy se evitó a propósito).
+
+**H10 — "Retirar el código interno del creador del HTML público"** *(el plan declarado en v1.38).*
+- Estado: **☐ Sin probar — NECESITA DISEÑO CON TONY.** La auditoría confirmó que lo gateado es
+  inofensivo (cero PII, cero claves privadas), pero los botones Aprobar/Rechazar son el flujo real de
+  gobernanza de Tony: arrancarlos sin diseño alternativo rompe su trabajo. Mitigaciones YA señaladas
+  por la auditoría, independientes de esta hipótesis: (a) ⚠️ la contraseña «Jabado» está en texto
+  plano — TONY debe confirmar que no la reutiliza en ningún otro servicio; (b) la rutina que procesa
+  `feedback` debe tratar las «decisiones» llegadas por la web como NO verificadas (cualquiera puede
+  saltarse el candado); (c) revisar RLS de la tabla feedback (que la clave pública no permita SELECT).
+- **Cómo puede MORIR:** si el coste de mover el flujo de gobernanza fuera del HTML supera el beneficio
+  (el contenido ya se auditó como inofensivo y la debilidad ya está declarada públicamente).
+
+**H11 — "Plan de peso" (auditado 12-jul, NO ejecutado a propósito).** Lo que viaja son 252KB gzip, no
+777KB. Única victoria grande: externalizar el changelog a un TSV junto al index (−35KB gzip, 14-17% de
+la transferencia; la tubería `loadCambios()` ya existe) — pero la rutina de MADRE reescribe el fichero
+cada ~30 min: hay que coordinarlo con ella (propuesta al buzón cuando toque), no hacerlo unilateral.
+Victoria segura pequeña: externalizar `cmCorpus` a corpus.js (−9KB, consumidores con fallback). NO
+tocar (medido): minificar/CRLF/indentación — gzip ya lo hace gratis. Estado: ☐ Sin probar.
 
 ### 🟦 Deuda técnica de baja prioridad (real, pero NO es el cuello hoy)
 
