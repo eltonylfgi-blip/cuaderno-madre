@@ -1,9 +1,26 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 noche·2) — v1.40 EN VIVO; el siguiente cuello ya está
-> ELEGIDO y AUDITADO con datos: las TERMINACIONES de los actos. PAUSA DE DOCUMENTACIÓN en vigor
-> (crítica aceptada por Tony: "no añadáis más H/B/P/documentos, solo construid unas versiones") —
-> NO crear hipótesis/brújulas/patrones nuevos; registrar solo aquí.**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 noche·3) — v1.41 EN VIVO. PAUSA DE DOCUMENTACIÓN en
+> vigor (no crear H/B/P/documentos nuevos; registrar solo aquí). Tony ha abierto la capa de
+> PARTICIPACIÓN: sonido (v1.40) + interactividad (v1.41) + pendientes abajo.**
+>
+> **✅ v1.41 — EL GESTO DE MOJARSE. Commit `ac973f8`.** Tony pidió interactividad («sliders que
+> mover»); el filtro del revisor (aceptado): SOLO interacción que haga participar en el experimento,
+> y 3-5 GESTOS REPETIDOS = identidad, no veinte demos. Construido el primero y de más palanca: en
+> cada apuesta en juego, quien no votó ve un deslizador 0-100 de confianza + botón ✍️ SELLAR (el
+> sello solo aparece tras deslizar — un roce no apuesta). Aditivo puro sobre el motor v1.13 (intacto,
+> sus botones ocultos accionados por debajo, ≥50=favor); % exacto en localStorage `cm_predpct_v1`;
+> **el bucle del 15-jul ya está cableado**: cuando la rutina hornee el veredicto (li.wait→ok/ko), la
+> tarjeta confronta sola: «Tú sellaste un 80%. La realidad dijo ❌. Te equivocaste conmigo —
+> bienvenido al club.» / «Tú lo viste venir antes que yo.» Verificado flujo completo en local +
+> reload + confrontación simulada; 57/57 node --check; 0 consola; 375px ok.
+> **VOCABULARIO DE GESTOS elegido (registrado aquí por la pausa de docs, NO crear doc nuevo):**
+> 1) mojarse (deslizar+sellar — HECHO v1.41) · 2) rascar para descubrir un veredicto (candidato:
+> los «revive el veredicto» del palmarés) · 3) palanca física para Vivo (candidato: #cmMotionBtn) ·
+> 4) tirar de pestaña/sobre para mensajes de MADRE (candidato) · 5) conectar apuesta↔rama (ya
+> existe como toque v1.34; podría evolucionar a cable). Librerías React del pegote de GPT: NO
+> encajan (un solo html sin build) — copiar el GESTO en vanilla, no el componente; CodePen/Codrops
+> solo como inspiración.
 >
 > **✅ v1.40 — capa de sonido UI. Commit `42699f4`.** Directiva de Tony en caps («sonidos al
 > interactuar, o ambiente si es zona VIP como el mapa») = autorización que levanta el "solo quitar"
