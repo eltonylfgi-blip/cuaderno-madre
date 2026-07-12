@@ -1,8 +1,27 @@
 # CONTINUAR_AQUI — handoff del Cuaderno MADRE (léeme primero)
 
-> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 noche·4) — v1.42 EN VIVO. PAUSA DE DOCUMENTACIÓN en
-> vigor. Tony ha abierto la capa de PARTICIPACIÓN: sonido (v1.40) + interactividad (v1.41) +
-> bugfixes de sus capturas (v1.42).**
+> ▶️ **EMPIEZA AQUÍ (chat nuevo, 12-jul-2026 madrugada) — v1.44 EN VIVO. PAUSA DE DOCUMENTACIÓN
+> sigue. Sesión de hoy: 6 versiones (v1.39→v1.44).**
+>
+> **✅ v1.43+v1.44 — mandos + LA VOZ. Commit `86005b6`.**
+> - v1.43 (capturas de Tony): píldora de escape del prototipo de identidad («🎨 identidad: nueva ✕»,
+>   esquina — quedó ATRAPADO: la salida estaba enterrada en «⋯ más» y localStorage la recordaba);
+>   chat con «✕ cerrar chat» sticky + Escape; ❤️ la pastilla de movimiento BRILLA en Auto invitando
+>   (estática bajo reduced-motion sin opt-in, late donde se permite, descansa en Vivo); **brújula del
+>   mapa** 🌳↑/↓ en el borde derecho a media altura (la franja inferior-centro está casi siempre
+>   ocupada — medido) que te lleva al mapa con aro de llegada; cumple nada-flotante-tapa: esquiva
+>   hasta 3 veces y si aún pisa NO sale (verificado esquivando a 36%).
+> - v1.44 — **LA VOZ, elegida por mí con OK de Tony («elige tú la voz»)**: seca, un dato REAL de la
+>   página en cada frase, autoironía sin drama. 3 reglas escritas JUNTO al array HITOS (en el código)
+>   para cualquier línea futura: (1) nunca gracias/exclamaciones de animadora, (2) siempre un dato
+>   verificable, (3) la verdad incómoda se dice primero. Aplicada a: 2 hitos de presencia, despedida
+>   final, texto de chat vacío, placeholders del chat. **NO tocados:** gato (humor gamer validado
+>   v1.38) y hero (congelado por Tony). Si se escriben más líneas de MADRE → seguir esas 3 reglas.
+> - **Adoptado del revisor (sin doc nuevo):** los resúmenes/changelog se escriben en LENGUAJE DE
+>   VISITANTE («qué cambia para ti»), no de desarrollador; y los PROTOCOLOS tienen derecho a morir —
+>   si uno no cambia 2 decisiones reales en un mes, se poda (mismo trato que las hipótesis).
+> - Encoladas sin construir: € en vez de % en el gesto de mojarse · huellas del recorrido ·
+>   terminaciones de actos (auditadas, borradores en el chat del 12-jul).
 >
 > **✅ v1.42 — los 5 fallos que Tony vio con sus capturas. Commit `7227c8b`.** (1) 👍 ya son
 > interruptores en comentarios Y dibujos — el backend ganó los rpc espejo `unlike_comment`/
