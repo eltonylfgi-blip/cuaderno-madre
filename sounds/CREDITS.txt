@@ -6,3 +6,5 @@ Sonidos del Cuaderno MADRE — todos CC0 / dominio público (libres de usar y re
 
 Uso: micro-sonidos ASMR/UI que suenan al tocar las texturas y botones (apagable desde el menú ✦).
 El roce (hover) sigue siendo sintetizado por código (Web Audio); estos ficheros son para los toques/pops.
+
+voz-historia.mp3 — voz de MADRE (candidata): es-ES-ElviraNeural, Microsoft Edge TTS (gratuita), generada por codigo con edge-tts el 12-jul-2026, rate -6%. Texto = el propio arranque de la pagina. Una sola voz siempre: la voz es identidad.
