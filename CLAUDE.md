@@ -98,6 +98,12 @@ de botella de mayor impacto DENTRO del Cuaderno y resolverlo — no esperar una 
   `mcp__Claude_Browser__javascript_tool` (NUNCA la herramienta de screenshot, se cuelga en esta
   página — usa eval/DOM/consola); regresión estándar: `window.__openMapaBig()` debe dar 12 nodos;
   0 errores de consola; 375px sin overflow.
+- **Regresión de la RUTA GUIADA (obligatoria desde v1.37 — Tony: "que las siguientes mejoras no
+  rompan la ruta"):** disparar el tour (`#tourBtn`) y recorrer los 7 pasos por JS comprobando que
+  (a) cada target existe y queda VISIBLE al llegar a su paso (`offsetParent!==null` tras el show —
+  el paso 5 vive tras el revelado progresivo y el tour lo revela solo), y (b) ninguna burbuja/toast
+  flotante se pinta por encima de `#tourBox` mientras el tour está abierto (la presencia de MADRE
+  v0.66 tiene guard `if(tourOv) return` — cualquier burbuja NUEVA debe llevar el mismo guard).
 - Changelog: array `cambios` (buscar `var cambios=[`) — nueva entrada como PRIMER elemento, mismo
   estilo que las de abajo. Versión: `window.__cmVersion`.
 - Commit + push inmediato tras verificar (no dejar el árbol sucio mucho rato — mitiga colisión con
