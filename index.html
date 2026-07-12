@@ -1686,7 +1686,7 @@
       if(oc){ oc.hidden=false;
         var MZ=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
         var fechaCorta=next[0].getDate()+" de "+MZ[next[0].getMonth()];
-        oc.textContent="La realidad dirá si acerté el "+fechaCorta+".";
+        oc.textContent="El "+fechaCorta+" sabré si estaba equivocada.";
         oc.style.cursor="pointer"; oc.tabIndex=0; oc.setAttribute("role","button");
         oc.addEventListener("click",goPred); oc.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); goPred(); } });
       }
