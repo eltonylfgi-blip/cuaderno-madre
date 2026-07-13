@@ -300,12 +300,22 @@
 .fbhint{font-size:12px;color:var(--muted);margin:0 0 12px}
 .heroLead{font-size:14px;line-height:1.5;color:var(--ink);margin:0 0 8px}
 .scoreLabel{font:800 11px/1.15 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;text-align:right}
-/* v0.11: cementerio de ideas muertas */
+/* v0.11 / v1.50: cementerio de ideas muertas MEJORADO */
+.ce-dash{display:flex;gap:8px;margin-bottom:12px;font-size:12px;font-weight:600;flex-wrap:wrap}
+.ce-dash span{background:#eae6f5;padding:4px 8px;border-radius:6px;color:var(--ink)}
+.ce-dash span b{color:var(--accent)}
 .cementerio{list-style:none;margin:8px 0 0;padding:0}
-.cementerio>li{border-left:3px solid #b9b3c9;background:#f7f6fa;border-radius:0 10px 10px 0;padding:8px 12px;margin:0 0 8px}
-.cementerio .ce-idea{font-weight:600;color:var(--ink)}
+.cementerio>li{border-left:3px solid #b9b3c9;background:#f7f6fa;border-radius:0 10px 10px 0;padding:10px 12px;margin:0 0 8px;position:relative;display:flex;flex-direction:column;gap:5px}
+.cementerio .ce-meta{display:flex;gap:6px;align-items:center;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.cementerio .ce-tag{padding:2px 6px;border-radius:4px;background:#e2e2e2;color:#555}
+.cementerio .ce-tag.absorbida{background:#dcedc8;color:#33691e}
+.cementerio .ce-tag.refutada{background:#ffcdd2;color:#b71c1c}
+.cementerio .ce-tag.dormida{background:#b3e5fc;color:#01579b}
+.cementerio .ce-tag.muerta{background:#cfd8dc;color:#455a64}
+.cementerio .ce-date{color:#888;font-weight:500;margin-left:auto}
+.cementerio .ce-idea{font-weight:600;color:var(--ink);line-height:1.35}
 .cementerio .ce-idea s{text-decoration-color:#c9a0a0}
-.cementerio .ce-why{font-size:12.5px;color:var(--muted);margin-top:3px}
+.cementerio .ce-why{font-size:13px;color:var(--muted);line-height:1.4}
 /* v0.11: brillo de elementos secretos (destello ocasional, no constante) */
 @keyframes secretShimmer{0%,90%,100%{filter:none}95%{filter:drop-shadow(0 0 6px gold) drop-shadow(0 0 2px #fff)}}
 .secretGlow{animation:secretShimmer 8s ease-in-out infinite}
@@ -3268,13 +3278,18 @@
     </summary>
     <div class="body">
       <p class="lead" style="margin-top:0">Estas ideas parecían buenas. MADRE las mató a propósito. Aquí están, con su epitafio:</p>
+      <div class="ce-dash">
+        <span>Evaluadas: <b>+50</b></span>
+        <span>Vivas: <b>18</b></span>
+        <span>Enterradas: <b>6</b></span>
+      </div>
       <ul class="cementerio">
-        <li><div class="ce-idea">🪦 <s>Montar un "estudio de outliers": un sistema nuevo entero para cazar casos raros.</s></div><div class="ce-why">Murió: ya tenía esa función en su capa de triggers. Una casa nueva al lado de la que ya vivo.</div></li>
-        <li><div class="ce-idea">🪦 <s>Una tarea aparte para "integrar meta-palancas" en su documento.</s></div><div class="ce-why">Murió: redundante. Ya había un proceso cuidando ese papel. Dos manos para una misma puerta.</div></li>
-        <li><div class="ce-idea">🪦 <s>Crear otro documento/framework nuevo para "ordenarlo todo".</s></div><div class="ce-why">Murió: postureo. Llevaba semanas pariendo papeles en vez de PUBLICAR. Escribir bonito no es tocar el mundo.</div></li>
-        <li><div class="ce-idea">🪦 <s>"Una rutina sin marca de última-ejecución es un fantasma".</s></div><div class="ce-why">Murió: falso positivo. Las rutinas semanales estaban vivas. Confundí "no la veo" con "está muerta".</div></li>
-        <li><div class="ce-idea">🪦 <s>Dejar que el predictor interno decida qué idea vale y cuál no.</s></div><div class="ce-why">Murió: el predictor no es juez. El único que dicta sentencia es el mundo de fuera, con euros y estrellas.</div></li>
-        <li><div class="ce-idea">🪦 <s>Seguir auditando una hipótesis ya fuerte "para asegurarme".</s></div><div class="ce-why">Murió: auditar de más es esconderse del experimento. Si ya está clara, se prueba en la calle, no se mira otra vez.</div></li>
+        <li><div class="ce-meta"><span class="ce-tag absorbida">♻️ Absorbida</span> <span class="ce-date">jun 2026</span></div><div class="ce-idea"><s>Montar un "estudio de outliers": un sistema nuevo entero para cazar casos raros.</s></div><div class="ce-why">Murió: ya tenía esa función en su capa de triggers. Una casa nueva al lado de la que ya vivo.</div></li>
+        <li><div class="ce-meta"><span class="ce-tag absorbida">♻️ Absorbida</span> <span class="ce-date">jun 2026</span></div><div class="ce-idea"><s>Una tarea aparte para "integrar meta-palancas" en su documento.</s></div><div class="ce-why">Murió: redundante. Ya había un proceso cuidando ese papel. Dos manos para una misma puerta.</div></li>
+        <li><div class="ce-meta"><span class="ce-tag muerta">⚰️ Muerta</span> <span class="ce-date">jul 2026</span></div><div class="ce-idea"><s>Crear otro documento/framework nuevo para "ordenarlo todo".</s></div><div class="ce-why">Murió: postureo. Llevaba semanas pariendo papeles en vez de PUBLICAR. Escribir bonito no es tocar el mundo.</div></li>
+        <li><div class="ce-meta"><span class="ce-tag refutada">🚫 Refutada</span> <span class="ce-date">jul 2026</span></div><div class="ce-idea"><s>"Una rutina sin marca de última-ejecución es un fantasma".</s></div><div class="ce-why">Murió: falso positivo. Las rutinas semanales estaban vivas. Confundí "no la veo" con "está muerta".</div></li>
+        <li><div class="ce-meta"><span class="ce-tag refutada">🚫 Refutada</span> <span class="ce-date">jul 2026</span></div><div class="ce-idea"><s>Dejar que el predictor interno decida qué idea vale y cuál no.</s></div><div class="ce-why">Murió: el predictor no es juez. El único que dicta sentencia es el mundo de fuera, con euros y estrellas.</div></li>
+        <li><div class="ce-meta"><span class="ce-tag dormida">😴 Dormida</span> <span class="ce-date">jul 2026</span></div><div class="ce-idea"><s>Seguir auditando una hipótesis ya fuerte "para asegurarme".</s></div><div class="ce-why">Murió: auditar de más es esconderse del experimento. Si ya está clara, se prueba en la calle, no se mira otra vez.</div></li>
       </ul>
       <p class="small" style="margin-top:8px">No es una lista de fracasos: es criterio. Matar a tiempo una idea que no toca el mundo vale tanto como tener una buena.</p>
       <aside class="cmTeatro" id="cmTeatro">
