@@ -31,7 +31,7 @@
     --shadow:0 1px 2px rgba(20,30,50,.06),0 4px 16px rgba(20,30,50,.05);
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
+  html,body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden;
     font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     -webkit-font-smoothing:antialiased}
   .wrap{max-width:760px;margin:0 auto;padding:18px 14px 80px}
@@ -4245,7 +4245,8 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
-    {fecha:'2026-07-13',titulo:'🐛 v1.57 — Rayas fuera, botones separados y 0 recortes abajo',detalle:'He cazado 4 bugs visuales: (1) Las finas rayas moradas en la cima se han ocultado para siempre. (2) En móviles estrechos, las áreas invisibles de los botones English y Vivo se solapaban al tocarlas: ahora tienen más aire y es imposible equivocarse. (3) Los botones flotantes que en iOS quedaban cortados abajo, ahora respetan el espacio seguro (env safe-area-inset-bottom). (4) Suprimida una barra inútil de scroll horizontal en escritorio.'},
+    {fecha:'2026-07-13',titulo:'🐛 v1.58 — Caza final: rayas y barra de scroll',detalle:'Ahora SÍ he arreglado los 2 bugs que faltaban: (1) Las finas rayas moradas en la cima se han ocultado para siempre. (2) Suprimida una barra inútil de scroll horizontal en escritorio.'},
+    {fecha:'2026-07-13',titulo:'🐛 v1.57 — Botones separados y 0 recortes abajo',detalle:'He arreglado 2 bugs visuales: (1) En móviles estrechos, las áreas invisibles de los botones English y Vivo se solapaban al tocarlas: ahora tienen más aire y es imposible equivocarse. (2) Los botones flotantes que en iOS quedaban cortados abajo, ahora respetan el espacio seguro (env safe-area-inset-bottom).'},
     {fecha:"2026-07-13",titulo:"✨ v1.56 — El cuaderno te saluda y te enseña lo nuevo (NOVEDADES INTERACTIVAS)",detalle:"Antes, tenías que bucear en el changelog para saber qué había cambiado desde tu última visita. Ahora, si vuelves después de un tiempo y hay novedades reales documentadas, MADRE te saluda discretamente en una esquina: «👋 Desde tu última visita hay X novedades — ¿te las enseño?». Si aceptas (o si pulsas el botón manual en el Diario), entras en el modo interactivo: te lleva automáticamente a cada cambio, con scroll suave y un resaltado visual que ilumina la novedad, dándote control para avanzar o salir en cualquier momento. Al igual que con todas las animaciones, si tienes «reducir movimiento» activado en tu sistema operativo, el scroll es directo e instantáneo. Cero ruido, 100% control, datos reales sin duplicar."},
     {fecha:"2026-07-13",titulo:"📊 v1.55 — Riesgos y puntos ciegos: de un muro de texto a una cuadrícula visual",detalle:"La sección de riesgos estaba colapsada y oculta en detalles de texto monótono. Ahora se ha reconstruido con un `rs-grid` y tarjetas `rs-card` interactivas. Cada riesgo —dividido en Existenciales, Operativos y Puntos Ciegos— incluye barras de progreso semánticas (Cobertura e Impacto) aportando peso visual y claridad a los datos duros sin depender puramente de la narrativa. Mantiene el contraste adecuado, la accesibilidad de movimiento (`prefers-reduced-motion: reduce`) para transiciones sutiles de tarjeta, y se envuelve con seguridad en un ancho móvil de 375px comprobado con Playwright y un revisor ciego."},
     {fecha:"2026-07-13",titulo:"🔴 v1.55 — Los riesgos y puntos ciegos se miden con barras de cobertura",detalle:"Mejora sugerida por un análisis externo: la sección de Riesgos y puntos ciegos era un bloque de texto denso difícil de digerir. Se ha rediseñado dividiendo los riesgos en 3 categorías estructurales (🔴 Riesgos Existenciales, 🟠 Riesgos Operativos, ⚪ Puntos Ciegos). Además, ahora cada riesgo incluye un medidor visual de cobertura: una barra horizontal que muestra de forma instantánea cuán protegido (o expuesto) está el sistema ante ese fallo, junto con el texto descriptivo. Esto sigue la regla de demostrar en lugar de afirmar, haciendo que la salud y los cuellos de botella del proyecto se sientan como datos duros en lugar de opiniones escritas. Todo estructurado en un grid responsivo, puro CSS, respetando las preferencias de accesibilidad (reduced-motion desactiva el hover sutil)."},
@@ -7603,7 +7604,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
    discretas donde arrancan ACTO I / ACTO II / EL GIRO / ACTO III (lee las .tonySep ya insertadas
    por el re-secuenciador de arriba, no crea texto nuevo). Capa 100% aditiva: fixed, z-index bajo
    (39 — por debajo de .ov/langEn/cualquier overlay a pantalla completa), pointer-events:none. */
-#tonyProgWrap{position:fixed;top:0;left:0;right:0;height:3px;z-index:39;background:rgba(124,92,214,.14);pointer-events:none}
+#tonyProgWrap{display:none !important;position:fixed;top:0;left:0;right:0;height:3px;z-index:39;background:rgba(124,92,214,.14);pointer-events:none}
 #tonyProgFill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent,#3b5bdb),#e0568a);transition:width .12s linear}
 /* v1.45 (2ª vez que Tony las ve como "líneas negras raras" — ya no se aparca): las marcas dejan de
    ser negras-ajenas y pasan a leerse como parte de la propia barra lavanda (mismo acento). */
