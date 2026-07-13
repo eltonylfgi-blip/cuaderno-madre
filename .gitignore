@@ -7,6 +7,7 @@ UI_REFS_INBOX.txt
 articulos/
 
 # Notas y herramientas internas del FLUJO DE TRABAJO — NO publicar en la web pública
+AGENTS.md
 FLUJO_MEJORAS.md
 BITACORA_AGENTE.md
 GEM_REVISOR.md
