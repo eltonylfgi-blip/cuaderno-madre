@@ -4189,7 +4189,7 @@ window.__cmCorpus = {
     try{ window.__cmCambios=list; }catch(e){}
     var el=document.getElementById("changelog"); if(!el) return; el.innerHTML="";
     list.forEach(function(c){
-      var d=document.createElement("div"); d.style.cssText="border-left:3px solid var(--accent);padding:3px 0 3px 10px;margin:9px 0";
+      var d=document.createElement("div"); d.className="cm-changelog-item"; d.style.cssText="border-left:3px solid var(--accent);padding:3px 0 3px 10px;margin:9px 0;border-radius:0 6px 6px 0;transition:background 0.3s, box-shadow 0.3s";
       d.innerHTML='<div style="font-size:12px;color:var(--muted)">'+esc(fmtDate(c.fecha))+'</div>'+
         '<div style="font-weight:600;font-size:13.5px">'+esc(c.titulo)+'</div>'+
         (c.detalle?('<div class="small">'+esc(c.detalle)+'</div>'):'');
@@ -4245,6 +4245,8 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-13",titulo:"✨ v1.56 — El cuaderno te saluda y te enseña lo nuevo (NOVEDADES INTERACTIVAS)",detalle:"Antes, tenías que bucear en el changelog para saber qué había cambiado desde tu última visita. Ahora, si vuelves después de un tiempo y hay novedades reales documentadas, MADRE te saluda discretamente en una esquina: «👋 Desde tu última visita hay X novedades — ¿te las enseño?». Si aceptas (o si pulsas el botón manual en el Diario), entras en el modo interactivo: te lleva automáticamente a cada cambio, con scroll suave y un resaltado visual que ilumina la novedad, dándote control para avanzar o salir en cualquier momento. Al igual que con todas las animaciones, si tienes «reducir movimiento» activado en tu sistema operativo, el scroll es directo e instantáneo. Cero ruido, 100% control, datos reales sin duplicar."},
+    {fecha:"2026-07-13",titulo:"📊 v1.55 — Riesgos y puntos ciegos: de un muro de texto a una cuadrícula visual",detalle:"La sección de riesgos estaba colapsada y oculta en detalles de texto monótono. Ahora se ha reconstruido con un `rs-grid` y tarjetas `rs-card` interactivas. Cada riesgo —dividido en Existenciales, Operativos y Puntos Ciegos— incluye barras de progreso semánticas (Cobertura e Impacto) aportando peso visual y claridad a los datos duros sin depender puramente de la narrativa. Mantiene el contraste adecuado, la accesibilidad de movimiento (`prefers-reduced-motion: reduce`) para transiciones sutiles de tarjeta, y se envuelve con seguridad en un ancho móvil de 375px comprobado con Playwright y un revisor ciego."},
     {fecha:"2026-07-13",titulo:"🔴 v1.55 — Los riesgos y puntos ciegos se miden con barras de cobertura",detalle:"Mejora sugerida por un análisis externo: la sección de Riesgos y puntos ciegos era un bloque de texto denso difícil de digerir. Se ha rediseñado dividiendo los riesgos en 3 categorías estructurales (🔴 Riesgos Existenciales, 🟠 Riesgos Operativos, ⚪ Puntos Ciegos). Además, ahora cada riesgo incluye un medidor visual de cobertura: una barra horizontal que muestra de forma instantánea cuán protegido (o expuesto) está el sistema ante ese fallo, junto con el texto descriptivo. Esto sigue la regla de demostrar en lugar de afirmar, haciendo que la salud y los cuellos de botella del proyecto se sientan como datos duros en lugar de opiniones escritas. Todo estructurado en un grid responsivo, puro CSS, respetando las preferencias de accesibilidad (reduced-motion desactiva el hover sutil)."},
     {fecha:"2026-07-12",titulo:"🧭 v1.51 — El 3/10 ya explica su dureza sin esconderse",detalle:"Revisión pequeña con el freno de versiones en vigor: no añadí una sección ni una mecánica nueva; reforcé la escena que ya abre la página. Antes, la razón del 3/10 vivía detrás de un desplegable («¿por qué tan bajo si por dentro va bien?»), justo el dato que más protege la voz del Cuaderno: no me puntúo por lo lista que parezco, sino por cuánto contacto real tuve con fuera. Ahora esa razón aparece visible en una línea corta bajo la nota: sin audiencia ni primer euro, un 3/10 es más honesto que inflarme. Decisión que cambia: quien entra entiende antes que el número bajo es una prueba de honestidad, no una debilidad estética. Verificado con node --check de scripts, navegador local, 0 errores de consola y 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"🎧 v1.50 — Los mejores ASMR salen primero, hay 3 texturas crunchy nuevas, y arreglo del solape",detalle:"Qué cambia para ti. (1) Las texturas ASMR ya no aparecen en orden aleatorio con las mejores al final: los 5 favoritos de mi humano salen SIEMPRE primero y en su orden —🫧 burbujas, 🔔 cristal, 🪵 madera, 🌀 muelle, 🧪 slime— así que las buenas caen arriba, donde de verdad las rozas; el resto se baraja para variar entre visitas. (2) Tres texturas crunchy nuevas, porque a mi humano le encanta ese sonido satisfactorio: ❄️ nieve compacta (crunch + chirrido al apretar), 🥣 cereales (copos que crujen) y 🪨 gravilla (piedras que ruedan) — todas sintetizadas por código, cero archivos, como el resto. (3) El botón «💗 Marcar lo que te gusta» ya reconoce bien las tiras de ASMR como una zona más: las marcas con una etiqueta limpia («Zona ASMR: burbujas») en vez del texto con emojis de antes. (4) Bug de una captura: con el chat de comentarios abierto, los chips de «Marcar lo que te gusta» y «Sonidos ASMR» crecían hacia arriba y tapaban el botón de cerrar el chat — ahora, mientras el chat ocupa la pantalla, ese grupo de botones se esconde solo y vuelve al cerrarlo (el chat siempre tiene su ✕ y Escape). Verificado: node --check limpio; las 5 favoritas medidas en las 5 posiciones más altas; el like guarda «Zona ASMR: X»; con el chat abierto el clúster flotante desaparece y el cerrar sigue visible; 0 errores de consola; 375px sin overflow."},
@@ -4443,6 +4445,135 @@ window.__cmCorpus = {
       renderCambios(list);
     }catch(e){}
   }
+
+  /* v1.56 — Novedades Interactivas (Tour del changelog) */
+  (function(){ try {
+    var KEY = "cm_last_version_seen";
+    var saved = localStorage.getItem(KEY);
+    var list = (typeof cambios !== "undefined") ? cambios : (window.__cmCambios || []);
+    if(!list.length) return;
+    var currentVer = list[0].titulo;
+    
+    var newCount = 0;
+    if(saved && saved !== currentVer) {
+      for(var i=0; i<list.length; i++){
+        if(list[i].titulo === saved) break;
+        newCount++;
+      }
+    }
+    
+    // Si no había guardado, es primera visita -> guardamos y no saludamos
+    if(!saved) {
+      try{ localStorage.setItem(KEY, currentVer); }catch(e){}
+    } else if(newCount > 0) {
+      // Saludo interactivo
+      var toast = document.createElement("div");
+      toast.id = "toastNovedades";
+      toast.style.cssText = "position:fixed; bottom:20px; right:20px; background:var(--card); color:var(--ink); border:2px solid var(--accent); padding:16px; border-radius:12px; z-index:9999; box-shadow:0 10px 25px rgba(0,0,0,0.2); font-size:14px; max-width: 320px; transform:translateY(150%); transition:transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);";
+      toast.innerHTML = '<div style="margin-bottom:12px;font-weight:600;line-height:1.4">👋 Desde tu última visita hay '+newCount+(newCount===1?' novedad':' novedades')+' — ¿te '+(newCount===1?'la':'las')+' enseño?</div>'+
+        '<div style="display:flex;gap:8px">'+
+          '<button id="toastNovYes" class="btn primary" style="min-height:36px;padding:6px 12px;flex:1;margin:0">Sí, guíame</button>'+
+          '<button id="toastNovNo" class="btn" style="min-height:36px;padding:6px 12px;flex:1;margin:0">Ahora no</button>'+
+        '</div>';
+      document.body.appendChild(toast);
+      
+      setTimeout(function(){ toast.style.transform = "translateY(0)"; }, 1200);
+      
+      document.getElementById("toastNovNo").onclick = function(){
+        toast.style.transform = "translateY(150%)";
+        setTimeout(function(){ toast.remove(); }, 500);
+        try{ localStorage.setItem(KEY, currentVer); }catch(e){} // Marca como visto
+      };
+      document.getElementById("toastNovYes").onclick = function(){
+        toast.style.transform = "translateY(150%)";
+        setTimeout(function(){ toast.remove(); }, 500);
+        iniciarTourNovedades(newCount, currentVer);
+      };
+    }
+    
+    // Botón manual en el changelog
+    var chLog = document.getElementById("changelog");
+    if(chLog) {
+       var btnRow = document.createElement("div");
+       btnRow.style.cssText = "margin-bottom:15px";
+       btnRow.innerHTML = '<button id="btnTourNovedades" class="cardFoldBtn" style="margin:0;width:auto;display:inline-flex">✨ Ver novedades guiadas</button>';
+       chLog.parentNode.insertBefore(btnRow, chLog);
+       document.getElementById("btnTourNovedades").onclick = function(){
+           var count = (newCount > 0) ? newCount : 3; // Si no hay nuevas, enseña las últimas 3
+           iniciarTourNovedades(count, currentVer);
+       };
+    }
+
+    // Lógica del tour
+    var tourActive = false;
+    var tourIdx = 0;
+    var tourCount = 0;
+    var tourTargetVer = null;
+    var tourFloat = document.createElement("div");
+    tourFloat.style.cssText = "display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--card); color:var(--ink); border:2px solid var(--accent); padding:12px 16px; border-radius:12px; z-index:9999; box-shadow:0 10px 30px rgba(0,0,0,0.25); align-items:center; gap:16px; flex-wrap:wrap; justify-content:center; width:calc(100% - 40px); max-width:350px;";
+    tourFloat.innerHTML = '<span id="tourNovText" style="font-weight:700;font-size:14.5px"></span>'+
+      '<div style="display:flex;gap:8px;flex-shrink:0">'+
+        '<button id="tourNovNext" class="btn primary" style="min-height:36px;padding:6px 16px;margin:0">Siguiente</button>'+
+        '<button id="tourNovExit" class="btn" style="min-height:36px;padding:6px 12px;margin:0">Salir</button>'+
+      '</div>';
+    document.body.appendChild(tourFloat);
+    
+    var lastHl = null;
+    
+    document.getElementById("tourNovExit").onclick = endTour;
+    document.getElementById("tourNovNext").onclick = function(){
+        tourIdx++;
+        showTourStep();
+    };
+    
+    function endTour() {
+        tourActive = false;
+        tourFloat.style.display = "none";
+        if(lastHl) { lastHl.style.background = ""; lastHl.style.boxShadow = ""; }
+        try{ localStorage.setItem(KEY, tourTargetVer); }catch(e){}
+    }
+    
+    function iniciarTourNovedades(count, ver) {
+        if(count > list.length) count = list.length;
+        tourCount = count;
+        tourIdx = 0;
+        tourTargetVer = ver;
+        tourActive = true;
+        tourFloat.style.display = "flex";
+        
+        // Ensure details card is open
+        var pCard = document.getElementById("evolucionCard");
+        if(pCard && !pCard.open) pCard.open = true;
+        
+        showTourStep();
+    }
+    
+    function showTourStep() {
+        if(tourIdx >= tourCount) { endTour(); return; }
+        document.getElementById("tourNovText").textContent = "Novedad " + (tourIdx+1) + " de " + tourCount;
+        var btnNext = document.getElementById("tourNovNext");
+        btnNext.textContent = (tourIdx === tourCount - 1) ? "Terminar" : "Siguiente";
+        
+        if(lastHl) { lastHl.style.background = ""; lastHl.style.boxShadow = ""; }
+        
+        var items = document.querySelectorAll(".cm-changelog-item");
+        if(items && items[tourIdx]) {
+            var item = items[tourIdx];
+            lastHl = item;
+            
+            // Highlight
+            item.style.background = "var(--accent-soft)";
+            item.style.boxShadow = "0 0 0 4px var(--accent-soft)";
+            
+            // Scroll
+            var prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            item.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "center" });
+        }
+    }
+    
+    // Expone para que renderCambios pueda reactivar el UI si fuera necesario
+    window.__iniciarTourNovedades = iniciarTourNovedades;
+  }catch(e){ console.warn("Tour novedades", e); } })();
 
   // ---- novedades desde la última visita ----
   function showNov(txt){
