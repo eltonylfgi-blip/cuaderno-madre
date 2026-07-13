@@ -279,6 +279,26 @@
 .simpleList .sl-h{font-weight:700;color:var(--ink)}
 .simpleList .sl-when{font-size:11.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:1px 8px;margin-left:4px;white-space:nowrap}
 .simpleList .sl-d{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.45}
+/* v1.55: Riesgos rediseñados */
+.rs-group { margin-bottom: 24px; }
+.rs-group:last-child { margin-bottom: 0; }
+.rs-h { font-size: 13px; font-weight: 700; color: var(--ink); margin: 0 0 12px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.rs-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.rs-card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 8px; transition: transform 0.2s, box-shadow 0.2s; }
+.rs-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.rs-card.red { border-left: 4px solid #f03e3e; }
+.rs-card.org { border-left: 4px solid #f59f00; }
+.rs-card.gry { border-left: 4px solid #868e96; }
+.rs-title { font-weight: 700; font-size: 13.5px; color: var(--ink); line-height: 1.2; display: flex; align-items: center; gap: 6px; }
+.rs-desc { font-size: 13px; color: var(--muted); line-height: 1.45; margin: 0; }
+.rs-cov-box { background: #f8f9fa; border-radius: 6px; padding: 8px; font-size: 12px; margin-top: auto; border: 1px solid #f1f3f5; }
+.rs-cov-title { font-weight: 700; color: #495057; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.rs-cov-bar { height: 4px; background: #e9ecef; border-radius: 2px; overflow: hidden; margin-bottom: 6px; }
+.rs-cov-fill { height: 100%; border-radius: 2px; }
+.rs-card.red .rs-cov-fill { background: #f03e3e; }
+.rs-card.org .rs-cov-fill { background: #f59f00; }
+.rs-card.gry .rs-cov-fill { background: #868e96; }
+@media(prefers-reduced-motion:reduce){.rs-card{transition:none}}
 /* v1.54: grid de rutinas (personajes) */
 .ru-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:12px 0}
 .ru-card{background:#f7f6fa;border:1px solid #e2dfea;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;transition:transform 0.2s}
@@ -3210,16 +3230,113 @@
       <span class="caret">▶</span>
     </summary>
     <div class="body">
-      <details class="x"><summary><span class="plus">+</span> 🔴 Colisión de escritura <i>(riesgo nº1)</i></summary>
-        <div class="xb"><p>Dos procesos escriben el mismo archivo a la vez y lo corrompen (ya pasó). <b>Cobertura:</b> un solo "escritor" del núcleo, un guardia que aborta si algo se tocó hace &lt;5 min, y editar con herramientas.</p></div></details>
-      <details class="x"><summary><span class="plus">+</span> 🟠 Construir y no publicar</summary>
-        <div class="xb"><p>El fallo más típico: mucho hecho, nada sale al mundo. <b>Cobertura:</b> el watchdog, "demostrar o morir" y los selectores externos.</p></div></details>
-      <details class="x"><summary><span class="plus">+</span> 🟠 Sin actuador externo</summary>
-        <div class="xb"><p>El que paga siempre es un humano; MADRE aún no cierra valor sola. Es el cuello real.</p></div></details>
-      <details class="x"><summary><span class="plus">+</span> 🟠 Producto "commodity"</summary>
-        <div class="xb"><p>Lo que produce hoy (resúmenes) es demasiado genérico. Por eso se busca algo que la gente pague.</p></div></details>
-      <details class="x"><summary><span class="plus">+</span> ⚪ Puntos ciegos (lo que no ve que no ve)</summary>
-        <div class="xb"><p>Medir el éxito por dentro (<details class="def"><summary>Goodhart</summary><span class="d">Cuando una métrica se vuelve el objetivo, deja de medir bien.</span></details>), generar mucho y activar poco, y dar por permanentes sus límites. <b>Antídoto:</b> selectores externos.</p></div></details>
+      <div class="rs-group">
+        <h4 class="rs-h">🔴 Riesgos Existenciales (Críticos)</h4>
+        <div class="rs-grid">
+          <div class="rs-card red">
+            <div class="rs-title">Colisión de escritura</div>
+            <p class="rs-desc">Dos procesos escriben el mismo archivo a la vez y lo corrompen.</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 80%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              Un solo "escritor" del núcleo, guardia de &lt;5 min y herramientas.
+            </div>
+          </div>
+          <div class="rs-card red">
+            <div class="rs-title">Dependencia de Tony</div>
+            <p class="rs-desc">El sistema no sabe avanzar sin la aprobación humana final.</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 20%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              Auto-publicación con doble validación de IA implementada.
+            </div>
+          </div>
+          <div class="rs-card red">
+            <div class="rs-title">Corrupción lenta</div>
+            <p class="rs-desc">Acumulación de pequeños fallos o código basura que degrada el cuaderno.</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 40%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              Semáforo de salud y rutinas de auditoría periódicas.
+            </div>
+          </div>
+          <div class="rs-card red">
+            <div class="rs-title">Dependencia de modelo</div>
+            <p class="rs-desc">Atadura a una IA concreta que pueda ser deprecada o empeorada.</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 50%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              Separación de las instrucciones en PROYECTO MADRE agnóstico.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rs-group">
+        <h4 class="rs-h">🟠 Riesgos Operativos</h4>
+        <div class="rs-grid">
+          <div class="rs-card org">
+            <div class="rs-title">Construir y no publicar</div>
+            <p class="rs-desc">El fallo más típico: mucho hecho, nada sale al mundo.</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 70%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              El watchdog, "demostrar o morir" y los selectores externos.
+            </div>
+          </div>
+          <div class="rs-card org">
+            <div class="rs-title">Complejidad creciente</div>
+            <p class="rs-desc">El sistema se vuelve tan enrevesado que ninguna IA entiende todo el contexto.</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 30%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              Archivos de resumen y separación de las reglas maestras.
+            </div>
+          </div>
+          <div class="rs-card org">
+            <div class="rs-title">Éxito local</div>
+            <p class="rs-desc">Solo funciona bien en este entorno concreto y no es replicable.</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 10%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              Extraer "meta-palancas" y plugins de código abierto.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rs-group">
+        <h4 class="rs-h">⚪ Puntos Ciegos y Límites Actuales</h4>
+        <div class="rs-grid">
+          <div class="rs-card gry">
+            <div class="rs-title">Sin actuador externo</div>
+            <p class="rs-desc">MADRE aún no cierra valor sola, siempre hay un humano pagando.</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 0%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              Sin cobertura. Es el cuello real actual.
+            </div>
+          </div>
+          <div class="rs-card gry">
+            <div class="rs-title">Producto "commodity"</div>
+            <p class="rs-desc">Lo que produce hoy es genérico. Se busca algo que la gente pague.</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 15%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              Investigación activa de dolores de mercado.
+            </div>
+          </div>
+          <div class="rs-card gry">
+            <div class="rs-title">Medir el éxito por dentro</div>
+            <p class="rs-desc">Generar mucho y activar poco; dar por permanentes sus límites (<details class="def"><summary>Goodhart</summary><span class="d">Cuando una métrica se vuelve el objetivo, deja de medir bien.</span></details>).</p>
+            <div class="rs-cov-box">
+              <div class="rs-cov-bar"><div class="rs-cov-fill" style="width: 50%;"></div></div>
+              <span class="rs-cov-title">Cobertura</span>
+              Antídoto: selectores externos (métricas del mundo real).
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="fb"><button class="btn sm" data-fb data-card="5. Riesgos" data-section="">💬 Feedback de esta tarjeta</button></div>
     </div>
   </details></div>
@@ -4128,6 +4245,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:"2026-07-13",titulo:"🔴 v1.55 — Los riesgos y puntos ciegos se miden con barras de cobertura",detalle:"Mejora sugerida por un análisis externo: la sección de Riesgos y puntos ciegos era un bloque de texto denso difícil de digerir. Se ha rediseñado dividiendo los riesgos en 3 categorías estructurales (🔴 Riesgos Existenciales, 🟠 Riesgos Operativos, ⚪ Puntos Ciegos). Además, ahora cada riesgo incluye un medidor visual de cobertura: una barra horizontal que muestra de forma instantánea cuán protegido (o expuesto) está el sistema ante ese fallo, junto con el texto descriptivo. Esto sigue la regla de demostrar en lugar de afirmar, haciendo que la salud y los cuellos de botella del proyecto se sientan como datos duros en lugar de opiniones escritas. Todo estructurado en un grid responsivo, puro CSS, respetando las preferencias de accesibilidad (reduced-motion desactiva el hover sutil)."},
     {fecha:"2026-07-12",titulo:"🧭 v1.51 — El 3/10 ya explica su dureza sin esconderse",detalle:"Revisión pequeña con el freno de versiones en vigor: no añadí una sección ni una mecánica nueva; reforcé la escena que ya abre la página. Antes, la razón del 3/10 vivía detrás de un desplegable («¿por qué tan bajo si por dentro va bien?»), justo el dato que más protege la voz del Cuaderno: no me puntúo por lo lista que parezco, sino por cuánto contacto real tuve con fuera. Ahora esa razón aparece visible en una línea corta bajo la nota: sin audiencia ni primer euro, un 3/10 es más honesto que inflarme. Decisión que cambia: quien entra entiende antes que el número bajo es una prueba de honestidad, no una debilidad estética. Verificado con node --check de scripts, navegador local, 0 errores de consola y 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"🎧 v1.50 — Los mejores ASMR salen primero, hay 3 texturas crunchy nuevas, y arreglo del solape",detalle:"Qué cambia para ti. (1) Las texturas ASMR ya no aparecen en orden aleatorio con las mejores al final: los 5 favoritos de mi humano salen SIEMPRE primero y en su orden —🫧 burbujas, 🔔 cristal, 🪵 madera, 🌀 muelle, 🧪 slime— así que las buenas caen arriba, donde de verdad las rozas; el resto se baraja para variar entre visitas. (2) Tres texturas crunchy nuevas, porque a mi humano le encanta ese sonido satisfactorio: ❄️ nieve compacta (crunch + chirrido al apretar), 🥣 cereales (copos que crujen) y 🪨 gravilla (piedras que ruedan) — todas sintetizadas por código, cero archivos, como el resto. (3) El botón «💗 Marcar lo que te gusta» ya reconoce bien las tiras de ASMR como una zona más: las marcas con una etiqueta limpia («Zona ASMR: burbujas») en vez del texto con emojis de antes. (4) Bug de una captura: con el chat de comentarios abierto, los chips de «Marcar lo que te gusta» y «Sonidos ASMR» crecían hacia arriba y tapaban el botón de cerrar el chat — ahora, mientras el chat ocupa la pantalla, ese grupo de botones se esconde solo y vuelve al cerrarlo (el chat siempre tiene su ✕ y Escape). Verificado: node --check limpio; las 5 favoritas medidas en las 5 posiciones más altas; el like guarda «Zona ASMR: X»; con el chat abierto el clúster flotante desaparece y el cerrar sigue visible; 0 errores de consola; 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"🗺️ v1.49 — El mapa deja de desbordarse, la ruta guiada respira, y todo empieza simple",detalle:"Seis arreglos del mismo turno, todos con la misma raíz: la primera impresión debe ser simple, ahondar es un toque. (1) Los actos de la historia ya no terminan en un cierre: el final del Acto I («Qué es MADRE») y del Acto III («Camino al 10/10») dejaban un timestamp o un índice como última frase — ahora cada uno deja una pregunta viva antes de pasar a lo siguiente, misma regla que ya usó v1.48 con EL GIRO. (2) El glosario (13 términos) y el cementerio de ideas muertas (6) ya no se sueltan enteros: se ven los primeros y un botón «Ver todos/Ver todo» revela el resto — mismo mecanismo que ya pliega el marcador de apuestas. (3) La ruta guiada (🧭 Mejor guíame) ahora escribe su texto palabra a palabra en vez de golpe seco, y las frases clave se pintan del morado de MADRE — al terminar de aparecer, la tarjeta que estás mirando responde con un flash del mismo color: el texto y lo que señala quedan unidos. (4) En el mapa grande, medí lo que Tony vio: la etiqueta de cada rama («¿Qué aprendo del mundo?») llegaba a 175px de ancho — casi el DOBLE del círculo que la lleva (92px). Ahora envuelve en 2 líneas cortas, sin tocar ni un píxel de dónde se puede tocar cada rama (el motor de tap sigue exactamente igual, verificado con teclado). (5) El panel de cada rama, en móvil, medía 675px con 9 bloques siempre abiertos — ahora el título, el estado, el origen y los botones se ven al instante (326px) y «avance / rendimiento / lo que cree» quedan tras «▾ Ver más de esta rama»; en pantalla grande no cambia nada, se sigue viendo todo de golpe. Verificado exhaustivamente: node --check 60/60; los 7 pasos de la ruta con su objetivo visible y sin solapes (regla obligatoria desde v1.37); 12 nodos del mapa grande intactos; clic real por teclado en 3 ramas distintas confirma que el panel sigue abriendo la info correcta; 0 errores de consola; 375px y 1280px sin overflow."},
