@@ -51,7 +51,7 @@
   .scoreWhy b{color:var(--ink)}
   .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
   .chip{background:var(--chip);border-radius:99px;padding:5px 11px;font-size:12.5px;
-    color:var(--ink);white-space:nowrap;border:1px solid var(--line)}
+    color:var(--ink);white-space:nowrap;border:1px solid var(--line);position:relative}
   .chip b{font-weight:700}
   .chip.primary{background:var(--accent);border-color:var(--accent);color:#fff}
   .chip.quiet{background:transparent;border-color:transparent;color:var(--muted)}
@@ -61,7 +61,7 @@
 
   button{font-family:inherit;cursor:pointer}
   .btn{border:1px solid var(--line);background:#fff;color:var(--ink);
-    border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+    border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;display:inline-flex;gap:6px;align-items:center;position:relative}
   .btn:hover{border-color:#cdd4df;background:#fbfcfe}
   .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
   .btn.primary:hover{background:#2f60e4}
@@ -4245,7 +4245,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
-    {fecha:'2026-07-13',titulo:'🐛 v1.58 — Caza final: rayas y barra de scroll',detalle:'Ahora SÍ he arreglado los 2 bugs que faltaban: (1) Las finas rayas moradas en la cima se han ocultado para siempre. (2) Suprimida una barra inútil de scroll horizontal en escritorio.'},
+    {fecha:'2026-07-13',titulo:'🐛 v1.58 — Caza final: el verdadero origen del scroll fantasma',detalle:'Ahora SÍ he arreglado los 2 bugs que faltaban: (1) Las finas rayas moradas en la cima se han ocultado para siempre. (2) El scroll horizontal de 10px no se arreglaba ocultando el overflow, sino atacando la raíz: los seudoelementos de los botones y chips (.btn, .chip) tenían un inset de -10px pero carecían de position: relative, por lo que su área táctil se expandía 10px fuera de la pantalla. Además, se ha cambiado un width: 100vw problemático a 100%.'},
     {fecha:'2026-07-13',titulo:'🐛 v1.57 — Botones separados y 0 recortes abajo',detalle:'He arreglado 2 bugs visuales: (1) En móviles estrechos, las áreas invisibles de los botones English y Vivo se solapaban al tocarlas: ahora tienen más aire y es imposible equivocarse. (2) Los botones flotantes que en iOS quedaban cortados abajo, ahora respetan el espacio seguro (env safe-area-inset-bottom).'},
     {fecha:"2026-07-13",titulo:"✨ v1.56 — El cuaderno te saluda y te enseña lo nuevo (NOVEDADES INTERACTIVAS)",detalle:"Antes, tenías que bucear en el changelog para saber qué había cambiado desde tu última visita. Ahora, si vuelves después de un tiempo y hay novedades reales documentadas, MADRE te saluda discretamente en una esquina: «👋 Desde tu última visita hay X novedades — ¿te las enseño?». Si aceptas (o si pulsas el botón manual en el Diario), entras en el modo interactivo: te lleva automáticamente a cada cambio, con scroll suave y un resaltado visual que ilumina la novedad, dándote control para avanzar o salir en cualquier momento. Al igual que con todas las animaciones, si tienes «reducir movimiento» activado en tu sistema operativo, el scroll es directo e instantáneo. Cero ruido, 100% control, datos reales sin duplicar."},
     {fecha:"2026-07-13",titulo:"📊 v1.55 — Riesgos y puntos ciegos: de un muro de texto a una cuadrícula visual",detalle:"La sección de riesgos estaba colapsada y oculta en detalles de texto monótono. Ahora se ha reconstruido con un `rs-grid` y tarjetas `rs-card` interactivas. Cada riesgo —dividido en Existenciales, Operativos y Puntos Ciegos— incluye barras de progreso semánticas (Cobertura e Impacto) aportando peso visual y claridad a los datos duros sin depender puramente de la narrativa. Mantiene el contraste adecuado, la accesibilidad de movimiento (`prefers-reduced-motion: reduce`) para transiciones sutiles de tarjeta, y se envuelve con seguridad en un ancho móvil de 375px comprobado con Playwright y un revisor ciego."},
@@ -7795,7 +7795,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
 
   var cv=document.createElement('canvas');
   cv.id='cmOrganism';
-  cv.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;';
+  cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;';
   document.body.appendChild(cv);
   var ctx=cv.getContext('2d'); if(!ctx) return;
 
