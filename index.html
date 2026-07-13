@@ -210,7 +210,7 @@
   /* comentarios in-page: no ocupan toda la página; lista con scroll interno */
   .cmtScroll{max-height:54vh;overflow:auto;border-radius:12px;margin-top:6px}
   .gradtext{background:linear-gradient(90deg,var(--accent),#8a5bdb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  #likeFab{position:fixed;right:16px;bottom:74px;width:48px;height:48px;border-radius:50%;border:none;background:#fff;color:#e0568a;font-size:20px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.22);z-index:60;transition:transform .15s}
+  #likeFab{position:fixed;right:16px;bottom:max(74px, calc(74px + env(safe-area-inset-bottom, 0px)));width:48px;height:48px;border-radius:50%;border:none;background:#fff;color:#e0568a;font-size:20px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.22);z-index:60;transition:transform .15s}
   #likeFab:hover{transform:scale(1.12) rotate(-6deg)} #likeFab.on{background:#e0568a;color:#fff}
   body.likeMode .card:hover,body.likeMode .hero:hover,body.likeMode .senalItem:hover,body.likeMode .body p:hover,body.likeMode .body li:hover,body.likeMode .ctitle .t:hover,body.likeMode summary:hover,body.likeMode h1:hover,body.likeMode .sub:hover,body.likeMode .postit:hover,body.likeMode #gateBar:hover,body.likeMode footer:hover,body.likeMode .heronote:hover,body.likeMode .dec:hover,body.likeMode .alert:hover,body.likeMode .step:hover,body.likeMode .chip:hover{outline:3px solid #e0568a;outline-offset:2px;cursor:pointer;border-radius:10px}
   #likeHint{position:fixed;left:50%;top:10px;transform:translateX(-50%);background:#e0568a;color:#fff;padding:8px 14px;border-radius:99px;font-size:13px;z-index:61;box-shadow:0 4px 16px rgba(0,0,0,.25);display:none}
@@ -4245,6 +4245,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-13',titulo:'🐛 v1.57 — Rayas fuera, botones separados y 0 recortes abajo',detalle:'He cazado 4 bugs visuales: (1) Las finas rayas moradas en la cima se han ocultado para siempre. (2) En móviles estrechos, las áreas invisibles de los botones English y Vivo se solapaban al tocarlas: ahora tienen más aire y es imposible equivocarse. (3) Los botones flotantes que en iOS quedaban cortados abajo, ahora respetan el espacio seguro (env safe-area-inset-bottom). (4) Suprimida una barra inútil de scroll horizontal en escritorio.'},
     {fecha:"2026-07-13",titulo:"✨ v1.56 — El cuaderno te saluda y te enseña lo nuevo (NOVEDADES INTERACTIVAS)",detalle:"Antes, tenías que bucear en el changelog para saber qué había cambiado desde tu última visita. Ahora, si vuelves después de un tiempo y hay novedades reales documentadas, MADRE te saluda discretamente en una esquina: «👋 Desde tu última visita hay X novedades — ¿te las enseño?». Si aceptas (o si pulsas el botón manual en el Diario), entras en el modo interactivo: te lleva automáticamente a cada cambio, con scroll suave y un resaltado visual que ilumina la novedad, dándote control para avanzar o salir en cualquier momento. Al igual que con todas las animaciones, si tienes «reducir movimiento» activado en tu sistema operativo, el scroll es directo e instantáneo. Cero ruido, 100% control, datos reales sin duplicar."},
     {fecha:"2026-07-13",titulo:"📊 v1.55 — Riesgos y puntos ciegos: de un muro de texto a una cuadrícula visual",detalle:"La sección de riesgos estaba colapsada y oculta en detalles de texto monótono. Ahora se ha reconstruido con un `rs-grid` y tarjetas `rs-card` interactivas. Cada riesgo —dividido en Existenciales, Operativos y Puntos Ciegos— incluye barras de progreso semánticas (Cobertura e Impacto) aportando peso visual y claridad a los datos duros sin depender puramente de la narrativa. Mantiene el contraste adecuado, la accesibilidad de movimiento (`prefers-reduced-motion: reduce`) para transiciones sutiles de tarjeta, y se envuelve con seguridad en un ancho móvil de 375px comprobado con Playwright y un revisor ciego."},
     {fecha:"2026-07-13",titulo:"🔴 v1.55 — Los riesgos y puntos ciegos se miden con barras de cobertura",detalle:"Mejora sugerida por un análisis externo: la sección de Riesgos y puntos ciegos era un bloque de texto denso difícil de digerir. Se ha rediseñado dividiendo los riesgos en 3 categorías estructurales (🔴 Riesgos Existenciales, 🟠 Riesgos Operativos, ⚪ Puntos Ciegos). Además, ahora cada riesgo incluye un medidor visual de cobertura: una barra horizontal que muestra de forma instantánea cuán protegido (o expuesto) está el sistema ante ese fallo, junto con el texto descriptivo. Esto sigue la regla de demostrar en lugar de afirmar, haciendo que la salud y los cuellos de botella del proyecto se sientan como datos duros en lugar de opiniones escritas. Todo estructurado en un grid responsivo, puro CSS, respetando las preferencias de accesibilidad (reduced-motion desactiva el hover sutil)."},
@@ -4469,7 +4470,7 @@ window.__cmCorpus = {
       // Saludo interactivo
       var toast = document.createElement("div");
       toast.id = "toastNovedades";
-      toast.style.cssText = "position:fixed; bottom:20px; right:20px; background:var(--card); color:var(--ink); border:2px solid var(--accent); padding:16px; border-radius:12px; z-index:9999; box-shadow:0 10px 25px rgba(0,0,0,0.2); font-size:14px; max-width: 320px; transform:translateY(150%); transition:transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);";
+      toast.style.cssText = "position:fixed; bottom:max(20px, env(safe-area-inset-bottom, 20px)); right:20px; background:var(--card); color:var(--ink); border:2px solid var(--accent); padding:16px; border-radius:12px; z-index:9999; box-shadow:0 10px 25px rgba(0,0,0,0.2); font-size:14px; max-width: 320px; transform:translateY(150%); transition:transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);";
       toast.innerHTML = '<div style="margin-bottom:12px;font-weight:600;line-height:1.4">👋 Desde tu última visita hay '+newCount+(newCount===1?' novedad':' novedades')+' — ¿te '+(newCount===1?'la':'las')+' enseño?</div>'+
         '<div style="display:flex;gap:8px">'+
           '<button id="toastNovYes" class="btn primary" style="min-height:36px;padding:6px 12px;flex:1;margin:0">Sí, guíame</button>'+
@@ -4510,7 +4511,7 @@ window.__cmCorpus = {
     var tourCount = 0;
     var tourTargetVer = null;
     var tourFloat = document.createElement("div");
-    tourFloat.style.cssText = "display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--card); color:var(--ink); border:2px solid var(--accent); padding:12px 16px; border-radius:12px; z-index:9999; box-shadow:0 10px 30px rgba(0,0,0,0.25); align-items:center; gap:16px; flex-wrap:wrap; justify-content:center; width:calc(100% - 40px); max-width:350px;";
+    tourFloat.style.cssText = "display:none; position:fixed; bottom:max(20px, env(safe-area-inset-bottom, 20px)); left:50%; transform:translateX(-50%); background:var(--card); color:var(--ink); border:2px solid var(--accent); padding:12px 16px; border-radius:12px; z-index:9999; box-shadow:0 10px 30px rgba(0,0,0,0.25); align-items:center; gap:16px; flex-wrap:wrap; justify-content:center; width:calc(100% - 40px); max-width:350px;";
     tourFloat.innerHTML = '<span id="tourNovText" style="font-weight:700;font-size:14.5px"></span>'+
       '<div style="display:flex;gap:8px;flex-shrink:0">'+
         '<button id="tourNovNext" class="btn primary" style="min-height:36px;padding:6px 16px;margin:0">Siguiente</button>'+
@@ -5384,7 +5385,7 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
    confirmado 0 llamadas reales (showWelcome/startTour nunca se invocan). #tourLaunch sigue siendo
    un boton real, ahora simple proxy de un toque al tour real (#tourBtn). ===== */
 #tourLaunch{
-  position:fixed; left:16px; bottom:16px; z-index:62;
+  position:fixed; left:16px; bottom:max(16px, env(safe-area-inset-bottom, 16px)); z-index:62;
   display:inline-flex; align-items:center; gap:7px;
   padding:11px 15px; border:none; border-radius:999px;
   font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
@@ -5401,7 +5402,7 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
 @media(max-width:420px){
   #tourLaunch{ padding:10px 13px; font-size:13px; }
   #tourLaunch .tlTxt{ display:none; }
-  #tourLaunch{ left:14px; bottom:14px; }
+  #tourLaunch{ left:14px; bottom:max(14px, env(safe-area-inset-bottom, 14px)); }
 }
 @media (prefers-reduced-motion: reduce){ #tourLaunch .tlEmoji{ animation:none !important; } }
 /* widget: dibujos */
@@ -6510,13 +6511,13 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 @media(max-width:360px){.tcNie{font-size:0}.tcNie::after{content:"🤔";font-size:15px}}
 /* C3: HUB de botones flotantes */
 /* los FAB sueltos se ocultan por JS (solo los que SÍ entran al hub) — así nunca ocultamos uno que aún no existió (carrera con el módulo remoto de comentarios) */
-#fabHubBtn{position:fixed;right:16px;bottom:16px;z-index:72;width:54px;height:54px;border-radius:50%;border:none;background:var(--accent,#3b5bdb);color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.3);transition:transform .25s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
+#fabHubBtn{position:fixed;right:16px;bottom:max(16px, env(safe-area-inset-bottom, 16px));z-index:72;width:54px;height:54px;border-radius:50%;border:none;background:var(--accent,#3b5bdb);color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.3);transition:transform .25s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
 #fabHubBtn:hover{box-shadow:0 7px 22px rgba(0,0,0,.38)}
 #fabHubBtn .fhIco{display:inline-block;transition:transform .25s}
 #fabHubBtn.on{transform:rotate(135deg)}
 #fabHubBtn.nudge{animation:fhNudge 1s ease-in-out infinite}
 @keyframes fhNudge{0%,100%{transform:scale(1)}50%{transform:scale(1.16)}}
-#fabHubMenu{position:fixed;right:16px;bottom:80px;z-index:72;display:flex;flex-direction:column;gap:8px;align-items:flex-end;opacity:0;transform:translateY(10px) scale(.96);pointer-events:none;transition:opacity .18s,transform .18s;max-height:78vh;overflow:auto}
+#fabHubMenu{position:fixed;right:16px;bottom:max(80px, calc(80px + env(safe-area-inset-bottom, 0px)));z-index:72;display:flex;flex-direction:column;gap:8px;align-items:flex-end;opacity:0;transform:translateY(10px) scale(.96);pointer-events:none;transition:opacity .18s,transform .18s;max-height:78vh;overflow:auto}
 #fabHubMenu.on{opacity:1;transform:none;pointer-events:auto}
 .fabHubItem{display:inline-flex;align-items:center;gap:9px;border:none;border-radius:999px;background:#fff;color:#23233a;font:600 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;padding:9px 14px 9px 10px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.22);transition:transform .12s;white-space:nowrap}
 .fabHubItem:hover{transform:translateX(-3px) scale(1.03)}
@@ -8710,8 +8711,8 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   /* v1.47 (captura móvil de Tony: ❤️ Vivo PISABA la pastilla de idioma) — en pantallas estrechas
      las pastillas se APILAN en columna, nunca se solapan */
   @media(max-width:560px){
-    #cmMotionBtn{top:47px!important;right:12px!important}
-    #cmIdExit{top:84px!important;right:12px!important}
+    #cmMotionBtn{top:64px!important;right:12px!important}
+    #cmIdExit{top:100px!important;right:12px!important}
   }
 </style>
 <script>
