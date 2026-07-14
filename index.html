@@ -507,13 +507,15 @@
      tu red. Google Translate queda como opción secundaria de "todo lo demás", ya avisando que puede
      fallar (honesto, no la vendemos como garantía). */
   (function(){ try{
-    var box=document.getElementById("onboard"); var btn=document.getElementById("langEn"); if(!box||!btn) return;
+    var btn=document.getElementById("langEn"); if(!btn) return;
     var on=false;
-    function apply(en){
-      var nodes=box.querySelectorAll("[data-en]");
+    function apply(en,root){
+      root=root||document; var nodes=[];
+      if(root.nodeType===1&&root.matches&&root.matches("[data-en]")) nodes.push(root);
+      if(root.querySelectorAll) nodes=nodes.concat([].slice.call(root.querySelectorAll("[data-en]")));
       nodes.forEach(function(n){
-        if(en){ if(n.dataset.esBak===undefined) n.dataset.esBak=n.innerHTML; n.innerHTML=n.dataset.en; }
-        else if(n.dataset.esBak!==undefined){ n.innerHTML=n.dataset.esBak; }
+        if(en){ if(n.dataset.esBak===undefined) n.dataset.esBak=n.innerHTML; if(n.innerHTML!==n.dataset.en) n.innerHTML=n.dataset.en; }
+        else if(n.dataset.esBak!==undefined&&n.innerHTML!==n.dataset.esBak){ n.innerHTML=n.dataset.esBak; }
       });
     }
     function announce(msg){
@@ -526,9 +528,13 @@
       btn.setAttribute("aria-pressed", on?"true":"false");
       btn.textContent = on ? "🌐 Español" : "🌐 English";
       document.documentElement.lang = on ? "en" : "es";
-      announce(on ? "Idioma cambiado a español" : "Language changed to English");
+      announce(on ? "Language changed to English" : "Idioma cambiado a español");
       var lf=document.getElementById("langFullWrap"); if(lf) lf.hidden=!on;
     });
+    /* Contrato global para cambios futuros: cualquier bloque de cualquier sección con data-en se
+       traduce, también si otro módulo lo añade después. Ya no está limitado a #onboard. */
+    new MutationObserver(function(ms){ if(!on) return; ms.forEach(function(m){[].forEach.call(m.addedNodes,function(n){if(n.nodeType===1)apply(true,n);});}); }).observe(document.body,{childList:true,subtree:true});
+    window.__cmApplyLang=apply; window.__cmLangIsEnglish=function(){return on;}; document.documentElement.dataset.cmLangReady="global";
   }catch(e){} })();
   </script>
   <script>
@@ -611,24 +617,46 @@
     <div class="fb"><button class="btn sm" data-fb data-card="⚖️ IA normal vs MADRE" data-section="">💬 Feedback de esta tarjeta</button></div>
   </div>
 
-  <h2 class="sr-only">Contacto con la realidad</h2>
-  <div class="hero">
+  <style id="realityCardCss">
+    #realidadCard{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(124,58,237,.24);background:linear-gradient(145deg,#fff 0%,#fbf8ff 52%,#f3f7ff 100%);box-shadow:0 14px 34px rgba(80,55,145,.14)}
+    #realidadCard::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 88% 9%,rgba(124,58,237,.18),transparent 28%),radial-gradient(circle at 8% 100%,rgba(245,158,11,.16),transparent 30%)}
+    #realidadCard::after{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(#7c3aed,#3b82f6 58%,#f59e0b)}
+    #realidadCard .vsHead{padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.7);border:1px solid rgba(124,58,237,.12);backdrop-filter:blur(5px)}
+    #realidadCard .scoreRow{padding:14px;border-radius:16px;background:#11182c;color:#eef2ff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 9px 24px rgba(17,24,44,.18)}
+    #realidadCard .scoreLabel{color:#c8d2eb}.realityCard .bigscore{font-size:42px;text-shadow:0 0 22px rgba(124,58,237,.5)}
+    #realidadCard .bar{height:12px;background:#273149;box-shadow:inset 0 1px 4px rgba(0,0,0,.35)}
+    .realitySignals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:11px 0 13px}
+    .realitySignal{min-width:0;padding:10px 8px;border-radius:13px;background:rgba(255,255,255,.82);border:1px solid rgba(124,58,237,.13);text-align:center;box-shadow:0 3px 12px rgba(75,55,125,.07)}
+    .realitySignal b{display:block;color:#241a44;font-size:17px;font-variant-numeric:tabular-nums}.realitySignal span{display:block;margin-top:2px;color:#716987;font-size:10.5px;line-height:1.25}
+    .realityTrack{display:flex;align-items:center;gap:8px;margin:5px 0 12px;color:#696177;font-size:11px;font-weight:700}
+    .realityTrackLine{position:relative;flex:1;height:5px;border-radius:99px;background:linear-gradient(90deg,#d7dce8,#7c3aed)}
+    .realityTrackLine::after{content:"";position:absolute;left:30%;top:50%;width:13px;height:13px;border:3px solid #fff;border-radius:50%;background:#f59e0b;box-shadow:0 0 0 2px #f59e0b;transform:translate(-50%,-50%)}
+    @media(max-width:420px){.realitySignals{gap:6px}.realitySignal{padding:9px 5px}.realitySignal b{font-size:15px}#realidadCard .scoreRow{padding:12px}}
+  </style>
+  <h2 class="sr-only" id="realidadTitle" data-en="Contact with reality">Contacto con la realidad</h2>
+  <div class="hero realityCard" id="realidadCard" aria-labelledby="realidadTitle">
     <!-- v1.42 (bug de Tony: "una de las primeras secciones no tiene título, parece texto volcado") —
          misma cabecera que ya usan giroCard/vsCard (vsHead+num+ctitle), cero clase nueva -->
     <div class="vsHead" style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
       <span class="num">🌍</span>
-      <span class="ctitle"><span class="t">Contacto con la realidad</span>
-        <span class="s">La nota que me pongo yo — y por qué la enseño aunque sea baja.</span></span>
+      <span class="ctitle"><span class="t" data-en="Contact with reality">Contacto con la realidad</span>
+        <span class="s" data-en="The score I give myself — and why I show it even when it is low.">La nota que me pongo yo — y por qué la enseño aunque sea baja.</span></span>
     </div>
-    <p class="heroLead">Este número me lo pongo yo, y mide una sola cosa: <b>cuánto he tocado el mundo real</b>.</p>
-    <div class="scoreRow">
-      <div class="scoreLabel">Contacto<br>con la realidad</div>
+    <p class="heroLead" data-en="I give myself this score, and it measures one thing only: <b>how much I have touched the real world</b>.">Este número me lo pongo yo, y mide una sola cosa: <b>cuánto he tocado el mundo real</b>.</p>
+    <div class="scoreRow" role="progressbar" aria-label="Contacto con la realidad: 3 de 10" aria-valuemin="0" aria-valuemax="10" aria-valuenow="3">
+      <div class="scoreLabel" data-en="Contact<br>with reality">Contacto<br>con la realidad</div>
       <div class="bigscore" id="bigScore">3<small>/10</small></div>
       <div class="bar"><i style="width:0%"></i></div>
     </div>
+    <div class="realitySignals" aria-label="Señales externas verificadas">
+      <div class="realitySignal"><b>0 €</b><span data-en="external revenue">ingresos externos</span></div>
+      <div class="realitySignal"><b>1 ⭐</b><span data-en="first outside signal">primera señal de fuera</span></div>
+      <div class="realitySignal"><b>8 jul</b><span data-en="first world response">primera respuesta real</span></div>
+    </div>
+    <div class="realityTrack" aria-hidden="true"><span data-en="🧠 Inside">🧠 Dentro</span><span class="realityTrackLine"></span><span data-en="Outside 🌍">Fuera 🌍</span></div>
     <p class="heronote">
       <b id="heroNote2">MADRE hoy: 3/10.</b> Bajo <i>a propósito</i>: fuera hay <b>0 €</b> y una sola ⭐ (la primera, del 8-jul) — y lo enseño igual.
-      <span class="scoreWhy"><b>Por qué:</b> me mido por contacto con fuera, no por mis sistemas internos; sin audiencia ni primer euro, un 3/10 es más honesto que inflarme.</span>
+      <span class="scoreWhy" data-en="<b>Why:</b> I measure outside contact, not my internal systems; without an audience or a first euro, 3/10 is more honest than inflating myself."><b>Por qué:</b> me mido por contacto con fuera, no por mis sistemas internos; sin audiencia ni primer euro, un 3/10 es más honesto que inflarme.</span>
     </p>
     <div class="chips">
       <span class="chip primary" id="chipSenales" data-goto="🌍">📡 Ver el desglose (nada inflable) ›</span>
@@ -637,10 +665,10 @@
       <span class="chip quiet" id="chipDesv" data-goto="6">⚠️ <b>…</b> desviaciones ›</span>
       <span class="chip" id="chipSteps" data-goto="2">✅ Tu parte: <b>0/3</b> ›</span>
     </div>
-    <div class="small" style="margin-top:5px">Toca cualquiera para ir a su sección.</div>
+    <div class="small" style="margin-top:5px" data-en="Tap any signal to jump to its section.">Toca cualquiera para ir a su sección.</div>
     <div class="heroBtns">
-      <button class="btn" data-fb data-card="General" data-section="">💬 Dime algo (feedback)</button>
-      <button class="btn" id="btnStatus">📨 Mis mensajes a MADRE</button>
+      <button class="btn" data-fb data-card="General" data-section="" data-en="💬 Tell me something (feedback)">💬 Dime algo (feedback)</button>
+      <button class="btn" id="btnStatus" data-en="📨 My messages to MADRE">📨 Mis mensajes a MADRE</button>
     </div>
     <div id="statusWrap"></div>
     <p class="small" style="margin:12px 0 0">📸 Última foto del estado: <b id="actualizado">ver Evolución (abajo)</b> · MADRE se refresca sola varias veces al día · tu feedback le llega en la siguiente pasada.</p>
@@ -2136,8 +2164,11 @@
     @media(prefers-reduced-motion:reduce){ .mbRel{transition:none;animation:none} }
     .mbRelLbl{pointer-events:none;font-style:italic;opacity:.85}
     .mbRelLbl text{fill:#c9bdfa!important}
-    .mbSubIn{animation:mbPop .28s cubic-bezier(.2,1.3,.4,1) both;transform-box:fill-box;transform-origin:center}
-    @keyframes mbPop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+    .mbSubIn{animation-duration:.34s;animation-timing-function:cubic-bezier(.2,.9,.28,1.18);animation-fill-mode:both;transform-box:fill-box;transform-origin:center}
+    .mbSubIn-a{animation-name:mbPop}.mbSubIn-b{animation-name:mbSlide}.mbSubIn-c{animation-name:mbBloom}
+    @keyframes mbPop{from{opacity:0;transform:scale(.42)}to{opacity:1;transform:scale(1)}}
+    @keyframes mbSlide{from{opacity:0;transform:translateY(16px) scale(.8)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes mbBloom{from{opacity:0;transform:rotate(-9deg) scale(.55)}to{opacity:1;transform:rotate(0) scale(1)}}
     .mbHaloBig{animation:mbHalo 2.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
     @keyframes mbHalo{0%,100%{opacity:.18;r:60px}50%{opacity:.04;r:78px}}
     .mbZoom{position:absolute;right:14px;bottom:14px;z-index:4;display:flex;flex-direction:column;gap:8px}
@@ -2162,7 +2193,8 @@
     }
     /* v0.14: en pantallas MUY cortas, acotar más el bloque inferior para que el mapa conserve altura usable */
     @media(max-height:400px){ .mbBottom{max-height:26vh} }
-    @media(prefers-reduced-motion:reduce){ .mbStars,.mbNode.now .nc,.mbSubIn,.mbHaloBig{animation:none} .mbOv{transition:none} }
+    @media(prefers-reduced-motion:reduce){ body:not(.cmMotionOn) .mbStars,body:not(.cmMotionOn) .mbNode.now .nc,body:not(.cmMotionOn) .mbSubIn,body:not(.cmMotionOn) .mbHaloBig{animation:none} .mbOv{transition:none} }
+    body.cmMotionOff .mbStars,body.cmMotionOff .mbNode.now .nc,body.cmMotionOff .mbSubIn,body.cmMotionOff .mbHaloBig{animation:none!important}
     /* v0.15: «cómo avanza» + acciones por nodo + badge «＋N dentro» + progreso de exploración */
     .mbProg{display:block;color:#cdd6f5;font-size:12.5px;line-height:1.42;margin-top:8px;padding:7px 10px;background:rgba(255,255,255,.06);border-left:3px solid rgba(255,255,255,.28);border-radius:0 8px 8px 0}
     .mbProg b{color:#fff}
@@ -2576,8 +2608,12 @@
     if(bi) bi.addEventListener("click",function(){ stopAnim(); zoomAround(CX,CY,1.25); }); if(bo) bo.addEventListener("click",function(){ stopAnim(); zoomAround(CX,CY,1/1.25); }); if(br) br.addEventListener("click",function(){ collapseAll(); center(); showHint(); });
 
     /* ---- sub-ramas MULTINIVEL (recursivo: un nodo con kids abre otra capa) ---- */
-    function wrapText(str,x,y,fs,fill,maxlen){ var g=el("g",{}); var words=str.split(" "), lines=[], cur="";
-      words.forEach(function(w){ if((cur+" "+w).trim().length>maxlen){ if(cur) lines.push(cur); cur=w; } else cur=(cur+" "+w).trim(); }); if(cur) lines.push(cur);
+    function wrapText(str,x,y,fs,fill,maxlen,maxLines){ var g=el("g",{}); var words=(str||"").replace(/[-–]/g," ").split(/\s+/), lines=[], cur="";
+      words.forEach(function(w){
+        if(w.length>maxlen){ if(cur){lines.push(cur);cur="";} while(w.length>maxlen){lines.push(w.slice(0,maxlen-1)+"-");w=w.slice(maxlen-1);} cur=w; }
+        else if((cur+" "+w).trim().length>maxlen){ if(cur) lines.push(cur); cur=w; } else cur=(cur+" "+w).trim();
+      }); if(cur) lines.push(cur);
+      if(maxLines&&lines.length>maxLines){ lines=lines.slice(0,maxLines); var last=lines[maxLines-1]; lines[maxLines-1]=(last.length>=maxlen?last.slice(0,maxlen-1):last)+"…"; }
       var lh=fs+2, y0=y-(lines.length-1)*lh/2; lines.forEach(function(line,i){ var t=el("text",{x:x,y:y0+i*lh,"text-anchor":"middle","dominant-baseline":"middle","font-size":fs,"font-weight":"700",fill:fill}); t.textContent=line; g.appendChild(t); }); return g; }
     var openSet=[], subLayer=null, kidReg=[]; /* kidReg = sub-nodos DIBUJADOS ahora (para el rescate de taps) */
     function isOpen(n){ return openSet.indexOf(n)>=0; }
@@ -2590,11 +2626,13 @@
       var depth=(parent.__depth||0)+1, color=parent.__color||stOf(parent.st).c, top=parent.__top||parent;
       var pang=Math.atan2(parent.y-CY,parent.x-CX), n=kids.length, spread=Math.min(Math.PI*1.15,.55+n*.32), stp=n>1?spread/(n-1):0, start=pang-spread/2, SR=depth===1?160:122;
       kids.forEach(function(kd,j){ var ang=n>1?start+stp*j:pang; kd.x=parent.x+SR*Math.cos(ang); kd.y=parent.y+SR*Math.sin(ang); kd.__depth=depth; kd.__color=color; kd.__top=top; kd.__parent=parent; /* v0.36: ref a la madre para encuadrarla al tocar una hoja */
-        var ln=el("line",{x1:parent.x,y1:parent.y,x2:kd.x,y2:kd.y,stroke:color,"stroke-width":depth===1?"2":"1.6",opacity:".5"}); ln.setAttribute("class","mbLink"+(reduce?"":" mbSubIn")); subLayer.appendChild(ln);
+        var animate=!document.body.classList.contains("cmMotionOff")&&(!reduce||document.body.classList.contains("cmMotionOn")), variant=["a","b","c"][j%3], delay=j*75;
+        var ln=el("line",{x1:parent.x,y1:parent.y,x2:kd.x,y2:kd.y,stroke:color,"stroke-width":depth===1?"2":"1.6",opacity:".5"}); ln.setAttribute("class","mbLink"+(animate?(" mbSubIn mbSubIn-"+variant):"")); if(animate) ln.style.animationDelay=delay+"ms"; subLayer.appendChild(ln);
         var hasKids=kd.kids&&kd.kids.length, r=depth===1?34:27;
-        var g=el("g",{"class":"mbNode"+(reduce?"":" mbSubIn"),tabindex:"0",role:"button"}); g.setAttribute("aria-label",kd.t+(hasKids?" — abre "+kd.kids.length+" dentro":"")); g.style.color=color; g.__node=kd; /* v0.23: ref para el hit-test nativo */
+        var g=el("g",{"class":"mbNode"+(animate?(" mbSubIn mbSubIn-"+variant):""),tabindex:"0",role:"button"}); if(animate) g.style.animationDelay=(delay+28)+"ms"; g.setAttribute("aria-label",kd.t+(hasKids?" — abre "+kd.kids.length+" dentro":"")); g.style.color=color; g.__node=kd; /* v0.23: ref para el hit-test nativo */
         var c=el("circle",{cx:kd.x,cy:kd.y,r:r,fill:"#141a2e",stroke:color,"stroke-width":depth===1?"2.5":"2"}); c.setAttribute("class","nc"); g.appendChild(c);
-        g.appendChild(wrapText(kd.t,kd.x,kd.y,depth===1?11:10,"#e8edf8",depth===1?13:12));
+        g.appendChild(el("circle",{cx:kd.x-8,cy:kd.y-8,r:Math.max(5,r*.24),fill:"rgba(255,255,255,.08)","pointer-events":"none"}));
+        var kidText=wrapText(kd.t,kd.x,kd.y,depth===1?9.7:8.8,"#e8edf8",depth===1?11:8,3); kidText.setAttribute("class","mbNodeText"); g.appendChild(kidText);
         if(hasKids){ var pb=el("text",{x:kd.x,y:kd.y+r+13,"text-anchor":"middle","font-size":"10.5","font-weight":"800",fill:color}); pb.textContent=(isOpen(kd)?"▾ ":"＋ ")+kd.kids.length+" dentro"; g.appendChild(pb); }
         (function(node){ function act(){ if(proposeMode){ pickParent(node); } else { onNodeClick(node); } } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(kd);
         subLayer.appendChild(g); kidReg.push({nd:kd,r:r});
@@ -2612,11 +2650,12 @@
       kidReg.forEach(function(kk){ var d=Math.hypot(px-kk.nd.x,py-kk.nd.y); if(d<=kk.r+6 && d<bd){ bd=d; best=kk.nd; } });
       try{ (ghostReg||[]).forEach(function(gh){ var d=Math.hypot(px-gh.x,py-gh.y); if(d<=30 && d<bd){ bd=d; best={__ghost:gh.show}; } }); }catch(e){}
       return best; }
-    function onNodeClick(nd){ var hasKids=nd.kids&&nd.kids.length;
-      if(hasKids){ var willOpen=!isOpen(nd);
+    function onNodeClick(nd){ var hasKids=nd.kids&&nd.kids.length, willOpen=false;
+      if(hasKids){ willOpen=!isOpen(nd);
         if(willOpen && (nd.__depth||0)===0){ NODES.forEach(function(t){ if(t!==nd) setOpen(t,false); }); } /* a nivel raíz, una rama abierta a la vez */
         setOpen(nd,willOpen); renderSubs();
         if(willOpen) markExplored(nd); }
+      try{ if(typeof window.__cmMapSound==="function") window.__cmMapSound(nd,hasKids?willOpen:null); }catch(_snd){}
       /* v0.32 (Tony, 2º reporte: «sigue sin haber zoom suficiente a donde cliques»): cada toque
          ACERCA de verdad — suelo más alto (1.9 raíz / 2.6 sub-rama) y si ya estás a ese nivel,
          un 25% más cerca por toque hasta el techo 3.2. Y NUNCA aleja (v0.25 intacta). */
@@ -2848,6 +2887,8 @@
       NODES.forEach(function(nd){ var isNow=(M.ahora&&nd.emoji===M.ahora), hasKids=nd.kids&&nd.kids.length;
         var g=el("g",{"class":"mbNode"+(isNow?" now":""),tabindex:"0",role:"button"}); g.setAttribute("aria-label",(nd.q?nd.q+" — ":"")+nd.t+": "+stOf(nd.st).l+(isNow?" — aquí trabaja AHORA":"")+(hasKids?" — abre "+nd.kids.length+" sub-ramas":"")); g.style.color=stOf(nd.st).c; g.__node=nd; /* v0.23: ref para el hit-test nativo */
         var c=el("circle",{cx:nd.x,cy:nd.y,r:46,fill:"#141a2e",stroke:stOf(nd.st).c,"stroke-width":"4"}); c.setAttribute("class","nc"); g.appendChild(c);
+        g.appendChild(el("circle",{cx:nd.x,cy:nd.y,r:38,fill:"none",stroke:"rgba(255,255,255,.08)","stroke-width":"1","pointer-events":"none"}));
+        g.appendChild(el("circle",{cx:nd.x-13,cy:nd.y-13,r:10,fill:"rgba(255,255,255,.055)","pointer-events":"none"}));
         /* v0.19: ANILLO exterior = cuánto RINDE esta rama (benef 0-10); empieza arriba y recorre en proporción */
         if(nd.benef!=null){ var RR=55, CIRC=2*Math.PI*RR;
           var ring=el("circle",{cx:nd.x,cy:nd.y,r:RR,fill:"none",stroke:stOf(nd.st).c,"stroke-width":"3.5","stroke-linecap":"round","stroke-dasharray":(CIRC*nd.benef/10).toFixed(1)+" "+CIRC.toFixed(1),opacity:".9",transform:"rotate(-90 "+nd.x+" "+nd.y+")"}); ring.setAttribute("class","mbRing"); g.appendChild(ring);
@@ -2864,15 +2905,16 @@
              cruzado por texto/fecha (data-rama en el palmares), reusado via window.__failedRamas. */
           if(window.__failedRamas && window.__failedRamas[nd.emoji]){ var fb=el("text",{x:nd.x-34,y:nd.y-30,"text-anchor":"middle","font-size":"20"}); fb.textContent="🍂";
             var fbt=document.createElementNS(NS,"title"); fbt.textContent=nd.t+": tiene una apuesta pública que FALLÓ — se enseña sin maquillar, míralo en el palmarés."; fb.appendChild(fbt); g.appendChild(fb); } }
-        var em=el("text",{x:nd.x,y:nd.y+1,"text-anchor":"middle","dominant-baseline":"middle","font-size":"32"}); em.textContent=nd.emoji; g.appendChild(em);
-        var lbl=el("text",{x:nd.x,y:nd.y+68,"text-anchor":"middle","font-size":"14","font-weight":"700",fill:"#dde4f5"}); g.appendChild(lbl);
-        var lblLines=wrapSvgText(lbl, nd.q||nd.t, nd.x, 15, 15);
+        var em=el("text",{x:nd.x,y:nd.y-11,"text-anchor":"middle","dominant-baseline":"middle","font-size":"27"}); em.textContent=nd.emoji; g.appendChild(em);
+        var nodeText=wrapText(nd.t,nd.x,nd.y+21,9.5,"#f2f5ff",13,2); nodeText.setAttribute("class","mbNodeText"); g.appendChild(nodeText);
+        var lblLines=0;
+        if(nd.q){ var lbl=el("text",{x:nd.x,y:nd.y+68,"text-anchor":"middle","font-size":"13","font-weight":"700",fill:"#dde4f5"}); g.appendChild(lbl); lblLines=wrapSvgText(lbl,nd.q,nd.x,16,14); }
         /* v0.35 (decisión de Tony 10-jul): en 2 nodos la etiqueta principal es una PREGUNTA; el nombre de siempre se conserva, pequeño y encima del nodo */
         if(nd.q){ var nm=el("text",{x:nd.x,y:nd.y-64,"text-anchor":"middle","font-size":"11.5","font-weight":"600",fill:"#93a0bf"}); nm.textContent=nd.t; g.appendChild(nm); }
         /* v0.35: frase de curiosidad — que se entienda POR QUÉ entrar sin tener que entrar */
         var fraseLines=0;
-        if(nd.frase){ var fr=el("text",{x:nd.x,y:nd.y+86+(lblLines-1)*15,"text-anchor":"middle","font-size":"11.5","font-style":"italic",fill:"#9aa7c9"}); g.appendChild(fr); fraseLines=wrapSvgText(fr, nd.frase, nd.x, 20, 14); }
-        if(hasKids){ var pb=el("text",{x:nd.x,y:nd.y+(nd.frase?103+(fraseLines-1)*14:85)+(lblLines-1)*15,"text-anchor":"middle","font-size":"11.5","font-weight":"800",fill:stOf(nd.st).c}); pb.setAttribute("class","mbPlus"); pb.textContent="＋ "+nd.kids.length+" dentro"; g.appendChild(pb); }
+        if(nd.frase){ var fr=el("text",{x:nd.x,y:nd.y+86+Math.max(0,lblLines-1)*14,"text-anchor":"middle","font-size":"11.5","font-style":"italic",fill:"#9aa7c9"}); g.appendChild(fr); fraseLines=wrapSvgText(fr, nd.frase, nd.x, 20, 14); }
+        if(hasKids){ var pb=el("text",{x:nd.x,y:nd.y+(nd.frase?103+(fraseLines-1)*14:85)+Math.max(0,lblLines-1)*14,"text-anchor":"middle","font-size":"11.5","font-weight":"800",fill:stOf(nd.st).c}); pb.setAttribute("class","mbPlus"); pb.textContent="＋ "+nd.kids.length+" dentro"; g.appendChild(pb); }
         if(isNow){ var nb=el("text",{x:nd.x,y:nd.y-(nd.q?82:60),"text-anchor":"middle","font-size":"12","font-weight":"800",fill:"#fff"}); nb.textContent="● AHORA"; g.appendChild(nb); }
         (function(node){ function act(){ if(proposeMode){ pickParent(node); } else { onNodeClick(node); } } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(nd);
         view.appendChild(g); });
@@ -4226,6 +4268,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-14',titulo:'🐈 v1.61 — El cuaderno responde al tacto: gato, mapa, ASMR y visitas vivas',detalle:'El gato dormido usa la imagen elegida por Tony y maúlla al tocarlo. Las subramas del mapa nacen de una en una con 3 estilos, sonidos propios y texto medido dentro de cada nodo. Las 13 zonas ASMR dejan de estar ocultas, sus controles miden al menos 44px y una franja visible invita ocasionalmente a tocarla. «No entiendo → señalar» ya acepta cualquier punto de la tarjeta. Cada 6–7 visible se vuelve un meme con ola y sonido. El panel de realidad gana jerarquía visual sin cambiar sus datos; Inglés aplica globalmente a cualquier bloque data-en, incluso futuro; y Visitas incorpora una gráfica horizontal con hitos y solo cifras verificadas: 695 en la captura del 14-jul más el contador real actual, nunca 1.200 inventadas.'},
     {fecha:'2026-07-14',titulo:'🫀 v1.60 — El Diario deja de fallar por cuota y el primer toque móvil llega a su destino',detalle:'El Diario ya no consulta GitHub en cada visita: lee el changelog incluido en la propia versión, enlaza al historial y distingue claramente la fecha del Cuaderno de la foto de estado de MADRE. En móvil, los controles iniciales ocupan una sola franja sin tapar el contenido. Durante la animación de entrada, el primer toque ejecuta su acción antes de terminar la animación. El número del pie se deriva del último cambio y deja de quedarse atrás. El verificador protege desde ahora las cuatro regresiones: llamada API, solapes, primer CTA y versión visible.'},
     {fecha:'2026-07-13',titulo:'🐛 v1.58 — Caza final: el verdadero origen del scroll fantasma',detalle:'Ahora SÍ he arreglado los 2 bugs que faltaban: (1) Las finas rayas moradas en la cima se han ocultado para siempre. (2) El scroll horizontal de 10px no se arreglaba ocultando el overflow, sino atacando la raíz: los seudoelementos de los botones y chips (.btn, .chip) tenían un inset de -10px pero carecían de position: relative, por lo que su área táctil se expandía 10px fuera de la pantalla. Además, se ha cambiado un width: 100vw problemático a 100%.'},
     {fecha:'2026-07-13',titulo:'🐛 v1.57 — Botones separados y 0 recortes abajo',detalle:'He arreglado 2 bugs visuales: (1) En móviles estrechos, las áreas invisibles de los botones English y Vivo se solapaban al tocarlas: ahora tienen más aire y es imposible equivocarse. (2) Los botones flotantes que en iOS quedaban cortados abajo, ahora respetan el espacio seguro (env safe-area-inset-bottom).'},
@@ -5326,6 +5369,10 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
   display:block; transform-origin:50% 80%;
   animation:gxg-idle 3.6s ease-in-out infinite;
 }
+.gxg-cat .gxg-sleep-img{
+  display:none; position:absolute; left:-5px; top:-5px; width:54px; height:54px;
+  object-fit:contain; pointer-events:none; transform-origin:50% 80%;
+}
 @keyframes gxg-idle{
   0%,100%{ transform:translateY(0) rotate(0deg); }
   25%{ transform:translateY(-2px) rotate(-4deg); }
@@ -5338,7 +5385,8 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
   50%{ transform:translateY(-4px) rotate(9deg) scaleX(var(--gxg-dir,1)); }
   100%{ transform:translateY(0) rotate(-9deg) scaleX(var(--gxg-dir,1)); }
 }
-.gxg-cat.gxg-sleep .gxg-emoji{ animation:gxg-breathe 3.2s ease-in-out infinite; opacity:.85; }
+.gxg-cat.gxg-sleep .gxg-emoji{ display:none; }
+.gxg-cat.gxg-sleep .gxg-sleep-img{ display:block; animation:gxg-breathe 3.2s ease-in-out infinite; }
 @keyframes gxg-breathe{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
 
 .gxg-bubble{
@@ -5517,9 +5565,17 @@ cat.setAttribute('tabindex','0');
 var emoji = D.createElement('span');
 emoji.className = 'gxg-emoji';
 emoji.textContent = '🐈';
+var sleepImg = D.createElement('img');
+sleepImg.className = 'gxg-sleep-img';
+sleepImg.src = 'assets/gato-durmiendo.webp';
+sleepImg.alt = '';
+sleepImg.width = 54; sleepImg.height = 54;
+sleepImg.draggable = false;
+sleepImg.setAttribute('aria-hidden','true');
 var bubble = D.createElement('div');
 bubble.className = 'gxg-bubble';
 cat.appendChild(emoji);
+cat.appendChild(sleepImg);
 cat.appendChild(bubble);
 D.body.appendChild(cat);
 
@@ -5545,7 +5601,7 @@ var phrasesEN = ['yeow!','paws off 😼','404: meow not found','I\'m busy rn','s
 function catPhrases(){ return (D.documentElement.lang==='en') ? phrasesEN : phrases; }
 var pIdx = 0;
 // poses del gato: cambia de "cara" según lo que hace (idle / asustado / dormido)
-var POSE_IDLE=['🐈','🐈‍⬛','😺','😸','🐱'], POSE_SCARED=['🙀','😿','😼'], POSE_SLEEP='😴';
+var POSE_IDLE=['🐈','🐈‍⬛','😺','😸','🐱'], POSE_SCARED=['🙀','😿','😼'];
 function setPose(p){ try{ emoji.textContent=p; }catch(e){} }
 function idlePose(){ setPose(POSE_IDLE[Math.floor(Math.random()*POSE_IDLE.length)]); }
 
@@ -5655,6 +5711,7 @@ function onMove(ev){
 function onPoke(ev){
   ev.preventDefault();
   ev.stopPropagation();
+  catSound();
   var px, py;
   try {
     if (ev.touches && ev.touches[0]){ px = ev.touches[0].clientX; py = ev.touches[0].clientY; }
@@ -5664,11 +5721,15 @@ function onPoke(ev){
   flee(px, py);
 }
 
+var lastCatSound=0;
+function catSound(){ var now=Date.now(); if(now-lastCatSound<500) return; lastCatSound=now;
+  try{ if(typeof W.__cmCatMeow==='function') W.__cmCatMeow(); }catch(e){} }
+
 cat.addEventListener('click', onPoke);
 // MÓVIL: huye al tocarlo PERO sin bloquear el scroll (passive, sin preventDefault) — antes "se atascaba".
-cat.addEventListener('touchstart', function(ev){ var t=(ev.touches&&ev.touches[0])?ev.touches[0]:null; flee(t?t.clientX:(x+SIZE/2), t?t.clientY:(y+SIZE/2)); }, {passive:true});
+cat.addEventListener('touchstart', function(ev){ var t=(ev.touches&&ev.touches[0])?ev.touches[0]:null; catSound(); flee(t?t.clientX:(x+SIZE/2), t?t.clientY:(y+SIZE/2)); }, {passive:true});
 cat.addEventListener('keydown', function(ev){
-  if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); flee(x+SIZE/2, y+SIZE/2); }
+  if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); catSound(); flee(x+SIZE/2, y+SIZE/2); }
 });
 if (!('ontouchstart' in W)) {
   D.addEventListener('mousemove', onMove, {passive:true});
@@ -5693,7 +5754,6 @@ function checkSleep(){
   if (!asleep && !cat.classList.contains('gxg-hidden') && Date.now()-lastInteract > 11000){
     asleep = true;
     cat.classList.add('gxg-sleep');
-    setPose(POSE_SLEEP);
     bubble.textContent = '💤';
   }
 }
@@ -6385,6 +6445,12 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 .cmv-draw img{width:72px;height:54px;object-fit:cover;border-radius:8px;background:#fafafa;border:1px solid #eee}
 .cmv-think{background:linear-gradient(135deg,#fff6fb,#f3f0ff);border:1px solid #ecdcf5;border-radius:14px;padding:12px 13px;font-size:.9rem;line-height:1.45;font-style:italic;color:#5a3d7a}
 .cmv-empty{color:#9a9ab0;font-size:.82rem}
+.cmv-chart-note{margin:8px 0 7px;color:#756e88;font-size:.75rem;line-height:1.35}
+.cmv-chart-scroll{overflow-x:auto;overflow-y:hidden;width:100%;border:1px solid #e5e1f2;border-radius:14px;background:linear-gradient(180deg,#fbfaff,#f5f7ff);cursor:grab;scrollbar-color:#a78bfa #eeebf7;touch-action:pan-x;overscroll-behavior-x:contain}
+.cmv-chart-scroll.drag{cursor:grabbing;user-select:none}.cmv-chart-scroll:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+.cmv-chart-scroll svg{display:block;width:820px;height:220px;max-width:none}.cmv-chart-scroll text{font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+.cmv-chart-help{margin:5px 2px 0;color:#8a7fc0;font-size:.7rem;font-weight:700}
+.cmv-eventList{margin:8px 0 0;padding-left:19px;color:#625b76;font-size:.72rem;line-height:1.45}.cmv-eventList b{color:#30264d}
 .cmv-foot{margin-top:12px;font-size:.72rem;color:#a0a0b4;text-align:center}
 @media(prefers-reduced-motion:reduce){#cmvCard{animation:none}}
 </style>
@@ -6394,10 +6460,11 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   var fab=D.createElement("button"); fab.id="cmvFab"; fab.type="button"; fab.title="El cuaderno por dentro";
   fab.innerHTML='<span class="cmv-eye">👁️</span><span class="cmv-n">·</span>';
   D.body.appendChild(fab);
-  var nEl=fab.querySelector(".cmv-n");
+  var nEl=fab.querySelector(".cmv-n"), lastView=null, chartHost=null;
   function fmtN(v){ var x=parseInt(v,10); if(isNaN(x)) return "·"; try{ return x.toLocaleString("es-ES"); }catch(e){ return ""+x; } }
-  function setView(v){ nEl.textContent=fmtN(v); }
+  function setView(v){ var x=parseInt(v,10); nEl.textContent=fmtN(v); lastView=isNaN(x)?null:x; var big=card&&card.querySelector&&card.querySelector(".cmv-big"); if(big)big.textContent=fmtN(v); if(chartHost&&chartHost.isConnected) buildVisitChart(chartHost,lastView); }
   function el(tag,cls,txt){ var d=D.createElement(tag); if(cls)d.className=cls; if(txt!=null)d.textContent=txt; return d; }
+  function trEl(tag,cls,es,en){ var d=el(tag,cls,es); if(en)d.dataset.en=en; return d; }
   function waitSb(cb,err){ if(window.__sb){cb(window.__sb);return;} var t=0,iv=setInterval(function(){ t++; if(window.__sb){clearInterval(iv);cb(window.__sb);} else if(t>=25){clearInterval(iv); if(err)err();} },400); }
 
   // contar la visita una vez por sesión (un refresco en la misma pestaña no infla el número)
@@ -6428,29 +6495,50 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
   ov.appendChild(card); D.body.appendChild(ov);
   function close(){ ov.classList.remove("cmv-show"); }
   ov.addEventListener("click",function(e){ if(e.target===ov) close(); });
-  function section(title){ var s=el("div","cmv-sec"); s.appendChild(el("div","cmv-h",title)); return s; }
+  function section(title,en){ var s=el("div","cmv-sec"); s.appendChild(trEl("div","cmv-h",title,en)); return s; }
+  function buildVisitChart(host,total){
+    host.textContent="";
+    host.appendChild(trEl("p","cmv-chart-note","Histórico real disponible desde el 14 jul. Los huecos anteriores no se inventan.","Real history is available from 14 Jul. Earlier gaps are not invented."));
+    var sc=el("div","cmv-chart-scroll"); sc.tabIndex=0; sc.setAttribute("role","region"); sc.setAttribute("aria-label","Gráfico horizontal de visitas observadas y momentos importantes");
+    var NS="http://www.w3.org/2000/svg", svg=D.createElementNS(NS,"svg"); svg.setAttribute("viewBox","0 0 820 220"); svg.setAttribute("role","img"); svg.setAttribute("aria-label","Visitas verificadas: 695 el 14 de julio"+(total!=null&&total!==695?", "+total+" ahora":""));
+    function se(n,a,txt){var x=D.createElementNS(NS,n);Object.keys(a||{}).forEach(function(k){x.setAttribute(k,a[k]);});if(txt!=null)x.textContent=txt;svg.appendChild(x);return x;}
+    se("line",{x1:45,y1:168,x2:785,y2:168,stroke:"#c9c3dc","stroke-width":"2"});
+    var events=[{x:85,d:"21 jun",es:"Cuaderno público",en:"Notebook goes public"},{x:330,d:"8 jul",es:"Primera señal externa",en:"First outside signal"},{x:560,d:"14 jul",es:"Captura verificada",en:"Verified screenshot"}];
+    events.forEach(function(ev){se("line",{x1:ev.x,y1:42,x2:ev.x,y2:168,stroke:"#ddd7ec","stroke-dasharray":"3 6"});se("circle",{cx:ev.x,cy:168,r:5,fill:"#7c3aed"});se("text",{x:ev.x,y:188,"text-anchor":"middle","font-size":"11","font-weight":"800",fill:"#4b3b78"},ev.d);var lab=se("text",{x:ev.x,y:203,"text-anchor":"middle","font-size":"9.5",fill:"#766d91"},ev.es);lab.dataset.en=ev.en;});
+    var pts=[{x:560,n:695,label:"695 · 14 jul"}]; if(total!=null&&total!==695)pts.push({x:755,n:total,label:fmtN(total)+" · ahora"});
+    var nums=pts.map(function(p){return p.n;}), lo=Math.min.apply(null,nums), hi=Math.max.apply(null,nums);
+    pts.forEach(function(p){p.y=hi===lo?92:138-((p.n-lo)/(hi-lo))*70;});
+    if(pts.length>1)se("polyline",{points:pts.map(function(p){return p.x+","+p.y;}).join(" "),fill:"none",stroke:"#7c3aed","stroke-width":"4","stroke-linecap":"round","stroke-linejoin":"round"});
+    pts.forEach(function(p){se("circle",{cx:p.x,cy:p.y,r:9,fill:"#fff",stroke:"#7c3aed","stroke-width":"4"});se("text",{x:p.x,y:p.y-17,"text-anchor":"middle","font-size":"14","font-weight":"900",fill:"#2f2450"},p.label);});
+    sc.appendChild(svg); host.appendChild(sc);
+    host.appendChild(trEl("div","cmv-chart-help","↔ Desliza horizontalmente · también funcionan ← →","↔ Swipe horizontally · ← → also work"));
+    var list=el("ul","cmv-eventList"); [["21 jun","se abrió al público","went public"],["8 jul","llegó la primera señal externa","the first outside signal arrived"],["14 jul","695 visitas, verificadas en captura","695 visits, verified by screenshot"]].forEach(function(row){var li=D.createElement("li");li.innerHTML="<b>"+row[0]+"</b> · "+row[1];li.dataset.en="<b>"+row[0]+"</b> · "+row[2];list.appendChild(li);});host.appendChild(list);
+    var drag=false,sx=0,sl=0;sc.addEventListener("pointerdown",function(e){if(e.pointerType==="touch")return;drag=true;sx=e.clientX;sl=sc.scrollLeft;sc.classList.add("drag");try{sc.setPointerCapture(e.pointerId);}catch(_e){}});sc.addEventListener("pointermove",function(e){if(drag)sc.scrollLeft=sl-(e.clientX-sx);});function end(){drag=false;sc.classList.remove("drag");}sc.addEventListener("pointerup",end);sc.addEventListener("pointercancel",end);sc.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){e.preventDefault();sc.scrollBy({left:90,behavior:"smooth"});}if(e.key==="ArrowLeft"){e.preventDefault();sc.scrollBy({left:-90,behavior:"smooth"});}});
+    setTimeout(function(){sc.scrollLeft=sc.scrollWidth-sc.clientWidth;},0);
+  }
 
   function open(){
     card.textContent="";
     var x=el("button","cmv-x"); x.type="button"; x.textContent="×"; x.setAttribute("aria-label","cerrar"); x.onclick=close; card.appendChild(x);
-    card.appendChild(el("h3",null,"📒 El cuaderno por dentro"));
-    card.appendChild(el("p","cmv-sub","Lo que está vivo aquí dentro ahora mismo."));
+    card.appendChild(trEl("h3",null,"📒 El cuaderno por dentro","📒 Inside the notebook"));
+    card.appendChild(trEl("p","cmv-sub","Lo que está vivo aquí dentro ahora mismo.","What is alive inside it right now."));
 
-    var sV=section("👁️ Visitas");
+    var sV=section("👁️ Visitas","👁️ Visits");
     sV.appendChild(el("div","cmv-big",(nEl.textContent==="·"?"—":nEl.textContent)));
-    sV.appendChild(el("div","cmv-sub","personas han abierto el cuaderno. Empieza en 0 a propósito — mide el mundo, no las ganas."));
+    sV.appendChild(trEl("div","cmv-sub","personas han abierto el cuaderno. Empieza en 0 a propósito — mide el mundo, no las ganas.","people have opened the notebook. It starts at 0 on purpose — it measures the world, not wishful thinking."));
+    chartHost=el("div","cmv-chart"); buildVisitChart(chartHost,lastView); sV.appendChild(chartHost);
     card.appendChild(sV);
 
-    var sA=section("📊 Actividad");
+    var sA=section("📊 Actividad","📊 Activity");
     var stats=el("div","cmv-stats");
-    var cC=el("div","cmv-stat"); cC.appendChild(el("b",null,"—")); cC.appendChild(el("span",null,"comentarios"));
-    var cD=el("div","cmv-stat"); cD.appendChild(el("b",null,"—")); cD.appendChild(el("span",null,"dibujos"));
-    var cF=el("div","cmv-stat"); cF.appendChild(el("b",null,"—")); cF.appendChild(el("span",null,"resp. MADRE"));
+    var cC=el("div","cmv-stat"); cC.appendChild(el("b",null,"—")); cC.appendChild(trEl("span",null,"comentarios","comments"));
+    var cD=el("div","cmv-stat"); cD.appendChild(el("b",null,"—")); cD.appendChild(trEl("span",null,"dibujos","drawings"));
+    var cF=el("div","cmv-stat"); cF.appendChild(el("b",null,"—")); cF.appendChild(trEl("span",null,"resp. MADRE","MADRE replies"));
     stats.appendChild(cC); stats.appendChild(cD); stats.appendChild(cF); sA.appendChild(stats); card.appendChild(sA);
 
-    var sL=section("💬 Lo más querido"); var lWrap=el("div"); lWrap.appendChild(el("div","cmv-empty","cargando…")); sL.appendChild(lWrap); card.appendChild(sL);
-    var sDr=section("🎨 Dibujo más votado"); var drWrap=el("div"); drWrap.appendChild(el("div","cmv-empty","cargando…")); sDr.appendChild(drWrap); card.appendChild(sDr);
-    var sM=section("🤱🏻 Lo que opina MADRE"); sM.appendChild(el("div","cmv-think", THOUGHTS[Math.floor(Math.random()*THOUGHTS.length)])); card.appendChild(sM);
+    var sL=section("💬 Lo más querido","💬 Most loved"); var lWrap=el("div"); lWrap.appendChild(el("div","cmv-empty","cargando…")); sL.appendChild(lWrap); card.appendChild(sL);
+    var sDr=section("🎨 Dibujo más votado","🎨 Most-voted drawing"); var drWrap=el("div"); drWrap.appendChild(el("div","cmv-empty","cargando…")); sDr.appendChild(drWrap); card.appendChild(sDr);
+    var sM=section("🤱🏻 Lo que opina MADRE","🤱🏻 What MADRE thinks"); sM.appendChild(el("div","cmv-think", THOUGHTS[Math.floor(Math.random()*THOUGHTS.length)])); card.appendChild(sM);
     card.appendChild(el("div","cmv-foot","Cada vez que abres esto, MADRE piensa algo distinto."));
     ov.classList.add("cmv-show");
 
@@ -6668,7 +6756,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
 
   /* ---------- estilos por textura (autocontenido) ---------- */
   var css=document.createElement("style"); css.textContent=
-    ".cmTex{position:relative;margin:16px auto;max-width:640px;min-height:32px;border-radius:9px;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;gap:9px;padding:7px 12px;user-select:none;-webkit-user-select:none;touch-action:pan-y;box-shadow:inset 0 0 0 1px rgba(80,60,140,.12)}"+
+    ".cmTex{position:relative;margin:16px auto;max-width:640px;min-height:44px;border-radius:12px;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;gap:9px;padding:7px 12px;user-select:none;-webkit-user-select:none;touch-action:pan-y;box-shadow:inset 0 0 0 1px rgba(80,60,140,.16);transition:box-shadow .25s,transform .25s,filter .25s}"+
     ".cmTex::before{content:'';position:absolute;inset:0;background:radial-gradient(130px 46px at var(--mx,-200px) 50%,rgba(255,255,255,.6),transparent 70%);opacity:0;transition:opacity .2s;pointer-events:none}"+
     ".cmTex.lit::before{opacity:1}"+
     ".cmTex>*{position:relative;z-index:1}"+
@@ -6686,14 +6774,20 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     ".tex-nieve{background:radial-gradient(circle,rgba(180,210,255,.22) .5px,transparent 1px) 0 0/4px 4px,#f4f9ff}"+
     ".tex-cereales{background:radial-gradient(circle at 8px 6px,rgba(200,140,50,.20) 2px,transparent 3px) 0 0/16px 14px,#fdf6ea}"+
     ".tex-grava{background:radial-gradient(circle,rgba(110,110,120,.24) 1px,transparent 2px) 0 0/7px 7px,#eef0f2}"+
-    ".cmBub{width:21px;height:21px;border-radius:50%;border:none;flex:0 0 auto;cursor:pointer;padding:0;background:radial-gradient(circle at 35% 30%,#fff,rgba(124,58,237,.55) 68%,rgba(80,40,160,.7));box-shadow:0 1px 3px rgba(0,0,0,.25),inset 0 -2px 3px rgba(0,0,0,.18);transition:transform .08s}"+
+    ".cmBub{width:44px;height:44px;border-radius:50%;border:8px solid transparent;background-clip:padding-box;flex:0 0 auto;cursor:pointer;padding:0;background-color:rgba(124,58,237,.55);background-image:radial-gradient(circle at 35% 30%,#fff,rgba(124,58,237,.55) 68%,rgba(80,40,160,.7));box-shadow:0 1px 3px rgba(0,0,0,.25),inset 0 -2px 3px rgba(0,0,0,.18);transition:transform .08s}"+
     ".cmBub:hover{transform:scale(1.18)}"+
     ".cmBub.popped{background:radial-gradient(circle at 50% 50%,rgba(124,58,237,.14),rgba(124,58,237,.05));box-shadow:inset 0 1px 2px rgba(0,0,0,.3);cursor:default;transform:scale(.82)}"+
-    ".cmCrumb{flex:0 0 auto;border:none;background:transparent;cursor:pointer;font-size:17px;line-height:1;padding:4px 6px;transition:transform .1s;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}"+
+    ".cmCrumb{flex:0 0 auto;min-width:44px;min-height:44px;border:none;background:transparent;cursor:pointer;font-size:21px;line-height:1;padding:8px;transition:transform .1s;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}"+
     ".cmCrumb:hover{transform:scale(1.18) rotate(-6deg)}"+
+    ".cmTex.cmTexCall{box-shadow:0 0 0 3px rgba(124,58,237,.28),0 8px 24px rgba(124,58,237,.25),inset 0 0 0 1px rgba(80,60,140,.2);filter:saturate(1.12);animation:cmTexCall 1.15s ease-in-out 1}"+
+    ".cmTex.cmTexCall::after{content:attr(data-call);position:absolute;right:9px;top:4px;z-index:3;padding:3px 7px;border-radius:999px;background:#7c3aed;color:#fff;font:700 10px/1 system-ui;pointer-events:none}"+
+    ".cmTex.cmTexCall .cmBub,.cmTex.cmTexCall .cmCrumb{animation:cmTexWave .7s ease-in-out 1}"+
+    ".cmTex.cmTexCall button:nth-of-type(2){animation-delay:.08s}.cmTex.cmTexCall button:nth-of-type(3){animation-delay:.16s}.cmTex.cmTexCall button:nth-of-type(4){animation-delay:.24s}.cmTex.cmTexCall button:nth-of-type(5){animation-delay:.32s}"+
+    "@keyframes cmTexCall{0%,100%{transform:translateX(0)}35%{transform:translateX(3px)}65%{transform:translateX(-2px)}}"+
+    "@keyframes cmTexWave{0%,100%{transform:translateY(0) rotate(0)}45%{transform:translateY(-7px) rotate(-7deg)}}"+
     "body.asmrOff .cmTex{opacity:.42;filter:grayscale(.55)}"+
     "@media(max-width:640px){.cmTex{max-width:92vw;margin:12px auto}}"+
-    "@media(prefers-reduced-motion:reduce){.cmTex::before{transition:none}.cmBub,.cmCrumb{transition:none}}";
+    "@media(prefers-reduced-motion:reduce){.cmTex,.cmTex::before,.cmBub,.cmCrumb{transition:none}.cmTex.cmTexCall,.cmTex.cmTexCall .cmBub,.cmTex.cmTexCall .cmCrumb{animation:none}}";
   document.head.appendChild(css);
 
   /* ---------- VARIEDAD: 13 texturas que rotan por carga, sin repetir en la misma página ---------- */
@@ -6726,10 +6820,10 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   function nextType(){ if(!queue.length){ queue=buildQueue(); } return queue.shift(); }
 
   var ribbons=[];
-  function mkBubble(prof){ var b=document.createElement("button"); b.type="button"; b.tabIndex=-1; b.className="cmBub"; b.setAttribute("aria-label","burbuja para reventar");
+  function mkBubble(prof){ var b=document.createElement("button"); b.type="button"; b.tabIndex=0; b.className="cmBub"; b.setAttribute("aria-label","burbuja para reventar");
     b.addEventListener("click",function(e){ e.stopPropagation(); if(b.classList.contains("popped")) return; b.classList.add("popped"); hit(prof);
       setTimeout(function(){ try{ b.classList.remove("popped"); }catch(e){} }, 10000+Math.random()*6000); }); return b; }
-  function mkBit(emoji, prof){ var c=document.createElement("button"); c.type="button"; c.tabIndex=-1; c.className="cmCrumb"; c.textContent=emoji; c.setAttribute("aria-label","tócame para sonar");
+  function mkBit(emoji, prof){ var c=document.createElement("button"); c.type="button"; c.tabIndex=0; c.className="cmCrumb"; c.textContent=emoji; c.setAttribute("aria-label","tócame para sonar");
     c.addEventListener("click",function(e){ e.stopPropagation(); if(c.dataset.busy) return; c.dataset.busy="1"; hit(prof);
       try{ c.animate([{transform:"scale(1) rotate(0)"},{transform:"scale(1.3) rotate(-10deg)"},{transform:"scale(.25) rotate(14deg)",opacity:.15}],{duration:260}); }catch(_){}
       setTimeout(function(){ c.style.visibility="hidden"; },240);
@@ -6741,14 +6835,23 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
       if(i%2===0) continue;                       // una textura sí, otra no -> "esparcidas"
       var card=cards[i]; if(!card||!card.parentNode) continue;
       var ty=nextType();
-      var rib=document.createElement("aside"); rib.className="cmTex tex-"+ty.k; rib.setAttribute("aria-hidden","true"); rib.dataset.tex=ty.k;
-      rib.appendChild(mkLabel("✦ "+ty.lbl+" — rózame"));
+      var rib=document.createElement("aside"); rib.className="cmTex tex-"+ty.k; rib.dataset.tex=ty.k; rib.dataset.call="✨ tócame";
+      rib.setAttribute("aria-label","Zona ASMR de "+ty.lbl+": roza la franja o toca sus elementos para oírla");
+      rib.appendChild(mkLabel("✦ "+ty.lbl+" — rózame o toca"));
       if(ty.bub){ var nb=MOBILE?5:9; for(var k=0;k<nb;k++) rib.appendChild(mkBubble(ty.hit)); }
       else{ var nbits=MOBILE?3:6; for(var j=0;j<nbits;j++) rib.appendChild(mkBit(ty.bits[j%ty.bits.length], ty.hit)); }
       try{ card.parentNode.insertBefore(rib, card); ribbons.push(rib); }catch(e){}
     }
   }
   buildRibbons();
+
+  /* Descubrimiento sin ruido constante: al entrar una zona nueva en pantalla, una sola franja
+     llama suavemente la atención una vez. Calma/reduced-motion conserva el brillo, sin movimiento. */
+  function markTouched(rib){ if(!rib) return; rib.dataset.touched="1"; rib.classList.remove("cmTexCall"); try{ if(window.__cmTexFound) window.__cmTexFound(rib.dataset.tex); }catch(_e){} }
+  function callOut(rib){ if(!rib||rib.dataset.touched||document.hidden) return; ribbons.forEach(function(r){r.classList.remove("cmTexCall");}); rib.classList.add("cmTexCall"); setTimeout(function(){try{rib.classList.remove("cmTexCall");}catch(e){}},1900); }
+  ribbons.forEach(function(rib){ rib.addEventListener("pointerdown",function(){markTouched(rib);},{passive:true}); rib.addEventListener("focusin",function(){markTouched(rib);}); });
+  try{ if("IntersectionObserver" in window){ var seenTimer=0, io=new IntersectionObserver(function(entries){ entries.forEach(function(en){ var rib=en.target; if(!en.isIntersecting||rib.dataset.prompted||rib.dataset.touched) return; rib.dataset.prompted="1"; clearTimeout(seenTimer); seenTimer=setTimeout(function(){callOut(rib);},1000); }); },{threshold:.65}); ribbons.forEach(function(r){io.observe(r);}); } }catch(e){}
+  window.__cmNudgeAsmr=function(){ var visible=ribbons.filter(function(r){var b=r.getBoundingClientRect();return !r.dataset.touched&&b.bottom>0&&b.top<innerHeight;}); if(visible.length) callOut(visible[Math.floor(Math.random()*visible.length)]); };
 
   /* ---------- rozar = fricción según velocidad (timbre según la textura) ---------- */
   var lastX=0,lastY=0,lastT=0,brushT=0,litRib=null;
@@ -6763,7 +6866,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     var dt=Math.max(8,t-lastT), dx=x-lastX, dy=y-lastY, dist=Math.sqrt(dx*dx+dy*dy);
     var speed=Math.max(0,Math.min(1,(dist/dt)/2.2));
     brushT=t; lastX=x; lastY=y; lastT=t;
-    if(dist>3){ brush(rib.dataset.tex||"burbujas", speed); try{ if(window.__cmTexFound) window.__cmTexFound(rib.dataset.tex); }catch(_e){} }
+    if(dist>3){ markTouched(rib); brush(rib.dataset.tex||"burbujas", speed); }
   }
   if(canHover) document.addEventListener("pointermove",function(e){ onMove(e.clientX,e.clientY,e.target); },{passive:true});
   document.addEventListener("touchmove",function(e){ var tt=e.touches&&e.touches[0]; if(!tt) return; var el=document.elementFromPoint(tt.clientX,tt.clientY); if(el&&el.closest&&el.closest(".cmTex")) onMove(tt.clientX,tt.clientY,el); else clearLit(); },{passive:true});
@@ -6771,7 +6874,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   /* ---------- click suave en botones (las burbujas/crumbs ya suenan y paran la propagación) ---------- */
   document.addEventListener("click",function(e){ if(!enabled) return; var t=e.target; if(!t.closest) return;
     if(t.closest(".cmBub")||t.closest(".cmCrumb")) return;
-    if(t.closest("#gxg-cat-root, .chip, button, summary, [data-choice]")) softClick();
+    if(t.closest(".chip, button, summary, [data-choice]")) softClick();
   }, false);
 
   /* ---------- contrato del HUB + batería ---------- */
@@ -6816,8 +6919,9 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
 
   // ---- al marcar "no lo entiendo": ¿señalar la PARTE concreta, o solo seguir? ----
   function sendNieZone(card, section){ try{ if(window.__fb) window.__fb({card:cardTitle(card), section:section||"", tipo:"no-entiendo", texto:""}); }catch(e){} }
-  var curCard=null, curBtn=null, nieHint=null;
-  function endNieSelect(){ D.body.classList.remove("nieSelect"); if(nieHint){ try{nieHint.remove();}catch(e){} nieHint=null; } if(curCard){ try{curCard.classList.remove("nieScope");}catch(e){} } curCard=null; curBtn=null; }
+  var curCard=null, curBtn=null, nieHint=null, nieTarget=null;
+  function clearNieTarget(){ if(nieTarget){try{nieTarget.classList.remove("nieTarget");}catch(e){} nieTarget=null;} }
+  function endNieSelect(){ D.body.classList.remove("nieSelect"); clearNieTarget(); if(nieHint){ try{nieHint.remove();}catch(e){} nieHint=null; } if(curCard){ try{curCard.classList.remove("nieScope");}catch(e){} } curCard=null; curBtn=null; }
   try{ window.__exitNieSelect=endNieSelect; }catch(_){}
   function startNieSelect(card, btn){ try{ if(window.__exitLike) window.__exitLike(); }catch(_){}   // modos mutuamente exclusivos (mismo patron que activate() del lapiz, linea ~4770)
     endNieSelect(); curCard=card; curBtn=btn; D.body.classList.add("nieSelect"); try{card.classList.add("nieScope");}catch(e){}
@@ -6834,6 +6938,19 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     var top=r.bottom+6; if(top+h>window.innerHeight-8) top=Math.max(8, r.top-6-h); pop.style.top=top+"px";
     pop.style.left=Math.max(8, Math.min(window.innerWidth-w-8, r.left-60))+"px";
   }
+  function zoneAt(target,card){ if(!target||!card||!card.contains(target)) return null;
+    var el=target.closest&&target.closest("p,li,summary,button,a,img,svg,canvas,[role=button],.scoreRow,.chips,.fb,.vsHead,.cmVs,.senalItem,.body>*,.xb>*,.heroBtns,.heronote,.small");
+    if(el&&card.contains(el)) return el;
+    el=target.nodeType===1?target:target.parentElement;
+    while(el&&el.parentElement&&el.parentElement!==card) el=el.parentElement;
+    return (el&&card.contains(el))?el:card;
+  }
+  function zoneLabel(el,card,e){ var raw=""; try{if(el!==card) raw=el.getAttribute("aria-label")||el.getAttribute("title")||el.getAttribute("alt")||el.textContent||"";}catch(_e){}
+    raw=String(raw).replace(/\s+/g," ").trim(); if(raw) return raw.slice(0,80);
+    var r=card.getBoundingClientRect(), x=Math.max(0,Math.min(100,Math.round(((e.clientX-r.left)/Math.max(1,r.width))*100))), y=Math.max(0,Math.min(100,Math.round(((e.clientY-r.top)/Math.max(1,r.height))*100)));
+    return "Zona visual · "+x+"% horizontal · "+y+"% vertical";
+  }
+  D.addEventListener("pointermove",function(e){ if(!D.body.classList.contains("nieSelect")||!curCard) return; var el=zoneAt(e.target,curCard); if(el===nieTarget) return; clearNieTarget(); if(el){nieTarget=el;try{el.classList.add("nieTarget");}catch(_e){}} },{passive:true});
   // captura el clic de selección (fase de captura: intercepta y no deja que dispare otra cosa)
   D.addEventListener("click", function(e){
     if(!D.body.classList.contains("nieSelect")) return;
@@ -6841,16 +6958,15 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     if(e.target.closest && e.target.closest("#likeFab,#lapizFab,#chaosFab,#cmtFab,#fabHubBtn,#fabHubMenu,#fabHubActive")) return;   // v0.77: tocar OTRO boton de modo debe cambiar de modo, no quedar comido por este capture
     var card=curCard, btn=curBtn; if(!card){ endNieSelect(); return; }
     e.preventDefault(); e.stopPropagation();
-    var el=e.target.closest(".body p,.body li,.xb p,.d,.ctitle .t,summary,.dec,.alert,.step,p,li");
-    if(!el || !card.contains(el)){ endNieSelect(); return; }   // clic fuera de la tarjeta = salir sin enviar
-    var section=(el.textContent||"").trim().slice(0,80)||"(parte)";
+    if(!card.contains(e.target)){ endNieSelect(); return; }   // clic fuera de la tarjeta = salir sin enviar
+    var el=zoneAt(e.target,card), section=zoneLabel(el||card,card,e);
     sendNieZone(card, section); if(btn) ok(btn); endNieSelect();
   }, true);
   D.addEventListener("keydown", function(e){ if(e.key==="Escape" && D.body.classList.contains("nieSelect")) endNieSelect(); });
   (function(){ var st=D.createElement("style"); st.textContent=
     "body.nieSelect{cursor:crosshair}"+
     "body.nieSelect .nieScope{outline:3px dashed #d98a2b;outline-offset:3px;border-radius:12px}"+
-    "body.nieSelect .nieScope p:hover,body.nieSelect .nieScope li:hover,body.nieSelect .nieScope summary:hover,body.nieSelect .nieScope .t:hover,body.nieSelect .nieScope .d:hover{background:rgba(245,166,35,.20);border-radius:6px;box-shadow:0 0 0 2px rgba(245,166,35,.55);cursor:help}"+
+    "body.nieSelect .nieScope .nieTarget{background:rgba(245,166,35,.20)!important;border-radius:6px;box-shadow:0 0 0 2px rgba(245,166,35,.55)!important;cursor:help}"+
     "#nieSelHint{position:fixed;left:50%;top:10px;transform:translateX(-50%);background:#d98a2b;color:#fff;font:600 13px/1.2 system-ui,-apple-system,Segoe UI,sans-serif;padding:8px 14px;border-radius:999px;z-index:9300;box-shadow:0 4px 16px rgba(0,0,0,.25);pointer-events:none}";
     D.head.appendChild(st); })();
 
@@ -6863,6 +6979,37 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     btn.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); popFor(btn, card); });
   });
 }catch(e){ console.warn("nie-cards", e); } })();
+</script>
+
+<style id="cm67Css">
+.cm67{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:0;border:1px solid rgba(124,58,237,.32);border-radius:999px;background:linear-gradient(135deg,#fff,#f0e9ff);color:#5b21b6;font:800 1em/1 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:44px;padding:.18em .42em;margin:0 .08em;vertical-align:middle;cursor:pointer;box-shadow:0 2px 9px rgba(91,33,182,.14);-webkit-tap-highlight-color:transparent}
+.cm67:hover{box-shadow:0 4px 14px rgba(91,33,182,.26);transform:translateY(-1px)}
+.cm67:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+.cm67Char{display:inline-block;min-width:.42em;text-align:center;transform-origin:50% 90%}
+.cm67::after{content:"🌊";position:absolute;right:-17px;top:-12px;opacity:0;pointer-events:none;font-size:19px}
+.cm67.waving .cm67Char{animation:cm67CharWave .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 80ms)}
+.cm67.waving::after{animation:cm67Surf .9s ease-out both}
+@keyframes cm67CharWave{0%,100%{transform:translateY(0) rotate(0)}45%{transform:translateY(-9px) rotate(-8deg);color:#f59e0b}70%{transform:translateY(2px) rotate(5deg)}}
+@keyframes cm67Surf{0%{opacity:0;transform:translate(-12px,8px) scale(.5)}35%{opacity:1}100%{opacity:0;transform:translate(19px,-9px) scale(1.25)}}
+@media(prefers-reduced-motion:reduce){body:not(.cmMotionOn) .cm67.waving .cm67Char,body:not(.cmMotionOn) .cm67.waving::after{animation:none}.cm67:hover{transform:none}}
+body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{animation:none!important}
+</style>
+<script>
+/* Regla 6–7: cualquier aparición pública se convierte en el mismo pequeño meme interactivo.
+   TreeWalker toca solo texto visible/seguro; MutationObserver cubre contenido que llegue después. */
+(function(){try{
+  var D=document, RX=/(\b6(?:\s|[-–‑])+7\b)/g, busy=false, pending=false;
+  function skip(n){var p=n&&n.parentElement;return !p||!!p.closest("script,style,noscript,textarea,input,select,option,button,a,summary,[contenteditable=true],[aria-hidden=true],.cm67");}
+  function make(raw){var b=D.createElement("button");b.type="button";b.className="cm67";b.setAttribute("aria-label","Six Seven: activa el meme y la ola");b.title="Six Seven 🌊";
+    Array.from(raw).forEach(function(ch,i){var s=D.createElement("span");s.className="cm67Char";s.style.setProperty("--i",i);s.textContent=ch;b.appendChild(s);});
+    b.addEventListener("click",function(){b.classList.remove("waving");void b.offsetWidth;b.classList.add("waving");try{if(typeof window.__cm67Sound==="function")window.__cm67Sound();}catch(_e){}setTimeout(function(){b.classList.remove("waving");},1050);var a=D.getElementById("a11yAnnounce");if(a)a.textContent=D.documentElement.lang==="en"?"Six… seven! Wave!":"¡Seis… siete! ¡Ola!";});return b;}
+  function decorate(root){if(busy)return;busy=true;var nodes=[];
+    function take(n){if(n&&n.nodeType===3&&!skip(n)){RX.lastIndex=0;if(RX.test(n.nodeValue||""))nodes.push(n);}}
+    if(root&&root.nodeType===3)take(root);else{var w=D.createTreeWalker(root||D.body,NodeFilter.SHOW_TEXT);while(w.nextNode())take(w.currentNode);}
+    nodes.forEach(function(n){var text=n.nodeValue,parts=text.split(RX),f=D.createDocumentFragment();parts.forEach(function(part,i){f.appendChild(i%2?make(part):D.createTextNode(part));});n.parentNode&&n.parentNode.replaceChild(f,n);});busy=false;}
+  function schedule(){if(pending)return;pending=true;setTimeout(function(){pending=false;decorate(D.body);},0);}
+  decorate(D.body);new MutationObserver(schedule).observe(D.body,{childList:true,subtree:true});window.__cmDecorate67=decorate;
+}catch(e){console.warn("cm67",e);}})();
 </script>
 
 <script>
@@ -7039,7 +7186,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.60";
+  window.__cmVersion="v1.61";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
@@ -8545,12 +8692,26 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     o.frequency.setValueAtTime(f0,t); if(f1&&f1!==f0) o.frequency.exponentialRampToValueAtTime(f1,t+dur*0.8);
     g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(peak,t+0.008); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
     o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+dur+0.03); }
-  function meow(){ blip(720,470,0.16,0.05); setTimeout(function(){ blip(590,420,0.14,0.04); },110); }
+  /* Maullido sintético: dos sílabas y un armónico suave. Sigue pesando 0 bytes y solo suena
+     tras un gesto real; el hook permite que el gato lo dispare también por teclado/touch. */
+  function meow(){
+    blip(790,470,0.24,0.055,"triangle");
+    setTimeout(function(){ blip(1580,940,0.17,0.014,"sine"); },18);
+    setTimeout(function(){ blip(650,390,0.22,0.048,"triangle"); },155);
+  }
+  try{ window.__cmCatMeow=meow; }catch(_e){}
+  function mapSound(nd,opening){ if(calma()) return; var depth=(nd&&nd.__depth)||0, base=depth?430:360;
+    if(opening===true){ blip(base,base*1.16,.10,.045,"sine"); setTimeout(function(){blip(base*1.28,base*1.55,.12,.04,"triangle");},68); setTimeout(function(){blip(base*1.72,base*1.92,.15,.026,"sine");},145); }
+    else if(opening===false){ blip(base*1.55,base*1.18,.12,.04,"triangle"); setTimeout(function(){blip(base,base*.82,.14,.03,"sine");},82); }
+    else { blip(base*1.2,base*1.48,.1,.04,"sine"); setTimeout(function(){blip(base*1.9,base*1.65,.09,.018,"sine");},55); }
+  }
+  try{ window.__cmMapSound=mapSound; }catch(_e){}
+  function sixSevenSound(){ blip(360,520,.11,.045,"square"); setTimeout(function(){blip(670,820,.16,.05,"triangle");},105); }
+  try{ window.__cm67Sound=sixSevenSound; }catch(_e){}
   /* set CURADO de interacciones (pocas y bajitas, para no fatigar — NO suena cada summary/click) */
   document.addEventListener("click",function(e){
     var t=e.target; if(!t||!t.closest) return;
-    if(t.closest(".mapNode")){ blip(520,760,0.07,0.05); return; }
-    if(t.closest("#gxg-cat-root")){ meow(); return; }
+    if(t.closest(".mapNode")){ mapSound({__depth:0},true); return; }
     if(t.closest(".predBtn")){ blip(440,660,0.09,0.05); return; }
     if(t.closest(".prMoreBtn")||t.closest(".cardFoldBtn")){ blip(330,470,0.08,0.045); return; }
     if(t.closest("#cmMotionBtn")){ blip(500,500,0.05,0.04,"triangle"); return; }
