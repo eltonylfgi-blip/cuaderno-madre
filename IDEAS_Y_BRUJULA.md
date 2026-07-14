@@ -163,6 +163,36 @@ comparativa y falsable — "el final es malo" era el hecho, no la hipótesis. Re
 - **⚠️ GATED parcial:** una escena de cierre nueva = identidad/momento nuevo → enseñar a Tony la
   ganadora del torneo antes de fijarla (gate de identidad de CLAUDE.md).
 
+**H15 — "Si Caos exagera lo que el visitante ACABA de tocar con lenguaje MLG reconocible, será más
+memorable y menos cansado que una lluvia aleatoria de memes."**
+- Estado: **☐ Probando — Construida ✔ (v1.63).** El director central suma energía por eventos reales,
+  enseña combo/fase, limita a un titular héroe, deja el azar como condimento lento y limpia con Esc.
+  Bajo movimiento reducido no arranca tint, cámara, partículas ni bromas móviles.
+  `6,7` conserva un mini-MLG también fuera del modo; ninguna etiqueta puede afirmar éxito/estado.
+- **Decisión que cambia:** conservar y extender el director a más escenas semánticas, o volver al Caos
+  mínimo si la relación gesto→efecto no se entiende. No autoriza meter recursos MLG porque sí.
+- **Selector externo barato:** Tony activa Caos, toca al menos mapa/ASMR/gato y responde sin pistas qué
+  disparó cada golpe. Gana si identifica las causas y lo describe como MLG; pierde si dice «cosas random»,
+  si un titular tapa lectura o si necesita salir antes de tres interacciones.
+- **Cómo puede morir:** una observación real no distingue el nuevo modo del anterior, la cámara molesta
+  bajo la preferencia reducida o el 67 deja de caber a 375px. Se conserva el mini-meme que sí funcione y se poda el
+  director; no se sube intensidad para intentar rescatarlo.
+
+**H16 — "Si el visitante puede guardar sus zonas favoritas y al volver ve qué cambios PUBLICADOS las
+tocaron, el Cuaderno convierte feedback en una relación visible en vez de una caja negra."**
+- Estado: **☐ Probando — Construida ✔ (v1.63).** `cm_favorites_v1` sobrevive a la recarga; el feedback
+  existente recibe alta/actualización/retirada; el changelog horneado conserva `areas[]`; la tarjeta compara solo
+  versiones posteriores y admite «aún no hay» cuando corresponde. Respuestas de red antiguas no pueden
+  resucitar una nota borrada, y un fallo real al borrar se muestra en vez de fingir éxito.
+- **Decisión que cambia:** el siguiente ciclo de Cuaderno puede priorizar una zona con señal explícita y
+  mostrar la evidencia al volver. Si nadie guarda/retorna, no se convierte en perfil ni backend nuevo.
+- **Selector externo:** (1) aparece `tipo:favorito-madre*` en el inbox privado; (2) una versión futura
+  etiquetada con el área hace aparecer el cambio correcto al volver; (3) Tony reconoce que su nota sigue
+  siendo la misma. Los tres pasos forman el ciclo; guardar localmente por sí solo no confirma la hipótesis.
+- **Cómo puede morir:** no llega ninguna señal tras uso real, el visitante no vuelve/abre la tarjeta o las
+  coincidencias del changelog resultan engañosas. Se retira la promesa de seguimiento antes de añadir
+  perfiles, tablas o IA de matching.
+
 ### 🟨 Media palanca (bajo riesgo, no tocan el motor del mapa)
 
 **H13 — "Si las marcas de la barra de progreso (saltan a cada Acto) son legibles a simple vista, no
@@ -181,9 +211,11 @@ atención de forma puntual y recompensa el roce repetido con una manifestación 
   programa reclamos ocasionales (crecer/twirl/vibración, nunca movimiento constante) y aplica un contrato
   común de 3 fases: brillo local → primeras señales → efecto lateral semántico. `FX_MANIFEST` cubre 13/13;
   reduced-motion y el interruptor ASMR anulan los efectos móviles; máximo 24 elementos y limpieza automática.
-- **Selector externo:** uso real de Tony + votos `asmr-candidato-gusta/no-gusta` del Laboratorio que lleguen
-  al inbox (la preferencia local se conserva incluso offline). Si el reclamo no aumenta toques o molesta, se baja
-  frecuencia/intensidad; si una manifestación se siente genérica, no madura.
+  v1.63 añade 16/16 firmas auditivas declaradas y hace cada voto reversible con señal de retirada.
+- **Selector externo:** uso real de Tony + votos `asmr-candidato-gusta/no-gusta/retirado` del Laboratorio que
+  lleguen al inbox (la preferencia local se conserva incluso offline). Si el reclamo no aumenta toques o molesta,
+  se baja frecuencia/intensidad; si dos candidatas siguen sonando iguales al oído humano, una no madura aunque
+  sus firmas técnicas sean distintas.
 - **Regla heredable:** una textura nueva no está terminada hasta declarar `sonido + manifestación visual +
   umbrales progresivos + fallback sin movimiento`; el verificador debe fallar si queda fuera del manifiesto.
 - **Cómo puede morir:** si Tony la ignora incluso con reclamo puntual, si tapa lectura, o si el feedback marca

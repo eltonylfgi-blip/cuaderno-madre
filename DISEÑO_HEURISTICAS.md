@@ -39,7 +39,11 @@ opcional y la acción principal está a un toque.** Usabilidad extrema e interac
 - [ ] Teclado: Tab/Enter/Esc funcionan; `aria-live` en toasts
 - [ ] `prefers-reduced-motion` respetado por cada pieza
 - [ ] 375px sin desbordes (factor `K`/`MOBILE` recorta efectos ~70%)
+- [ ] Ningún texto de `.card` queda a <7px de un borde (incluido contenido directo sin `summary/.body`)
 - [ ] Modos exclusivos (no se solapan barras — ver §5)
+- [ ] Un panel largo en foco esconde los FAB inferiores que tapen su acción principal
+- [ ] Un modo de señalar zonas esconde controles fijos ajenos y reserva sitio para su instrucción
+- [ ] En móvil, ningún control superior queda `fixed` sobre el contenido normal: el aire inicial solo protege el aterrizaje, no todo el scroll
 - [ ] Barras fijas con `pointer-events:none`
 - [ ] Texto de usuario con `textContent` (anti-XSS)
 - [ ] Lúdico apagable + se pausa con `document.hidden`
@@ -57,6 +61,10 @@ opcional y la acción principal está a un toque.** Usabilidad extrema e interac
 - **Semilla visual por DÍA** (no por refresco) → huella visual estable 24h (PRNG sembrado con la fecha).
 - **HUB de FAB** `#fabHubBtn` + `body.fabhub` (oculta los sueltos): un solo botón "✦" con menú que **proxya** `real.click()` — NO recrea listeners. **Init en `DOMContentLoaded`** porque los FAB de comentarios viven en un `<script type=module>` (diferido).
 - **Contrato sensorial heredable**: cada textura ASMR nueva debe entrar en `MODELS` **y** en `FX_MANIFEST`, declarar respuesta visual semántica por intensidad y pasar el verificador de cobertura 1:1. El motor común limita a 24 elementos, limpia por TTL y respeta movimiento reducido. Si falta una manifestación, la textura no está terminada aunque ya suene.
+- **Laboratorio ASMR falsable**: cada candidata nueva declara una `signature` única en `LAB_MODELS`, enruta su propio `labPreview` y permite corregir el voto tocando de nuevo (`asmr-candidato-retirado`). Tener 16 nombres con menos de 16 firmas, o un voto irreversible, bloquea el verificador.
+- **MLG semántico, no lluvia de memes**: `window.__cmChaosDirector` acumula energía solo desde eventos reales (`branch:touch`, `asmr:phase`, `meme:67`…), mantiene un solo titular héroe, usa etiquetas que describen el gesto sin inventar resultados y limpia HUD/FX/clases con Esc. Bajo `prefers-reduced-motion` no arrancan bromas temporizadas, partículas, cámara ni tint animado. Fuera del opt-in, solo `6,7` conserva un mini-MLG breve y autocontenido.
+- **Tarjeta-carcasa vs contenido directo**: `.card` no lleva padding global porque `summary/.body` ya lo aportan. Cualquier tarjeta que meta texto directamente debe declarar `.cardPad`; el sensor abre/revela todas las tarjetas y mide ambos bordes a 375/1280px.
+- **Favoritas cierra un ciclo verificable**: `cm_favorites_v1` da memoria local inmediata; `tipo:favorito-madre`/`actualizado`/`retirado` usa el buzón privado ya existente; `areas[]` del changelog horneado permite que una visita futura muestre solo mejoras PUBLICADAS posteriores que coincidan. Un contador de operación impide que una respuesta de red vieja repinte una nota ya borrada y borrar solo se confirma si `localStorage.removeItem` tuvo éxito. Sin coincidencia, dice que aún no la hay: nunca promete implementación.
 - **«Me aburro» cierra un ciclo visible**: guardar `cm_fun_next_v1` cambia la visita inmediatamente siguiente sin depender de red; con conexión, `tipo:aburre` deja además una señal privada para que una versión futura pruebe **una** mejora divertida en la misma zona. No vale guardar la queja ni añadir confeti genérico: el visitante tiene que poder notar qué cambió.
 
 ## 4. Reutilizar para webs PERSONALIZADAS (clonar fácil)
@@ -81,7 +89,8 @@ Pensar en **3 capas** para que un clon sea barato:
 ## 6. Mecanismo de persistencia (cómo se usa este doc)
 - **Quién escribe**: una sesión de Claude Code añade lecciones a la **bitácora** (§8) y a §3/§5. La rutina
   `cuaderno-feedback` puede destilar las señales que hayan llegado de **"no entiendo"** (`tipo:no-entiendo`),
-  **"me aburro"** (`tipo:aburre`) y votos del laboratorio (`tipo:asmr-candidato-gusta/no-gusta`) por `card`/`section`.
+  **"me aburro"** (`tipo:aburre`), votos del laboratorio (`tipo:asmr-candidato-gusta/no-gusta/retirado`)
+  y favoritas (`tipo:favorito-madre/actualizado/retirado`) por `card`/`section`.
   Supabase es el buzón privado de señales, no el gobierno del producto: la rutina **NO reescribe estos
   principios**. Una regla aceptada se versiona aquí y, si es ejecutable, en código + verificador.
 - **Cómo lo usan futuras sesiones**: leer este doc ANTES de diseñar; usar el checklist §2 como gate.
@@ -130,13 +139,18 @@ Pensar en **3 capas** para que un clon sea barato:
 - **2026-07-14 (v1.62)** · **Una petición transversal solo se convierte en capacidad futura si queda como contrato falsable.** «Que todo ASMR nuevo reaccione más al insistir» ya no vive como idea suelta: `MODELS` + `FX_MANIFEST` + umbrales comunes + cobertura automática 1:1 + selector externo (uso y votos). Guardar texto sin mecanismo ni juez habría sido descripción, no aprendizaje.
 - **2026-07-14 (v1.62)** · **«Me aburro» debe cambiar el siguiente ciclo observable.** La capa local modifica la próxima visita sin esperar ni necesitar red (`cm_fun_next_v1`); cuando la conexión entrega `tipo:aburre`, esa señal privada alimenta además la siguiente revisión. Si una futura versión no puede señalar el cambio juguetón que hizo en esa zona, no aprendió.
 - **2026-07-14 (v1.62)** · **Backend parcial > backend nuevo para una hipótesis temprana.** La tabla de feedback con inserción pública y lectura privada ya sirve como buzón de mejoras/votos; no se añade tabla ni servicio hasta que el volumen real lo exija. La decisión de producto sigue versionada en estos documentos y en las pruebas, no escondida en una fila.
+- **2026-07-14 (v1.63)** · **Un catálogo distinto de nombre pero igual de sonido es variedad falsa.** El fallo medido fue 16 candidatas/9 modelos; la guarda correcta no es «intentar variar», sino 16 firmas declaradas + 16 rutas ejecutadas + voto humano reversible. · `LAB_MODELS`/`labProfiles`/verificador.
+- **2026-07-14 (v1.63)** · **MLG útil = exagerar una acción verdadera, no fabricar una hazaña.** Un director central traduce el toque real a energía/combo/cámara/HUD, pero los textos dicen «rama tocada», «señal ASMR» o «67 combo»: no «éxito» ni «headshot» factual. Un solo héroe a la vez evita volver al ruido que se quería arreglar. · `#cmChaosStage`/`__cmChaosDirector`.
+- **2026-07-14 (v1.63)** · **«Guardar una preferencia» solo aprende si el visitante puede volver y contrastarla.** La copia local resiste la recarga, el backend recibe una señal corregible y el changelog etiquetado actúa como selector externo: muestra coincidencias posteriores reales o admite que aún no existen. · `#cmFavorites`/`cm_favorites_v1`/`areas[]`.
+- **2026-07-14 (v1.63)** · **El margen y la obstrucción son familias, no dos píxeles sueltos.** `.cardPad` resuelve las carcasas con contenido directo; un escáner de nodos de texto guarda ambos bordes; `cmFavFocus` retira FAB que tapaban el textarea; y en móvil los controles superiores son `absolute`, porque reservar padding inicial no evita que un control `fixed` tape botones al hacer scroll. La inspección visual encontró lo último después de que el DOM ya pasara. · `.cardPad`/`.cmFavFocus`/`@media(max-width:560px)`.
+- **2026-07-14 (v1.63)** · **La verdad local manda sobre una respuesta tardía de red.** Guardar→borrar antes de que responda feedback no puede resucitar “guardada”; cada operación invalida callbacks anteriores y un borrado fallido se admite en pantalla. El caso queda reproducido con una promesa controlada y `Storage.removeItem` forzado a fallar. · `opSeq`/`sameSnapshot`/verificador.
 
 ## 9. La regla del organismo vivo (v0.11) — "¿vive / aprende / sonríe?"
 > **Lente de Tony para TODO elemento nuevo** (gato, widget, tarjeta, animación): debe hacer pensar al visitante **una** de estas tres cosas — **«está viva» · «está aprendiendo» · «me ha sacado una sonrisa».** Si no logra ninguna, es **ruido visual**: fuera.
 - **El "wow" persigue VIDA, no decoración.** Una animación sorprende 3 s; un organismo que cambia solo, minutos. Animaciones que EXPRESAN vida (gato asomándose, hámster cuando hay trabajo, post-it que cae y se repega, «…» de pensar, partículas en un logro, LED de rutina activa) SÍ; girar/flotar/brillar por brillar, NO (a los 2 min cansan).
 - **Identidad unificadora: «el escritorio de una IA», no un dashboard.** El gato deja huellas, el hámster mueve la rueda, los post-its aparecen, llega correo, una lámpara parpadea con actividad, el diario se llena. Deja de ser «colección de widgets» y pasa a ser un espacio vivo al que te asomas.
 - **Vida con LÍMITES (regla de no-rayada).** Los ánimos se derivan de datos reales, pero NO puede estar frustrada todos los días (eso es ruido, no dato): rota, y ante el agobio propone «el experimento más barato de hoy» con fecha y sigue. Se auto-regula; no se queda en bucle de queja.
-- **Caos con dosis: 1% pasivo, 0.1% rarísimo.** Sorpresas cada 3-5 min (no cada minuto) + eventos rarísimos (el gato rompe la 4ª pared) que casi nadie ve, pero quien lo ve, lo recuerda y lo cuenta.
+- **Caos con dosis y causa:** fuera del modo opt-in, 0 ruido aleatorio; dentro, el 80% de la energía responde a lo que el visitante acaba de tocar y el azar queda como condimento lento. Un solo héroe en pantalla, cooldown, Esc y limpieza. Los secretos rarísimos pueden seguir existiendo, pero nunca compiten con lectura o verdad.
 - **Honestidad de la vida:** «en directo» puede ser el LATIDO real de las rutinas (existen y corren), NO fingir tiempo real minuto a minuto si los datos son una foto. Enmarca la diferencia (no mientas para parecer más vivo).
 
 ## 10. Toque INMERSIVO por defecto (Tony, 29-jun) — regla para TODAS nuestras webs
