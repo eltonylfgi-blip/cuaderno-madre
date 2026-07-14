@@ -165,10 +165,13 @@ comparativa y falsable — "el final es malo" era el hecho, no la hipótesis. Re
 
 **H15 — "Si Caos exagera lo que el visitante ACABA de tocar con lenguaje MLG reconocible, será más
 memorable y menos cansado que una lluvia aleatoria de memes."**
-- Estado: **☐ Probando — Construida ✔ (v1.63).** El director central suma energía por eventos reales,
+- Estado: **☐ Probando — Construida ✔ (v1.63–v1.64).** El director central suma energía por eventos reales,
   enseña combo/fase, limita a un titular héroe, deja el azar como condimento lento y limpia con Esc.
   Bajo movimiento reducido no arranca tint, cámara, partículas ni bromas móviles.
-  `6,7` conserva un mini-MLG también fuera del modo; ninguna etiqueta puede afirmar éxito/estado.
+  v1.64 convierte cualquier `6,7`/`6 7` en una escena gigante propia: 8 capas meme en normal y 40
+  en Caos, scope/flash/cámara/sonido y limpieza completa. `Auto` sigue estático cuando el sistema pide
+  reducir movimiento; `❤️ Vivo` es el override explícito y `Calma` siempre gana. Ninguna etiqueta puede
+  afirmar éxito/estado.
 - **Decisión que cambia:** conservar y extender el director a más escenas semánticas, o volver al Caos
   mínimo si la relación gesto→efecto no se entiende. No autoriza meter recursos MLG porque sí.
 - **Selector externo barato:** Tony activa Caos, toca al menos mapa/ASMR/gato y responde sin pistas qué
@@ -193,6 +196,41 @@ tocaron, el Cuaderno convierte feedback en una relación visible en vez de una c
   coincidencias del changelog resultan engañosas. Se retira la promesa de seguimiento antes de añadir
   perfiles, tablas o IA de matching.
 
+**H17 — "Si el Cuaderno muestra el FanRank canónico, permite sugerir con nombre y Tony puede señalar
+favoritas, las mejoras comunitarias seguirán vigentes entre versiones sin crear otro backlog."**
+- Estado: **☐ Probando — Construida ✔ (v1.64).** La rama lejana «Favoritos de Tony» enlaza FanRank,
+  Cuaderno, descargador TikTok, Shopify y meta-palancas. El panel lee `fr_ranking` (top 5), vota por el
+  `item_id` real y envía una única sugerencia privada a `fr_submissions`; muestra fallback honesto si la
+  red falla. El control de Tony es local + señal privada corregible: el cliente público nunca escribe
+  `ai_score`, `approved` ni `owner_pick`.
+- **Decisión que cambia:** conservar la rama como entrada comunitaria y usar sus señales para elegir el
+  siguiente cambio, o reducirla a enlaces si no cierra ciclos reales. No autoriza duplicar FanRank ni
+  prometer que una sugerencia pendiente ya está ordenada/implementada.
+- **Selector externo E2E:** una persona envía con nombre → aparece exactamente un pendiente privado → el
+  proceso existente lo puntúa/aprueba → el mismo elemento aparece ordenado → otro visitante vota → Tony
+  lo marca → una versión posterior cita esa señal. El test automático ya cubre lectura/voto/envío/favorita
+  sin escribir producción; la hipótesis solo se confirma cuando el ciclo real complete esos pasos.
+- **Cómo puede morir:** ranking divergente, fuga de pendientes, votos que no llegan al elemento canónico,
+  o cero sugerencias/votos tras exposición real. Se retira el adaptador visual y queda el enlace profundo;
+  nunca se rescata creando una segunda tabla o un ranking local.
+
+**H18 — "Si cualquiera puede preguntar y recibe primero una frase clara —con caminos explícitos para
+simplificar o profundizar—, aumentará la comprensión sin convertir el Cuaderno en un chatbot falso."**
+- Estado: **☐ Probando — Construida ✔ (v1.64).** La pregunta entra como comentario público con prefijo
+  trazable; la rutina responde de forma asíncrona y la interfaz agrupa pregunta→respuesta. Primero enseña
+  una sola frase; «Más simple» y «Ahonda» generan feedback privado ligado a esa respuesta. El freno público
+  es de cortesía por dispositivo (10/24 h y 2 min), no una barrera de seguridad; el modo creador de Tony lo
+  omite. Tres ejemplos ilustrados mantienen valor inmediato aunque todavía no haya preguntas reales.
+- **Decisión que cambia:** conservar la sección y mejorar sus explicaciones, o volver al comentario normal
+  si no reduce dudas ni genera conversaciones útiles. No autoriza prometer respuesta instantánea ni afirmar
+  que el cooldown local detiene abuso deliberado.
+- **Selector externo en ≤3 días:** primera pregunta real legible + respuesta agrupada; después, una pulsación
+  «Más simple» o «Ahonda» que produzca una segunda respuesta coherente. Medir preguntas válidas, respuestas,
+  solicitudes de ajuste y abandono; cero interacción tras exposición real refuta el coste de la sección.
+- **Cómo puede morir:** respuestas huérfanas, texto inicial que ya exige abrir el detalle, spam que supere el
+  freno de cortesía o ilustraciones que decoren sin explicar. Se oculta el formulario antes de construir auth,
+  captcha o una tabla nueva sin evidencia de abuso.
+
 ### 🟨 Media palanca (bajo riesgo, no tocan el motor del mapa)
 
 **H13 — "Si las marcas de la barra de progreso (saltan a cada Acto) son legibles a simple vista, no
@@ -209,9 +247,11 @@ atención de forma puntual y recompensa el roce repetido con una manifestación 
 *(Tony, 12/14-jul: "entre paneles" + "que los emojis se muevan" + "si rozas mucho madera, árboles por los laterales".)*
 - Estado: **☐ Probando — Construida ✔.** v1.47 repartió las zonas; v1.62 mantiene **13** texturas,
   programa reclamos ocasionales (crecer/twirl/vibración, nunca movimiento constante) y aplica un contrato
-  común de 3 fases: brillo local → primeras señales → efecto lateral semántico. `FX_MANIFEST` cubre 13/13;
-  reduced-motion y el interruptor ASMR anulan los efectos móviles; máximo 24 elementos y limpieza automática.
-  v1.63 añade 16/16 firmas auditivas declaradas y hace cada voto reversible con señal de retirada.
+  común de 3 fases: brillo local → primeras señales → invasión semántica explotable. `FX_MANIFEST` cubre
+  13/13; v1.64 integra las 5 WEBP de Tony, 19 apariciones normales / 95 en Caos (5× exacto), caps 40/96,
+  TTL y limpieza. El gesto táctil arbitra scroll vertical vs roce con inversión horizontal antes de premiar.
+  `Auto` respeta reduced-motion; solo `❤️ Vivo` lo anula explícitamente. El Laboratorio ejecuta 32/32
+  firmas auditivas distintas y cada voto sigue siendo reversible con señal de retirada.
 - **Selector externo:** uso real de Tony + votos `asmr-candidato-gusta/no-gusta/retirado` del Laboratorio que
   lleguen al inbox (la preferencia local se conserva incluso offline). Si el reclamo no aumenta toques o molesta,
   se baja frecuencia/intensidad; si dos candidatas siguen sonando iguales al oído humano, una no madura aunque
