@@ -174,18 +174,20 @@ las vio y las describió como "palitos negros" sin saber qué eran.)*
   enseñe) Tony sigue sin identificarlas como navegación, o si nadie las usa más que antes → Rechazada,
   se dejan como decoración menor de la barra o se quitan.
 
-**H14 — "Si las 12 zonas de textura ASMR se reparten ENTRE secciones del recorrido en vez de ir todas
-juntas, se sienten como una recompensa sorpresa distribuida por el viaje, no un carrusel al que hay que
-llegar a propósito."** *(Tony, 12-jul: "deberían estar entre paneles, no juntas".)*
-- Estado: **☐ Sin probar.** Hecho medido (12-jul): las 12 están TODAS seguidas en un único bloque de
-  ~600px (top 7234→7791px), nada intercalado. Orden preferido por Tony si se agrupan al final: burbujas,
-  madera, cristal, slime, arena, cremallera, muelle, y pana la última — máximo 1 seguida entre paneles.
-- **⚠️ Investigar antes de construir:** el comentario de línea ~4234 avisa de una "ruta CSS estable... 
-  insertar `<aside>` de texturas no la rompe" — repartirlas exige mover DÓNDE se insertan; confirmar que
-  no rompe esa ruta antes de tocar el DOM (B5).
-- **Cómo puede morir:** si repartirlas no se puede hacer sin tocar la ruta estable → aparcar hasta tener
-  un mecanismo que no la rompa. También muere si, repartidas, se sienten MENOS memorables que el bloque
-  compacto actual (no asumido, a probar con una persona).
+**H14 — "Una textura ASMR repartida por el recorrido se descubre más si, además de estar ahí, llama la
+atención de forma puntual y recompensa el roce repetido con una manifestación visual propia del material."**
+*(Tony, 12/14-jul: "entre paneles" + "que los emojis se muevan" + "si rozas mucho madera, árboles por los laterales".)*
+- Estado: **☐ Probando — Construida ✔.** v1.47 repartió las zonas; v1.62 mantiene **13** texturas,
+  programa reclamos ocasionales (crecer/twirl/vibración, nunca movimiento constante) y aplica un contrato
+  común de 3 fases: brillo local → primeras señales → efecto lateral semántico. `FX_MANIFEST` cubre 13/13;
+  reduced-motion y el interruptor ASMR anulan los efectos móviles; máximo 24 elementos y limpieza automática.
+- **Selector externo:** uso real de Tony + votos `asmr-candidato-gusta/no-gusta` del Laboratorio que lleguen
+  al inbox (la preferencia local se conserva incluso offline). Si el reclamo no aumenta toques o molesta, se baja
+  frecuencia/intensidad; si una manifestación se siente genérica, no madura.
+- **Regla heredable:** una textura nueva no está terminada hasta declarar `sonido + manifestación visual +
+  umbrales progresivos + fallback sin movimiento`; el verificador debe fallar si queda fuera del manifiesto.
+- **Cómo puede morir:** si Tony la ignora incluso con reclamo puntual, si tapa lectura, o si el feedback marca
+  molestia. En ese caso se conserva el sonido a demanda y se poda el reclamo/efecto, no se añade más ruido.
 
 **H4 — "El historial se despliega como un pergamino (no aparece de golpe) refuerza el significado de 📜."**
 - Estado: **☐ Probando** — Construida ✔ (v1.35, 12-jul), evidencia pendiente. Elegida tras el re-ranking

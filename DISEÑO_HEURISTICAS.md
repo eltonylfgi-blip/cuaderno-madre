@@ -56,6 +56,8 @@ opcional y la acción principal está a un toque.** Usabilidad extrema e interac
 - **Toast accesible** `#toast` `role="status" aria-live="polite"`.
 - **Semilla visual por DÍA** (no por refresco) → huella visual estable 24h (PRNG sembrado con la fecha).
 - **HUB de FAB** `#fabHubBtn` + `body.fabhub` (oculta los sueltos): un solo botón "✦" con menú que **proxya** `real.click()` — NO recrea listeners. **Init en `DOMContentLoaded`** porque los FAB de comentarios viven en un `<script type=module>` (diferido).
+- **Contrato sensorial heredable**: cada textura ASMR nueva debe entrar en `MODELS` **y** en `FX_MANIFEST`, declarar respuesta visual semántica por intensidad y pasar el verificador de cobertura 1:1. El motor común limita a 24 elementos, limpia por TTL y respeta movimiento reducido. Si falta una manifestación, la textura no está terminada aunque ya suene.
+- **«Me aburro» cierra un ciclo visible**: guardar `cm_fun_next_v1` cambia la visita inmediatamente siguiente sin depender de red; con conexión, `tipo:aburre` deja además una señal privada para que una versión futura pruebe **una** mejora divertida en la misma zona. No vale guardar la queja ni añadir confeti genérico: el visitante tiene que poder notar qué cambió.
 
 ## 4. Reutilizar para webs PERSONALIZADAS (clonar fácil)
 Pensar en **3 capas** para que un clon sea barato:
@@ -78,8 +80,10 @@ Pensar en **3 capas** para que un clon sea barato:
 
 ## 6. Mecanismo de persistencia (cómo se usa este doc)
 - **Quién escribe**: una sesión de Claude Code añade lecciones a la **bitácora** (§8) y a §3/§5. La rutina
-  `cuaderno-feedback` puede destilar señales de los botones **"no entiendo"** (tipo `no-entiendo` por
-  `card`/`section`) para señalar qué partes cuestan más — pero **NO reescribe estos principios** (línea roja).
+  `cuaderno-feedback` puede destilar las señales que hayan llegado de **"no entiendo"** (`tipo:no-entiendo`),
+  **"me aburro"** (`tipo:aburre`) y votos del laboratorio (`tipo:asmr-candidato-gusta/no-gusta`) por `card`/`section`.
+  Supabase es el buzón privado de señales, no el gobierno del producto: la rutina **NO reescribe estos
+  principios**. Una regla aceptada se versiona aquí y, si es ejecutable, en código + verificador.
 - **Cómo lo usan futuras sesiones**: leer este doc ANTES de diseñar; usar el checklist §2 como gate.
 - **Higiene**: consolidar en los 3 docs existentes; no crear docs de un solo uso.
 
@@ -123,6 +127,9 @@ Pensar en **3 capas** para que un clon sea barato:
 - **2026-06-29 (v0.14)** · **«Respirar» honesto y barato = traer un cambio REAL del mundo, no animar más.** Una web estática «respira» si muestra algo que de verdad cambia con el tiempo: los **commits** del propio repo (API pública de GitHub, CORS abierto, sin auth; degradar en silencio si falla) con su hora real + «desde tu última visita: N» (localStorage). Aquí el verde latiente SÍ es honesto (dato real y auto-refrescado), al revés que la lección v0.13 (verde sobre una foto). Da el «si vuelvo, habrá cambiado algo» = razón para volver, el norte del organismo. Decir «cambios» (no «commits» = jerga) y aclarar autoría mixta en letra pequeña. · `#diarioVivo`.
 - **2026-06-29 (v0.14)** · **Secuencia > cantidad: «qué es» y «por qué me importa» en los primeros 60 s; lo bonito (el mapa) es RECOMPENSA, va abajo.** «Si todo es importante, nada lo es»: no enseñes capacidades antes de crear la curiosidad. Gancho en 1ª persona + una pregunta plantada que el resto responde. Mover una sección = mover el `.card` por ID (el JS que clava por ID/clase no se rompe); cuidado solo con globals (`window.__X` debe seguir antes que su lector → mueve el cluster entero).
 - **2026-06-29 (v0.14)** · **Bug de overlay full-screen que solo aparece por ALTURA, no por anchura.** En `flex-direction:column`, un stage `flex:1 1 auto;min-height:0` se aplasta cuando el cromo inferior no cabe, y los controles `position:absolute` se salen del stage aplastado. Reproducir con `preview_resize` a varias ALTURAS (240/300/430) midiendo rects; fix = cromo inferior en contenedor acotado+scrollable (`max-height:NNvh;overflow-y:auto`) + controles en `flex-direction:row` en `@media(max-height:…)`; usar **vh** para que escale. · `.mbBottom`.
+- **2026-07-14 (v1.62)** · **Una petición transversal solo se convierte en capacidad futura si queda como contrato falsable.** «Que todo ASMR nuevo reaccione más al insistir» ya no vive como idea suelta: `MODELS` + `FX_MANIFEST` + umbrales comunes + cobertura automática 1:1 + selector externo (uso y votos). Guardar texto sin mecanismo ni juez habría sido descripción, no aprendizaje.
+- **2026-07-14 (v1.62)** · **«Me aburro» debe cambiar el siguiente ciclo observable.** La capa local modifica la próxima visita sin esperar ni necesitar red (`cm_fun_next_v1`); cuando la conexión entrega `tipo:aburre`, esa señal privada alimenta además la siguiente revisión. Si una futura versión no puede señalar el cambio juguetón que hizo en esa zona, no aprendió.
+- **2026-07-14 (v1.62)** · **Backend parcial > backend nuevo para una hipótesis temprana.** La tabla de feedback con inserción pública y lectura privada ya sirve como buzón de mejoras/votos; no se añade tabla ni servicio hasta que el volumen real lo exija. La decisión de producto sigue versionada en estos documentos y en las pruebas, no escondida en una fila.
 
 ## 9. La regla del organismo vivo (v0.11) — "¿vive / aprende / sonríe?"
 > **Lente de Tony para TODO elemento nuevo** (gato, widget, tarjeta, animación): debe hacer pensar al visitante **una** de estas tres cosas — **«está viva» · «está aprendiendo» · «me ha sacado una sonrisa».** Si no logra ninguna, es **ruido visual**: fuera.

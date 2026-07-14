@@ -561,33 +561,44 @@
   </div>
 
   <script>
-  /* v1.51 — Apuesta activa visible bajo el hero: usa los mismos datos VERE que el teaser */
-  (function(){ try{
-    var VERE=window.VERE; if(!VERE||!VERE.length) return;
-    var hoy=new Date(); hoy.setHours(0,0,0,0);
-    var next=null;
-    for(var i=0;i<VERE.length;i++){
-      var d=new Date(VERE[i][0]+"T00:00:00");
-      if(d>=hoy){ next=[d,VERE[i][1]]; break; }
-    }
-    if(!next) return;
-    var MZ=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
-    var fechaCorta=next[0].getDate()+" de "+MZ[next[0].getMonth()];
-    var t=document.getElementById("apuestaActivaTexto");
-    var f=document.getElementById("apuestaActivaFecha");
-    var b=document.getElementById("irApuestaActiva");
-    if(t) t.textContent="«"+next[1]+"»";
-    if(f) f.textContent="Se juzga el "+fechaCorta+".";
-    if(b){
-      b.addEventListener("click",function(){
-        var c=document.getElementById("prediccionesCard");
-        if(c){
-          try{ c.querySelector("details").open=true; }catch(e){}
-          c.scrollIntoView({behavior:"smooth",block:"start"});
-        }
+  /* v1.62 — una sola fuente: la apuesta visible se deriva del marcador público, no de un global
+     que todavía no existe cuando se parsea esta tarjeta. */
+  (function(){
+    function initApuestaActiva(){ try{
+      var card=document.getElementById("apuestaActivaCard");
+      var pred=document.getElementById("prediccionesCard");
+      if(!card||!pred) return false;
+      var hoy=new Date(); hoy.setHours(0,0,0,0);
+      var next=null;
+      Array.prototype.forEach.call(pred.querySelectorAll(".predList > li.wait[data-fecha]"),function(li){
+        var d=new Date(li.getAttribute("data-fecha")+"T00:00:00");
+        if(d>=hoy && (!next||d<next.fecha)) next={fecha:d,li:li};
       });
-    }
-  }catch(e){} })();
+      if(!next){ card.hidden=true; card.dataset.ready="sin-apuesta-futura"; return false; }
+      var cree=next.li.querySelector(".pr-cree");
+      var texto=(cree&&cree.textContent||"").trim();
+      var MZ=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+      var t=document.getElementById("apuestaActivaTexto");
+      var f=document.getElementById("apuestaActivaFecha");
+      var b=document.getElementById("irApuestaActiva");
+      if(t) t.textContent=/^«/.test(texto)?texto:"«"+texto+"»";
+      if(f) f.textContent="Se juzga el "+next.fecha.getDate()+" de "+MZ[next.fecha.getMonth()]+".";
+      if(b && !b.dataset.bound){
+        b.dataset.bound="1";
+        b.addEventListener("click",function(){
+          var c=document.getElementById("prediccionesCard");
+          if(!c) return;
+          var details=c.querySelector("details"); if(details) details.open=true;
+          c.scrollIntoView({behavior:(matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"),block:"start"});
+        });
+      }
+      card.hidden=false; card.dataset.ready="apuesta-futura"; card.dataset.source="predicciones-dom";
+      return !!texto;
+    }catch(e){ return false; } }
+    window.__cmInitApuesta=initApuestaActiva;
+    if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",initApuestaActiva,{once:true});
+    else initApuestaActiva();
+  })();
   </script>
 
   <!-- línea secundaria pequeña: modo creador (antes "Soy Tony", parecía login) -->
@@ -755,7 +766,7 @@
     function clean(msg){ var l=(msg||"").trim(); if(l.length>92) l=l.slice(0,90)+"…"; return l||"(cambio sin descripción)"; }
     function dayLabel(iso){ try{ return new Date(iso+"T12:00:00Z").toLocaleDateString("es-ES",{day:"numeric",month:"short"}); }catch(e){ return iso; } }
     function build(){
-      var src=window.__cmBakedCambios||window.__cmCambios||[];
+      var src=window.__cmCambiosDestacados||window.__cmBakedCambios||window.__cmCambios||[];
       return src.map(function(c){ return {sha:(c.fecha||"")+"|"+(c.titulo||""),msg:c.titulo||"",date:c.fecha||"",url:HISTORY}; })
                 .filter(function(c){ return c.date&&c.msg; });
     }
@@ -767,7 +778,7 @@
     }
     function render(commits,newCount){
       list.textContent="";
-      commits.slice(0,5).forEach(function(c,i){
+      commits.slice(0,3).forEach(function(c,i){
         var li=document.createElement("li"); if(i<newCount) li.className="dv-new";
         var when=document.createElement("span"); when.className="dv-when";
         var a=document.createElement("a"); a.href=c.url; a.target="_blank"; a.rel="noopener noreferrer"; a.textContent=dayLabel(c.date); a.title="Ver el historial que respalda este cambio"; a.setAttribute("aria-label","Ver historial en GitHub: "+clean(c.msg));
@@ -1861,6 +1872,54 @@
     </div>
   </details></div>
 
+  <!-- v1.62 — Laboratorio ASMR: catálogo experimental; el feedback existente decide qué madura. -->
+  <style id="asmrLabCss">
+    .asmrLabCard{position:relative;margin:16px 0;scroll-margin-top:70px;scroll-margin-bottom:130px;border:1.5px solid rgba(167,139,250,.72);border-radius:18px;overflow:hidden;color:#f8f7ff;background:radial-gradient(circle at 92% 8%,rgba(34,211,238,.22),transparent 28%),radial-gradient(circle at 8% 90%,rgba(236,72,153,.18),transparent 30%),linear-gradient(145deg,#171429,#34205d 58%,#153b52);box-shadow:0 18px 46px rgba(45,28,88,.24)}
+    .asmrLabCard>details>summary{list-style:none;display:flex;align-items:center;gap:12px;min-height:64px;padding:14px 16px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.12)}
+    .asmrLabCard>details>summary::-webkit-details-marker{display:none}.asmrLabCard .alIcon{font-size:30px;filter:drop-shadow(0 5px 10px rgba(34,211,238,.28))}
+    .asmrLabCard .alTitle{display:flex;flex-direction:column;min-width:0;flex:1}.asmrLabCard .alTitle b{font-size:18px;line-height:1.15}.asmrLabCard .alTitle span{font-size:12px;color:#cbc5e7;margin-top:3px}.asmrLabCard .alCaret{font-size:16px;transition:transform .2s}.asmrLabCard>details[open]>summary .alCaret{transform:rotate(90deg)}
+    .asmrLabBody{padding:14px 16px 17px}.asmrLabLead{margin:0 0 12px;color:#eeeaff;font-size:13.5px;line-height:1.5}.asmrLabLead b{color:#80ecff}
+    .asmrLabGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.asmrCand{display:grid;grid-template-columns:48px minmax(0,1fr);gap:9px;align-items:center;min-height:92px;padding:9px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.075);transition:transform .18s,background .18s,border-color .18s}.asmrCand:hover{transform:translateY(-2px);background:rgba(255,255,255,.12);border-color:rgba(128,236,255,.55)}
+    .asmrPlay{width:48px;height:48px;border:0;border-radius:14px;background:linear-gradient(145deg,#8b5cf6,#22d3ee);color:#fff;font-size:23px;cursor:pointer;box-shadow:0 7px 18px rgba(34,211,238,.18)}.asmrPlay:focus-visible,.asmrVote:focus-visible,.asmrLabMore>summary:focus-visible{outline:3px solid #facc15;outline-offset:2px}.asmrCand.playing .asmrPlay{animation:asmrPlayPulse .55s ease-out 1}
+    .asmrCandText{min-width:0}.asmrCandName{display:block;font-weight:800;font-size:13px;line-height:1.2}.asmrCandWhy{display:block;color:#cfc9e7;font-size:11px;line-height:1.3;margin-top:3px}.asmrVotes{display:flex;gap:6px;margin-top:7px}.asmrVote{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.18);border-radius:11px;background:rgba(8,7,18,.24);color:#fff;cursor:pointer;font-size:17px}.asmrVote.on{background:#fff;color:#4c1d95;border-color:#fff}
+    .asmrLabMore{margin-top:12px;border:1px dashed rgba(255,255,255,.25);border-radius:13px;background:rgba(0,0,0,.08)}.asmrLabMore>summary{min-height:48px;display:flex;align-items:center;padding:0 13px;cursor:pointer;font-weight:750;font-size:13px}.asmrLabMore .asmrLabGrid{padding:0 10px 10px}
+    .asmrLabSources{margin:13px 0 0;font-size:11.5px;line-height:1.55;color:#cbc5e7}.asmrLabSources a{color:#8eeeff;font-weight:700}.asmrLabStatus{min-height:18px;margin:10px 0 0;color:#fff;font-size:12px;font-weight:700}
+    /* El laboratorio es una escena completa: sus propios controles sustituyen temporalmente a los FAB
+       inferiores que, en 375px, tapaban «Ver 12 candidatos» y las fuentes. Vuelven al salir del card. */
+    body.cmLabFocus #cmvFab,body.cmLabFocus #fabHubActive,body.cmLabFocus #fabHubBtn,
+    body.cmLabFocus #fabHubMenu,body.cmLabFocus #fabHubTip,body.cmLabFocus #tourLaunch,
+    body.cmLabFocus #mapFab,body.cmLabFocus #gxg-cat-root{display:none!important}
+    @keyframes asmrPlayPulse{0%{transform:scale(1)}45%{transform:scale(1.14) rotate(5deg);box-shadow:0 0 0 8px rgba(34,211,238,.14)}100%{transform:scale(1)}}
+    @media(max-width:520px){.asmrLabGrid{grid-template-columns:1fr}.asmrLabCard .alTitle b{font-size:16px}.asmrLabCard .alTitle span{white-space:normal}}
+    @media(prefers-reduced-motion:reduce){.asmrLabCard *{scroll-behavior:auto!important}.asmrCand,.asmrLabCard .alCaret{transition:none}.asmrCand:hover{transform:none}.asmrCand.playing .asmrPlay{animation:none}}
+  </style>
+  <aside class="asmrLabCard" id="asmrLabCard">
+    <details open>
+      <summary>
+        <span class="alIcon" aria-hidden="true">🎧</span>
+        <span class="alTitle"><b data-en="ASMR laboratory · choose what comes next">Laboratorio ASMR · elige lo siguiente</b><span data-en="4 featured prototypes + 12 more · your vote is saved here and, online, reaches MADRE">4 prototipos destacados + 12 más · tu voto se guarda aquí y, con conexión, llega a MADRE</span></span>
+        <span class="alCaret" aria-hidden="true">▶</span>
+      </summary>
+      <div class="asmrLabBody">
+        <p class="asmrLabLead" data-en="I am not pretending these are final samples: they are synthesized prototypes. Play them, vote, and real use will decide which ones deserve licensed or recorded sound.">No finjo que ya sean muestras finales: son <b>prototipos sintetizados</b>. Pruébalos, vota y el uso real decidirá cuáles merecen sonido grabado o licenciado.</p>
+        <div class="asmrLabGrid" id="asmrLabFeatured" aria-label="Candidatos ASMR destacados"></div>
+        <details class="asmrLabMore">
+          <summary data-en="Show 12 more candidates">Ver 12 candidatos más</summary>
+          <div class="asmrLabGrid" id="asmrLabMore" aria-label="Más candidatos ASMR"></div>
+        </details>
+        <p class="asmrLabSources"><b data-en="Where sounds can come from:">De dónde pueden salir los sonidos:</b>
+          <a href="https://pixabay.com/sound-effects/search/asmr/" target="_blank" rel="noopener">Pixabay ASMR</a> ·
+          <a href="https://mixkit.co/free-sound-effects/" target="_blank" rel="noopener">Mixkit</a> ·
+          <a href="https://freesound.org/" target="_blank" rel="noopener">Freesound</a> ·
+          <a href="https://www.zapsplat.com/" target="_blank" rel="noopener">ZapSplat</a> ·
+          <a href="https://commons.wikimedia.org/wiki/Special:MediaSearch?type=audio" target="_blank" rel="noopener">Wikimedia audio</a>.
+          <span data-en="Current exact credits:">Créditos exactos actuales:</span> <a href="sounds/CREDITS.txt" target="_blank" rel="noopener">Kenney + Breviceps/CC0</a>.
+        </p>
+        <p class="asmrLabStatus" id="asmrLabStatus" role="status" aria-live="polite"></p>
+      </div>
+    </details>
+  </aside>
+
   <!-- ===== v0.12: MAPA DE MADRE — mapa de ramas interactivo + inmersivo (idea de Tony) ===== -->
   <style id="mapaCss">
     #mapaCard{position:relative;overflow:hidden}
@@ -1926,6 +1985,11 @@
     .mapNode.pr-ramaPulse .mn-c{stroke:var(--accent)!important;stroke-width:5;animation:prRamaPulse 1.1s ease-in-out 2}
     @keyframes prRamaPulse{0%,100%{filter:none}50%{filter:drop-shadow(0 0 10px var(--accent))}}
     @media(prefers-reduced-motion:reduce){ body:not(.cmMotionOn) .mapNode.pr-ramaPulse .mn-c{animation:none} }
+    /* v1.62 — acabado visual externo al motor: no cambia geometría, listeners ni hit-test. */
+    #mapaCard .mapWrap{border-radius:18px;background:radial-gradient(circle at 50% 48%,rgba(124,58,237,.12),transparent 64%);box-shadow:inset 0 0 0 1px rgba(124,58,237,.10)}
+    #mapaCard .mapNode .mn-lbl{font-weight:700;paint-order:stroke fill;stroke:var(--card);stroke-width:3px;stroke-linejoin:round}
+    #mapaInfo{border-left:3px solid var(--accent);background:linear-gradient(135deg,var(--accent-soft),var(--card));box-shadow:0 8px 24px rgba(39,24,82,.10)}
+    #mapaInfo .mi-t{font-size:14.5px;font-weight:800} #mapaInfo .mi-d{line-height:1.48}
   </style>
   <h2 class="sr-only">El mapa de MADRE</h2>
   <div class="card key" id="mapaCard">
@@ -2122,7 +2186,7 @@
 
   <!-- ===== v0.13: MAPA A PANTALLA COMPLETA — experiencia inmersiva (zoom/pan + sub-ramas), deep-link #mapa ===== -->
   <style id="mapBigCss">
-    .mbOv{position:fixed;inset:0;z-index:99990;display:flex;flex-direction:column;background:#0b1020;color:#e8edf8;opacity:0;transition:opacity .25s ease}
+    .mbOv{position:fixed;inset:0;z-index:100010;display:flex;flex-direction:column;background:#0b1020;color:#e8edf8;opacity:0;transition:opacity .25s ease}
     .mbOv.show{opacity:1}
     .mbOv[hidden]{display:none}
     .mbAmbient{position:absolute;inset:0;pointer-events:none;background:
@@ -2276,6 +2340,21 @@
     @media(prefers-reduced-motion:no-preference){ .mbPhantom .nc-ph{animation:mbPhPulse 1.5s ease-in-out infinite} }
     @keyframes mbPhPulse{0%,100%{opacity:.5}50%{opacity:1}}
     @media(max-height:480px){ .mbPropBanner{font-size:12px;padding:7px 10px;top:8px} }
+    /* v1.62 — legibilidad y jerarquía, sin tocar onNodeClick/routeTap/nodeAtPoint/focusBranch. */
+    .mbNodeText{font-weight:700;paint-order:stroke fill;stroke:rgba(5,9,20,.92);stroke-width:1.8px;stroke-linejoin:round}
+    .mbInfo{border-left:3px solid #a78bfa;background:linear-gradient(135deg,rgba(124,58,237,.17),rgba(255,255,255,.07) 62%);box-shadow:0 10px 28px rgba(0,0,0,.18)}
+    .mbInfo .t{font-size:15px;line-height:1.3;letter-spacing:-.01em}.mbInfo .st{display:inline-flex;align-items:center;vertical-align:middle;line-height:1.2}.mbInfo .d{color:#d7def2;line-height:1.48}.mbNace,.mbPara{line-height:1.45}
+    .mbTouchHint{display:none}
+    @media(max-width:560px){
+      .mbBar{display:grid;grid-template-columns:minmax(0,1fr) 44px 44px;gap:8px;padding:10px 12px}
+      .mbTitle{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.18}
+      #mbPropGlobal{width:44px;padding:0;border-radius:12px} #mbPropGlobal .mbBtnTxt{display:none}
+      .mbClose{margin-left:0;width:44px;height:44px}
+      .mbTouchHint{position:relative;z-index:3;display:block;flex:0 0 auto;margin:0 12px 6px;padding:6px 10px;border:1px solid rgba(183,148,255,.42);border-radius:999px;background:rgba(124,58,237,.17);box-shadow:0 0 18px rgba(124,58,237,.16);color:#dbe4ff;text-align:center;font:700 11.5px/1.3 system-ui,-apple-system,Segoe UI,sans-serif}
+    }
+    @media(max-height:480px){.mbTouchHint{display:none}}
+    /* v1.62: el control temporal de la génesis no puede flotar sobre el diálogo del mapa. */
+    body:has(#mapBig-ov:not([hidden])) #cmGenSkip{display:none!important}
   </style>
   <div id="mapBig-ov" class="mbOv" role="dialog" aria-modal="true" aria-label="Mapa de MADRE a pantalla completa" hidden>
     <div class="mbAmbient"></div><div class="mbStars" id="mbStars"></div>
@@ -2285,6 +2364,7 @@
       <button class="mbBarBtn" id="mbPropGlobal" type="button" aria-label="🌱 Proponer rama"><span aria-hidden="true">🌱</span><span class="mbBtnTxt"> Proponer rama</span></button>
       <button class="mbClose" id="mbClose" type="button" aria-label="Cerrar el mapa">✕</button>
     </div>
+    <div class="mbTouchHint" data-en="☝️ Tap a sphere · pinch or drag to travel">☝️ Toca una esfera · pellizca o arrastra para viajar</div>
     <div class="mbStage">
       <svg id="mbSvg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Mapa explorable de las ramas de MADRE"><g id="mbView"></g></svg>
       <div class="mbZoom">
@@ -3520,7 +3600,7 @@
     </div>
   </details></div>
 
-  <div class="card"><details>
+  <div class="card" id="evolucionCard"><details>
     <summary>
       <span class="num">12</span>
       <span class="ctitle"><span class="t">Evolución de MADRE</span>
@@ -4114,7 +4194,7 @@ window.__cmCorpus = {
         if(actEl && !/foto de hace/.test(actEl.innerHTML)) actEl.innerHTML+=' <b style="color:var(--muted)">· foto de hace ~'+days+' día'+(days!==1?'s':'')+'</b>';
         if(!st){ st=document.createElement("div"); st.id="staleBanner"; st.setAttribute("role","status"); st.style.cssText="margin:8px 0;background:#f5f7fb;border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:flex-start";
           var nb=document.getElementById("novBanner"); if(nb&&nb.parentNode) nb.parentNode.insertBefore(st, nb); }
-        st.innerHTML='<span style="font-size:15px">📸</span><div><b style="color:var(--ink)">Última foto disponible: hace ~'+days+' día'+(days!==1?'s':'')+'.</b> Si nada importante ha cambiado, sigue siendo válida — MADRE va estable. No está roto.</div>';
+        st.innerHTML='<span style="font-size:15px">📸</span><div><b style="color:var(--ink)">Última foto disponible: hace ~'+days+' día'+(days!==1?'s':'')+'.</b> Es una observación histórica: no confirma el estado actual. Mira la fecha antes de decidir.</div>';
       } else if(st){ st.remove(); }
     }catch(e){}
   }
@@ -4209,15 +4289,33 @@ window.__cmCorpus = {
   function renderCambios(list){
     /* v0.52: expone SIEMPRE la lista que se está pintando de verdad (baked o la de Supabase si llegó
        después) — evita que el modo película muestre datos desincronizados de lo que el visitante ve. */
-    try{ window.__cmCambios=list; }catch(e){}
+    list=Array.isArray(list)?list:[];
+    var featured=list.filter(function(c){ return c&&c.destacada===true; }).slice(0,3);
+    for(var fi=0;fi<list.length&&featured.length<3;fi++) if(featured.indexOf(list[fi])<0) featured.push(list[fi]);
+    try{ window.__cmCambios=list; window.__cmCambiosDestacados=featured; }catch(e){}
     var el=document.getElementById("changelog"); if(!el) return; el.innerHTML="";
-    list.forEach(function(c){
-      var d=document.createElement("div"); d.className="cm-changelog-item"; d.style.cssText="border-left:3px solid var(--accent);padding:3px 0 3px 10px;margin:9px 0;border-radius:0 6px 6px 0;transition:background 0.3s, box-shadow 0.3s";
-      d.innerHTML='<div style="font-size:12px;color:var(--muted)">'+esc(fmtDate(c.fecha))+'</div>'+
-        '<div style="font-weight:600;font-size:13.5px">'+esc(c.titulo)+'</div>'+
-        (c.detalle?('<div class="small">'+esc(c.detalle)+'</div>'):'');
-      el.appendChild(d);
-    });
+    var expanded=false;
+    function paint(source){
+      el.innerHTML="";
+      source.forEach(function(c){
+        var d=document.createElement("div"); d.className="cm-changelog-item"; d.style.cssText="border-left:3px solid var(--accent);padding:3px 0 3px 10px;margin:9px 0;border-radius:0 6px 6px 0;transition:background 0.3s, box-shadow 0.3s";
+        d.innerHTML='<div style="font-size:12px;color:var(--muted)">'+esc(fmtDate(c.fecha))+'</div>'+
+          '<div style="font-weight:600;font-size:13.5px">'+esc(c.titulo)+'</div>'+
+          (c.detalle?('<div class="small">'+esc(c.detalle)+'</div>'):'');
+        el.appendChild(d);
+      });
+      if(list.length>featured.length){
+        var more=document.createElement("button");
+        more.type="button"; more.id="cmChangeMore"; more.className="cardFoldBtn";
+        more.setAttribute("aria-expanded",String(expanded));
+        more.textContent=expanded?"Volver a las 3 destacadas":"Ver historial completo ("+(list.length-featured.length)+" más)";
+        more.addEventListener("click",function(){ expanded=!expanded; paint(expanded?list:featured); });
+        el.appendChild(more);
+      }
+      el.dataset.mode=expanded?"completo":"destacadas";
+    }
+    paint(featured);
+    window.__cmSetCambiosExpanded=function(on){ expanded=!!on; paint(expanded?list:featured); };
   }
   function fallback(id,msg){ var el=document.getElementById(id); if(el) el.innerHTML='<div class="small">'+esc(msg)+'</div>'; }
 
@@ -4268,8 +4366,9 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
-    {fecha:'2026-07-14',titulo:'🐈 v1.61 — El cuaderno responde al tacto: gato, mapa, ASMR y visitas vivas',detalle:'El gato dormido usa la imagen elegida por Tony y maúlla al tocarlo. Las subramas del mapa nacen de una en una con 3 estilos, sonidos propios y texto medido dentro de cada nodo. Las 13 zonas ASMR dejan de estar ocultas, sus controles miden al menos 44px y una franja visible invita ocasionalmente a tocarla. «No entiendo → señalar» ya acepta cualquier punto de la tarjeta. Cada 6–7 visible se vuelve un meme con ola y sonido. El panel de realidad gana jerarquía visual sin cambiar sus datos; Inglés aplica globalmente a cualquier bloque data-en, incluso futuro; y Visitas incorpora una gráfica horizontal con hitos y solo cifras verificadas: 695 en la captura del 14-jul más el contador real actual, nunca 1.200 inventadas.'},
-    {fecha:'2026-07-14',titulo:'🫀 v1.60 — El Diario deja de fallar por cuota y el primer toque móvil llega a su destino',detalle:'El Diario ya no consulta GitHub en cada visita: lee el changelog incluido en la propia versión, enlaza al historial y distingue claramente la fecha del Cuaderno de la foto de estado de MADRE. En móvil, los controles iniciales ocupan una sola franja sin tapar el contenido. Durante la animación de entrada, el primer toque ejecuta su acción antes de terminar la animación. El número del pie se deriva del último cambio y deja de quedarse atrás. El verificador protege desde ahora las cuatro regresiones: llamada API, solapes, primer CTA y versión visible.'},
+    {fecha:'2026-07-14',destacada:true,titulo:'🌳 v1.62 — El ASMR responde, el mapa respira y el Cuaderno aprende de «me aburro»',detalle:'Las novedades muestran solo las 3 últimas destacadas y dejan el resto tras «Ver historial completo». «Ver la apuesta completa» abre ahora la predicción futura real. Las zonas ASMR llaman la atención por turnos, la madera suena más presente y el roce insistente desata efectos propios de cada material —en madera, árboles y hojas crecen desde los laterales— con límite, limpieza y movimiento reducido. Un laboratorio deja probar 16 candidatos ASMR, guardar el voto sin publicar identidad y consultar fuentes/licencias; con conexión, la señal llega por el canal privado existente. «Me aburro» cambia la visita siguiente sin depender de la red y, con conexión, deja una señal para el próximo ciclo. El mapa grande gana profundidad, jerarquía y controles móviles legibles sin tocar su motor de interacción.'},
+    {fecha:'2026-07-14',destacada:true,titulo:'🐈 v1.61 — El cuaderno responde al tacto: gato, mapa, ASMR y visitas vivas',detalle:'El gato dormido usa la imagen elegida por Tony y maúlla al tocarlo. Las subramas del mapa nacen de una en una con 3 estilos, sonidos propios y texto medido dentro de cada nodo. Las 13 zonas ASMR dejan de estar ocultas, sus controles miden al menos 44px y una franja visible invita ocasionalmente a tocarla. «No entiendo → señalar» ya acepta cualquier punto de la tarjeta. Cada 6–7 visible se vuelve un meme con ola y sonido. El panel de realidad gana jerarquía visual sin cambiar sus datos; Inglés aplica globalmente a cualquier bloque data-en, incluso futuro; y Visitas incorpora una gráfica horizontal con hitos y solo cifras verificadas: 695 en la captura del 14-jul más el contador real actual, nunca 1.200 inventadas.'},
+    {fecha:'2026-07-14',destacada:true,titulo:'🫀 v1.60 — El Diario deja de fallar por cuota y el primer toque móvil llega a su destino',detalle:'El Diario ya no consulta GitHub en cada visita: lee el changelog incluido en la propia versión, enlaza al historial y distingue claramente la fecha del Cuaderno de la foto de estado de MADRE. En móvil, los controles iniciales ocupan una sola franja sin tapar el contenido. Durante la animación de entrada, el primer toque ejecuta su acción antes de terminar la animación. El número del pie se deriva del último cambio y deja de quedarse atrás. El verificador protege desde ahora las cuatro regresiones: llamada API, solapes, primer CTA y versión visible.'},
     {fecha:'2026-07-13',titulo:'🐛 v1.58 — Caza final: el verdadero origen del scroll fantasma',detalle:'Ahora SÍ he arreglado los 2 bugs que faltaban: (1) Las finas rayas moradas en la cima se han ocultado para siempre. (2) El scroll horizontal de 10px no se arreglaba ocultando el overflow, sino atacando la raíz: los seudoelementos de los botones y chips (.btn, .chip) tenían un inset de -10px pero carecían de position: relative, por lo que su área táctil se expandía 10px fuera de la pantalla. Además, se ha cambiado un width: 100vw problemático a 100%.'},
     {fecha:'2026-07-13',titulo:'🐛 v1.57 — Botones separados y 0 recortes abajo',detalle:'He arreglado 2 bugs visuales: (1) En móviles estrechos, las áreas invisibles de los botones English y Vivo se solapaban al tocarlas: ahora tienen más aire y es imposible equivocarse. (2) Los botones flotantes que en iOS quedaban cortados abajo, ahora respetan el espacio seguro (env safe-area-inset-bottom).'},
     {fecha:"2026-07-13",titulo:"✨ v1.56 — El cuaderno te saluda y te enseña lo nuevo (NOVEDADES INTERACTIVAS)",detalle:"Antes, tenías que bucear en el changelog para saber qué había cambiado desde tu última visita. Ahora, si vuelves después de un tiempo y hay novedades reales documentadas, MADRE te saluda discretamente en una esquina: «👋 Desde tu última visita hay X novedades — ¿te las enseño?». Si aceptas (o si pulsas el botón manual en el Diario), entras en el modo interactivo: te lleva automáticamente a cada cambio, con scroll suave y un resaltado visual que ilumina la novedad, dándote control para avanzar o salir en cualquier momento. Al igual que con todas las animaciones, si tienes «reducir movimiento» activado en tu sistema operativo, el scroll es directo e instantáneo. Cero ruido, 100% control, datos reales sin duplicar."},
@@ -4477,18 +4576,22 @@ window.__cmCorpus = {
   /* v1.56 — Novedades Interactivas (Tour del changelog) */
   (function(){ try {
     var KEY = "cm_last_version_seen";
+    var MAX_FEATURED = 3;
     var saved = localStorage.getItem(KEY);
-    var list = (typeof cambios !== "undefined") ? cambios : (window.__cmCambios || []);
-    if(!list.length) return;
-    var currentVer = list[0].titulo;
+    var allList = (typeof cambios !== "undefined") ? cambios : (window.__cmCambios || []);
+    var list = (window.__cmCambiosDestacados||allList.slice(0,MAX_FEATURED)).slice(0,MAX_FEATURED);
+    if(!allList.length||!list.length) return;
+    var currentVer = allList[0].titulo;
     
     var newCount = 0;
     if(saved && saved !== currentVer) {
-      for(var i=0; i<list.length; i++){
-        if(list[i].titulo === saved) break;
+      for(var i=0; i<allList.length; i++){
+        if(allList[i].titulo === saved) break;
         newCount++;
       }
     }
+    var shownCount=Math.min(MAX_FEATURED,newCount||MAX_FEATURED,list.length);
+    window.__cmNoveltyState={totalNew:newCount,shown:shownCount,max:MAX_FEATURED,tourActive:false};
     
     // Si no había guardado, es primera visita -> guardamos y no saludamos
     if(!saved) {
@@ -4498,7 +4601,7 @@ window.__cmCorpus = {
       var toast = document.createElement("div");
       toast.id = "toastNovedades";
       toast.style.cssText = "position:fixed; bottom:max(20px, env(safe-area-inset-bottom, 20px)); right:20px; background:var(--card); color:var(--ink); border:2px solid var(--accent); padding:16px; border-radius:12px; z-index:9999; box-shadow:0 10px 25px rgba(0,0,0,0.2); font-size:14px; max-width: 320px; transform:translateY(150%); transition:transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);";
-      toast.innerHTML = '<div style="margin-bottom:12px;font-weight:600;line-height:1.4">👋 Desde tu última visita hay '+newCount+(newCount===1?' novedad':' novedades')+' — ¿te '+(newCount===1?'la':'las')+' enseño?</div>'+
+      toast.innerHTML = '<div style="margin-bottom:12px;font-weight:600;line-height:1.4">👋 Hay novedades. Te enseño '+(shownCount===1?'la última destacada':'las '+shownCount+' destacadas')+', no todo el historial.</div>'+
         '<div style="display:flex;gap:8px">'+
           '<button id="toastNovYes" class="btn primary" style="min-height:36px;padding:6px 12px;flex:1;margin:0">Sí, guíame</button>'+
           '<button id="toastNovNo" class="btn" style="min-height:36px;padding:6px 12px;flex:1;margin:0">Ahora no</button>'+
@@ -4515,7 +4618,7 @@ window.__cmCorpus = {
       document.getElementById("toastNovYes").onclick = function(){
         toast.style.transform = "translateY(150%)";
         setTimeout(function(){ toast.remove(); }, 500);
-        iniciarTourNovedades(newCount, currentVer);
+        iniciarTourNovedades(shownCount, currentVer);
       };
     }
     
@@ -4527,7 +4630,7 @@ window.__cmCorpus = {
        btnRow.innerHTML = '<button id="btnTourNovedades" class="cardFoldBtn" style="margin:0;width:auto;display:inline-flex">✨ Ver novedades guiadas</button>';
        chLog.parentNode.insertBefore(btnRow, chLog);
        document.getElementById("btnTourNovedades").onclick = function(){
-           var count = (newCount > 0) ? newCount : 3; // Si no hay nuevas, enseña las últimas 3
+           var count = (newCount > 0) ? shownCount : Math.min(MAX_FEATURED,list.length);
            iniciarTourNovedades(count, currentVer);
        };
     }
@@ -4556,22 +4659,31 @@ window.__cmCorpus = {
     
     function endTour() {
         tourActive = false;
+        window.__cmNoveltyState.tourActive=false;
         tourFloat.style.display = "none";
         if(lastHl) { lastHl.style.background = ""; lastHl.style.boxShadow = ""; }
         try{ localStorage.setItem(KEY, tourTargetVer); }catch(e){}
     }
     
     function iniciarTourNovedades(count, ver) {
-        if(count > list.length) count = list.length;
+        count=Math.max(1,Math.min(MAX_FEATURED,count||MAX_FEATURED,list.length));
         tourCount = count;
         tourIdx = 0;
         tourTargetVer = ver;
         tourActive = true;
+        window.__cmNoveltyState.tourActive=true;
+        window.__cmNoveltyState.shown=count;
         tourFloat.style.display = "flex";
         
-        // Ensure details card is open
+        // Reusa el revelado progresivo oficial: abrir <details> no sirve si la tarjeta sigue pdHidden.
         var pCard = document.getElementById("evolucionCard");
-        if(pCard && !pCard.open) pCard.open = true;
+        if(pCard&&pCard.offsetParent===null){
+          var revealBtns=document.querySelectorAll(".pdReveal");
+          for(var ri=0;ri<revealBtns.length&&pCard.offsetParent===null;ri++) revealBtns[ri].click();
+        }
+        var pDetails=pCard&&pCard.querySelector("details");
+        if(pDetails) pDetails.open = true;
+        if(window.__cmSetCambiosExpanded) window.__cmSetCambiosExpanded(false);
         
         showTourStep();
     }
@@ -6714,7 +6826,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   var MODELS={
     burbujas:{ brush:function(t,sp){ var f0=240+sp*150+rr(0,90); tone(t,{type:"sine",f:f0,f1:f0*(1.7+sp*0.9),dur:0.035+0.02*sp,peak:0.16+sp*0.26}); if(sp>0.25) grain(t,{src:"white",type:"highpass",f:3200,q:0.7,dur:0.008,peak:0.07+sp*0.10}); },   /* v0.30 (Tony: «las burbujas no suenan al rozarse»): el suelo era 0.05 = inaudible; ahora 0.16 + chispa desde sp>0.25 */
                hit:function(t){ tone(t,{type:"sine",f:360,f1:820+rr(0,160),dur:0.11,peak:0.6}); grain(t,{src:"white",type:"highpass",f:2600,q:0.7,dur:0.012,peak:0.34}); } },
-    madera:{   brush:function(t,sp){ grain(t,{src:"brown",type:"lowpass",f:420+sp*1000,q:1.2,dur:0.045,peak:0.24+sp*0.42}); if(sp>0.65) grain(t,{src:"white",type:"bandpass",f:1400,q:2,dur:0.02,peak:0.05+sp*0.10}); },   /* raspado leñoso CÁLIDO (marrón+lowpass = madera, confirmado por tu oído); chispa extra al rozar fuerte */
+    madera:{   brush:function(t,sp){ grain(t,{src:"brown",type:"lowpass",f:420+sp*1000,q:1.2,dur:0.045,peak:0.30+sp*0.50}); if(sp>0.65) grain(t,{src:"white",type:"bandpass",f:1400,q:2,dur:0.02,peak:0.06+sp*0.12}); },   /* v1.62: raspado leñoso un 20-25% más presente sin subir el master ni las demás texturas */
                hit:function(t){ modal(t,[{f:210,decay:0.16,gain:0.42},{f:560,decay:0.10,gain:0.26},{f:1450,decay:0.05,gain:0.13}],3200); } },
     papel:{    brush:function(t,sp){ var n=(sp>0.5)?3:2,i; for(i=0;i<n;i++) grain(t+i*(0.008+rr(0,0.012)),{src:"white",type:"highpass",f:1500+rr(0,3800),q:0.8,dur:0.008+rr(0,0.006),peak:0.10+sp*0.22+(Math.random()<0.25?0.26:0)}); },   /* cracks IRREGULARES, highpass crujiente, alguno fuerte = arrugar papel */
                hit:function(t){ for(var i=0;i<16;i++){ var loud=Math.random()<0.3; grain(t+i*(0.006+rr(0,0.02)),{src:"white",type:"highpass",f:1500+rr(0,4200),q:0.8,dur:0.007+rr(0,0.008),peak:(loud?0.42:0.14)+rr(0,0.10)}); } } },   /* scrunch: timing+nivel irregulares, cracks sueltos fuertes */
@@ -6779,15 +6891,28 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     ".cmBub.popped{background:radial-gradient(circle at 50% 50%,rgba(124,58,237,.14),rgba(124,58,237,.05));box-shadow:inset 0 1px 2px rgba(0,0,0,.3);cursor:default;transform:scale(.82)}"+
     ".cmCrumb{flex:0 0 auto;min-width:44px;min-height:44px;border:none;background:transparent;cursor:pointer;font-size:21px;line-height:1;padding:8px;transition:transform .1s;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}"+
     ".cmCrumb:hover{transform:scale(1.18) rotate(-6deg)}"+
-    ".cmTex.cmTexCall{box-shadow:0 0 0 3px rgba(124,58,237,.28),0 8px 24px rgba(124,58,237,.25),inset 0 0 0 1px rgba(80,60,140,.2);filter:saturate(1.12);animation:cmTexCall 1.15s ease-in-out 1}"+
-    ".cmTex.cmTexCall::after{content:attr(data-call);position:absolute;right:9px;top:4px;z-index:3;padding:3px 7px;border-radius:999px;background:#7c3aed;color:#fff;font:700 10px/1 system-ui;pointer-events:none}"+
-    ".cmTex.cmTexCall .cmBub,.cmTex.cmTexCall .cmCrumb{animation:cmTexWave .7s ease-in-out 1}"+
+    ".cmTex.cmTexCall{box-shadow:0 0 0 4px rgba(124,58,237,.32),0 10px 30px rgba(124,58,237,.32),inset 0 0 0 1px rgba(80,60,140,.24);filter:saturate(1.2);animation:cmTexCall 1.55s ease-in-out 1}"+
+    ".cmTex.cmTexCall::after{content:attr(data-call);position:absolute;right:9px;top:4px;z-index:3;padding:5px 9px;border-radius:999px;background:#7c3aed;color:#fff;font:800 11px/1 system-ui;box-shadow:0 4px 12px rgba(72,32,150,.28);pointer-events:none}"+
+    ".cmTex.cmTexCall .cmBub,.cmTex.cmTexCall .cmCrumb{animation:cmTexWave .9s ease-in-out 1}"+
+    ".cmTex.cmTexCall button:first-of-type{animation:cmTexTwirl 1.05s cubic-bezier(.2,.8,.25,1) 1}"+
     ".cmTex.cmTexCall button:nth-of-type(2){animation-delay:.08s}.cmTex.cmTexCall button:nth-of-type(3){animation-delay:.16s}.cmTex.cmTexCall button:nth-of-type(4){animation-delay:.24s}.cmTex.cmTexCall button:nth-of-type(5){animation-delay:.32s}"+
-    "@keyframes cmTexCall{0%,100%{transform:translateX(0)}35%{transform:translateX(3px)}65%{transform:translateX(-2px)}}"+
-    "@keyframes cmTexWave{0%,100%{transform:translateY(0) rotate(0)}45%{transform:translateY(-7px) rotate(-7deg)}}"+
+    ".cmTex[data-fx-phase='1']{box-shadow:0 0 0 3px rgba(124,58,237,.22),inset 0 0 18px rgba(255,255,255,.6)}"+
+    ".cmTex[data-fx-phase='2'],.cmTex[data-fx-phase='3']{box-shadow:0 0 0 4px rgba(124,58,237,.32),0 8px 26px rgba(124,58,237,.24),inset 0 0 28px rgba(255,255,255,.72)}"+
+    "#cmAsmrFx{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:80;contain:layout paint}"+
+    ".cmAsmrFxItem{position:absolute;top:var(--fx-top);font-size:var(--fx-size);line-height:1;opacity:0;filter:drop-shadow(0 8px 9px rgba(30,25,55,.18));will-change:transform,opacity}"+
+    ".cmAsmrFxItem[data-side='l']{left:-58px;transform-origin:left bottom;animation:cmFxFromLeft var(--fx-dur) cubic-bezier(.16,.8,.25,1) forwards}"+
+    ".cmAsmrFxItem[data-side='r']{right:-58px;transform-origin:right bottom;animation:cmFxFromRight var(--fx-dur) cubic-bezier(.16,.8,.25,1) forwards}"+
+    ".cmAsmrFxItem[data-tex='madera'],.cmAsmrFxItem[data-tex='hojas']{font-size:calc(var(--fx-size) * 1.25)}"+
+    "@keyframes cmTexCall{0%,100%{transform:translateX(0)}18%{transform:translateX(5px)}32%{transform:translateX(-4px)}48%{transform:translateX(3px)}64%{transform:translateX(-2px)}}"+
+    "@keyframes cmTexWave{0%,100%{transform:translateY(0) rotate(0) scale(1)}45%{transform:translateY(-9px) rotate(-9deg) scale(1.16)}}"+
+    "@keyframes cmTexTwirl{0%,100%{transform:scale(1) rotate(0)}45%{transform:scale(1.42) rotate(190deg)}70%{transform:scale(1.18) rotate(350deg)}}"+
+    "@keyframes cmFxFromLeft{0%{opacity:0;transform:translateX(-25px) scale(.25) rotate(-14deg)}18%,70%{opacity:.95}72%{transform:translateX(44px) scale(1) rotate(4deg)}100%{opacity:0;transform:translateX(86px) translateY(-18px) scale(1.12) rotate(10deg)}}"+
+    "@keyframes cmFxFromRight{0%{opacity:0;transform:translateX(25px) scale(.25) rotate(14deg)}18%,70%{opacity:.95}72%{transform:translateX(-44px) scale(1) rotate(-4deg)}100%{opacity:0;transform:translateX(-86px) translateY(-18px) scale(1.12) rotate(-10deg)}}"+
+    "body.cmMotionOff .cmTex.cmTexCall,body.cmMotionOff .cmTex.cmTexCall .cmBub,body.cmMotionOff .cmTex.cmTexCall .cmCrumb,body.cmMotionOff .cmTex.cmTexCall button{animation:none!important}"+
     "body.asmrOff .cmTex{opacity:.42;filter:grayscale(.55)}"+
+    "body.asmrOff #cmAsmrFx,body.cmMotionOff #cmAsmrFx{display:none}"+
     "@media(max-width:640px){.cmTex{max-width:92vw;margin:12px auto}}"+
-    "@media(prefers-reduced-motion:reduce){.cmTex,.cmTex::before,.cmBub,.cmCrumb{transition:none}.cmTex.cmTexCall,.cmTex.cmTexCall .cmBub,.cmTex.cmTexCall .cmCrumb{animation:none}}";
+    "@media(prefers-reduced-motion:reduce){.cmTex,.cmTex::before,.cmBub,.cmCrumb{transition:none}.cmTex.cmTexCall,.cmTex.cmTexCall .cmBub,.cmTex.cmTexCall .cmCrumb,.cmTex.cmTexCall button:first-of-type{animation:none!important}#cmAsmrFx{display:none}body.cmMotionOn #cmAsmrFx{display:block}}";
   document.head.appendChild(css);
 
   /* ---------- VARIEDAD: 13 texturas que rotan por carga, sin repetir en la misma página ---------- */
@@ -6821,11 +6946,11 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
 
   var ribbons=[];
   function mkBubble(prof){ var b=document.createElement("button"); b.type="button"; b.tabIndex=0; b.className="cmBub"; b.setAttribute("aria-label","burbuja para reventar");
-    b.addEventListener("click",function(e){ e.stopPropagation(); if(b.classList.contains("popped")) return; b.classList.add("popped"); hit(prof);
+    b.addEventListener("click",function(e){ e.stopPropagation(); if(b.classList.contains("popped")) return; b.classList.add("popped"); hit(prof); progressFx(b.closest(".cmTex"),6,e.clientX,e.clientY);
       setTimeout(function(){ try{ b.classList.remove("popped"); }catch(e){} }, 10000+Math.random()*6000); }); return b; }
   function mkBit(emoji, prof){ var c=document.createElement("button"); c.type="button"; c.tabIndex=0; c.className="cmCrumb"; c.textContent=emoji; c.setAttribute("aria-label","tócame para sonar");
-    c.addEventListener("click",function(e){ e.stopPropagation(); if(c.dataset.busy) return; c.dataset.busy="1"; hit(prof);
-      try{ c.animate([{transform:"scale(1) rotate(0)"},{transform:"scale(1.3) rotate(-10deg)"},{transform:"scale(.25) rotate(14deg)",opacity:.15}],{duration:260}); }catch(_){}
+    c.addEventListener("click",function(e){ e.stopPropagation(); if(c.dataset.busy) return; c.dataset.busy="1"; hit(prof); progressFx(c.closest(".cmTex"),6,e.clientX,e.clientY);
+      if(!reduce) try{ c.animate([{transform:"scale(1) rotate(0)"},{transform:"scale(1.3) rotate(-10deg)"},{transform:"scale(.25) rotate(14deg)",opacity:.15}],{duration:260}); }catch(_){}
       setTimeout(function(){ c.style.visibility="hidden"; },240);
       setTimeout(function(){ try{ c.style.visibility=""; c.removeAttribute("data-busy"); }catch(e){} }, 9000+Math.random()*5000); }); return c; }
   function mkLabel(txt){ var l=document.createElement("span"); l.className="cmTexLbl"; l.textContent=txt; return l; }
@@ -6845,13 +6970,70 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   }
   buildRibbons();
 
+  /* v1.62 — contrato heredable: cada textura declara QUÉ aparece cuando el roce se vuelve intenso.
+     El motor común da umbrales, límite de partículas, limpieza y reduced-motion; una textura futura
+     solo tiene que añadir su manifestación aquí y pasa por el mismo comportamiento. */
+  var FX_MANIFEST={
+    burbujas:["🫧","✨"], cristal:["✨","💎","✦"], madera:["🌲","🌿","🍃"],
+    muelle:["🌀","✨","〰️"], slime:["🟢","🫧","💧"], nieve:["❄️","🏔️","✦"],
+    cereales:["🌽","🥣","✨"], grava:["🪨","✦","⛰️"], pana:["🧶","〰️","🪡"],
+    arena:["🏖️","⏳","✨"], papel:["📄","✂️","📝"], hojas:["🍃","🌿","🌱"],
+    cremallera:["⚡","🔗","✨"]
+  };
+  var fxLayer=document.createElement("div"); fxLayer.id="cmAsmrFx"; fxLayer.setAttribute("aria-hidden","true"); document.body.appendChild(fxLayer);
+  var fxStates={},MAX_FX=24;
+  function motionAllowed(){ return enabled&&!document.body.classList.contains("cmMotionOff")&&(!reduce||document.body.classList.contains("cmMotionOn")); }
+  function removeFx(el){ try{ if(el&&el.parentNode) el.parentNode.removeChild(el); }catch(e){} }
+  function clearFx(){ while(fxLayer.firstChild) fxLayer.removeChild(fxLayer.firstChild); Object.keys(fxStates).forEach(function(k){ var s=fxStates[k]; clearTimeout(s.fade); s.energy=0; s.phase=0; s.phase2Shown=false; }); ribbons.forEach(function(r){r.removeAttribute("data-fx-phase");}); }
+  function spawnFx(tex,count){
+    if(!motionAllowed()) return 0;
+    var set=FX_MANIFEST[tex]||["✨"], made=0, large=(tex==="madera"||tex==="hojas");
+    for(var i=0;i<count;i++){
+      while(fxLayer.children.length>=MAX_FX) removeFx(fxLayer.firstElementChild);
+      var el=document.createElement("span"), side=(i%2===0?"l":"r"), dur=Math.round(rr(3300,5000));
+      el.className="cmAsmrFxItem"; el.dataset.side=side; el.dataset.tex=tex;
+      el.textContent=set[Math.floor(Math.random()*set.length)];
+      el.style.setProperty("--fx-top",Math.round(rr(12,82))+"%");
+      el.style.setProperty("--fx-size",Math.round(large?rr(42,68):rr(26,48))+"px");
+      el.style.setProperty("--fx-dur",dur+"ms");
+      fxLayer.appendChild(el); made++;
+      (function(node,ttl){ setTimeout(function(){removeFx(node);},ttl+180); })(el,dur);
+    }
+    return made;
+  }
+  function progressFx(rib,amount,x,y,forcedType){
+    var tex=forcedType||(rib&&rib.dataset.tex)||"burbujas", t=now();
+    var s=fxStates[tex]||(fxStates[tex]={energy:0,last:t,lastBurst:0,phase:0,phase2Shown:false,fade:0});
+    s.energy=Math.max(0,s.energy-(t-s.last)/520)+Math.max(0,amount||0); s.last=t;
+    var phase=s.energy>=24?3:(s.energy>=13?2:(s.energy>=5?1:0)); s.phase=phase;
+    if(rib){ if(phase) rib.dataset.fxPhase=String(phase); else rib.removeAttribute("data-fx-phase"); }
+    if(phase>=2&&!s.phase2Shown){ spawnFx(tex,2); s.phase2Shown=true; }
+    if(phase===3&&t-s.lastBurst>1900){ spawnFx(tex,8); s.lastBurst=t; s.energy=13; s.phase=2; if(rib) rib.dataset.fxPhase="2"; }
+    clearTimeout(s.fade); s.fade=setTimeout(function(){ s.energy=0; s.phase=0; s.phase2Shown=false; if(rib) rib.removeAttribute("data-fx-phase"); },4300);
+    return {tex:tex,phase:phase,energy:Math.round(s.energy*10)/10,items:fxLayer.children.length};
+  }
+  window.__cmAsmrFx={
+    manifestations:Object.keys(FX_MANIFEST),
+    coverage:TYPES.map(function(t){return t.k;}).filter(function(k){return !FX_MANIFEST[k];}),
+    max:MAX_FX,
+    feed:function(tex,amount){ var rib=document.querySelector('.cmTex[data-tex="'+tex+'"]'); return progressFx(rib,amount==null?30:amount,innerWidth/2,innerHeight/2,tex); },
+    clear:clearFx,
+    state:function(){ var out={items:fxLayer.children.length}; Object.keys(fxStates).forEach(function(k){out[k]={energy:Math.round(fxStates[k].energy*10)/10,phase:fxStates[k].phase};}); return out; }
+  };
+
   /* Descubrimiento sin ruido constante: al entrar una zona nueva en pantalla, una sola franja
      llama suavemente la atención una vez. Calma/reduced-motion conserva el brillo, sin movimiento. */
   function markTouched(rib){ if(!rib) return; rib.dataset.touched="1"; rib.classList.remove("cmTexCall"); try{ if(window.__cmTexFound) window.__cmTexFound(rib.dataset.tex); }catch(_e){} }
-  function callOut(rib){ if(!rib||rib.dataset.touched||document.hidden) return; ribbons.forEach(function(r){r.classList.remove("cmTexCall");}); rib.classList.add("cmTexCall"); setTimeout(function(){try{rib.classList.remove("cmTexCall");}catch(e){}},1900); }
+  function callOut(rib){ if(!enabled||!rib||rib.dataset.touched||document.hidden) return false; ribbons.forEach(function(r){r.classList.remove("cmTexCall");}); rib.classList.add("cmTexCall"); setTimeout(function(){try{rib.classList.remove("cmTexCall");}catch(e){}},1900); return true; }
   ribbons.forEach(function(rib){ rib.addEventListener("pointerdown",function(){markTouched(rib);},{passive:true}); rib.addEventListener("focusin",function(){markTouched(rib);}); });
   try{ if("IntersectionObserver" in window){ var seenTimer=0, io=new IntersectionObserver(function(entries){ entries.forEach(function(en){ var rib=en.target; if(!en.isIntersecting||rib.dataset.prompted||rib.dataset.touched) return; rib.dataset.prompted="1"; clearTimeout(seenTimer); seenTimer=setTimeout(function(){callOut(rib);},1000); }); },{threshold:.65}); ribbons.forEach(function(r){io.observe(r);}); } }catch(e){}
-  window.__cmNudgeAsmr=function(){ var visible=ribbons.filter(function(r){var b=r.getBoundingClientRect();return !r.dataset.touched&&b.bottom>0&&b.top<innerHeight;}); if(visible.length) callOut(visible[Math.floor(Math.random()*visible.length)]); };
+  var nudgeTimer=0,nudgeCount=0,nextNudgeAt=0;
+  function nudgeBusy(){ return document.hidden||!enabled||(window.__cmNoveltyState&&window.__cmNoveltyState.tourActive)||!!document.querySelector("#mapBig-ov.show,#mapBig-ov:not([hidden]),.cmFbOpen,.commentOverlay.open"); }
+  window.__cmNudgeAsmr=function(){ var visible=ribbons.filter(function(r){var b=r.getBoundingClientRect();return !r.dataset.touched&&b.bottom>0&&b.top<innerHeight;}); if(!visible.length||nudgeBusy()) return false; var ok=callOut(visible[Math.floor(Math.random()*visible.length)]); if(ok) nudgeCount++; return ok; };
+  function scheduleNudge(delay){ clearTimeout(nudgeTimer); delay=delay==null?Math.round(rr(16000,26000)):delay; nextNudgeAt=Date.now()+delay; nudgeTimer=setTimeout(function(){ window.__cmNudgeAsmr(); scheduleNudge(); },delay); }
+  scheduleNudge(6500);
+  window.__cmAsmrNudge={force:window.__cmNudgeAsmr,state:function(){return {count:nudgeCount,nextAt:nextNudgeAt,enabled:enabled};}};
+  document.addEventListener("visibilitychange",function(){ if(document.hidden) clearTimeout(nudgeTimer); else scheduleNudge(4500); });
 
   /* ---------- rozar = fricción según velocidad (timbre según la textura) ---------- */
   var lastX=0,lastY=0,lastT=0,brushT=0,litRib=null;
@@ -6866,7 +7048,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     var dt=Math.max(8,t-lastT), dx=x-lastX, dy=y-lastY, dist=Math.sqrt(dx*dx+dy*dy);
     var speed=Math.max(0,Math.min(1,(dist/dt)/2.2));
     brushT=t; lastX=x; lastY=y; lastT=t;
-    if(dist>3){ markTouched(rib); brush(rib.dataset.tex||"burbujas", speed); }
+    if(dist>3){ markTouched(rib); brush(rib.dataset.tex||"burbujas", speed); progressFx(rib,1.4+speed*2.3,x,y); }
   }
   if(canHover) document.addEventListener("pointermove",function(e){ onMove(e.clientX,e.clientY,e.target); },{passive:true});
   document.addEventListener("touchmove",function(e){ var tt=e.touches&&e.touches[0]; if(!tt) return; var el=document.elementFromPoint(tt.clientX,tt.clientY); if(el&&el.closest&&el.closest(".cmTex")) onMove(tt.clientX,tt.clientY,el); else clearLit(); },{passive:true});
@@ -6892,11 +7074,104 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
 </script>
 
 <script>
+/* v1.62 — 16 candidatos ASMR, como experimento. Usa el motor real del Cuaderno y el inbox
+   privado de feedback ya existente; no crea un backend paralelo ni afirma que un prototipo ganó. */
+(function(){ try{
+  var LAB=[
+    {k:"susurro",e:"🫢",n:"Susurro oído a oído",en:"Ear-to-ear whisper",w:"Suave y cercano",wen:"Soft and close",m:"arena"},
+    {k:"cepillo-pelo",e:"💇",n:"Cepillado de pelo",en:"Hair brushing",w:"Fibras lentas",wen:"Slow fibres",m:"pana"},
+    {k:"cepillo-micro",e:"🎙️",n:"Cepillo de micrófono",en:"Microphone brushing",w:"Barrido de lado a lado",wen:"Side-to-side sweep",m:"hojas"},
+    {k:"lluvia",e:"🌧️",n:"Lluvia en la ventana",en:"Rain on a window",w:"Gotas finas y fondo calmado",wen:"Fine drops and calm ambience",m:"arena"},
+    {k:"teclado",e:"⌨️",n:"Teclado mecánico",en:"Mechanical keyboard",w:"Tics secos y ordenados",wen:"Dry, ordered ticks",m:"madera"},
+    {k:"maquina",e:"📠",n:"Máquina de escribir",en:"Typewriter",w:"Golpes con ritmo",wen:"Rhythmic strikes",m:"papel"},
+    {k:"tijeras",e:"✂️",n:"Tijeras de peluquería",en:"Haircut scissors",w:"Cortes metálicos breves",wen:"Short metallic snips",m:"cristal"},
+    {k:"escritura",e:"✏️",n:"Lápiz escribiendo",en:"Pencil writing",w:"Rascar fino sobre papel",wen:"Fine scratch on paper",m:"papel"},
+    {k:"paginas",e:"📖",n:"Pasar páginas",en:"Page turning",w:"Pliegues y roce seco",wen:"Folds and dry friction",m:"papel"},
+    {k:"aluminio",e:"🪙",n:"Aluminio crujiente",en:"Foil crinkles",w:"Crujidos brillantes",wen:"Bright crinkles",m:"cereales"},
+    {k:"agua",e:"💧",n:"Agua vertida",en:"Pouring water",w:"Gotas y ondas",wen:"Drops and ripples",m:"burbujas"},
+    {k:"fuego",e:"🔥",n:"Fuego crepitando",en:"Crackling fire",w:"Chispas secas y cálidas",wen:"Warm, dry sparks",m:"hojas"},
+    {k:"ceramica",e:"🏺",n:"Tapping en cerámica",en:"Ceramic tapping",w:"Golpe hueco y limpio",wen:"Clean hollow tap",m:"cristal"},
+    {k:"peine",e:"🪮",n:"Peine y cerdas",en:"Comb and bristles",w:"Dientes recorriendo textura",wen:"Teeth crossing texture",m:"pana"},
+    {k:"masaje",e:"💆",n:"Masaje de cabeza",en:"Head massage",w:"Presión blanda y lenta",wen:"Soft, slow pressure",m:"slime"},
+    {k:"boca",e:"👄",n:"Sonidos de boca",en:"Mouth sounds",w:"Polariza: o encanta o sobra",wen:"Polarising: love it or leave it",m:"slime"}
+  ];
+  var feat=document.getElementById("asmrLabFeatured"), more=document.getElementById("asmrLabMore"), status=document.getElementById("asmrLabStatus");
+  if(!feat||!more) return;
+  var VK="cm_asmr_lab_votes_v1", votes={}; try{votes=JSON.parse(localStorage.getItem(VK)||"{}");}catch(e){votes={};}
+  function save(){ try{localStorage.setItem(VK,JSON.stringify(votes));}catch(e){} }
+  function preview(c,tile){
+    if(!window.__asmr) return false;
+    window.__asmr.demo(c.m); setTimeout(function(){try{window.__asmr.brushAt(c.m,.58);}catch(e){}},85);
+    tile.classList.remove("playing"); void tile.offsetWidth; tile.classList.add("playing"); setTimeout(function(){tile.classList.remove("playing");},650);
+    if(status) status.textContent="▶ Prototipo: "+c.n+". Tú decides si merece una muestra final.";
+    return true;
+  }
+  function paintVote(tile,key){ Array.prototype.forEach.call(tile.querySelectorAll(".asmrVote"),function(b){ var on=votes[key]===b.dataset.vote; b.classList.toggle("on",on); b.setAttribute("aria-pressed",String(on)); }); }
+  function vote(c,val,tile){
+    votes[c.k]=val; save(); paintVote(tile,c.k);
+    var en=!!(document.getElementById("langEn")&&document.getElementById("langEn").getAttribute("aria-pressed")==="true");
+    var prefix=en?(val==="gusta"?"👍 Keeping it as a candidate.":"👎 Noted: I would not move it to the next round."):(val==="gusta"?"👍 Me lo quedo como candidato.":"👎 Anotado: lo marco para no pasar de ronda.");
+    if(status) status.textContent=prefix+(en?" Saved here · sending signal…":" Preferencia guardada aquí · enviando señal…");
+    try{
+      if(typeof window.__fb==="function"){
+        Promise.resolve(window.__fb({card:"🎧 Laboratorio ASMR",section:c.n,tipo:"asmr-candidato-"+val,texto:"ASMR-CANDIDATO\nid: "+c.k+"\nvoto: "+val+"\nprototipo: sintetizado-v1\norigen: laboratorio-cuaderno"})).then(function(result){
+          if(status&&votes[c.k]===val) status.textContent=prefix+(result==="sent"?(en?" MADRE received the signal.":" MADRE recibió la señal."):(en?" Saved here; delivery is pending.":" Guardada aquí; el envío queda pendiente."));
+        },function(){ if(status&&votes[c.k]===val) status.textContent=prefix+(en?" Saved here; delivery is pending.":" Guardada aquí; el envío queda pendiente."); });
+      } else if(status) status.textContent=prefix+(en?" Saved here; delivery was unavailable.":" Guardada aquí; el envío no estaba disponible.");
+    }catch(e){ if(status) status.textContent=prefix+(en?" Saved here; delivery is pending.":" Guardada aquí; el envío queda pendiente."); }
+  }
+  function tile(c){
+    var a=document.createElement("article"); a.className="asmrCand"; a.dataset.candidate=c.k;
+    var play=document.createElement("button"); play.type="button"; play.className="asmrPlay"; play.textContent=c.e; play.setAttribute("aria-label","Escuchar prototipo: "+c.n); play.setAttribute("data-en","Play prototype: "+c.en);
+    var tx=document.createElement("span"); tx.className="asmrCandText";
+    var nm=document.createElement("strong"); nm.className="asmrCandName"; nm.textContent=c.n; nm.setAttribute("data-en",c.en);
+    var wh=document.createElement("span"); wh.className="asmrCandWhy"; wh.textContent=c.w; wh.setAttribute("data-en",c.wen);
+    var row=document.createElement("span"); row.className="asmrVotes";
+    [["gusta","👍","Me gusta"],["no-gusta","👎","No me gusta"]].forEach(function(v){ var b=document.createElement("button"); b.type="button"; b.className="asmrVote"; b.dataset.vote=v[0]; b.textContent=v[1]; b.setAttribute("aria-label",v[2]+": "+c.n); b.setAttribute("aria-pressed","false"); b.addEventListener("click",function(){vote(c,v[0],a);}); row.appendChild(b); });
+    tx.appendChild(nm); tx.appendChild(wh); tx.appendChild(row); a.appendChild(play); a.appendChild(tx); play.addEventListener("click",function(){preview(c,a);}); paintVote(a,c.k); return a;
+  }
+  LAB.forEach(function(c,i){ (i<4?feat:more).appendChild(tile(c)); });
+  var focusObserver=null,labCard=document.getElementById("asmrLabCard");
+  if(labCard&&"IntersectionObserver" in window){
+    focusObserver=new IntersectionObserver(function(entries){ entries.forEach(function(en){ document.body.classList.toggle("cmLabFocus",en.isIntersecting&&en.intersectionRatio>=.05); }); },{threshold:[0,.05]});
+    focusObserver.observe(labCard);
+  }
+  window.__cmAsmrLab={count:LAB.length,featured:4,keys:LAB.map(function(c){return c.k;}),voteCount:function(){return Object.keys(votes).length;},focus:function(){return document.body.classList.contains("cmLabFocus");},preview:function(k){for(var i=0;i<LAB.length;i++)if(LAB[i].k===k)return preview(LAB[i],document.querySelector('[data-candidate="'+k+'"]'));return false;}};
+}catch(e){ console.warn("asmr-lab",e); } })();
+</script>
+
+<script>
 /* C1: botón "🤔 no entiendo" en cada tarjeta -> feedback de dónde se entiende menos */
 (function(){ try{
   var D=document;
+  var FUN_KEY="cm_fun_next_v1";
   function cardTitle(card){ try{ var t=card.querySelector(".ctitle .t"); return t?("📄 "+t.textContent.trim().slice(0,60)):"Tarjeta"; }catch(e){ return "Tarjeta"; } }
-  function sendNie(card, tipo){ try{ if(window.__fb) window.__fb({card:cardTitle(card), section:"", tipo:tipo, texto:""}); }catch(e){} }
+  function sendNie(card, tipo, texto){ try{ if(window.__fb) window.__fb({card:cardTitle(card), section:"", tipo:tipo, texto:texto||""}); }catch(e){} }
+  function armFun(card){ try{ localStorage.setItem(FUN_KEY,JSON.stringify({at:Date.now(),card:cardTitle(card)})); }catch(e){} window.__cmFunAdaptation.armed=true; }
+  function revealLab(){
+    var target=D.getElementById("asmrLabCard"); if(!target) return false;
+    if(target.offsetParent===null){ var bs=D.querySelectorAll(".pdReveal"); for(var i=0;i<bs.length&&target.offsetParent===null;i++) bs[i].click(); }
+    var det=target.querySelector("details"); if(det) det.open=true;
+    try{ target.scrollIntoView({behavior:(matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"),block:"start"}); }catch(e){}
+    setTimeout(function(){try{if(window.__cmNudgeAsmr)window.__cmNudgeAsmr();}catch(e){}},700); return true;
+  }
+  function applyFunReturn(pending){
+    var anchor=D.getElementById("novBanner")||D.getElementById("apuestaActivaCard"); if(!anchor||D.getElementById("cmFunReturn")) return false;
+    var box=D.createElement("aside"); box.id="cmFunReturn"; box.className="cmFunReturn";
+    var copy=D.createElement("span"); copy.className="cmFunCopy"; copy.textContent="😴 Me dijiste «me aburro». Esta visita cambia una cosa: te dejo elegir el siguiente juguete."; copy.setAttribute("data-en","😴 You told me ‘I’m bored’. This visit changes one thing: you choose the next toy.");
+    var go=D.createElement("button"); go.type="button"; go.textContent="🎲 Sorpréndeme"; go.setAttribute("data-en","🎲 Surprise me"); go.addEventListener("click",revealLab);
+    box.appendChild(copy); box.appendChild(go); anchor.insertAdjacentElement("afterend",box);
+    try{ localStorage.removeItem(FUN_KEY); }catch(e){}
+    window.__cmFunAdaptation.applied=true; window.__cmFunAdaptation.source=pending&&pending.card||"aburre"; return true;
+  }
+  window.__cmFunAdaptation={applied:false,armed:false,reveal:revealLab};
+  (function(){ try{ var raw=localStorage.getItem(FUN_KEY), p=raw?JSON.parse(raw):null; if(p) applyFunReturn(p); }catch(e){} })();
+  (function(){ var st=D.createElement("style"); st.textContent=
+    ".cmFunReturn{display:flex;align-items:center;gap:10px;justify-content:space-between;margin:10px 0 12px;padding:11px 12px;border:1.5px solid #f59e0b;border-radius:14px;background:linear-gradient(135deg,#fff8df,#f2eaff);box-shadow:0 8px 24px rgba(124,58,237,.12);color:#34215b}"+
+    ".cmFunCopy{font:750 13px/1.4 system-ui,-apple-system,Segoe UI,sans-serif}"+
+    ".cmFunReturn button{flex:0 0 auto;min-height:44px;border:0;border-radius:12px;padding:0 13px;background:#7c3aed;color:#fff;font-weight:800;cursor:pointer;box-shadow:0 5px 14px rgba(124,58,237,.22)}"+
+    ".cmFunReturn button:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}"+
+    "@media(max-width:480px){.cmFunReturn{align-items:stretch;flex-direction:column}.cmFunReturn button{width:100%}}"; D.head.appendChild(st); })();
   function closePop(){ var p=D.getElementById("niePopOpen"); if(p){ try{p.remove();}catch(e){} } }
   function ok(btn){ btn.classList.add("nieOk"); btn.textContent="✓"; setTimeout(function(){ btn.classList.remove("nieOk"); btn.textContent="🤔"; },1300); }
   function popFor(btn, card){
@@ -6907,7 +7182,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     pop.appendChild(mk("🔽 simplifícalo más", function(){ sendNie(card,"simplificar"); ok(btn); closePop(); }));
     pop.appendChild(mk("💡 dame un ejemplo", function(){ sendNie(card,"ejemplo"); ok(btn); closePop(); }));
     pop.appendChild(mk("✍️ desarrollar / foto", function(){ closePop(); try{ if(window.__openFb) window.__openFb(cardTitle(card),"","mas-claridad"); }catch(e){} }));
-    pop.appendChild(mk("😴 aburre", function(){ sendNie(card,"aburre"); ok(btn); closePop(); }));
+    pop.appendChild(mk("😴 aburre", function(){ armFun(card); sendNie(card,"aburre","ADAPTACION-PROXIMA-VISITA\naccion: probar una intervención más divertida en esta zona\norigen: boton-aburre-cuaderno"); ok(btn); closePop(); }));
     pop.appendChild(mk("😍 me gusta", function(){ sendNie(card,"gusto"); ok(btn); closePop(); }));
     D.body.appendChild(pop);
     var r=btn.getBoundingClientRect(), h=pop.offsetHeight||90, w=pop.offsetWidth||220;
@@ -7186,7 +7461,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.61";
+  window.__cmVersion="v1.62";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
@@ -7608,7 +7883,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     sep("EL GIRO","8 de julio: alguien me vio."),
     byId("giroCard"),
     sep("ACTO III · El final no está escrito","Lo que pasa ahora mismo — y tu parte en ello."),
-    byId("diarioVivo"), byId("envivo"), byId("madreHabla"), byNum("3"), byId("caminoCard"),
+    byId("diarioVivo"), byId("envivo"), byId("madreHabla"), byNum("3"), byId("caminoCard"), byId("asmrLabCard"),
     /* v1.49 — Acto III terminaba en un timestamp ("Actualizado: fecha") tras el Camino al 10/10:
        cerrado-administrativo, justo lo contrario de lo que pide esa lista (un hueco ABIERTO). No
        invento drama nueva (B2): repito, con otras palabras, lo que la propia tarjeta ya dice. */
@@ -7663,7 +7938,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
      intro:"Sigo el hilo en 2 paradas (ya abiertas abajo). El resto son fichas de consulta — ábrelas solo si quieres profundizar. Pero no te bajes antes de «EL GIRO», justo después de todo esto: es el momento que de verdad cambió mi historia.",
      els:group(["senalesCard","num:📖","num:12","num:⚰️","num:⚙️","num:🔁","num:11","num:10","num:8","num:9","num:5","num:6","dondeVive"])},
     {texto:"▾ Seguir con ACTO III — el final no está escrito",
-     els:(function(){ var a=group(["diarioVivo","envivo","madreHabla","num:3","caminoCard"]); if(ayudaCard) a.push(ayudaCard); return a; })()}
+     els:(function(){ var a=group(["diarioVivo","envivo","madreHabla","num:3","caminoCard","asmrLabCard"]); if(ayudaCard) a.push(ayudaCard); return a; })()}
   ];
 
   actos.forEach(function(acto){
