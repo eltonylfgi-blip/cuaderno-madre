@@ -705,7 +705,7 @@
   <div id="diarioVivo" hidden>
     <div class="dv-head">
       <span class="dv-pulse" aria-hidden="true"></span>
-      <span class="dv-sr">Sección viva: se actualiza sola cada pocos minutos.</span>
+      <span class="dv-sr">Sección del Cuaderno: se actualiza con cada versión publicada.</span>
       <span class="dv-title">📓 Diario del cuaderno · cambios de verdad</span>
       <span class="dv-since" id="dvSince"></span>
     </div>
@@ -713,80 +713,61 @@
     <div class="dv-foot" id="dvFoot"></div>
   </div>
   <script>
-  /* v0.14 — DIARIO VIVO: hace que el cuaderno "respire" con cambios REALES.
-     Lee los commits de verdad del repo (API pública de GitHub) y los muestra con su hora real;
-     se auto-refresca cada 3 min y marca lo nuevo. "Desde tu última visita" usa localStorage.
-     HONESTIDAD §9: son cambios reales (commits), no tiempo real fingido; no afirmo autonomía que no hay.
-     Degrada en silencio: si la API falla / no hay red / hay límite de cuota, el bloque queda oculto. */
+  /* v1.60 — DIARIO PUBLICADO: usa el changelog que viaja dentro de ESTA versión.
+     No consulta una API en cada visita: así no confunde un límite de cuota con falta de actividad.
+     "Desde tu última visita" compara versiones publicadas mediante localStorage. */
   (function(){ try{
-    if(!window.fetch) return;
-    var REPO="eltonylfgi-blip/cuaderno-madre", API="https://api.github.com/repos/"+REPO+"/commits?per_page=8";
+    var HISTORY="https://github.com/eltonylfgi-blip/cuaderno-madre/commits/main";
     var box=document.getElementById("diarioVivo"), list=document.getElementById("dvList"),
         sinceEl=document.getElementById("dvSince"), foot=document.getElementById("dvFoot");
     if(!box||!list) return;
-    var LV="cm_lastvisit_v1", seen={}, firstDone=false, timer=null;
-    function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
-    function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
-    function hace(iso){ var ms=Date.now()-new Date(iso).getTime(); if(ms<0) ms=0; var s=ms/1000;
-      if(s<90) return "hace un momento"; var m=s/60; if(m<60) return "hace "+Math.round(m)+" min";
-      var h=m/60; if(h<24) return "hace "+Math.floor(h)+" h"; var d=h/24; if(d<30){ var nd=Math.floor(d); return "hace "+nd+(nd===1?" día":" días"); }
-      var mo=Math.floor(d/30); return "hace "+mo+(mo===1?" mes":" meses"); }
-    function clean(msg){ var l=(msg||"").split("\n")[0].trim();
-      l=l.replace(/^(docs|fix|feat|chore|refactor|style|perf|test|build|ci|wip)(\(.+?\))?:\s*/i,"");
-      if(l.length>92) l=l.slice(0,90)+"…"; return l? l.charAt(0).toUpperCase()+l.slice(1) : "(cambio sin descripción)"; }
-    function render(commits, initial){
+    var LV="cm_lastvisit_baked_v2";
+    function lsGet(){ try{ var raw=localStorage.getItem(LV); return raw?JSON.parse(raw):null; }catch(e){ return null; } }
+    function lsSet(v){ try{ localStorage.setItem(LV,JSON.stringify(v)); }catch(e){} }
+    function clean(msg){ var l=(msg||"").trim(); if(l.length>92) l=l.slice(0,90)+"…"; return l||"(cambio sin descripción)"; }
+    function dayLabel(iso){ try{ return new Date(iso+"T12:00:00Z").toLocaleDateString("es-ES",{day:"numeric",month:"short"}); }catch(e){ return iso; } }
+    function build(){
+      var src=window.__cmBakedCambios||window.__cmCambios||[];
+      return src.map(function(c){ return {sha:(c.fecha||"")+"|"+(c.titulo||""),msg:c.titulo||"",date:c.fecha||"",url:HISTORY}; })
+                .filter(function(c){ return c.date&&c.msg; });
+    }
+    function countNew(commits,prev){
+      if(!prev||!prev.head) return 0;
+      if(prev.head===commits[0].sha) return 0;
+      for(var i=0;i<commits.length;i++){ if(commits[i].sha===prev.head) return i; }
+      return commits.length;
+    }
+    function render(commits,newCount){
       list.textContent="";
-      commits.slice(0,5).forEach(function(c){
-        var li=document.createElement("li"); var isNew=!initial && !seen[c.sha];
-        if(isNew) li.className="dv-new";
+      commits.slice(0,5).forEach(function(c,i){
+        var li=document.createElement("li"); if(i<newCount) li.className="dv-new";
         var when=document.createElement("span"); when.className="dv-when";
-        var a=document.createElement("a"); a.href=c.url; a.target="_blank"; a.rel="noopener noreferrer"; a.textContent=hace(c.date); a.title="Ver este cambio en GitHub"; a.setAttribute("aria-label","Ver en GitHub: "+clean(c.msg));
+        var a=document.createElement("a"); a.href=c.url; a.target="_blank"; a.rel="noopener noreferrer"; a.textContent=dayLabel(c.date); a.title="Ver el historial que respalda este cambio"; a.setAttribute("aria-label","Ver historial en GitHub: "+clean(c.msg));
         when.appendChild(a);
         var msg=document.createElement("span"); msg.className="dv-msg"; msg.textContent=clean(c.msg);
-        if(isNew){ var b=document.createElement("span"); b.className="dv-fresh"; b.textContent="✨ nuevo"; msg.appendChild(b); }
+        if(i<newCount){ var b=document.createElement("span"); b.className="dv-fresh"; b.textContent="✨ nuevo"; msg.appendChild(b); }
         li.appendChild(when); li.appendChild(msg); list.appendChild(li);
       });
-      commits.forEach(function(c){ seen[c.sha]=1; });
     }
-    function sinceLine(commits){
-      var prev=lsGet(LV);
-      if(!prev){ sinceEl.textContent="👋 primera vez — vuelve mañana y verás qué cambió"; return; }
-      var pd=new Date(prev).getTime(); var n=commits.filter(function(c){ return new Date(c.date).getTime()>pd; }).length;
-      if(n<=0){ sinceEl.textContent="🌙 desde tu última visita, aún nada nuevo"; }
-      else { var cap=(n>=commits.length)?(n+"+"):(""+n); sinceEl.textContent="🌙 desde tu última visita: "+cap+(n===1?" cambio nuevo":" cambios nuevos"); }
+    function loadBaked(){
+      var commits=build(), prev=lsGet();
+      if(!commits.length){
+        sinceEl.textContent="sin cambios disponibles en esta versión";
+        foot.textContent="El historial completo sigue disponible en GitHub.";
+        box.hidden=false; return;
+      }
+      var n=countNew(commits,prev);
+      if(!prev){ sinceEl.textContent="👋 primera visita · vuelve tras la próxima publicación"; }
+      else if(!n){ sinceEl.textContent="🌙 desde tu última visita, aún nada nuevo"; }
+      else { sinceEl.textContent="🌙 desde tu última visita: "+(n>=commits.length?n+"+":n)+(n===1?" cambio nuevo":" cambios nuevos"); }
+      render(commits,n);
+      foot.textContent="Cada línea sale del changelog de esta misma versión y enlaza al historial de commits. Cambia cuando se publica una versión nueva.";
+      box.hidden=false;
+      try{ var hr=document.getElementById("hoyReal"), last=commits[0];
+        if(hr){ hr.textContent="🔦 Última versión del Cuaderno: "+dayLabel(last.date)+" · «"+clean(last.msg)+"»"; hr.hidden=false; } }catch(e){}
+      lsSet({head:commits[0].sha,count:commits.length,seenAt:new Date().toISOString()});
     }
-    function load(initial){
-      fetch(API,{headers:{Accept:"application/vnd.github+json"}}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(arr){
-        if(!Array.isArray(arr)||!arr.length) throw 0;
-        var commits=arr.map(function(c){ return { sha:c.sha, msg:(c.commit&&c.commit.message)||"", date:(c.commit&&c.commit.committer&&c.commit.committer.date)||(c.commit&&c.commit.author&&c.commit.author.date), url:c.html_url }; })
-                       .filter(function(c){ return c.date; });
-        if(!commits.length) throw 0;
-        if(initial){ sinceLine(commits); }
-        render(commits, initial);
-        if(foot && !foot.textContent){ foot.textContent="Cada línea es un cambio real guardado. Unos los hago yo en bucle; otros, mientras me construyen. Vuelve y habrá más."; }
-        box.hidden=false;
-        /* v0.20: alimenta el «🔦 HOY» de la cabecera con los MISMOS datos reales (evidencia, no relato) */
-        try{ var hr=document.getElementById("hoyReal");
-          if(hr){ var day=Date.now()-864e5, hoy=commits.filter(function(c){ return new Date(c.date).getTime()>day; }).length, last=commits[0];
-            /* v1.05: este texto salia del mensaje de commit EN CRUDO (clean() solo quita prefijos tipo
-               "fix:", no jerga tecnica) -> un commit real llego a mostrar "#giroCard" a cualquier
-               visitante. window.__cmCambios[0] es el MISMO titulo que ya escribo a mano, en espanol
-               llano, para el propio changelog (v0.52 lo expone para el modo pelicula) - se prioriza ese
-               y el mensaje de commit crudo queda solo de red de seguridad si aun no cargo. */
-            var lastTitle=clean(last.msg);
-            try{
-              var cc=window.__cmCambios;
-              if(cc && cc[0] && cc[0].titulo){ lastTitle=cc[0].titulo.replace(/^\S+\s*v?\d+\.\d+\s*[—-]\s*/,""); }
-            }catch(e2){}
-            hr.textContent = hoy>0 ? ("🔦 Hoy, de verdad: ✓ "+hoy+(hoy===1?" cambio real":" cambios reales")+" en 24 h — el último, "+hace(last.date)+": «"+lastTitle+"»")
-                                   : ("🔦 Último cambio real, "+hace(last.date)+": «"+lastTitle+"»");
-            hr.hidden=false; } }catch(e){}
-        if(initial && !firstDone){ firstDone=true; lsSet(LV, new Date().toISOString()); if(!document.hidden) start(); }
-      }).catch(function(){ /* silencio: si no hay datos, el bloque sigue oculto (degrada limpio) */ });
-    }
-    function start(){ if(timer) return; timer=setInterval(function(){ if(!document.hidden) load(false); }, 180000); }
-    document.addEventListener("visibilitychange",function(){ if(document.hidden){ if(timer){ clearInterval(timer); timer=null; } } else { start(); } });
-    load(true);
+    window.addEventListener("load",loadBaked,{once:true});
   }catch(e){ console.warn("diarioVivo", e); } })();
   </script>
 
@@ -4245,6 +4226,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-14',titulo:'🫀 v1.60 — El Diario deja de fallar por cuota y el primer toque móvil llega a su destino',detalle:'El Diario ya no consulta GitHub en cada visita: lee el changelog incluido en la propia versión, enlaza al historial y distingue claramente la fecha del Cuaderno de la foto de estado de MADRE. En móvil, los controles iniciales ocupan una sola franja sin tapar el contenido. Durante la animación de entrada, el primer toque ejecuta su acción antes de terminar la animación. El número del pie se deriva del último cambio y deja de quedarse atrás. El verificador protege desde ahora las cuatro regresiones: llamada API, solapes, primer CTA y versión visible.'},
     {fecha:'2026-07-13',titulo:'🐛 v1.58 — Caza final: el verdadero origen del scroll fantasma',detalle:'Ahora SÍ he arreglado los 2 bugs que faltaban: (1) Las finas rayas moradas en la cima se han ocultado para siempre. (2) El scroll horizontal de 10px no se arreglaba ocultando el overflow, sino atacando la raíz: los seudoelementos de los botones y chips (.btn, .chip) tenían un inset de -10px pero carecían de position: relative, por lo que su área táctil se expandía 10px fuera de la pantalla. Además, se ha cambiado un width: 100vw problemático a 100%.'},
     {fecha:'2026-07-13',titulo:'🐛 v1.57 — Botones separados y 0 recortes abajo',detalle:'He arreglado 2 bugs visuales: (1) En móviles estrechos, las áreas invisibles de los botones English y Vivo se solapaban al tocarlas: ahora tienen más aire y es imposible equivocarse. (2) Los botones flotantes que en iOS quedaban cortados abajo, ahora respetan el espacio seguro (env safe-area-inset-bottom).'},
     {fecha:"2026-07-13",titulo:"✨ v1.56 — El cuaderno te saluda y te enseña lo nuevo (NOVEDADES INTERACTIVAS)",detalle:"Antes, tenías que bucear en el changelog para saber qué había cambiado desde tu última visita. Ahora, si vuelves después de un tiempo y hay novedades reales documentadas, MADRE te saluda discretamente en una esquina: «👋 Desde tu última visita hay X novedades — ¿te las enseño?». Si aceptas (o si pulsas el botón manual en el Diario), entras en el modo interactivo: te lleva automáticamente a cada cambio, con scroll suave y un resaltado visual que ilumina la novedad, dándote control para avanzar o salir en cualquier momento. Al igual que con todas las animaciones, si tienes «reducir movimiento» activado en tu sistema operativo, el scroll es directo e instantáneo. Cero ruido, 100% control, datos reales sin duplicar."},
@@ -4429,6 +4411,7 @@ window.__cmCorpus = {
      descubrimiento del mapa (nivel medio, entre 4 y 8 ramas exploradas). */
   try{ window.__investigMeta={count:investigBaked.length}; }catch(e){}
   async function loadCambios(){
+    try{ window.__cmBakedCambios=cambios.slice(); }catch(e){}
     renderCambios(cambios);
     try{
       var s=await mcp(T_SEARCH,{query:"title = 'CUADERNO_CAMBIOS.tsv'",pageSize:5,excludeContentSnippets:true});
@@ -7055,7 +7038,10 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
 (function(){ try{
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
-  window.__cmVersion="v1.51";
+  // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
+  window.__cmVersion="v1.60";
+  try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
+    var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
      vez que se shippeaba sin acordarse de tocar esta linea -- hoy mismo (11-jul) ya llevabamos 15
      versiones y el pie seguia diciendo 10-jul. Ahora se deriva SIEMPRE de la fecha real del ultimo
@@ -7741,7 +7727,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     hi.innerHTML=origHi; big.innerHTML=origBig; q.innerHTML=origQ;
     [hi,big,q,scoreRow].concat(chips).forEach(function(el){ el.classList.remove('cmGenHidden'); });
     var skip=document.getElementById('cmGenSkip'); if(skip) skip.remove();
-    document.removeEventListener('pointerdown',finishNow);
+    document.removeEventListener('click',finishNow);
   }
 
   [hi,big,q,scoreRow].concat(chips).forEach(function(el){ el.classList.add('cmGenHidden','cmGenIn'); });
@@ -7749,7 +7735,9 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   skip.type='button'; skip.id='cmGenSkip'; skip.textContent='saltar ⏭';
   skip.addEventListener('click',finishNow);
   document.body.appendChild(skip);
-  document.addEventListener('pointerdown',finishNow);
+  /* v1.60: terminar en click (burbujeo), no en pointerdown. Así el primer CTA recibe su click antes
+     de que la génesis restaure y mueva el hero; en móvil ya no se cancela el gesto al primer toque. */
+  document.addEventListener('click',finishNow);
 
   function typeInto(el,text,cb){
     el.classList.remove('cmGenHidden'); el.textContent='';
@@ -8709,10 +8697,12 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   /* v1.45 — respiro entre los widgets reubicados tras vsCard (Tony: "hay partes con texto muy junto") */
   #hoyReal{margin:12px 0 10px!important}
   #visitLine{margin:10px 0 14px!important}
-  /* v1.47 (captura móvil de Tony: ❤️ Vivo PISABA la pastilla de idioma) — en pantallas estrechas
-     las pastillas se APILAN en columna, nunca se solapan */
+  /* v1.60: una sola franja de controles en móvil. Reservar aire arriba evita que «¿qué es?» quede
+     debajo de English; «saltar» va a la izquierda y ni las áreas táctiles invisibles se pisan. */
   @media(max-width:560px){
-    #cmMotionBtn{top:64px!important;right:12px!important}
+    .wrap{padding-top:64px}
+    #cmMotionBtn{top:10px!important;right:124px!important}
+    #cmGenSkip{top:10px!important;left:12px!important;right:auto!important;min-height:44px}
     #cmIdExit{top:100px!important;right:12px!important}
   }
 </style>
