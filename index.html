@@ -3640,6 +3640,7 @@
         <li><b>Palanca:</b> un truco o herramienta que <b>multiplica</b> el resultado, no que suma un poco.</li>
         <li><b>Cuello de botella:</b> la parte lenta que limita todo el resultado. <i>Importa: si nadie ve una herramienta, el cuello es distribución; añadir funciones no lo arregla.</i></li>
         <li><b>Mecanismo transversal:</b> una regla o herramienta que protege o mejora muchas partes a la vez. <i>Importa: NO-RUINA, el feedback y los watchdogs no arreglan una sola cosa: hacen a todo MADRE más fuerte.</i></li>
+        <li><b>Invariante:</b> una condición que MADRE no puede romper aunque cambie de proyecto o de idea. <i>Importa: NO-RUINA es una invariante; no significa “nunca se revisa”, sino que solo cambia con evidencia y una decisión explícita.</i></li>
         <li><b>Meta-palanca:</b> una palanca que te hace mejor <b>encontrando</b> otras palancas. <i>Importa: multiplica el futuro, no solo el presente.</i></li>
         <li><b>Watchdog (vigía):</b> un chequeo que comprueba que algo no solo "está encendido" sino que de verdad avanzó y produjo algo. <i>Importa: ya pasó que una pieza se paró en silencio y se perdieron ~40 enlaces.</i></li>
         <li><b>Colisión multi-IA:</b> dos IAs escribiendo el mismo archivo a la vez y dejándolo roto. <i>Importa: es el riesgo nº1 de MADRE — ya corrompió contenido una vez.</i></li>
@@ -7792,6 +7793,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     "palanca":{s:"Un truco con el que un empujón pequeño mueve algo grande.",e:"Una herramienta que escribe una vez y luego la usan cien personas sin que ella mueva un dedo más."},
     "cuello de botella":{s:"La parte que va más lenta y por eso frena todo lo demás.",e:"Si una herramienta es buena pero nadie la encuentra, el cuello es que la vean; hacer otra función no lo arregla."},
     "mecanismo transversal":{s:"Una herramienta o regla que ayuda a muchas partes de MADRE a la vez.",e:"El feedback, NO-RUINA y los vigilantes sirven en muchos proyectos, no solo en uno. Por eso multiplican."},
+    "invariante":{s:"Una condición que debe seguir siendo verdad aunque cambien los planes.",e:"NO-RUINA obliga a que una idea nueva no pueda hundir lo que ya existe. Puede revisarse, pero nunca se rompe por accidente."},
     "meta-palanca":{s:"Una palanca que fabrica más palancas: no mueve la piedra, fabrica más herramientas.",e:"En vez de hacer una sola herramienta, montar una rutina que le ayude a sacar herramientas nuevas sola."},
     "watchdog":{s:"Un vigilante que mira si algo se ha roto o se ha quedado parado, y avisa.",e:"Si una rutina lleva días muerta, ladra para que la arreglen. (Ya pasó: se pararon en silencio ~40 enlaces.)"},
     "colision multi-ia":{s:"Dos manos escribiendo en el mismo papel a la vez y emborronándolo.",e:"Si dos rutinas tocan el mismo fichero a la vez, se pisan y lo corrompen. Por eso solo una manda. (Su riesgo nº1.)"},
@@ -7801,7 +7803,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     "temperatura":{s:"Cuánto texto y reglas se mete de golpe en la cabeza: si carga demasiado, se satura; si lo deja todo muy mascado, gasta de más.",e:"Como una maleta: si la llenas hasta arriba no cierra; si lo dejas todo masticadito, pesa de más. Hay que elegir qué metes."}
   };
   var META={
-    "suelo externo":{l:"Sencillo",f:"Realidad"},"publicar 1 activo":{l:"Sencillo",f:"Realidad"},"selector externo":{l:"Sencillo",f:"Realidad"},"ciclo cerrado":{l:"Sencillo",f:"Aprender"},"activacion":{l:"Sencillo",f:"Realidad"},"palanca":{l:"Sencillo",f:"Priorizar"},"cuello de botella":{l:"Sencillo",f:"Priorizar"},"mecanismo transversal":{l:"Sencillo",f:"Sistema"},"meta-palanca":{l:"Siguiente",f:"Priorizar"},"watchdog":{l:"Siguiente",f:"Sistema"},"colision multi-ia":{l:"Siguiente",f:"Seguridad"},"no-ruina":{l:"Sencillo",f:"Seguridad"},"demostrar o morir":{l:"Siguiente",f:"Aprender"},"goodhart":{l:"Avanzado",f:"Medir"},"temperatura":{l:"Avanzado",f:"IA"}
+    "suelo externo":{l:"Sencillo",f:"Realidad"},"publicar 1 activo":{l:"Sencillo",f:"Realidad"},"selector externo":{l:"Sencillo",f:"Realidad"},"ciclo cerrado":{l:"Sencillo",f:"Aprender"},"activacion":{l:"Sencillo",f:"Realidad"},"palanca":{l:"Sencillo",f:"Priorizar"},"cuello de botella":{l:"Sencillo",f:"Priorizar"},"mecanismo transversal":{l:"Sencillo",f:"Sistema"},"invariante":{l:"Sencillo",f:"Sistema"},"meta-palanca":{l:"Siguiente",f:"Priorizar"},"watchdog":{l:"Siguiente",f:"Sistema"},"colision multi-ia":{l:"Siguiente",f:"Seguridad"},"no-ruina":{l:"Sencillo",f:"Seguridad"},"demostrar o morir":{l:"Siguiente",f:"Aprender"},"goodhart":{l:"Avanzado",f:"Medir"},"temperatura":{l:"Avanzado",f:"IA"}
   };
   function norm(s){ return (s||"").replace(/\(.*?\)/g,"").replace(/[:：].*$/,"").replace(/:$/,"").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""); }
   var glosCard=null;
@@ -7842,6 +7844,25 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var hint=D.createElement("p"); hint.className="small"; hint.style.cssText="margin:8px 0 0;color:var(--muted)";
   hint.innerHTML='👆 ¿Una palabra no te cuadra? Toca su <b>🤔</b> y te la simplifico o te doy un ejemplo al momento — y aprendo cuáles cuestan más.';
   var ul=glosCard.querySelector("ul.clean"); if(ul&&ul.parentNode) ul.parentNode.insertBefore(hint, ul);
+  var relations=[
+    {a:"Palanca",b:"Cuello de botella",q:"¿Qué relación manda aquí?",opts:["La palanca buena es la que afloja el cuello.","Primero se crean muchas palancas y luego se busca un cuello.","No tienen relación."],ok:0,why:"Una palanca que no toca el cuello puede ser buena, pero no sube el resultado total."},
+    {a:"Invariante",b:"Mecanismo transversal",q:"¿Qué diferencia hay?",opts:["Son exactamente lo mismo.","La invariante dice qué no se rompe; el mecanismo transversal hace que esa protección llegue a muchas partes.","La invariante solo sirve en un archivo."],ok:1,why:"NO-RUINA es una invariante y también actúa de forma transversal: protege decisiones distintas."},
+    {a:"Selector externo",b:"Ciclo cerrado",q:"¿Cómo encajan?",opts:["El selector da la señal que permite cerrar y corregir el ciclo.","El ciclo sustituye al selector.","Solo sirven para escribir informes."],ok:0,why:"Sin señal de fuera hay acción, pero no aprendizaje validado."}
+  ];
+  var route=D.createElement("details"); route.className="glosRelations";
+  var sum=D.createElement("summary"); sum.textContent="🧩 Jugar a relacionar conceptos"; route.appendChild(sum);
+  var relBody=D.createElement("div"); relBody.className="glosRelBody"; route.appendChild(relBody);
+  relations.forEach(function(r){
+    var card=D.createElement("div"); card.className="glosRelCard";
+    var nodes=D.createElement("div"); nodes.className="glosNodes"; nodes.innerHTML="<b>"+r.a+"</b><span>↔</span><b>"+r.b+"</b>"; card.appendChild(nodes);
+    var q=D.createElement("p"); q.className="small"; q.textContent=r.q; card.appendChild(q);
+    var acts=D.createElement("div"); acts.className="glosRelActs"; var out=D.createElement("p"); out.className="glosRelOut";
+    r.opts.forEach(function(opt,i){ var btn=D.createElement("button"); btn.type="button"; btn.textContent=opt; btn.addEventListener("click",function(){
+      var correct=i===r.ok; Array.prototype.forEach.call(acts.querySelectorAll("button"),function(x){x.disabled=true;}); out.textContent=(correct?"✓ ":"↪ ")+r.why;
+      try{ if(window.__fb) window.__fb({card:"📖 Glosario",section:r.a+" ↔ "+r.b,tipo:"relacion-conceptos",texto:"RELACION-CONCEPTOS\nrelacion: "+r.a+" ↔ "+r.b+"\nrespuesta: "+opt+"\ncorrecta: "+(correct?"si":"no")+"\norigen: glosario-cuaderno"}); }catch(e){}
+    }); acts.appendChild(btn); }); card.appendChild(acts); card.appendChild(out); relBody.appendChild(card);
+  });
+  if(ul&&ul.parentNode) ul.parentNode.insertBefore(route,ul.nextSibling);
   var st=D.createElement("style"); st.textContent=
     ".glosMeta{display:inline-block;margin:0 0 0 6px;color:var(--muted);font:700 10px/1.2 system-ui,-apple-system,Segoe UI,sans-serif;vertical-align:middle}"+
     ".glosFav{border:1px solid var(--line);background:#fff;color:var(--ink);font:700 11px/1 system-ui,-apple-system,Segoe UI,sans-serif;padding:5px 8px;margin:5px 0 0;border-radius:999px;cursor:pointer}"+
@@ -7851,7 +7872,8 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     ".glosPanel{margin:6px 0 2px;display:flex;flex-wrap:wrap;gap:6px}"+
     ".glosBr{font:600 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:6px 10px;cursor:pointer}"+
     ".glosBr:hover{background:var(--accent-soft)}"+
-    ".glosOut{width:100%;font-size:13px;line-height:1.45;color:var(--ink);background:var(--accent-soft);border-radius:10px;padding:8px 11px;margin-top:2px}";
+    ".glosOut{width:100%;font-size:13px;line-height:1.45;color:var(--ink);background:var(--accent-soft);border-radius:10px;padding:8px 11px;margin-top:2px}"+
+    ".glosRelations{margin:12px 0 2px;border:1px solid var(--line);border-radius:12px;background:#fcfdff;padding:9px 11px}.glosRelations summary{cursor:pointer;font-weight:800}.glosRelBody{display:grid;gap:9px;margin-top:10px}.glosRelCard{padding:9px;border-radius:10px;background:#fff;border:1px solid var(--line)}.glosNodes{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:var(--accent)}.glosNodes b{padding:4px 7px;border-radius:999px;background:var(--accent-soft);font-size:11px}.glosRelActs{display:grid;gap:5px}.glosRelActs button{text-align:left;border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 8px;cursor:pointer;font:650 12px/1.35 system-ui,-apple-system,Segoe UI,sans-serif}.glosRelActs button:hover:not(:disabled){background:var(--accent-soft)}.glosRelOut{margin:7px 0 0;font-size:12px;line-height:1.4;color:var(--ink)}";
   D.head.appendChild(st);
 }catch(e){ console.warn("glos-nie", e); } })();
 </script>
