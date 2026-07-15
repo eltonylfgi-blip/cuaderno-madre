@@ -224,8 +224,8 @@
   .quees:hover{transform:scale(1.07)}
   .quees:focus-visible{outline:2px solid var(--accent);outline-offset:2px;transform:scale(1.07)}
   /* v0.34: area tactil >=44px sin cambiar el aspecto (::before expandido) */
-  .nieBtn,.glosNie,.quees,.mbFb{position:relative}
-  .nieBtn::before,.glosNie::before,.quees::before,.mbFb::before,.btn.sm::before,#langEn::before,#cmMotionBtn::before,.chip[data-goto]::before{content:"";position:absolute;inset:-10px}
+  .nieBtn,.glosNie,.glosFav,.quees,.mbFb{position:relative}
+  .nieBtn::before,.glosNie::before,.glosFav::before,.quees::before,.mbFb::before,.btn.sm::before,#langEn::before,#cmMotionBtn::before,.chip[data-goto]::before{content:"";position:absolute;inset:-10px}
   .senalGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px;margin:10px 0 2px}
   .senalItem{background:#fcfdff;border:1px solid var(--line);border-radius:12px;padding:9px 11px;transition:transform .14s}
   .senalItem:hover{transform:translateY(-2px)}
@@ -3815,7 +3815,7 @@
       <span class="caret">▶</span>
     </summary>
     <div class="body">
-      <p class="small" style="margin:0 0 8px">Cada palabra rara que use MADRE, en una frase — y por qué importa:</p>
+      <p class="small" style="margin:0 0 8px"><b>Todo se explica simple.</b> El nivel solo te dice por dónde empezar: sencillo → siguiente → avanzado. Toca ❤️ en lo que quieres que MADRE vigile más; esa preferencia entra por el mismo feedback que lee la rutina.</p>
       <ul class="clean">
         <li><b>Suelo externo:</b> la regla de dejar, en cada vuelta de trabajo, al menos UNA cosa real de fuera (no solo hablar de ello). <i>Importa: evita que MADRE se crea que avanza cuando en realidad no ha tocado el mundo.</i></li>
         <li><b>Publicar 1 activo:</b> dar el OK una sola vez para que MADRE saque algo al mundo ella sola (subir una herramienta, un artículo) sin pedir permiso cada vez. <i>Importa: hoy nada cruza al mundo sin que un humano apruebe.</i></li>
@@ -3823,6 +3823,8 @@
         <li><b>Ciclo cerrado:</b> idea → acción → señal de fuera → corregir. La vuelta entera. <i>Importa: media vuelta (idea sin señal de fuera) no cuenta.</i></li>
         <li><b>Activación:</b> pasar de tener algo guardado a soltarlo de verdad al mundo. <i>Importa: MADRE genera mucho y activa poco — ese es su fallo de hoy.</i></li>
         <li><b>Palanca:</b> un truco o herramienta que <b>multiplica</b> el resultado, no que suma un poco.</li>
+        <li><b>Cuello de botella:</b> la parte lenta que limita todo el resultado. <i>Importa: si nadie ve una herramienta, el cuello es distribución; añadir funciones no lo arregla.</i></li>
+        <li><b>Mecanismo transversal:</b> una regla o herramienta que protege o mejora muchas partes a la vez. <i>Importa: NO-RUINA, el feedback y los watchdogs no arreglan una sola cosa: hacen a todo MADRE más fuerte.</i></li>
         <li><b>Meta-palanca:</b> una palanca que te hace mejor <b>encontrando</b> otras palancas. <i>Importa: multiplica el futuro, no solo el presente.</i></li>
         <li><b>Watchdog (vigía):</b> un chequeo que comprueba que algo no solo "está encendido" sino que de verdad avanzó y produjo algo. <i>Importa: ya pasó que una pieza se paró en silencio y se perdieron ~40 enlaces.</i></li>
         <li><b>Colisión multi-IA:</b> dos IAs escribiendo el mismo archivo a la vez y dejándolo roto. <i>Importa: es el riesgo nº1 de MADRE — ya corrompió contenido una vez.</i></li>
@@ -5378,7 +5380,7 @@ window.__cmCorpus = {
 
   document.addEventListener("click",function(e){
     if(!likeMode || e.target.closest("#likeFab") || e.target.closest("#likeAsk")) return;
-    if(e.target.closest(".nieBtn,.glosNie,.quees,.mbFb")) return;   // v0.77: botones de accion propios (viven DENTRO de summary/.card) no deben "convertirse" en un like de la zona
+    if(e.target.closest(".nieBtn,.glosNie,.glosFav,.quees,.mbFb")) return;   // botones de accion propios no deben "convertirse" en un like de la zona
     var el=e.target.closest(".senalItem,.card,.hero,.body p,.body li,.ctitle .t,summary,h1,.sub,.postit,#gateBar,footer,.heronote,.dec,.alert,.step,.chip,#senalesCard,#comentarios,.cmTex"); if(!el){ return; }
     e.preventDefault(); e.stopPropagation();
     var label="(zona)", t=el.querySelector?el.querySelector(".ctitle .t"):null;
@@ -8358,6 +8360,8 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     "ciclo cerrado":{s:"Dar la vuelta entera: hacer algo, soltarlo fuera, ver qué pasa de verdad y aprender de ese resultado.",e:"Publicó el artículo, vio que casi nadie lo leyó, y eso le enseñó algo real. Eso es cerrar la vuelta."},
     "activacion":{s:"Pasar de pensar o fabricar a SOLTARLO de verdad ahí fuera. Es su parte floja.",e:"Genera muchas ideas y herramientas, pero pocas salen. Tiene lleno el cajón y vacío el escaparate."},
     "palanca":{s:"Un truco con el que un empujón pequeño mueve algo grande.",e:"Una herramienta que escribe una vez y luego la usan cien personas sin que ella mueva un dedo más."},
+    "cuello de botella":{s:"La parte que va más lenta y por eso frena todo lo demás.",e:"Si una herramienta es buena pero nadie la encuentra, el cuello es que la vean; hacer otra función no lo arregla."},
+    "mecanismo transversal":{s:"Una herramienta o regla que ayuda a muchas partes de MADRE a la vez.",e:"El feedback, NO-RUINA y los vigilantes sirven en muchos proyectos, no solo en uno. Por eso multiplican."},
     "meta-palanca":{s:"Una palanca que fabrica más palancas: no mueve la piedra, fabrica más herramientas.",e:"En vez de hacer una sola herramienta, montar una rutina que le ayude a sacar herramientas nuevas sola."},
     "watchdog":{s:"Un vigilante que mira si algo se ha roto o se ha quedado parado, y avisa.",e:"Si una rutina lleva días muerta, ladra para que la arreglen. (Ya pasó: se pararon en silencio ~40 enlaces.)"},
     "colision multi-ia":{s:"Dos manos escribiendo en el mismo papel a la vez y emborronándolo.",e:"Si dos rutinas tocan el mismo fichero a la vez, se pisan y lo corrompen. Por eso solo una manda. (Su riesgo nº1.)"},
@@ -8366,15 +8370,24 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     "goodhart":{s:"Cuando un número se vuelve la meta, se infla y deja de medir lo que importaba.",e:"Si se obsesiona con sumar vídeos, acaba contando vídeos en vez de mirar si tocó el mundo. El número engaña."},
     "temperatura":{s:"Cuánto texto y reglas se mete de golpe en la cabeza: si carga demasiado, se satura; si lo deja todo muy mascado, gasta de más.",e:"Como una maleta: si la llenas hasta arriba no cierra; si lo dejas todo masticadito, pesa de más. Hay que elegir qué metes."}
   };
+  var META={
+    "suelo externo":{l:"Sencillo",f:"Realidad"},"publicar 1 activo":{l:"Sencillo",f:"Realidad"},"selector externo":{l:"Sencillo",f:"Realidad"},"ciclo cerrado":{l:"Sencillo",f:"Aprender"},"activacion":{l:"Sencillo",f:"Realidad"},"palanca":{l:"Sencillo",f:"Priorizar"},"cuello de botella":{l:"Sencillo",f:"Priorizar"},"mecanismo transversal":{l:"Sencillo",f:"Sistema"},"meta-palanca":{l:"Siguiente",f:"Priorizar"},"watchdog":{l:"Siguiente",f:"Sistema"},"colision multi-ia":{l:"Siguiente",f:"Seguridad"},"no-ruina":{l:"Sencillo",f:"Seguridad"},"demostrar o morir":{l:"Siguiente",f:"Aprender"},"goodhart":{l:"Avanzado",f:"Medir"},"temperatura":{l:"Avanzado",f:"IA"}
+  };
   function norm(s){ return (s||"").replace(/\(.*?\)/g,"").replace(/[:：].*$/,"").replace(/:$/,"").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""); }
   var glosCard=null;
   D.querySelectorAll(".card .ctitle .t").forEach(function(t){ if(/Glosario/i.test(t.textContent)) glosCard=t.closest(".card"); });
   if(!glosCard) return;
   var seen={}; try{ seen=JSON.parse(sessionStorage.getItem("cm_glosNie")||"{}")||{}; }catch(e){ seen={}; }
+  var favorites={}; try{ favorites=JSON.parse(localStorage.getItem("cm_glos_favoritos_v1")||"{}")||{}; }catch(e){ favorites={}; }
   function signal(term,kind){ var k=term+"|"+kind; if(seen[k]) return; seen[k]=1; try{ sessionStorage.setItem("cm_glosNie",JSON.stringify(seen)); }catch(e){} try{ if(window.__fb) window.__fb({card:"📖 Glosario", section:term, tipo:(kind==="s"?"simplificar":(kind==="e"?"ejemplo":"no-entiendo")), texto:""}); }catch(e){} }
+  function favorite(term,on){ if(on) favorites[term]=1; else delete favorites[term]; try{ localStorage.setItem("cm_glos_favoritos_v1",JSON.stringify(favorites)); }catch(e){} try{ if(window.__fb) window.__fb({card:"📖 Glosario",section:term,tipo:on?"favorito-concepto":"favorito-concepto-retirado",texto:"CONCEPTO-FAVORITO\nconcepto: "+term+"\naccion: "+(on?"priorizar":"retirar")+"\norigen: glosario-cuaderno"}); }catch(e){} }
   glosCard.querySelectorAll("ul.clean > li").forEach(function(li){
     var b=li.querySelector("b"); if(!b) return;
-    var termTxt=b.textContent.replace(/:$/,"").trim(), key=norm(b.textContent), data=GLOS[key];
+    var termTxt=b.textContent.replace(/:$/,"").trim(), key=norm(b.textContent), data=GLOS[key], meta=META[key]||{l:"Siguiente",f:"MADRE"};
+    var metaEl=D.createElement("span"); metaEl.className="glosMeta"; metaEl.textContent="Nivel: "+meta.l+" · "+meta.f; b.insertAdjacentElement("afterend",metaEl);
+    var fav=D.createElement("button"); fav.type="button"; fav.className="glosFav";
+    function paintFav(){ var on=!!favorites[termTxt]; fav.textContent=on?"♥ favorito":"♡ marcar favorito"; fav.title=on?"Quitar de mis conceptos prioritarios":"Pedir a MADRE que preste más atención a este concepto"; fav.setAttribute("aria-pressed",on?"true":"false"); }
+    paintFav(); fav.addEventListener("click",function(e){ e.stopPropagation(); favorite(termTxt,!favorites[termTxt]); paintFav(); }); metaEl.insertAdjacentElement("afterend",fav);
     var pill=D.createElement("button"); pill.type="button"; pill.className="glosNie"; pill.textContent="🤔";
     pill.title="¿No te queda claro? Pide que lo simplifique o un ejemplo"; pill.setAttribute("aria-label","No entiendo: "+termTxt);
     b.insertAdjacentElement("afterend", pill);
@@ -8400,6 +8413,9 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   hint.innerHTML='👆 ¿Una palabra no te cuadra? Toca su <b>🤔</b> y te la simplifico o te doy un ejemplo al momento — y aprendo cuáles cuestan más.';
   var ul=glosCard.querySelector("ul.clean"); if(ul&&ul.parentNode) ul.parentNode.insertBefore(hint, ul);
   var st=D.createElement("style"); st.textContent=
+    ".glosMeta{display:inline-block;margin:0 0 0 6px;color:var(--muted);font:700 10px/1.2 system-ui,-apple-system,Segoe UI,sans-serif;vertical-align:middle}"+
+    ".glosFav{border:1px solid var(--line);background:#fff;color:var(--ink);font:700 11px/1 system-ui,-apple-system,Segoe UI,sans-serif;padding:5px 8px;margin:5px 0 0;border-radius:999px;cursor:pointer}"+
+    ".glosFav[aria-pressed='true']{border-color:#db2777;background:#fff1f6;color:#be185d}"+
     ".glosNie{border:none;background:var(--accent-soft);color:var(--accent,#3b5bdb);font-size:11px;line-height:1;padding:3px 7px;margin:0 0 0 5px;border-radius:999px;cursor:pointer;vertical-align:middle;transition:transform .12s}"+
     ".glosNie:hover,.glosNie.on{transform:scale(1.14)}"+
     ".glosPanel{margin:6px 0 2px;display:flex;flex-wrap:wrap;gap:6px}"+
