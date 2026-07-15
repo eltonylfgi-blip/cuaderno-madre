@@ -1,3 +1,10 @@
+## v1.69 — 2026-07-15 · Cuaderno como puerta común a las webs de Tony
+- **Navegación:** el final del Cuaderno reúne cuatro destinos públicos comprobados: FanRank, Neuro-Fuerza, Salón Vera y el perfil con todos los proyectos públicos de Tony. Los enlaces abren en otra pestaña para conservar el punto de lectura.
+- **Selector real:** el primer toque a cada destino durante una sesión reutiliza el canal privado de feedback con el tipo `navegacion-proyecto`; los toques repetidos de la misma sesión no inflan la señal. Si el canal no está disponible, la navegación sigue funcionando y no se finge una medición.
+- **Claridad y acceso:** la cuadrícula se reduce a una columna en móvil, conserva objetivos táctiles mayores de 44 px, foco visible y traducción ES/EN mediante el contrato global `data-en` ya existente.
+- **Backend:** sin cambios ni despliegue nuevo; se reutiliza el canal público ya operativo del Cuaderno.
+- **Revertir:** `git revert <hash de v1.69>`.
+
 ## v1.68 — 2026-07-15 · Primer roce ASMR + objetivos reales en Caos + MyInstants autorizado
 - **Roce desde el primer gesto:** una pasada horizontal deliberada activa el ASMR sin exigir invertir el movimiento. El guard sigue rechazando el scroll predominantemente vertical.
 - **Laboratorio / feedback:** cada prototipo responde `Coincide: Sí / No` en su propia tarjeta, persiste y permite retirar el veredicto; el diálogo queda solo para matizar. Feedback general incorpora una ✕ superior de 44 px con devolución de foco.

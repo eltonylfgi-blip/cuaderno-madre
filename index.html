@@ -172,6 +172,22 @@
   .dot{display:inline-block;width:8px;height:8px;border-radius:99px;vertical-align:middle;margin-right:6px}
   .dot.g{background:var(--green)} .dot.a{background:var(--amber)}
   footer{color:var(--muted);font-size:12px;text-align:center;margin-top:18px;line-height:1.6}
+  /* v1.69 — una casa común para los activos públicos: cuatro destinos reales, sin menú nuevo
+     flotando ni URLs hipotéticas. El toque abre otra pestaña y deja una señal privada de uso para
+     que MADRE pueda podar accesos que nadie usa. */
+  .cmWebHub{margin:0 auto 18px;padding:16px;max-width:690px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,var(--card),var(--accent-soft));text-align:left}
+  .cmWebHubTitle{margin:0 0 3px;color:var(--ink);font-size:15px;font-weight:850;text-align:center}
+  .cmWebHubSub{margin:0 0 12px;text-align:center;color:var(--muted);font-size:12.5px}
+  .cmWebHubGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .cmWebLink{display:flex;min-height:54px;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);text-decoration:none;box-shadow:0 2px 8px rgba(30,42,75,.05);transition:transform .14s,border-color .14s,box-shadow .14s}
+  .cmWebLink:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 7px 18px rgba(30,42,75,.11)}
+  .cmWebLink:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .cmWebIcon{font-size:22px;line-height:1;flex:none}
+  .cmWebCopy{min-width:0;display:flex;flex-direction:column;line-height:1.25}
+  .cmWebCopy strong{font-size:13.5px}
+  .cmWebCopy span{margin-top:3px;color:var(--muted);font-size:11.5px}
+  .cmWebSignal{margin:9px 0 0;text-align:center;color:var(--muted);font-size:11px}
+  @media(max-width:520px){.cmWebHub{padding:13px 11px}.cmWebHubGrid{grid-template-columns:1fr}.cmWebLink{min-height:52px}}
 
   /* ===== v2: variedad visual + señales + animaciones ===== */
   @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
@@ -3798,10 +3814,42 @@
   </script>
 
   <footer>
+    <nav id="cmWebHub" class="cmWebHub" aria-labelledby="cmWebHubTitle">
+      <p id="cmWebHubTitle" class="cmWebHubTitle" data-en="🌐 More Tony projects">🌐 Más webs y trabajo de Tony</p>
+      <p class="cmWebHubSub" data-en="Jump from here without having to remember where everything lives.">Salta desde aquí sin tener que recordar dónde vive cada cosa.</p>
+      <div class="cmWebHubGrid">
+        <a class="cmWebLink" href="https://eltonylfgi-blip.github.io/fanrank/?s=cuaderno-madre&amp;lang=es" target="_blank" rel="noopener" data-cm-project="fanrank">
+          <span class="cmWebIcon" aria-hidden="true">🏁</span><span class="cmWebCopy"><strong>FanRank</strong><span data-en="Ideas ranked by real signals">Ideas ordenadas por señales reales</span></span>
+        </a>
+        <a class="cmWebLink" href="https://eltonylfgi-blip.github.io/neuro-fuerza/" target="_blank" rel="noopener" data-cm-project="neuro-fuerza">
+          <span class="cmWebIcon" aria-hidden="true">🧠</span><span class="cmWebCopy"><strong>Neuro-Fuerza</strong><span data-en="Clinical neuro-mechanics tool">Herramienta de neuro-mecánica</span></span>
+        </a>
+        <a class="cmWebLink" href="https://eltonylfgi-blip.github.io/demo-salon-vera/" target="_blank" rel="noopener" data-cm-project="salon-vera">
+          <span class="cmWebIcon" aria-hidden="true">✂️</span><span class="cmWebCopy"><strong>Salón Vera</strong><span data-en="A real local-business demo">Demo real para negocio local</span></span>
+        </a>
+        <a class="cmWebLink" href="https://github.com/eltonylfgi-blip?tab=repositories" target="_blank" rel="noopener" data-cm-project="github-tony">
+          <span class="cmWebIcon" aria-hidden="true">🧰</span><span class="cmWebCopy"><strong data-en="More Tony projects">Más trabajo de Tony</strong><span data-en="All public projects on GitHub">Todos los proyectos públicos en GitHub</span></span>
+        </a>
+      </div>
+      <p class="cmWebSignal" data-en="Each first click leaves one anonymous use signal so MADRE can improve these shortcuts.">Cada primer toque deja una señal anónima de uso para que MADRE mejore estos accesos.</p>
+    </nav>
     Cuaderno MADRE · tu opinión (botones 💬) la recoge MADRE y actúa.<br>
     Hecho para leerse en 2 minutos y opinar sin tecnicismos.<br>
     <button type="button" id="cmShareBtn" class="btn sm" style="margin-top:10px">🔗 Compartir este cuaderno</button>
   </footer>
+  <script>
+  /* v1.69 — selector de uso del hub. Una señal por destino y sesión evita inflar el contador por
+     doble toque; si el canal existente no está listo, el enlace funciona igual y no se finge medir. */
+  (function(){ try{
+    var hub=document.getElementById("cmWebHub"); if(!hub) return;
+    hub.addEventListener("click",function(e){
+      var a=e.target.closest("a[data-cm-project]"); if(!a||!hub.contains(a)||typeof window.__fb!=="function") return;
+      var id=a.getAttribute("data-cm-project")||"desconocido", key="cm_web_hub_"+id;
+      try{ if(sessionStorage.getItem(key)) return; sessionStorage.setItem(key,"1"); }catch(_e){}
+      try{ window.__fb({card:"🌐 Más webs de Tony",section:id,tipo:"navegacion-proyecto",texto:"NAVEGACION-PROYECTO\ndestino: "+id+"\norigen: cuaderno-footer"}); }catch(_e){}
+    });
+  }catch(e){ console.warn("web-hub v1.69",e); } })();
+  </script>
 </div>
 
 <div class="ov" id="ov">
@@ -4456,6 +4504,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-15',destacada:true,areas:['navegacion','fanrank','proyectos','distribucion'],titulo:'🌐 v1.69 — El Cuaderno ya es la puerta a las demás webs',detalle:'El final reúne cuatro accesos públicos y comprobados: FanRank, Neuro-Fuerza, Salón Vera y todos los proyectos de Tony. Abren en otra pestaña, mantienen el Cuaderno disponible y cada primer toque deja una señal anónima para saber qué atajos merecen seguir.'},
     {fecha:'2026-07-15',destacada:true,areas:['asmr','caos','feedback','multimedia','sonido','interaccion','accesibilidad'],titulo:'🎯 v1.68 — ASMR desde el primer roce y Caos que señala cosas reales',detalle:'El roce ASMR ya responde a la primera pasada horizontal: conserva el bloqueo del scroll vertical, pero deja de exigir una ida y vuelta escondida. El Laboratorio muestra «Coincide: Sí / No» directamente en cada tarjeta, con elección reversible y matiz opcional; Feedback general gana una ✕ fija y grande, y el menú derecho empieza por Caos/ASMR y aprende del uso local. Activar Caos enciende ASMR y lanza escenas contextuales que rodean un control real, lo nombran, dibujan una flecha curva y premian tocarlo; una sola escena vive a la vez y se limpia con Escape, Calma, diálogo, escritura, pestaña oculta o salida. MyInstants queda reconocido en el Archivo como autorizado por Tony para reutilización dentro de MADRE, conserva la procedencia y deja activos seguridad y duplicados.'},
     {fecha:'2026-07-15',destacada:true,areas:['asmr','archivo','multimedia','feedback','animaciones','accesibilidad'],titulo:'👾 v1.67 — Combate ASMR 67 y Archivo que se entiende tocándolo',detalle:'Invocar un monstruo exige ahora bastante más roce, pero la batalla conserva 67 puntos y avanza rápido con golpes en combo; cada criatura esquiva, entra en furia, explota al ser derrotada y extiende su material por colores, tarjetas, franjas y emotes del Cuaderno. El Archivo añade el bestiario de los 13 mundos para subir sus monstruos, un atajo de Ctrl+V con foto y una sola frase, ejemplos visibles y audibles dentro de cada ficha, veredictos directos «Coincide: Sí / No» y dos puertos grandes A/B por recurso. Las conexiones se dibujan al tocar dos puertos, un mismo puerto admite varias cuerdas y el formulario queda como alternativa de teclado.'},
     {fecha:'2026-07-15',destacada:true,areas:['caos','asmr','mapa','comentarios','ruta','claridad','gato','sonido','animaciones','easter-eggs'],titulo:'🎢 v1.66 — Caos vivo, monstruos ASMR y una ruta para jugar sin perderse',detalle:'Caos ya no muere al dejar de tocar: mantiene una cadencia acotada de XD, frases, juguetes explotables, bromas del gato y líneas que traducen la velocidad del scroll; cada 6·7 activa una escena MLG más larga con un único sonido y ofrece encender Caos desde la derecha. Rozar o explotar ASMR suma por material: a 67 aparece un monstruo enorme, el Cuaderno adopta ese mundo durante 20 segundos y un toque lo fija; en Caos la lluvia material sigue siendo x5. Las 32 tarjetas del laboratorio suenan al tocar cualquier parte libre y el feedback separa título, emoji, descripción y momento de uso. El mapa mueve su explicación al lateral izquierdo, agranda y separa nodos y revela sus subramas una a una; solo los nodos disparan sonido y el universo queda casi imperceptible. Los comentarios dejan de ser una capa transparente: en móvil abren la sección real y en escritorio ocupan un lateral sin tapar texto. Una Ruta divertida reúne ASMR, dibujos, logros, Caos, gato, comentarios y FanRank, conserva un botón para volver; los tecnicismos empiezan con una explicación breve y enlazan al glosario.'},
@@ -8068,7 +8117,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.68";
+  window.__cmVersion="v1.69";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
