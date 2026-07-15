@@ -3831,22 +3831,28 @@
           <span class="cmWebIcon" aria-hidden="true">🧰</span><span class="cmWebCopy"><strong data-en="More Tony projects">Más trabajo de Tony</strong><span data-en="All public projects on GitHub">Todos los proyectos públicos en GitHub</span></span>
         </a>
       </div>
-      <p class="cmWebSignal" data-en="Each first click leaves one anonymous use signal so MADRE can improve these shortcuts.">Cada primer toque deja una señal anónima de uso para que MADRE mejore estos accesos.</p>
+      <p class="cmWebSignal" data-en="Each first click tries to send one use signal so MADRE can improve these shortcuts.">Cada primer toque intenta enviar una señal de uso para que MADRE mejore estos accesos.</p>
     </nav>
     Cuaderno MADRE · tu opinión (botones 💬) la recoge MADRE y actúa.<br>
     Hecho para leerse en 2 minutos y opinar sin tecnicismos.<br>
     <button type="button" id="cmShareBtn" class="btn sm" style="margin-top:10px">🔗 Compartir este cuaderno</button>
   </footer>
   <script>
-  /* v1.69 — selector de uso del hub. Una señal por destino y sesión evita inflar el contador por
-     doble toque; si el canal existente no está listo, el enlace funciona igual y no se finge medir. */
+  /* v1.69 — selector de uso del hub. Una señal confirmada por destino y sesión evita inflar el
+     contador; si almacenamiento o canal fallan, la navegación sigue y un toque posterior reintenta. */
   (function(){ try{
-    var hub=document.getElementById("cmWebHub"); if(!hub) return;
+    var hub=document.getElementById("cmWebHub"), seen=Object.create(null), pending=Object.create(null); if(!hub) return;
     hub.addEventListener("click",function(e){
       var a=e.target.closest("a[data-cm-project]"); if(!a||!hub.contains(a)||typeof window.__fb!=="function") return;
       var id=a.getAttribute("data-cm-project")||"desconocido", key="cm_web_hub_"+id;
-      try{ if(sessionStorage.getItem(key)) return; sessionStorage.setItem(key,"1"); }catch(_e){}
-      try{ window.__fb({card:"🌐 Más webs de Tony",section:id,tipo:"navegacion-proyecto",texto:"NAVEGACION-PROYECTO\ndestino: "+id+"\norigen: cuaderno-footer"}); }catch(_e){}
+      var stored=false; try{ stored=sessionStorage.getItem(key)==="1"; }catch(_e){}
+      if(stored||seen[key]||pending[key]) return; pending[key]=true;
+      try{
+        Promise.resolve(window.__fb({card:"🌐 Más webs de Tony",section:id,tipo:"navegacion-proyecto",texto:"NAVEGACION-PROYECTO\ndestino: "+id+"\norigen: cuaderno-footer"})).then(function(result){
+          delete pending[key]; if(result!=="sent") return;
+          seen[key]=true; try{ sessionStorage.setItem(key,"1"); }catch(_e){}
+        },function(){ delete pending[key]; });
+      }catch(_e){ delete pending[key]; }
     });
   }catch(e){ console.warn("web-hub v1.69",e); } })();
   </script>
@@ -4504,7 +4510,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
-    {fecha:'2026-07-15',destacada:true,areas:['navegacion','fanrank','proyectos','distribucion'],titulo:'🌐 v1.69 — El Cuaderno ya es la puerta a las demás webs',detalle:'El final reúne cuatro accesos públicos y comprobados: FanRank, Neuro-Fuerza, Salón Vera y todos los proyectos de Tony. Abren en otra pestaña, mantienen el Cuaderno disponible y cada primer toque deja una señal anónima para saber qué atajos merecen seguir.'},
+    {fecha:'2026-07-15',destacada:true,areas:['navegacion','fanrank','proyectos','distribucion'],titulo:'🌐 v1.69 — El Cuaderno ya es la puerta a las demás webs',detalle:'El final reúne cuatro accesos públicos y comprobados: FanRank, Neuro-Fuerza, Salón Vera y todos los proyectos de Tony. Abren en otra pestaña, mantienen el Cuaderno disponible y cada primer toque intenta enviar una señal de uso para saber qué atajos merecen seguir.'},
     {fecha:'2026-07-15',destacada:true,areas:['asmr','caos','feedback','multimedia','sonido','interaccion','accesibilidad'],titulo:'🎯 v1.68 — ASMR desde el primer roce y Caos que señala cosas reales',detalle:'El roce ASMR ya responde a la primera pasada horizontal: conserva el bloqueo del scroll vertical, pero deja de exigir una ida y vuelta escondida. El Laboratorio muestra «Coincide: Sí / No» directamente en cada tarjeta, con elección reversible y matiz opcional; Feedback general gana una ✕ fija y grande, y el menú derecho empieza por Caos/ASMR y aprende del uso local. Activar Caos enciende ASMR y lanza escenas contextuales que rodean un control real, lo nombran, dibujan una flecha curva y premian tocarlo; una sola escena vive a la vez y se limpia con Escape, Calma, diálogo, escritura, pestaña oculta o salida. MyInstants queda reconocido en el Archivo como autorizado por Tony para reutilización dentro de MADRE, conserva la procedencia y deja activos seguridad y duplicados.'},
     {fecha:'2026-07-15',destacada:true,areas:['asmr','archivo','multimedia','feedback','animaciones','accesibilidad'],titulo:'👾 v1.67 — Combate ASMR 67 y Archivo que se entiende tocándolo',detalle:'Invocar un monstruo exige ahora bastante más roce, pero la batalla conserva 67 puntos y avanza rápido con golpes en combo; cada criatura esquiva, entra en furia, explota al ser derrotada y extiende su material por colores, tarjetas, franjas y emotes del Cuaderno. El Archivo añade el bestiario de los 13 mundos para subir sus monstruos, un atajo de Ctrl+V con foto y una sola frase, ejemplos visibles y audibles dentro de cada ficha, veredictos directos «Coincide: Sí / No» y dos puertos grandes A/B por recurso. Las conexiones se dibujan al tocar dos puertos, un mismo puerto admite varias cuerdas y el formulario queda como alternativa de teclado.'},
     {fecha:'2026-07-15',destacada:true,areas:['caos','asmr','mapa','comentarios','ruta','claridad','gato','sonido','animaciones','easter-eggs'],titulo:'🎢 v1.66 — Caos vivo, monstruos ASMR y una ruta para jugar sin perderse',detalle:'Caos ya no muere al dejar de tocar: mantiene una cadencia acotada de XD, frases, juguetes explotables, bromas del gato y líneas que traducen la velocidad del scroll; cada 6·7 activa una escena MLG más larga con un único sonido y ofrece encender Caos desde la derecha. Rozar o explotar ASMR suma por material: a 67 aparece un monstruo enorme, el Cuaderno adopta ese mundo durante 20 segundos y un toque lo fija; en Caos la lluvia material sigue siendo x5. Las 32 tarjetas del laboratorio suenan al tocar cualquier parte libre y el feedback separa título, emoji, descripción y momento de uso. El mapa mueve su explicación al lateral izquierdo, agranda y separa nodos y revela sus subramas una a una; solo los nodos disparan sonido y el universo queda casi imperceptible. Los comentarios dejan de ser una capa transparente: en móvil abren la sección real y en escritorio ocupan un lateral sin tapar texto. Una Ruta divertida reúne ASMR, dibujos, logros, Caos, gato, comentarios y FanRank, conserva un botón para volver; los tecnicismos empiezan con una explicación breve y enlazan al glosario.'},
