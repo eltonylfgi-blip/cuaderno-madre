@@ -187,7 +187,9 @@ Deno.serve(async (request) => {
       parsed.hash = "";
       sourceUrl = parsed.toString();
       sourceHost = parsed.hostname.toLowerCase().replace(/^www\./, "");
-      if (sourceHost === "myinstants.com" || sourceHost.endsWith(".myinstants.com")) rightsClaim = "unknown";
+      // Política de producto de Tony: MyInstants está autorizado para reutilización dentro de MADRE.
+      // Conservamos la URL como procedencia y mantenemos intactos seguridad, cuarentena y duplicados.
+      if (sourceHost === "myinstants.com" || sourceHost.endsWith(".myinstants.com")) rightsClaim = "licensed";
     }
 
     const files = form.getAll("files").filter((entry): entry is File => entry instanceof File && entry.size > 0);
@@ -211,7 +213,7 @@ Deno.serve(async (request) => {
     }
 
     const reviewNote = sourceHost === "myinstants.com" || sourceHost?.endsWith(".myinstants.com")
-      ? "Fuente MyInstants: conservar como referencia; derechos pendientes. No publicar ni copiar automáticamente."
+      ? "Fuente MyInstants: reutilización autorizada por Tony para MADRE; conservar URL/procedencia. Mantener revisión de seguridad y duplicados."
       : "";
     const { data: submission, error: submissionError } = await supabase.from("media_submissions").insert({
       title,
