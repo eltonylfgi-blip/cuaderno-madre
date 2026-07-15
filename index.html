@@ -7426,8 +7426,9 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiome,body.cmMotionOff #
 
   /* Descubrimiento sin ruido constante: al entrar una zona nueva en pantalla, una sola franja
      llama suavemente la atención una vez. Calma/reduced-motion conserva el brillo, sin movimiento. */
-  function markTouched(rib){ if(!rib) return; rib.dataset.touched="1"; rib.classList.remove("cmTexCall"); try{ if(window.__cmTexFound) window.__cmTexFound(rib.dataset.tex); }catch(_e){} }
-  function callOut(rib){ if(!enabled||!rib||rib.dataset.touched||document.hidden) return false; ribbons.forEach(function(r){r.classList.remove("cmTexCall");}); rib.classList.add("cmTexCall"); setTimeout(function(){try{rib.classList.remove("cmTexCall");}catch(e){}},4800); return true; }
+  function clearCallOut(rib){ if(!rib) return; clearTimeout(rib.__cmCallTimer); rib.__cmCallTimer=0; rib.classList.remove("cmTexCall"); }
+  function markTouched(rib){ if(!rib) return; rib.dataset.touched="1"; clearCallOut(rib); try{ if(window.__cmTexFound) window.__cmTexFound(rib.dataset.tex); }catch(_e){} }
+  function callOut(rib){ if(!enabled||!rib||rib.dataset.touched||document.hidden) return false; ribbons.forEach(clearCallOut); rib.classList.add("cmTexCall"); rib.__cmCallTimer=setTimeout(function(){try{rib.__cmCallTimer=0;rib.classList.remove("cmTexCall");}catch(e){}},4800); return true; }
   ribbons.forEach(function(rib){ rib.addEventListener("pointerdown",function(e){if(e.pointerType!=="touch")markTouched(rib);},{passive:true}); rib.addEventListener("focusin",function(){markTouched(rib);}); });
   try{ if("IntersectionObserver" in window){ var seenTimer=0, io=new IntersectionObserver(function(entries){ entries.forEach(function(en){ var rib=en.target; if(!en.isIntersecting||rib.dataset.prompted||rib.dataset.touched) return; rib.dataset.prompted="1"; clearTimeout(seenTimer); seenTimer=setTimeout(function(){callOut(rib);},1000); }); },{threshold:.65}); ribbons.forEach(function(r){io.observe(r);}); } }catch(e){}
   var nudgeTimer=0,nudgeCount=0,nextNudgeAt=0;
