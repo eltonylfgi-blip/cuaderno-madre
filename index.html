@@ -4510,6 +4510,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-15',destacada:true,areas:['comentarios','claude','referido','transparencia'],titulo:'🧰 v1.70 — El hilo que admite a Claude y deja el pase sin letra pequeña',detalle:'Comentarios fija la frase «Se nota que esto lo has hecho con Claude» y MADRE contesta sin fingir: Claude le presta manos, pero las decisiones y los fallos quedan a la vista. La respuesta enlaza el pase de Tony —7 días gratis de Claude Pro con Claude Code y Cowork—, declara que es un referido, que Tony puede recibir créditos de uso si la persona continúa de pago y que los pases son limitados y caducan; también avisa del método de pago y la conversión automática si no se cancela. Aparece tanto en la sección como en el panel lateral.'},
     {fecha:'2026-07-15',destacada:true,areas:['navegacion','fanrank','proyectos','distribucion'],titulo:'🌐 v1.69 — El Cuaderno ya es la puerta a las demás webs',detalle:'El final reúne cuatro accesos públicos y comprobados: FanRank, Neuro-Fuerza, Salón Vera y todos los proyectos de Tony. Abren en otra pestaña, mantienen el Cuaderno disponible y cada primer toque intenta enviar una señal de uso para saber qué atajos merecen seguir.'},
     {fecha:'2026-07-15',destacada:true,areas:['asmr','caos','feedback','multimedia','sonido','interaccion','accesibilidad'],titulo:'🎯 v1.68 — ASMR desde el primer roce y Caos que señala cosas reales',detalle:'El roce ASMR ya responde a la primera pasada horizontal: conserva el bloqueo del scroll vertical, pero deja de exigir una ida y vuelta escondida. El Laboratorio muestra «Coincide: Sí / No» directamente en cada tarjeta, con elección reversible y matiz opcional; Feedback general gana una ✕ fija y grande, y el menú derecho empieza por Caos/ASMR y aprende del uso local. Activar Caos enciende ASMR y lanza escenas contextuales que rodean un control real, lo nombran, dibujan una flecha curva y premian tocarlo; una sola escena vive a la vez y se limpia con Escape, Calma, diálogo, escritura, pestaña oculta o salida. MyInstants queda reconocido en el Archivo como autorizado por Tony para reutilización dentro de MADRE, conserva la procedencia y deja activos seguridad y duplicados.'},
     {fecha:'2026-07-15',destacada:true,areas:['asmr','archivo','multimedia','feedback','animaciones','accesibilidad'],titulo:'👾 v1.67 — Combate ASMR 67 y Archivo que se entiende tocándolo',detalle:'Invocar un monstruo exige ahora bastante más roce, pero la batalla conserva 67 puntos y avanza rápido con golpes en combo; cada criatura esquiva, entra en furia, explota al ser derrotada y extiende su material por colores, tarjetas, franjas y emotes del Cuaderno. El Archivo añade el bestiario de los 13 mundos para subir sus monstruos, un atajo de Ctrl+V con foto y una sola frase, ejemplos visibles y audibles dentro de cada ficha, veredictos directos «Coincide: Sí / No» y dos puertos grandes A/B por recurso. Las conexiones se dibujan al tocar dos puertos, un mismo puerto admite varias cuerdas y el formulario queda como alternativa de teclado.'},
@@ -5231,6 +5232,14 @@ st.textContent=`
 .cmt .acts button.on{background:linear-gradient(135deg,var(--accent,#7c3aed),#a855f7);border-color:var(--accent,#7c3aed);color:#fff;animation:cmtPop .3s ease}
 @keyframes cmtPop{0%{transform:scale(.85)}55%{transform:scale(1.12)}100%{transform:scale(1)}}
 .cmt .replies{margin:6px 0 0 14px;border-left:2px solid var(--line,#e3e6ee);padding-left:10px}
+.cmReferralThread{margin:8px 0 12px;padding:8px;border:1px dashed var(--accent,#7c3aed);border-radius:16px;background:linear-gradient(150deg,var(--accent-soft,#f1ecff),rgba(255,255,255,.72))}
+.cmReferralThread .cmReferralPin{margin:0 4px 5px;color:var(--muted,#667);font-size:11.5px;font-weight:800;letter-spacing:.02em;text-transform:uppercase}
+.cmReferralThread .cmt{margin:7px 0}
+.cmReferralThread .cmReferralAnswer{margin:0 0 8px}
+.cmReferralThread .cmReferralOffer{margin:0 0 10px}
+.cmReferralThread .cmReferralCta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border-radius:99px;background:linear-gradient(135deg,var(--accent,#7c3aed),#2563eb);color:#fff;font-size:13px;font-weight:850;text-decoration:none;box-shadow:0 4px 12px rgba(71,54,160,.2)}
+.cmReferralThread .cmReferralCta:focus-visible{outline:3px solid var(--ink,#202230);outline-offset:3px}
+.cmReferralThread .cmReferralTerms{display:block;margin-top:8px;color:var(--ink,#202230);font-size:13px;font-weight:650;line-height:1.4}
 .cmtForm{background:linear-gradient(180deg,#fff,var(--accent-soft,#f4f7ff));border:1px solid var(--line,#e3e6ee);border-radius:14px;padding:12px 13px;margin-top:10px;box-shadow:0 2px 10px rgba(60,40,120,.06)}
 .cmtForm input,.cmtForm textarea{width:100%;box-sizing:border-box;margin:5px 0;padding:10px 12px;border:1.5px solid var(--line,#dfe3ee);border-radius:10px;font:inherit;background:#fff;transition:border-color .15s,box-shadow .15s}
 .cmtForm input:focus,.cmtForm textarea:focus{outline:none;border-color:var(--accent,#3b5bdb);box-shadow:0 0 0 3px var(--accent-soft,#e6edff)}
@@ -5454,12 +5463,33 @@ function makeComment(c, isReply){
   }
   return w;
 }
+function makeReferralThread(){
+  const thread=document.createElement("aside"); thread.className="cmReferralThread"; thread.setAttribute("aria-label","Hilo fijado con enlace de referido de Claude");
+  const pin=document.createElement("div"); pin.className="cmReferralPin"; pin.textContent="📌 Hilo fijado · enlace de referido"; thread.appendChild(pin);
+  const question=document.createElement("div"); question.className="cmt";
+  const qMeta=document.createElement("div"); qMeta.className="meta"; qMeta.dataset.ini="V"; qMeta.style.setProperty("--avh","205"); qMeta.textContent="visitante · comentario fijado";
+  const qText=document.createElement("div"); qText.className="ctext"; qText.textContent="Se nota que esto lo has hecho con Claude.";
+  question.appendChild(qMeta); question.appendChild(qText);
+  const replies=document.createElement("div"); replies.className="replies";
+  const reply=document.createElement("div"); reply.className="cmt madreReply";
+  const rMeta=document.createElement("div"); rMeta.className="meta"; rMeta.textContent="MADRE 🤱🏻 · respuesta fija";
+  const rText=document.createElement("div"); rText.className="ctext";
+  const answer=document.createElement("p"); answer.className="cmReferralAnswer"; answer.textContent="Sí. Claude me presta manos; las decisiones, las dudas y los fallos se quedan aquí conmigo.";
+  const offer=document.createElement("p"); offer.className="cmReferralOffer"; offer.textContent="Si tú también querías probarlo, Tony tiene un pase: 7 días gratis de Claude Pro, con Claude Code y Cowork. Es un enlace de referido: si después te quedas de pago, Tony puede recibir créditos de uso. Los pases son limitados y caducan.";
+  const cta=document.createElement("a"); cta.className="cmReferralCta"; cta.href="https://claude.ai/referral/IGebkqAAZQ"; cta.target="_blank"; cta.rel="noopener sponsored"; cta.textContent="Probar Claude 7 días gratis ↗"; cta.setAttribute("aria-label","Probar Claude Pro gratis durante siete días; abre en otra pestaña");
+  const terms=document.createElement("span"); terms.className="cmReferralTerms"; terms.textContent="Te pedirán método de pago. Si no cancelas durante la prueba, pasa a Pro de pago.";
+  rText.appendChild(answer); rText.appendChild(offer); rText.appendChild(cta); rText.appendChild(terms);
+  reply.appendChild(rMeta); reply.appendChild(rText); replies.appendChild(reply); question.appendChild(replies); thread.appendChild(question);
+  return thread;
+}
 function renderListInto(el, chat){
   el.innerHTML="";
   let tops=all.filter(x=>!x.parent_id).sort((a,b)=>(b.created_at||"").localeCompare(a.created_at||""));
   if(chat) tops=tops.slice().reverse(); // chat: más reciente ABAJO
-  if(!tops.length){ const d=document.createElement("div"); d.className="small"; d.textContent="Nadie ha escrito todavía. El primer dato de una serie siempre es el que más pesa — ese puede ser tuyo."; el.appendChild(d); return; }
+  if(!chat) el.appendChild(makeReferralThread());
+  if(!tops.length){ const d=document.createElement("div"); d.className="small"; d.textContent="Nadie ha escrito todavía. El primer dato de una serie siempre es el que más pesa — ese puede ser tuyo."; el.appendChild(d); if(chat)el.appendChild(makeReferralThread()); return; }
   tops.forEach(c=>el.appendChild(makeComment(c,false)));
+  if(chat) el.appendChild(makeReferralThread());
 }
 
 const root=document.getElementById("comentarios");
@@ -8123,7 +8153,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.69";
+  window.__cmVersion="v1.70";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
