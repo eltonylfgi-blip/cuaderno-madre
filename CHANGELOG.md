@@ -1,3 +1,12 @@
+## v1.68 — 2026-07-15 · Primer roce ASMR + objetivos reales en Caos + MyInstants autorizado
+- **Roce desde el primer gesto:** una pasada horizontal deliberada activa el ASMR sin exigir invertir el movimiento. El guard sigue rechazando el scroll predominantemente vertical.
+- **Laboratorio / feedback:** cada prototipo responde `Coincide: Sí / No` en su propia tarjeta, persiste y permite retirar el veredicto; el diálogo queda solo para matizar. Feedback general incorpora una ✕ superior de 44 px con devolución de foco.
+- **Herramientas:** el hub prioriza Caos, Laboratorio y ASMR, registra uso local y reordena lo no activo por frecuencia y recencia sin perder un orden estable inicial.
+- **Caos contextual:** activar Caos enciende ASMR. Un director señala controles reales del Cuaderno con anillo, flecha, nombre y recompensa al tocarlos; mantiene una sola escena, evita formularios/diálogos y limpia en Escape, Calma, salida, pestaña oculta y `pagehide`.
+- **MyInstants:** la interfaz aplica la autorización explícita de Tony para reutilización dentro de MADRE, conserva la URL como procedencia, autocompleta fuente/derechos y mantiene seguridad y deduplicación. Si la URL cambia a otro banco, retira también la confirmación que había autogenerado para evitar una falsa atestación. La Edge Function preparada refleja la misma política, pero continúa sin desplegar.
+- **Verificación:** el sensor E2E parte de un contexto fresco para que ningún click previo pueda ocultar la regresión del primer roce y cubre controles directos, ✕, orden adaptativo, Caos→ASMR, spotlight anclado, política MyInstants, 375/1280 px, movimiento reducido y limpieza.
+- **Revertir:** `git revert <hash de v1.68>`.
+
 ## v1.67 — 2026-07-15 · Combate ASMR 67 + bestiario + archivo multimedia visual
 - **Invocación y combate:** el monstruo sigue apareciendo exactamente a 67, pero el roce normal suma `0,34` y cada explosión `0,45`, así que ya no se invoca enseguida. Al aparecer abre una batalla `0/67`: los golpes encadenados hacen combo (base 7; base 11 en Caos), el monstruo esquiva, entra en furia, cae con animación propia y el mundo permanece 20 s. La lluvia material usa 10 emotes en normal y 18 en Caos; la victoria conserva la densidad fullscreen x5 ya existente en Caos.
 - **Temática material:** durante el encuentro el color y la textura del ASMR pasan al fondo, tarjetas, portada, barra de estado, cintas y pie del Cuaderno. Calma y `prefers-reduced-motion` conservan información, botones y monstruo estático sin tormenta ni sacudidas.
