@@ -6476,7 +6476,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 .chaosLasso ellipse{stroke-linecap:round;animation:chLassoDraw .7s ease forwards}
 @keyframes chLassoDraw{to{stroke-dashoffset:0}}
 @keyframes chLassoFade{0%{opacity:0}8%{opacity:1}78%{opacity:1}100%{opacity:0}}
-.cmChaosSpotlight{position:fixed;inset:0;width:100vw;height:100vh;z-index:9997;overflow:visible;pointer-events:none}.cmChaosSpotlight ellipse{fill:none;stroke:var(--spot,#f43f5e);stroke-width:5;stroke-linecap:round;stroke-dasharray:18 9;filter:drop-shadow(0 2px 2px rgba(255,255,255,.95));animation:cmChaosSpotDash .9s linear infinite}.cmChaosSpotlight path{fill:none;stroke:var(--spot,#f43f5e);stroke-width:5;stroke-linecap:round;filter:drop-shadow(0 2px 2px rgba(255,255,255,.95))}.cmChaosSpotLabel{position:fixed;z-index:9998;max-width:210px;padding:9px 11px;border:3px solid var(--spot,#f43f5e);border-radius:12px;background:#111;color:#fff;font:900 12px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.38);animation:cmChaosSpotPop .42s cubic-bezier(.2,1.7,.3,1) both}.cmChaosAnchored{outline:5px solid var(--cm-anchor,#f43f5e)!important;outline-offset:7px;border-radius:12px;animation:cmChaosAnchorPulse .78s ease-in-out infinite alternate!important}
+.cmChaosSpotlight{position:fixed;inset:0;width:100vw;height:100vh;z-index:9997;overflow:visible;pointer-events:none}.cmChaosSpotlight ellipse{fill:none;stroke:var(--spot,#f43f5e);stroke-width:5;stroke-linecap:round;stroke-dasharray:18 9;filter:drop-shadow(0 2px 2px rgba(255,255,255,.95));animation:cmChaosSpotDash .9s linear infinite}.cmChaosSpotlight path{fill:none;stroke:var(--spot,#f43f5e);stroke-width:5;stroke-linecap:round;filter:drop-shadow(0 2px 2px rgba(255,255,255,.95))}.cmChaosSpotLabel{position:fixed;z-index:9998;max-width:210px;padding:9px 11px;border:3px solid var(--spot,#f43f5e);border-radius:12px;background:#111;color:#fff;font:900 12px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.38);animation:cmChaosSpotPop .42s cubic-bezier(.2,1.7,.3,1) both}.cmChaosAnchored{outline:5px solid var(--cm-anchor,#f43f5e)!important;outline-offset:7px;border-radius:12px;transition:none!important;animation:cmChaosAnchorPulse .78s ease-in-out infinite alternate!important}
 /* El Laboratorio oculta los FAB para dejar aire. En Caos el gato es el objetivo fijo de reserva:
    evita escenas vacías mientras un scroll suave cruza zonas sin controles y sigue siendo clicable. */
 body.chaos.cmLabFocus #gxg-cat-root,body.chaos.cmFavFocus #gxg-cat-root,body.chaos.cmAskFocus #gxg-cat-root{display:block!important}
@@ -6646,6 +6646,7 @@ body.cmMotionOff .cmChaosSpotlight,body.cmMotionOff .cmChaosSpotLabel{display:no
   }
   function clearSpotlight(){
     var a=activeSpotlight;if(!a)return;activeSpotlight=null;clearTimeout(a.timer);
+    if(a.raf)cancelAnimationFrame(a.raf);
     try{a.target.removeEventListener("click",a.hit,true);a.target.classList.remove("cmChaosAnchored");a.target.style.removeProperty("--cm-anchor");a.svg.remove();a.label.remove();}catch(e){}
   }
   function overlaps(a,b,gap){gap=gap||0;return a.left<b.right+gap&&a.right>b.left-gap&&a.top<b.bottom+gap&&a.bottom>b.top-gap;}
@@ -6667,6 +6668,9 @@ body.cmMotionOff .cmChaosSpotlight,body.cmMotionOff .cmChaosSpotLabel{display:no
     var lr=a.label.getBoundingClientRect(),lcx=lr.left+lr.width/2,lcy=lr.top+lr.height/2,dx=cx-lcx,dy=cy-lcy,sx=lcx,sy=lcy;if(Math.abs(dx)>Math.abs(dy))sx=dx>0?lr.right:lr.left;else sy=dy>0?lr.bottom:lr.top;var vx=sx-cx,vy=sy-cy,scale=1/Math.sqrt((vx*vx)/(rx*rx)+(vy*vy)/(ry*ry)),ex=cx+vx*scale,ey=cy+vy*scale,mx=(sx+ex)/2,my=(sy+ey)/2,curve=dx>=0?24:-24;
     a.path.setAttribute("d","M "+sx.toFixed(1)+" "+sy.toFixed(1)+" Q "+(mx-curve).toFixed(1)+" "+(my+curve).toFixed(1)+" "+ex.toFixed(1)+" "+ey.toFixed(1));
   }
+  /* El gato y algunos controles pueden terminar una transición después de ser elegidos. La flecha
+     sigue su geometría mientras vive, en vez de quedarse señalando la posición del fotograma inicial. */
+  function trackSpotlight(){var a=activeSpotlight;if(!a)return;positionSpotlight();if(activeSpotlight===a)a.raf=requestAnimationFrame(trackSpotlight);}
   function spotlightReal(){
     if(!on||!motionAllowed()||interactionBusy()){clearSpotlight();return false;}clearSpotlight();var choices=visibleSpotTargets();if(!choices.length)return false;choices.sort(function(){return Math.random()-.5;});
     for(var ci=0;ci<choices.length;ci++){
@@ -6677,7 +6681,7 @@ body.cmMotionOff .cmChaosSpotlight,body.cmMotionOff .cmChaosSpotLabel{display:no
       var label=document.createElement("div");label.className="cmChaosSpotLabel";label.style.setProperty("--spot",color);label.textContent="🎯 "+name+" · "+tr("tócalo","touch it");
       var hit=(function(chosen,rect){return function(e){if(!activeSpotlight||activeSpotlight.target!==chosen)return;var p={x:e.clientX||rect.left+rect.width/2,y:e.clientY||rect.top+rect.height/2};marker(p,stage);stamp(tr("OBJETIVO TOCADO","TARGET TOUCHED"),{x:p.x,y:Math.max(72,p.y-48)},false,stage);burst(Math.max(5,Math.round(9*K)));soundMlg(38);setTimeout(clearSpotlight,180);};})(target,pick.r);
       target.classList.add("cmChaosAnchored");target.style.setProperty("--cm-anchor",color);target.addEventListener("click",hit,true);document.body.appendChild(svg);document.body.appendChild(label);
-      activeSpotlight={svg:svg,ellipse:ellipse,path:path,label:label,target:target,name:name,hit:hit,timer:setTimeout(clearSpotlight,5800)};positionSpotlight();if(activeSpotlight){spotlightSeen++;return true;}
+      activeSpotlight={svg:svg,ellipse:ellipse,path:path,label:label,target:target,name:name,hit:hit,raf:0,timer:setTimeout(clearSpotlight,5800)};positionSpotlight();if(activeSpotlight){activeSpotlight.raf=requestAnimationFrame(trackSpotlight);spotlightSeen++;return true;}
     }
     return false;
   }
