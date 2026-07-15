@@ -7812,7 +7812,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var seen={}; try{ seen=JSON.parse(sessionStorage.getItem("cm_glosNie")||"{}")||{}; }catch(e){ seen={}; }
   var favorites={}; try{ favorites=JSON.parse(localStorage.getItem("cm_glos_favoritos_v1")||"{}")||{}; }catch(e){ favorites={}; }
   function signal(term,kind){ var k=term+"|"+kind; if(seen[k]) return; seen[k]=1; try{ sessionStorage.setItem("cm_glosNie",JSON.stringify(seen)); }catch(e){} try{ if(window.__fb) window.__fb({card:"📖 Glosario", section:term, tipo:(kind==="s"?"simplificar":(kind==="e"?"ejemplo":"no-entiendo")), texto:""}); }catch(e){} }
-  function favorite(term,on){ if(on) favorites[term]=1; else delete favorites[term]; try{ localStorage.setItem("cm_glos_favoritos_v1",JSON.stringify(favorites)); }catch(e){} try{ if(window.__fb) window.__fb({card:"📖 Glosario",section:term,tipo:on?"favorito-concepto":"favorito-concepto-retirado",texto:"CONCEPTO-FAVORITO\nconcepto: "+term+"\naccion: "+(on?"priorizar":"retirar")+"\norigen: glosario-cuaderno"}); }catch(e){} }
+  function favorite(term,on){ if(on) favorites[term]=1; else delete favorites[term]; try{ localStorage.setItem("cm_glos_favoritos_v1",JSON.stringify(favorites)); }catch(e){} try{ if(window.__fb) window.__fb({card:"📖 Glosario",section:term,tipo:"gusto",texto:"PREFERENCIA-CONCEPTO\nconcepto: "+term+"\naccion: "+(on?"priorizar":"retirar")+"\norigen: glosario-cuaderno"}); }catch(e){} }
   glosCard.querySelectorAll("ul.clean > li").forEach(function(li){
     var b=li.querySelector("b"); if(!b) return;
     var termTxt=b.textContent.replace(/:$/,"").trim(), key=norm(b.textContent), data=GLOS[key], meta=META[key]||{l:"Siguiente",f:"MADRE"};
@@ -7859,7 +7859,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     var acts=D.createElement("div"); acts.className="glosRelActs"; var out=D.createElement("p"); out.className="glosRelOut";
     r.opts.forEach(function(opt,i){ var btn=D.createElement("button"); btn.type="button"; btn.textContent=opt; btn.addEventListener("click",function(){
       var correct=i===r.ok; Array.prototype.forEach.call(acts.querySelectorAll("button"),function(x){x.disabled=true;}); out.textContent=(correct?"✓ ":"↪ ")+r.why;
-      try{ if(window.__fb) window.__fb({card:"📖 Glosario",section:r.a+" ↔ "+r.b,tipo:"relacion-conceptos",texto:"RELACION-CONCEPTOS\nrelacion: "+r.a+" ↔ "+r.b+"\nrespuesta: "+opt+"\ncorrecta: "+(correct?"si":"no")+"\norigen: glosario-cuaderno"}); }catch(e){}
+      try{ if(window.__fb) window.__fb({card:"📖 Glosario",section:r.a+" ↔ "+r.b,tipo:correct?"opinion":"mas-claridad",texto:"RELACION-CONCEPTOS\nrelacion: "+r.a+" ↔ "+r.b+"\nrespuesta: "+opt+"\ncorrecta: "+(correct?"si":"no")+"\norigen: glosario-cuaderno"}); }catch(e){}
     }); acts.appendChild(btn); }); card.appendChild(acts); card.appendChild(out); relBody.appendChild(card);
   });
   if(ul&&ul.parentNode) ul.parentNode.insertBefore(route,ul.nextSibling);
