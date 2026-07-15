@@ -1,3 +1,9 @@
+## v1.72 — 2026-07-15 · Voz y aspecto fuera del camino principal
+- **Jerarquía:** el ambiguo «⋯ más (voz, identidad nueva)» deja de interrumpir la explicación y el CTA principal. La opción secundaria «✨ Voz y aspecto» sale de la portada y aparece después de la primera tarjeta real y sus datos de estado.
+- **Claridad:** «Escúchalo» pasa a «Oír a MADRE» y el «prototipo» técnico se presenta como «aspecto bioluminiscente», con etiquetas completas ES/EN también al cambiar de estado.
+- **Accesibilidad:** resumen y controles visibles miden al menos 44 px, tienen foco explícito y ya no dependen de áreas táctiles invisibles que podían invadir elementos vecinos.
+- **Revertir:** `git revert <commit de v1.72>`.
+
 ## v1.71 — 2026-07-15 · Automático primero + aviso humano imposible de perder
 - **Autonomía por defecto:** una sesión no puede depender de que Tony recuerde una skill o relea un chat. El carril humano solo admite identidad, banco/dinero, CAPTCHA/2FA, gusto estrictamente personal y acciones físicas inevitables; estas últimas exigen evidencia de haber agotado al menos dos vías entre API/conector, navegador y script/robot.
 - **Visible desde la portada:** si existe una excepción pendiente, la franja superior enseña un botón con el recuento y un objetivo táctil mínimo de 44 px. Al pulsarlo revela y enfoca la tarjeta correspondiente en `MADRE te dice`, aunque el recorrido progresivo aún tuviera esa sección plegada.

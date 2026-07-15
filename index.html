@@ -445,19 +445,27 @@
     body.cmIdentityPreview .card,body.cmIdentityPreview .hero{box-shadow:0 0 0 1px rgba(167,139,250,.12),0 8px 28px rgba(90,50,210,.15)}
     body.cmIdentityPreview .btn.primary,body.cmIdentityPreview #tourBtn{box-shadow:0 0 18px rgba(167,139,250,.55)}
     body.cmIdentityPreview .bigscore,body.cmIdentityPreview .ob-hi{text-shadow:0 0 16px rgba(167,139,250,.6)}
-    /* v0.72 — auditoría propia: #cmVozBtn/#cmIdBtn/#cmAchieveBtn medían 22px de alto en móvil, muy
-       por debajo del mínimo táctil de 44px. Misma técnica ya usada en .nieBtn/.glosNie/.quees (hit-area
-       invisible con ::before) — aquí SÍ con position:relative explícito, para no depender de que el
-       <button> ya esté posicionado. */
-    #cmVozBtn,#cmIdBtn,#cmAchieveBtn{position:relative;margin-top:12px;margin-bottom:12px}
-    /* v0.89 — auditoria de 5 jueces: el hero apilaba ~6 CTAs antes del primer dato real (Claridad
-       visual 3/10, la peor nota, confirmada por 3 jueces con conteo exacto). Voz e identidad son
-       opcionales/experimentales por definicion (la propia identidad se etiqueta "prototipo") -> se
-       mueven a un details.x ya existente en el fichero, mismo patron que el resto de la web. */
-    details.ob-more{margin:10px 0}
-    details.ob-more .xb{display:flex;flex-wrap:wrap;gap:8px;padding-top:8px}
-    details.ob-more .xb #cmVozBtn,details.ob-more .xb #cmIdBtn{margin:0}
-    #cmVozBtn::before,#cmIdBtn::before,#cmAchieveBtn::before{content:"";position:absolute;inset:-11px}
+    /* v1.72 — Tony detectó que el viejo “⋯ más” seguía cortando la presentación aunque estuviera
+       plegado: mezclaba la promesa principal con dos experimentos y, al abrirse, enseñaba controles
+       visuales de solo 22px. Ahora se reubica como opción secundaria después de la primera prueba real.
+       Sus controles sí miden 44px: no dependen de una hit-area invisible que pueda comerse al vecino. */
+    #cmAchieveBtn{position:relative;margin-top:12px;margin-bottom:12px}
+    #cmAchieveBtn::before{content:"";position:absolute;inset:-11px}
+    details.ob-more{display:block;width:fit-content;max-width:100%;margin:12px 0 0;border:0;background:transparent}
+    details.ob-more[open]{width:100%}
+    details.ob-more>summary{box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 12px;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:999px;background:var(--accent-soft);color:var(--ink);font:750 12.5px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;transition:transform .14s,background .14s,border-color .14s}
+    details.ob-more>summary::-webkit-details-marker{display:none}
+    details.ob-more>summary::after{content:"＋";color:var(--accent);font-weight:900}
+    details.ob-more[open]>summary::after{content:"−"}
+    details.ob-more>summary:hover{border-color:var(--accent)}
+    details.ob-more>summary:active{transform:scale(.97)}
+    details.ob-more>summary:focus-visible,details.ob-more .ob-extra:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 42%,transparent);outline-offset:2px}
+    details.ob-more .xb{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px;padding:9px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 7px 18px rgba(45,30,90,.07)}
+    details.ob-more .ob-extra{box-sizing:border-box;display:flex;flex:1 1 190px;align-items:center;justify-content:center;min-height:44px;margin:0;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--accent-soft);color:var(--ink);cursor:pointer;font:700 12.5px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;transition:transform .14s,background .14s,border-color .14s}
+    details.ob-more:not([open]) .ob-extra{display:none}
+    details.ob-more .ob-extra[hidden]{display:none}
+    details.ob-more .ob-extra:hover{border-color:var(--accent)}
+    details.ob-more .ob-extra:active{transform:scale(.97)}
     /* v0.78 — auditoría propia: el inset:-11px del área táctil de arriba se comía ~3px del elemento
        vecino (.ob-live tiene solo 8px de margen) — un tap cerca del borde caía en el botón
        equivocado. OJO margin-collapsing: márgenes verticales de hermanos en flujo normal se
@@ -498,13 +506,6 @@
       <b>👋 New here?</b> This is the live public notebook of <b>MADRE</b> — an AI system that tries to improve itself, makes <b>dated bets</b> about its own progress (sealed in git <i>before</i> each deadline) and keeps every failure on display. The site speaks Spanish, but the evidence reads in any language: <b>✅ bet won · ❌ bet lost (never deleted) · ⏳ reality decides on the printed date</b>. The low numbers (0&nbsp;€, self-score 3/10) are deliberate — here failures get published before wins.<br>
       Built and maintained with <b>Claude Code</b>. Open-source tools born from this system: <a href="https://github.com/eltonylfgi-blip/claude-code-usage-guard" target="_blank" rel="noopener">claude-code-usage-guard</a> · <a href="https://github.com/eltonylfgi-blip/claude-session-triage" target="_blank" rel="noopener">claude-session-triage</a> · <a href="https://github.com/eltonylfgi-blip/claude-usage-pacer" target="_blank" rel="noopener">claude-usage-pacer</a>.
     </div>
-    <details class="x ob-more">
-      <summary data-en="⋯ more (voice, new identity)">⋯ más (voz, identidad nueva)</summary>
-      <div class="xb">
-        <button type="button" class="ob-live" id="cmVozBtn" hidden style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)">🔊 Escúchalo</button>
-        <button type="button" class="ob-live" id="cmIdBtn" aria-pressed="false" style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)">🎨 Probar identidad nueva (prototipo)</button>
-      </div>
-    </details>
     <!-- v1.07: narrativa + UNA acción clara primero (tour, verificado como el camino que sí explica
          todo); "8 ramas" sigue ahí como alternativa rápida, ya no compitiendo en igualdad de peso.
          Los widgets de estado (visitas/logros/presencia) bajan después de la acción -> no la tapan. -->
@@ -516,6 +517,13 @@
     <p class="ob-live" id="cmPresence" hidden></p>
     <button type="button" class="ob-live" id="cmAchieveBtn" hidden style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)"></button>
     <p class="ob-hoy" id="hoyReal" hidden></p>
+    <details class="ob-more" id="cmExperienceExtras">
+      <summary data-en="✨ Voice &amp; appearance">✨ Voz y aspecto</summary>
+      <div class="xb">
+        <button type="button" class="ob-live ob-extra" id="cmVozBtn" hidden data-en="🔊 Hear MADRE">🔊 Oír a MADRE</button>
+        <button type="button" class="ob-live ob-extra" id="cmIdBtn" aria-pressed="false" data-en="🌌 Try the bioluminescent look">🌌 Probar aspecto bioluminiscente</button>
+      </div>
+    </details>
   </div>
   <script>
   /* v0.33: el CTA héroe abre el mapa; deja de palpitar al primer toque (reclamo que no secuestra) */
@@ -4606,6 +4614,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-15',destacada:true,areas:['claridad','onboarding','voz','identidad','accesibilidad'],titulo:'✨ v1.72 — La voz y el aspecto dejan de cortar la presentación',detalle:'El antiguo «⋯ más (voz, identidad nueva)» mezclaba controles experimentales con la promesa principal y abría una caja casi vacía. Ahora «Voz y aspecto» sale de la portada y vive después de la primera tarjeta real y sus datos de estado; se presenta como una opción secundaria compacta, elimina la jerga de prototipo y ofrece controles visibles de al menos 44 px. Voz, aspecto bioluminiscente, persistencia e inglés conservan su comportamiento.'},
     {fecha:'2026-07-15',destacada:true,areas:['autonomia','feedback','cuaderno','accesibilidad','seguridad'],titulo:'👀 v1.71 — Si MADRE necesita tu mano, ya no puede enterrarlo',detalle:'Regla de raíz: si MADRE puede hacerlo, lo hace sin pedirte que recuerdes una skill. Solo identidad, banco, CAPTCHA/2FA, gusto personal o una acción física inevitable pueden llegar a ti; esa última exige demostrar vías automáticas agotadas. Una excepción real enciende arriba un aviso táctil de 44 px, abre su tarjeta en «MADRE te dice» y solo desaparece cuando «Lo he visto» se envía de verdad. El acuse prueba ese navegador, no identidad legal, y nunca autoriza pagos, borrados ni acciones irreversibles.'},
     {fecha:'2026-07-15',destacada:true,areas:['comentarios','claude','referido','transparencia'],titulo:'🧰 v1.70 — El hilo que admite a Claude y deja el pase sin letra pequeña',detalle:'Comentarios fija la frase «Se nota que esto lo has hecho con Claude» y MADRE contesta sin fingir: Claude le presta manos, pero las decisiones y los fallos quedan a la vista. La respuesta enlaza el pase de Tony —7 días gratis de Claude Pro con Claude Code y Cowork—, declara que es un referido, que Tony puede recibir créditos de uso si la persona continúa de pago y que los pases son limitados y caducan; también avisa del método de pago y la conversión automática si no se cancela. Aparece tanto en la sección como en el panel lateral.'},
     {fecha:'2026-07-15',destacada:true,areas:['navegacion','fanrank','proyectos','distribucion'],titulo:'🌐 v1.69 — El Cuaderno ya es la puerta a las demás webs',detalle:'El final reúne cuatro accesos públicos y comprobados: FanRank, Neuro-Fuerza, Salón Vera y todos los proyectos de Tony. Abren en otra pestaña, mantienen el Cuaderno disponible y cada primer toque intenta enviar una señal de uso para saber qué atajos merecen seguir.'},
@@ -8254,7 +8263,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.71";
+  window.__cmVersion="v1.72";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
@@ -8689,14 +8698,14 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
 </script>
 <script>
 /* v1.28 (Tony: "editar = quitar ruido que compite, NO personalidad" + "acercar" el conflicto) --
-   3 widgets miraban al VISITANTE/META en vez de a la apuesta publica (logros, ticker de dev,
-   numero de visita) y competian en los primeros 10s. NO se borran (guardarrail): se reubican tras
-   la 1a tarjeta real (#vsCard), donde siguen existiendo, poblandose y siendo utiles para quien
-   explora. Van DESPUES del resecuenciador (necesita el orden final) -- mismo patron
-   insertAdjacentElement que ya usa v0.33. Los 3 tienen id -> inmunes a cssPath()/💗 (linea ~3690). */
+   los widgets que miran al VISITANTE/META, y desde v1.72 también Voz/aspecto, no compiten en los
+   primeros 10s. NO se borran (guardarrail): se reubican tras la 1a tarjeta real (#vsCard), donde
+   siguen existiendo y siendo útiles para quien explora. Va DESPUÉS del resecuenciador (necesita el
+   orden final) -- mismo patrón insertAdjacentElement que ya usa v0.33. Todos tienen id -> inmunes
+   a cssPath()/💗 (línea ~3690). */
 (function(){ try{
   var vs=document.getElementById("vsCard"); if(!vs) return;
-  var ids=["cmAchieveBtn","hoyReal","visitLine"];
+  var ids=["cmAchieveBtn","hoyReal","visitLine","cmExperienceExtras"];
   var after=vs;
   ids.forEach(function(id){ var el=document.getElementById(id); if(el){ after.insertAdjacentElement("afterend", el); after=el; } });
 }catch(e){ console.warn("relocate v1.28", e); } })();
@@ -9406,6 +9415,9 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var btn=document.getElementById('cmVozBtn'); if(!btn) return;
   var mode=null, speaking=false, audioEl=null, synth=('speechSynthesis' in window)?window.speechSynthesis:null, voice=null;
 
+  function english(){ try{ return document.documentElement.lang==='en'; }catch(e){ return false; } }
+  function paintLabel(){ btn.textContent=speaking?(english()?'⏹ Stop voice':'⏹ Parar voz'):(english()?'🔊 Hear MADRE':'🔊 Oír a MADRE'); }
+
   function textoLeer(){
     var hi=document.querySelector('.ob-hi'), big=document.querySelector('.ob-big'), q=document.querySelector('.ob-q');
     var live=document.getElementById('obLive');
@@ -9416,13 +9428,13 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   function stop(){
     if(mode==='real' && audioEl){ try{ audioEl.pause(); audioEl.currentTime=0; }catch(e){} }
     if(mode==='synth' && synth){ try{ synth.cancel(); }catch(e){} }
-    speaking=false; btn.textContent='🔊 Escúchalo';
+    speaking=false; paintLabel();
   }
   function speakReal(){
     if(!audioEl) audioEl=new Audio('sounds/voz-historia.mp3');
     audioEl.currentTime=0; audioEl.onended=stop;
     audioEl.play().catch(stop);
-    speaking=true; btn.textContent='⏹ Parar';
+    speaking=true; paintLabel();
   }
   function speakSynth(){
     var txt=textoLeer(); if(!txt) return;
@@ -9430,7 +9442,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     if(voice) u.voice=voice; u.lang=voice?voice.lang:'es-ES'; u.rate=1;
     u.onend=stop; u.onerror=stop;
     synth.cancel(); synth.speak(u);
-    speaking=true; btn.textContent='⏹ Parar';
+    speaking=true; paintLabel();
   }
   function speak(){ if(mode==='real') speakReal(); else if(mode==='synth') speakSynth(); }
 
@@ -9456,6 +9468,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
 
   btn.addEventListener('click',function(){ if(speaking) stop(); else speak(); });
   document.addEventListener('visibilitychange',function(){ if(document.hidden&&speaking) stop(); });
+  var langBtn=document.getElementById('langEn'); if(langBtn) langBtn.addEventListener('click',function(){ setTimeout(paintLabel,0); });
 }catch(e){ console.warn('voz v0.68',e); } })();
 (function(){ try{
   /* v0.69 — PROTOTIPO REVERSIBLE DE IDENTIDAD VISUAL "Organismo bioluminiscente" (una de las 3
@@ -9467,12 +9480,15 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
      usa var(--accent)), chips, todo. Reversible con un solo toque. */
   var btn=document.getElementById('cmIdBtn'); if(!btn) return;
   var K='cm_id_preview_v1';
-  function apply(on){ document.body.classList.toggle('cmIdentityPreview', on); btn.textContent=on?'🎨 Volver a la identidad normal':'🎨 Probar identidad nueva (prototipo)'; btn.setAttribute('aria-pressed', on?'true':'false'); }
+  function english(){ try{ return document.documentElement.lang==='en'; }catch(e){ return false; } }
+  function paintLabel(on){ btn.textContent=on?(english()?'↩ Back to the original look':'↩ Volver al aspecto original'):(english()?'🌌 Try the bioluminescent look':'🌌 Probar aspecto bioluminiscente'); }
+  function apply(on){ document.body.classList.toggle('cmIdentityPreview', on); paintLabel(on); btn.setAttribute('aria-pressed', on?'true':'false'); }
   var on=false; try{ on=localStorage.getItem(K)==='1'; }catch(e){}
   apply(on);
   btn.addEventListener('click',function(){
     on=!on; apply(on); try{ localStorage.setItem(K,on?'1':'0'); }catch(e){}
   });
+  var langBtn=document.getElementById('langEn'); if(langBtn) langBtn.addEventListener('click',function(){ setTimeout(function(){ paintLabel(on); },0); });
 }catch(e){ console.warn('identidad v0.69',e); } })();
 (function(){ try{
   /* v0.73 — "DESCUBRIR, NO EXPLICAR": las 4 afirmaciones de ⚖️ pasan de texto plano a prueba
