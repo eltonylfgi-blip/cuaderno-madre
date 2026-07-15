@@ -1,3 +1,13 @@
+## v1.74 — 2026-07-16 · Pase de Claude en el momento de intención
+- **Activación contextual:** el pase deja de depender solo de que alguien abra Comentarios. Tras 60 s acumulados con la pestaña visible, aparece un diálogo nativo que pregunta si la persona quiere construir algo parecido con Claude.
+- **Frecuencia acotada:** se muestra como máximo una vez por sesión; descartarlo activa 30 días de descanso y usar cualquier enlace de referido lo suprime de forma persistente.
+- **No interrumpe trabajo:** no aparece en modo creador, pestaña oculta, mientras se escribe ni mientras otro diálogo, tour o panel superpuesto está abierto. Si alcanza el minuto en ese estado, espera al cierre o a la pérdida de foco.
+- **Verdad comercial:** declara `enlace referido`, 7 días gratis de Claude Pro con Claude Code y Cowork, posible crédito para Tony, pases limitados/caducables y sujetos a elegibilidad, método de pago y paso automático a Pro si no se cancela.
+- **Disponibilidad honesta:** Claude confirma la disponibilidad al abrir el enlace. No se inventan `x/10`, “quedan N”, “N reclamados” ni cuentas atrás; un guard bloquea el diálogo si aparece escasez numérica sin una fuente real de Claude.
+- **Accesibilidad:** `<dialog>` nativo, botón visible de cierre, Escape, foco inicial en el título, devolución del foco, controles ≥44 px, ES/EN, layout 375/1280 px y cero animación bajo `prefers-reduced-motion`.
+- **Selector:** impresión, cierre y clic son señales de interfaz separadas; solo una redención/crédito externo cuenta como beneficio. Revisar el embudo en ≤72 h y retirar o estrechar si predominan cierres sin clic.
+- **Revertir:** `git revert <commit de v1.74>`.
+
 ## v1.73 — 2026-07-15 · Novedades visuales + grabaciones ASMR con procedencia
 - **Tour sobre el producto:** `Ver novedades guiadas` ya no enfoca filas de este changelog. Sus tres pasos revelan y resaltan componentes reales: el estante de grabaciones ASMR, `Voz y aspecto` y el hub de proyectos públicos.
 - **Texto mínimo:** cada paso usa un título y una sola frase breve, revelada en fragmentos durante menos de un segundo. `prefers-reduced-motion` y Calma muestran la frase completa al instante. El foco se limpia al avanzar o salir.

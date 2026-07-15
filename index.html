@@ -4627,6 +4627,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-16',destacada:true,areas:['claude','referido','distribucion','activacion','accesibilidad'],titulo:'💜 v1.74 — El pase de Claude aparece cuando ya conoces el Cuaderno',detalle:'Tras 60 segundos acumulados con la pestaña visible, el Cuaderno puede sugerir —una sola vez por sesión— que construyas algo parecido con Claude. El diálogo declara que el enlace es referido, explica los 7 días gratis de Claude Pro con Claude Code y Cowork, avisa del método de pago y la renovación, y permite cerrar con botón o Escape. Claude confirma la disponibilidad al abrir: no se inventan cupos, reclamaciones ni cuentas atrás, y un guard bloquea esa escasez numérica sin fuente real. No aparece en modo creador, durante escritura u otro diálogo; al descartarlo guarda 30 días de descanso y al usar cualquier enlace de referido deja de insistir. Impresión, cierre y clic quedan como señales separadas; solo una conversión o crédito externo contará como beneficio.'},
     {fecha:'2026-07-15',destacada:true,areas:['claridad','novedades','tour','asmr','sonido','feedback','accesibilidad'],titulo:'🎙️ v1.73 — Las novedades se ven y los sonidos dicen de dónde salen',detalle:'«Ver novedades guiadas» deja de pasear por párrafos del changelog: ahora enfoca tres componentes reales —las grabaciones ASMR, Voz y aspecto y el hub de proyectos— mientras una frase breve aparece por fragmentos; movimiento reducido la muestra al instante. El Laboratorio separa ocho grabaciones reales de Mixkit de sus 32 prototipos sintetizados, enseña la procedencia en cada ficha, limita la escucha a 6,7 segundos, envía ese origen con el feedback y conserva un fallback sintetizado explícito si la red falla.'},
     {fecha:'2026-07-15',destacada:true,areas:['claridad','onboarding','voz','identidad','accesibilidad'],titulo:'✨ v1.72 — La voz y el aspecto dejan de cortar la presentación',detalle:'El antiguo «⋯ más (voz, identidad nueva)» mezclaba controles experimentales con la promesa principal y abría una caja casi vacía. Ahora «Voz y aspecto» sale de la portada y vive después de la primera tarjeta real y sus datos de estado; se presenta como una opción secundaria compacta, elimina la jerga de prototipo y ofrece controles visibles de al menos 44 px. Voz, aspecto bioluminiscente, persistencia e inglés conservan su comportamiento.'},
     {fecha:'2026-07-15',destacada:true,areas:['autonomia','feedback','cuaderno','accesibilidad','seguridad'],titulo:'👀 v1.71 — Si MADRE necesita tu mano, ya no puede enterrarlo',detalle:'Regla de raíz: si MADRE puede hacerlo, lo hace sin pedirte que recuerdes una skill. Solo identidad, banco, CAPTCHA/2FA, gusto personal o una acción física inevitable pueden llegar a ti; esa última exige demostrar vías automáticas agotadas. Una excepción real enciende arriba un aviso táctil de 44 px, abre su tarjeta en «MADRE te dice» y solo desaparece cuando «Lo he visto» se envía de verdad. El acuse prueba ese navegador, no identidad legal, y nunca autoriza pagos, borrados ni acciones irreversibles.'},
@@ -8359,7 +8360,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.73";
+  window.__cmVersion="v1.74";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
@@ -10471,6 +10472,74 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   window.__cmFunRoute={count:STOPS.length,open:openPanel,go:function(k){for(var i=0;i<STOPS.length;i++)if(STOPS[i].k===k){var b=list.querySelector('[data-key="'+k+'"] button');if(b)b.click();return true;}return false;},back:restore,state:function(){return {open:!panel.hidden,visited:Object.keys(visited),hasReturn:!back.hidden};}};
   window.__cmGlossLinks={count:D.querySelectorAll(".cmTerm").length,open:openGloss};
 }catch(e){console.warn("ruta-divertida v1.66",e);}})();
+</script>
+<script>
+/* v1.74 — Activacion contextual del pase de Claude.
+   Cuenta solo tiempo con la pagina visible, no interrumpe escritura/otros dialogos, limita la
+   frecuencia y separa señales de interfaz de una conversión externa real. */
+(function(){try{
+  var D=document,REFERRAL_URL="https://claude.ai/referral/IGebkqAAZQ",THRESHOLD_MS=60000,
+      COOLDOWN_MS=30*24*60*60*1000,STATE_KEY="cm_referral_prompt_v1",
+      SESSION_KEY="cm_referral_prompt_shown_v1",SIGNAL_PREFIX="cm_referral_signal_v1_",
+      FALSE_SCARCITY_RE=/(?:\b\d+\s*\/\s*\d+\b|\bquedan\s+\d+\b|\b(?:solo\s+)?\d+\s+(?:pases?\s+)?(?:reclamad(?:os|as)|restantes?|disponibles?)\b|\bonly\s+\d+\s+(?:passes?\s+)?left\b|\b\d+\s+(?:passes?\s+)?(?:claimed|left|remaining|available)\b|\b\d{1,2}:\d{2}(?::\d{2})?\b|\bcountdown\b|\bcuenta\s+atr[aá]s\b)/i;
+  if(D.getElementById("cmReferralPrompt"))return;
+  var style=D.createElement("style");style.id="cmReferralPromptCss";style.textContent=
+    ".cmReferralPrompt{box-sizing:border-box;width:min(520px,calc(100vw - 24px));max-width:none;margin:auto;padding:0;border:1px solid color-mix(in srgb,var(--accent,#7c3aed) 34%,#d8d2e5);border-radius:24px;background:var(--card,#fff);color:var(--ink,#202230);box-shadow:0 24px 80px rgba(28,20,60,.38);overflow:hidden}"+
+    ".cmReferralPrompt::backdrop{background:rgba(20,14,34,.55);backdrop-filter:blur(3px)}"+
+    ".cmReferralPromptShell{position:relative;padding:26px 24px 22px;background:radial-gradient(circle at 90% 0,rgba(124,58,237,.16),transparent 38%),linear-gradient(150deg,var(--card,#fff),color-mix(in srgb,var(--accent-soft,#f1ecff) 72%,#fff))}"+
+    ".cmReferralPromptClose{position:absolute;top:10px;right:10px;display:grid;place-items:center;width:44px;height:44px;border:1px solid color-mix(in srgb,var(--accent,#7c3aed) 24%,#ddd);border-radius:999px;background:var(--card,#fff);color:var(--ink,#202230);font:800 22px/1 system-ui;cursor:pointer}"+
+    ".cmReferralPromptKicker{display:inline-flex;align-items:center;min-height:28px;margin:0 48px 10px 0;padding:0 10px;border-radius:999px;background:var(--accent-soft,#f1ecff);color:var(--accent,#6d28d9);font:850 11px/1 system-ui;letter-spacing:.04em;text-transform:uppercase}"+
+    ".cmReferralPromptTitle{max-width:410px;margin:0;color:var(--ink,#202230);font:900 clamp(23px,5vw,31px)/1.08 system-ui,-apple-system,Segoe UI,sans-serif;letter-spacing:-.025em}"+
+    ".cmReferralPromptTitle:focus{outline:none}"+
+    ".cmReferralPromptBody{margin:13px 0 0;color:var(--ink,#202230);font:650 15px/1.52 system-ui,-apple-system,Segoe UI,sans-serif}"+
+    ".cmReferralPromptDisclosure{margin:10px 0 0;color:var(--muted,#5f586d);font:600 13px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}"+
+    ".cmReferralPromptActions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;margin-top:18px}"+
+    ".cmReferralPromptCta,.cmReferralPromptLater{display:inline-flex;box-sizing:border-box;align-items:center;justify-content:center;min-height:48px;border-radius:14px;font:850 14px/1.2 system-ui,-apple-system,Segoe UI,sans-serif;text-align:center;cursor:pointer}"+
+    ".cmReferralPromptCta{padding:10px 16px;background:linear-gradient(135deg,var(--accent,#7c3aed),#2563eb);color:#fff;text-decoration:none;box-shadow:0 8px 22px rgba(69,48,180,.25)}"+
+    ".cmReferralPromptLater{padding:10px 14px;border:1px solid color-mix(in srgb,var(--accent,#7c3aed) 24%,#d7d2df);background:var(--card,#fff);color:var(--ink,#202230)}"+
+    ".cmReferralPromptClose:focus-visible,.cmReferralPromptCta:focus-visible,.cmReferralPromptLater:focus-visible{outline:3px solid var(--ink,#202230);outline-offset:3px}"+
+    ".cmReferralPromptTerms{display:block;margin-top:11px;color:var(--ink,#202230);font:650 13px/1.42 system-ui,-apple-system,Segoe UI,sans-serif}"+
+    "@media(max-width:480px){.cmReferralPromptShell{padding:23px 16px 18px}.cmReferralPromptActions{grid-template-columns:1fr}.cmReferralPromptLater{width:100%}.cmReferralPromptTitle{padding-right:22px}}"+
+    "@media(prefers-reduced-motion:reduce){.cmReferralPrompt,.cmReferralPrompt *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}";
+  D.head.appendChild(style);
+
+  var dialog=D.createElement("dialog");dialog.id="cmReferralPrompt";dialog.className="cmReferralPrompt";
+  dialog.setAttribute("aria-labelledby","cmReferralPromptTitle");dialog.setAttribute("aria-describedby","cmReferralPromptBody cmReferralPromptTerms");
+  dialog.innerHTML='<div class="cmReferralPromptShell"><button type="button" class="cmReferralPromptClose" aria-label="Cerrar sugerencia">×</button><span class="cmReferralPromptKicker">Enlace referido · Claude</span><h2 class="cmReferralPromptTitle" id="cmReferralPromptTitle" tabindex="-1">¿Quieres construir algo así tú también?</h2><p class="cmReferralPromptBody" id="cmReferralPromptBody">Este Cuaderno se ha construido con ayuda de Claude. Tony comparte su pase: 7 días gratis de Claude Pro, con Claude Code y Cowork.</p><p class="cmReferralPromptDisclosure">Si después continúas con Pro de pago, Tony puede recibir créditos de uso. Pases limitados · Claude confirma la disponibilidad al abrir; caducan y dependen de elegibilidad.</p><div class="cmReferralPromptActions"><a class="cmReferralPromptCta" data-referral-surface="popup" href="'+REFERRAL_URL+'" target="_blank" rel="noopener sponsored">Comprobar disponibilidad del pase ↗</a><button type="button" class="cmReferralPromptLater">Ahora no</button></div><span class="cmReferralPromptTerms" id="cmReferralPromptTerms">Te pedirán método de pago. Si no cancelas durante la prueba, pasa a Pro de pago.</span></div>';
+  D.body.appendChild(dialog);
+  var closeButton=dialog.querySelector(".cmReferralPromptClose"),laterButton=dialog.querySelector(".cmReferralPromptLater"),
+      title=dialog.querySelector(".cmReferralPromptTitle"),body=dialog.querySelector(".cmReferralPromptBody"),
+      disclosure=dialog.querySelector(".cmReferralPromptDisclosure"),cta=dialog.querySelector(".cmReferralPromptCta"),
+      terms=dialog.querySelector(".cmReferralPromptTerms"),kicker=dialog.querySelector(".cmReferralPromptKicker");
+  function english(){try{return D.documentElement.lang==="en"||(window.__cmLangIsEnglish&&window.__cmLangIsEnglish());}catch(e){return false;}}
+  function paint(){var en=english();kicker.textContent=en?"Referral link · Claude":"Enlace referido · Claude";title.textContent=en?"Want to build something like this too?":"¿Quieres construir algo así tú también?";body.textContent=en?"This Notebook was built with help from Claude. Tony is sharing his pass: 7 free days of Claude Pro, including Claude Code and Cowork.":"Este Cuaderno se ha construido con ayuda de Claude. Tony comparte su pase: 7 días gratis de Claude Pro, con Claude Code y Cowork.";disclosure.textContent=en?"If you continue with paid Pro afterwards, Tony may receive usage credits. Limited passes · Claude confirms availability when you open the link; passes expire and depend on eligibility.":"Si después continúas con Pro de pago, Tony puede recibir créditos de uso. Pases limitados · Claude confirma la disponibilidad al abrir; caducan y dependen de elegibilidad.";cta.textContent=en?"Check pass availability ↗":"Comprobar disponibilidad del pase ↗";laterButton.textContent=en?"Not now":"Ahora no";closeButton.setAttribute("aria-label",en?"Close suggestion":"Cerrar sugerencia");terms.textContent=en?"A payment method is required. If you do not cancel during the trial, it becomes a paid Pro plan.":"Te pedirán método de pago. Si no cancelas durante la prueba, pasa a Pro de pago.";}
+  function truthfulScarcity(){var copy=[kicker,title,body,disclosure,cta,terms].map(function(el){return el.textContent||"";}).join(" ");var safe=!FALSE_SCARCITY_RE.test(copy);if(safe){delete dialog.dataset.scarcityBlocked;}else{dialog.dataset.scarcityBlocked="true";console.error("referido-contextual bloqueado: escasez numérica sin fuente real de Claude");}return safe;}
+  function readState(){try{var value=JSON.parse(localStorage.getItem(STATE_KEY)||"{}");return value&&typeof value==="object"?value:{};}catch(e){return {};}}
+  function writeState(value){try{localStorage.setItem(STATE_KEY,JSON.stringify(value));return true;}catch(e){return false;}}
+  function isCreator(){try{return D.body.classList.contains("cmCreator")||localStorage.getItem("cuaderno_madre_tony")==="1";}catch(e){return D.body.classList.contains("cmCreator");}}
+  function sessionShown(){try{return sessionStorage.getItem(SESSION_KEY)==="1";}catch(e){return false;}}
+  function suppressReason(){var state=readState();if(isCreator())return "creator";if(state.clicked)return "clicked";if(Number(state.dismissedAt)>0&&Date.now()-Number(state.dismissedAt)<COOLDOWN_MS)return "cooldown";if(sessionShown())return "session";return "";}
+  function activeInput(){var el=D.activeElement;return !!(el&&(/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)||el.isContentEditable));}
+  function busyReason(){if(activeInput())return "editing";if(D.querySelector('dialog[open]:not(#cmReferralPrompt)'))return "dialog";if(D.querySelector('#tourOv,.cropOv,#cmtPanel.on,.cmNoveltyTour.on,#cmFunRoutePanel:not([hidden])'))return "overlay";return "";}
+  var signalRetried={};
+  function signal(type,surface){var key=SIGNAL_PREFIX+type+"_"+surface;try{if(sessionStorage.getItem(key))return;}catch(e){}if(!window.__fb){if(!signalRetried[key]){signalRetried[key]=1;setTimeout(function(){signal(type,surface);},1500);}return;}try{sessionStorage.setItem(key,"1");}catch(e){}var payload={card:"💜 Claude para crear",section:"referido-60s",tipo:type,texto:"REFERIDO-CLAUDE\nsuperficie: "+surface+"\nversion: "+(window.__cmVersion||"sin-version")+"\norigen: cuaderno-publico"};try{Promise.resolve(window.__fb(payload)).catch(function(){});}catch(e){}}
+  var visibleMs=0,lastTick=(window.performance&&performance.now)?performance.now():Date.now(),timer=null,pending=false,returnFocus=null,closeReason="";
+  function stopTimer(){if(timer!==null){clearInterval(timer);timer=null;}}
+  function snapshot(){return {thresholdMs:THRESHOLD_MS,cooldownMs:COOLDOWN_MS,visibleMs:Math.round(visibleMs),open:dialog.open,pending:pending,suppressed:suppressReason(),busy:busyReason()};}
+  function tryShow(){var suppressed=suppressReason();if(suppressed){pending=false;stopTimer();return false;}if(visibleMs<THRESHOLD_MS||D.hidden)return false;var busy=busyReason();if(busy){pending=true;stopTimer();return false;}if(typeof dialog.showModal!=="function")return false;paint();if(!truthfulScarcity()){pending=false;stopTimer();return false;}returnFocus=D.activeElement&&D.activeElement!==D.body?D.activeElement:null;try{dialog.showModal();}catch(e){pending=true;return false;}try{sessionStorage.setItem(SESSION_KEY,"1");}catch(e){}pending=false;stopTimer();setTimeout(function(){try{title.focus({preventScroll:true});}catch(e){}},0);signal("referido-popup-visto","popup");return true;}
+  function tick(){var now=(window.performance&&performance.now)?performance.now():Date.now();if(D.hidden){lastTick=now;return;}visibleMs+=Math.max(0,Math.min(now-lastTick,2000));lastTick=now;if(visibleMs>=THRESHOLD_MS)tryShow();}
+  function begin(){if(suppressReason())return;lastTick=(window.performance&&performance.now)?performance.now():Date.now();timer=setInterval(tick,1000);}
+  function dismiss(){closeReason="dismiss";if(dialog.open)dialog.close("dismiss");}
+  function markClicked(surface){var state=readState();state.clicked=true;state.clickedAt=Date.now();delete state.dismissedAt;writeState(state);stopTimer();signal(surface==="popup"?"referido-popup-click":"referido-hilo-click",surface);if(surface==="popup"&&dialog.open){closeReason="click";setTimeout(function(){if(dialog.open)dialog.close("click");},0);}}
+  closeButton.addEventListener("click",dismiss);laterButton.addEventListener("click",dismiss);dialog.addEventListener("cancel",function(){closeReason="dismiss";});
+  dialog.addEventListener("close",function(){if(closeReason!=="click"){var state=readState();state.dismissedAt=Date.now();writeState(state);signal("referido-popup-cerrado","popup");}var restore=returnFocus;returnFocus=null;closeReason="";if(restore&&D.contains(restore))setTimeout(function(){try{restore.focus({preventScroll:true});}catch(e){}},0);});
+  D.addEventListener("click",function(event){var link=event.target&&event.target.closest?event.target.closest('a[href="'+REFERRAL_URL+'"]'):null;if(link)markClicked(link.closest("#cmReferralPrompt")?"popup":"hilo");if(pending&&!link)setTimeout(tryShow,0);});
+  D.addEventListener("focusout",function(){if(pending)setTimeout(tryShow,0);},true);D.addEventListener("close",function(){if(pending)setTimeout(tryShow,0);},true);
+  D.addEventListener("visibilitychange",function(){lastTick=(window.performance&&performance.now)?performance.now():Date.now();if(!D.hidden&&pending)setTimeout(tryShow,0);});
+  var langButton=D.getElementById("langEn");if(langButton)langButton.addEventListener("click",function(){setTimeout(paint,0);});
+  window.__cmReferralPrompt={thresholdMs:THRESHOLD_MS,cooldownMs:COOLDOWN_MS,tryShow:tryShow,truthfulScarcity:truthfulScarcity,creditVisibleMs:function(ms){if(!D.hidden&&Number(ms)>0){visibleMs=Math.min(THRESHOLD_MS,visibleMs+Number(ms));if(visibleMs>=THRESHOLD_MS)tryShow();}return snapshot();},state:snapshot};
+  paint();begin();
+}catch(e){console.warn("referido-contextual v1.74",e);}})();
 </script>
 </body>
 </html>
