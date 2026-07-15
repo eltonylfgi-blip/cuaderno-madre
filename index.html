@@ -7489,8 +7489,13 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
     setTimeout(function(){try{bus.disconnect();}catch(e){}},25);
     return true;
   }
+  function labPrime(){
+    var c=ensure();if(!c)return Promise.resolve(false);
+    if(c.state==="running")return Promise.resolve(true);
+    try{return Promise.resolve(c.resume()).then(function(){return c.state==="running";},function(){return false;});}catch(e){return Promise.resolve(false);}
+  }
   function labPreview(k,kind){
-    if(!ensure()) return false; resume(); var m=LAB_MODELS[k]; if(!m) return false;
+    if(!ensure()||ctx.state!=="running") return false; var m=LAB_MODELS[k]; if(!m) return false;
     if(!labBus){labBus=ctx.createGain();labBus.gain.value=1;labBus.connect(master);}
     var output=master;master=labBus;
     try{ (kind==="brush"?m.brush:m.hit)(ctx.currentTime,.62); return true; }catch(e){ return false; }finally{master=output;}
@@ -7819,6 +7824,7 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
     list:function(){ return TYPES.map(function(x){ return x.k; }); },
     demo:function(p){ if(ensure()){ resume(); try{ modelFor(p).hit(ctx.currentTime); }catch(e){} } },
     brushAt:function(p,sp){ if(ensure()){ resume(); try{ modelFor(p).brush(ctx.currentTime, Math.max(0,Math.min(1,(sp==null?0.6:sp)))); }catch(e){} } },
+    labPrime:labPrime,
     labPreview:labPreview,
     labStop:stopLabPreview,
     labProfiles:function(){ var out={}; Object.keys(LAB_MODELS).forEach(function(k){out[k]=LAB_MODELS[k].signature;}); return out; },
@@ -7886,20 +7892,31 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
   function stopSynth(){clearTimeout(activeSynthTimer);activeSynthTimer=0;try{if(window.__asmr&&typeof window.__asmr.labStop==="function")window.__asmr.labStop();}catch(e){}}
   function stopAllPlayback(){playbackSeq++;stopRemote();stopSynth();return playbackSeq;}
   function rememberHeard(c,mode,source){var row={candidate:c.k,heardMode:mode,source:source||null,intendedSourceId:c.sourceId||null,at:Date.now()};heardByKey[c.k]=row;lastPlayback={key:c.k,mode:mode,source:source||null,fallback:mode==="synth-fallback"};return row;}
-  function playSynth(c,key,token,heardMode){
-    if(token!==playbackSeq||!window.__asmr) return false;
-    var own=typeof window.__asmr.labPreview==="function",profile=key||c.k,started=false;
-    try{if(own)started=window.__asmr.labPreview(profile,"hit")!==false;else{window.__asmr.demo(c.m);started=true;}}catch(e){started=false;}
-    if(!started)return false;
-    activeSynthTimer=setTimeout(function(){activeSynthTimer=0;if(token!==playbackSeq)return;try{if(own)window.__asmr.labPreview(profile,"brush");else window.__asmr.brushAt(c.m,.58);}catch(e){}},85);
-    rememberHeard(c,heardMode||"synth-prototype",profile);
-    return true;
+  function primeSynth(){
+    if(!window.__asmr||typeof window.__asmr.labPrime!=="function")return Promise.resolve(false);
+    try{return Promise.resolve(window.__asmr.labPrime()).then(function(ok){return ok===true;},function(){return false;});}catch(e){return Promise.resolve(false);}
   }
-  function playRecorded(c,token){
-    var audio;try{audio=new Audio(c.src);}catch(e){var made=playSynth(c,c.m,token,"synth-fallback");if(made&&status)status.textContent="⚠ No cargó Mixkit: oyes el respaldo sintetizado de "+c.n+".";return made;}
+  function markUnavailable(c,token){if(token!==playbackSeq)return;lastPlayback={key:c.k,mode:"unavailable",source:null,fallback:false};if(status)status.textContent="🔇 No se pudo confirmar ningún sonido. Tu feedback quedará como escucha no verificada.";}
+  function playSynth(c,key,token,heardMode,synthReady){
+    if(!window.__asmr)return Promise.resolve(false);
+    return Promise.resolve(synthReady).then(function(ready){
+      if(token!==playbackSeq||ready!==true)return false;
+      var own=typeof window.__asmr.labPreview==="function",profile=key||c.k,started=false;
+      try{if(own)started=window.__asmr.labPreview(profile,"hit")===true;else{window.__asmr.demo(c.m);started=true;}}catch(e){started=false;}
+      if(!started)return false;
+      activeSynthTimer=setTimeout(function(){activeSynthTimer=0;if(token!==playbackSeq)return;try{if(own)window.__asmr.labPreview(profile,"brush");else window.__asmr.brushAt(c.m,.58);}catch(e){}},85);
+      rememberHeard(c,heardMode||"synth-prototype",profile);
+      return true;
+    },function(){return false;});
+  }
+  function startFallback(c,token,synthReady){
+    return playSynth(c,c.m,token,"synth-fallback",synthReady).then(function(made){if(token!==playbackSeq)return false;if(made){if(status)status.textContent="⚠ No cargó Mixkit: oyes el respaldo sintetizado de "+c.n+".";}else markUnavailable(c,token);return made;});
+  }
+  function playRecorded(c,token,synthReady){
+    var audio;try{audio=new Audio(c.src);}catch(e){startFallback(c,token,synthReady);return true;}
     var settled=false;activeRecording=audio;audio.preload="auto";audio.volume=.58;
     function current(){return token===playbackSeq&&activeRecording===audio;}
-    function fallback(){if(settled||!current())return;settled=true;stopRemote();stopSynth();var made=playSynth(c,c.m,token,"synth-fallback");if(made&&status)status.textContent="⚠ No cargó Mixkit: oyes el respaldo sintetizado de "+c.n+".";}
+    function fallback(){if(settled||!current())return;settled=true;stopRemote();stopSynth();startFallback(c,token,synthReady);}
     audio.addEventListener("error",fallback,{once:true});
     audio.addEventListener("ended",function(){if(!current())return;clearTimeout(activeStopTimer);activeStopTimer=0;activeRecording=null;},{once:true});
     function startedOk(){if(settled||!current())return;settled=true;rememberHeard(c,"recorded",c.sourceId);if(status)status.textContent="🎙️ Grabación real de Mixkit: "+c.n+" · máximo 6,7 s.";activeStopTimer=setTimeout(function(){if(current())stopRemote();},6700);}
@@ -7908,9 +7925,10 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
   }
   function preview(c,tile){
     var token=stopAllPlayback();delete heardByKey[c.k];lastPlayback={key:c.k,mode:"pending",source:null,fallback:false};
-    var ok=c.kind==="recorded"?playRecorded(c,token):playSynth(c,c.k,token,"synth-prototype");if(!ok){lastPlayback={key:c.k,mode:"unavailable",source:null,fallback:false};return false;}
+    var synthReady=primeSynth(),ok=true;
+    if(c.kind==="recorded")ok=playRecorded(c,token,synthReady);else playSynth(c,c.k,token,"synth-prototype",synthReady).then(function(made){if(token!==playbackSeq)return;if(made){if(status)status.textContent="🧪 Prototipo sintetizado: "+c.n+". Tú decides si se parece.";}else markUnavailable(c,token);});
+    if(!ok){markUnavailable(c,token);return false;}
     if(tile){tile.classList.remove("playing");void tile.offsetWidth;tile.classList.add("playing");setTimeout(function(){tile.classList.remove("playing");},650);}
-    if(status&&c.kind!=="recorded") status.textContent="🧪 Prototipo sintetizado: "+c.n+". Tú decides si se parece.";
     return true;
   }
   function soundMeta(c,version,channel){

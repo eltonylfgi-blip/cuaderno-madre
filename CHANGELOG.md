@@ -3,7 +3,7 @@
 - **Texto mínimo:** cada paso usa un título y una sola frase breve, revelada en fragmentos durante menos de un segundo. `prefers-reduced-motion` y Calma muestran la frase completa al instante. El foco se limpia al avanzar o salir.
 - **Ocho muestras reales:** teclado, lluvia, fuego, mar, páginas, lápiz, agua y tijeras reproducen preescuchas oficiales de Mixkit durante un máximo de 6,7 s. Cada ficha declara `🎙️ real · Mixkit`; los 32 modelos anteriores declaran `🧪 sintetizado` y quedan en un desplegable separado.
 - **Procedencia y licencia:** título, ID, página y activo exactos viven en `sounds/MIXKIT_SOURCES.md` y viajan con el feedback. No se redistribuyen binarios en el repositorio; la web reproduce el activo oficial dentro del producto y cae a síntesis con aviso si la red falla.
-- **Una escucha, una verdad:** cambiar de ficha corta tanto la grabación como la síntesis anterior; un token descarta respuestas tardías de red. El feedback declara `recorded`, `synth-fallback` o `no-verificada` según lo realmente oído, y cada muestra real enlaza su fuente exacta.
+- **Una escucha, una verdad:** cambiar de ficha corta tanto la grabación como la síntesis anterior; un token descarta respuestas tardías de red. Web Audio se prepara dentro del toque original y solo registra síntesis si el contexto confirma que está reproduciendo. El feedback declara `recorded`, `synth-fallback` o `no-verificada` según lo realmente oído, y cada muestra real enlaza su fuente exacta.
 - **Selector:** el recorrido debe terminar con 0 objetivos dentro de `#changelog`; cada ficha grabada debe tener ID/URL únicos y un clic debe iniciar una sola ruta sonora.
 - **Revertir:** `git revert <commit de v1.73>`.
 
