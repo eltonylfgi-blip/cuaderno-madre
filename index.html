@@ -6694,7 +6694,7 @@ body.cmMotionOff .cmChaosSpotlight,body.cmMotionOff .cmChaosSpotLabel{display:no
   window.__cmMiniMlg=sixSevenSpectacle;
   window.__cm67Mlg={play:sixSevenSpectacle,clear:clear67,state:function(){return {layers:last67Layers,chaos:last67Chaos,visible:stage67.children.length,duration:last67Duration};}};
   window.__cmChaosEvent=emit;
-  var activeSpotlight=null,spotlightSeen=0;
+  var activeSpotlight=null,spotlightSeen=0,spotlightCooldownUntil=0;
   window.__cmChaosDirector={emit:emit,spotlight:function(){return spotlightReal();},state:function(){return {on:on,energy:energy,combo:combo,phase:phaseName(),lastKind:lastKind,speed:+(document.body.style.getPropertyValue("--cm-chaos-speed")||0),ambient:document.querySelectorAll(".chaos-el,.cmChaosToy,.cmSpeedLine").length,spotlight:activeSpotlight?activeSpotlight.name:"",asmr:!!(window.__asmr&&window.__asmr.isOn&&window.__asmr.isOn())};},start:function(){start();},stop:function(){stop();}};
   var EM=["🎉","✨","🎊","💥","⭐","🌈","🍕","👾","💫","🐱","🛸","🔥","🍌","🤡","📌","🎈"];
   var ARROWS=["⬅ MIRA ESTO","⬆ IMPORTANTE","➡ O NO","⬇ aquí abajo 👀","↙ esto seguro que sí","↗ ¿o era esto?","⬅ click aquí (no)","➡ tú sí me caes bien","⬆ ni idea la verdad"],ARROWS_EN=["⬅ LOOK AT THIS","⬆ IMPORTANT","➡ OR NOT","⬇ down here 👀","↙ surely this one","↗ or was it this?","⬅ click here (don't)","➡ I like you","⬆ honestly, no idea"];
@@ -6757,14 +6757,18 @@ body.cmMotionOff .cmChaosSpotlight,body.cmMotionOff .cmChaosSpotLabel{display:no
      sigue su geometría mientras vive, en vez de quedarse señalando la posición del fotograma inicial. */
   function trackSpotlight(){var a=activeSpotlight;if(!a)return;positionSpotlight();if(activeSpotlight===a)a.raf=requestAnimationFrame(trackSpotlight);}
   function spotlightReal(){
-    if(!on||!motionAllowed()||interactionBusy()){clearSpotlight();return false;}clearSpotlight();var choices=visibleSpotTargets();if(!choices.length)return false;choices.sort(function(){return Math.random()-.5;});
+    if(!on||!motionAllowed()||interactionBusy()){clearSpotlight();return false;}
+    /* Tras acertar un objetivo, deja respirar la recompensa antes de proponer otro. Sin este
+       enfriamiento, el temporizador de Caos podia sustituir la flecha ya resuelta en el mismo gesto. */
+    if(Date.now()<spotlightCooldownUntil)return false;
+    clearSpotlight();var choices=visibleSpotTargets();if(!choices.length)return false;choices.sort(function(){return Math.random()-.5;});
     for(var ci=0;ci<choices.length;ci++){
       var pick=choices[ci],target=pick.el,name=targetName(target),color=rnd(MARKERS),NS="http://www.w3.org/2000/svg";
       var svg=document.createElementNS(NS,"svg");svg.setAttribute("class","cmChaosSpotlight");svg.style.setProperty("--spot",color);svg.setAttribute("aria-hidden","true");
       var defs=document.createElementNS(NS,"defs"),markerDef=document.createElementNS(NS,"marker");markerDef.setAttribute("id","cmChaosSpotArrow");markerDef.setAttribute("markerWidth","10");markerDef.setAttribute("markerHeight","10");markerDef.setAttribute("refX","7");markerDef.setAttribute("refY","3");markerDef.setAttribute("orient","auto");markerDef.setAttribute("markerUnits","strokeWidth");var tip=document.createElementNS(NS,"path");tip.setAttribute("d","M0,0 L0,6 L8,3 z");tip.setAttribute("fill",color);markerDef.appendChild(tip);defs.appendChild(markerDef);svg.appendChild(defs);
       var ellipse=document.createElementNS(NS,"ellipse"),path=document.createElementNS(NS,"path");path.setAttribute("marker-end","url(#cmChaosSpotArrow)");svg.appendChild(ellipse);svg.appendChild(path);
       var label=document.createElement("div");label.className="cmChaosSpotLabel";label.style.setProperty("--spot",color);label.textContent="🎯 "+name+" · "+tr("tócalo","touch it");
-      var hit=(function(chosen,rect){return function(e){if(!activeSpotlight||activeSpotlight.target!==chosen)return;var p={x:e.clientX||rect.left+rect.width/2,y:e.clientY||rect.top+rect.height/2};marker(p,stage);stamp(tr("OBJETIVO TOCADO","TARGET TOUCHED"),{x:p.x,y:Math.max(72,p.y-48)},false,stage);burst(Math.max(5,Math.round(9*K)));soundMlg(38);setTimeout(clearSpotlight,180);};})(target,pick.r);
+      var hit=(function(chosen,rect){return function(e){if(!activeSpotlight||activeSpotlight.target!==chosen)return;spotlightCooldownUntil=Date.now()+1400;var p={x:e.clientX||rect.left+rect.width/2,y:e.clientY||rect.top+rect.height/2};marker(p,stage);stamp(tr("OBJETIVO TOCADO","TARGET TOUCHED"),{x:p.x,y:Math.max(72,p.y-48)},false,stage);burst(Math.max(5,Math.round(9*K)));soundMlg(38);setTimeout(clearSpotlight,180);};})(target,pick.r);
       target.classList.add("cmChaosAnchored");target.style.setProperty("--cm-anchor",color);target.addEventListener("click",hit,true);document.body.appendChild(svg);document.body.appendChild(label);
       activeSpotlight={svg:svg,ellipse:ellipse,path:path,label:label,target:target,name:name,hit:hit,raf:0,timer:setTimeout(clearSpotlight,5800)};positionSpotlight();if(activeSpotlight){activeSpotlight.raf=requestAnimationFrame(trackSpotlight);spotlightSeen++;return true;}
     }
@@ -6890,7 +6894,7 @@ body.cmMotionOff .cmChaosSpotlight,body.cmMotionOff .cmChaosSpotLabel{display:no
   function clearTimers(){ timers.forEach(function(t){ clearInterval(t); }); timers=[]; }
   function clearCatVisitor(){try{if(window.__cmCatVisitor&&typeof window.__cmCatVisitor.clear==="function")window.__cmCatVisitor.clear();}catch(e){}}
   function stop(){
-    on=false; energy=0; combo=0; lastSemantic=0; lastKind=""; crossed67=false;heroAt=0;
+    on=false; energy=0; combo=0; lastSemantic=0; lastKind=""; crossed67=false;heroAt=0;spotlightCooldownUntil=0;
     document.body.classList.remove("chaos","chaosBig","cmChaosPunch"); cfab.classList.remove("on"); clearTimeout(punchTimer); clearTimers();
     clearCatVisitor(); clearSpotlight();
     clear67(); hideInvite(); document.body.style.setProperty("--cm-chaos-speed","0"); document.querySelectorAll(".chaos-el,.cmChaosToy,.cmSpeedLine").forEach(function(p){ try{p.remove();}catch(e){} });

@@ -1,3 +1,10 @@
+## v1.70 — 2026-07-15 · Referido transparente + objetivos de Caos sin carreras
+- **Referido sin letra pequeña:** Comentarios fija una respuesta honesta sobre el uso de Claude y enlaza el pase real de Tony. Declara que es referido, el posible crédito para Tony, los pases limitados, la caducidad, el método de pago y la conversión a Pro si no se cancela.
+- **Acceso y claridad:** el CTA abre en otra pestaña con `noopener sponsored`, conserva un objetivo táctil de 44 px, contraste medido y presencia tanto en la sección como en el panel lateral.
+- **Caos estable:** al acertar un objetivo contextual, anillo y flecha se limpian y el director espera 1,4 s antes de proponer otro. Evita que el temporizador sustituya la recompensa por una flecha nueva en el mismo gesto.
+- **Verificación:** oferta, renovación, contraste, panel, tour 7/7 y 375/1280 px; además, cinco ciclos dirigidos de objetivo→toque→reintento terminaron sin relanzamientos ni capas huérfanas.
+- **Revertir:** `git revert <hash de hotfix v1.70>`.
+
 ## v1.69 — 2026-07-15 · Cuaderno como puerta común a las webs de Tony
 - **Navegación:** el final del Cuaderno reúne cuatro destinos públicos comprobados: FanRank, Neuro-Fuerza, Salón Vera y el perfil con todos los proyectos públicos de Tony. Los enlaces abren en otra pestaña para conservar el punto de lectura.
 - **Selector real:** el primer envío confirmado a cada destino durante una sesión reutiliza el canal existente de feedback con el tipo `navegacion-proyecto`; los toques repetidos no inflan la señal y un fallo queda libre para reintentar. Si almacenamiento o canal no están disponibles, la navegación sigue funcionando y no se finge una medición.
