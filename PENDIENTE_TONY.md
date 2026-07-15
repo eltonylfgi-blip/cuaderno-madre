@@ -6,6 +6,18 @@ Tony lee esto y decide. (Lo grande SIEMPRE espera; lo pequeño y claro la rutina
 
 ---
 
+## 2026-07-15 — Activar el backend del Archivo multimedia
+
+**Preparado y probado en rama:** galería, subida de audio/imagen/vídeo o URL, cuarentena privada, revisión de seguridad/derechos, corazones de Tony, feedback por coincidencia y relaciones muchos-a-muchos. Los bytes aprobados ya no pueden ser una URL externa mutable: deben ser una copia revisada en Storage privado y se sirven por `media-public`, que vuelve 404 en cuanto el activo se retira.
+
+**Escritura en producción que sigue gateada por el flujo del repo:** aplicar `supabase/migrations/20260715_media_archive_v1.sql`, desplegar `supabase/functions/media-intake` y `supabase/functions/media-public`, configurar `MEDIA_INTAKE_SALT`, verificar el límite del gateway y solo entonces poner `MEDIA_INTAKE_ENABLED=true`. El kill-switch queda apagado por defecto. Hasta entonces, la interfaz conserva los envíos como borradores locales y dice explícitamente que no se publicaron.
+
+**No activar a medias:** la comprobación previa debe demostrar (1) rechazo antes de parsear un multipart sobredimensionado, (2) misma cuota aunque cambie el User-Agent y (3) URL del activo retirado = 404. Si cualquiera falla, `MEDIA_INTAKE_ENABLED` sigue sin `true`.
+
+**Frase exacta para autorizarlo:** `activa el backend multimedia`.
+
+---
+
 ## DERIVA (revisar) — 2026-07-06
 
 **Control de deriva: 8 días desde el último informe (2026-06-28). Resumen desde el baseline `8d5f6d4`:**

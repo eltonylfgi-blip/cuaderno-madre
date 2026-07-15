@@ -1,0 +1,9 @@
+# El navegador usa una sb_publishable (no es JWT de usuario), por eso el gateway no la valida como
+# Bearer. La función pública se protege con kill-switch, origen, tamaño previo y rate-limit estable.
+[functions.media-intake]
+verify_jwt = false
+
+# Lectura pública controlada: la función solo entrega bytes si el activo sigue aprobado.
+# El bucket permanece privado; retirar la fila invalida de inmediato la misma URL.
+[functions.media-public]
+verify_jwt = false

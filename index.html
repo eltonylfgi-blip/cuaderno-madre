@@ -1816,7 +1816,8 @@
          pulsamos los botones «seguir leyendo» existentes (su click hace el reveal completo: intro,
          resize, focus) ANTES de iluminar — reusa el mecanismo, no lo duplica. */
       if(el && el.offsetParent===null){
-        document.querySelectorAll(".pdReveal").forEach(function(b){ b.click(); });
+        if(typeof window.__cmRevealTarget==="function") window.__cmRevealTarget(el);
+        else document.querySelectorAll(".pdReveal").forEach(function(b){ b.click(); });
       }
       unglow();
       if(el){ cur=el; el.classList.add("tourGlow"); try{ el.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"}); }catch(err){ el.scrollIntoView(); } }
@@ -1922,17 +1923,19 @@
     .asmrLabBody{padding:14px 16px 17px}.asmrLabLead{margin:0 0 12px;color:#eeeaff;font-size:13.5px;line-height:1.5}.asmrLabLead b{color:#80ecff}
     .asmrLabGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.asmrCand{display:grid;grid-template-columns:48px minmax(0,1fr);gap:9px;align-items:center;min-height:92px;padding:9px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.075);transition:transform .18s,background .18s,border-color .18s}.asmrCand:hover{transform:translateY(-2px);background:rgba(255,255,255,.12);border-color:rgba(128,236,255,.55)}
     .asmrPlay{width:48px;height:48px;border:0;border-radius:14px;background:linear-gradient(145deg,#8b5cf6,#22d3ee);color:#fff;font-size:23px;cursor:pointer;box-shadow:0 7px 18px rgba(34,211,238,.18)}.asmrPlay:focus-visible,.asmrVote:focus-visible,.asmrLabMore>summary:focus-visible{outline:3px solid #facc15;outline-offset:2px}.asmrCand.playing .asmrPlay{animation:asmrPlayPulse .55s ease-out 1}
-    .asmrCandText{min-width:0}.asmrCandName{display:block;font-weight:800;font-size:13px;line-height:1.2}.asmrCandWhy{display:block;color:#cfc9e7;font-size:11px;line-height:1.3;margin-top:3px}.asmrVotes{display:flex;gap:6px;margin-top:7px}.asmrVote{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.18);border-radius:11px;background:rgba(8,7,18,.24);color:#fff;cursor:pointer;font-size:17px}.asmrVote.on{background:#fff;color:#4c1d95;border-color:#fff}
+    .asmrCandText{min-width:0}.asmrCandName{display:block;font-weight:800;font-size:13px;line-height:1.2}.asmrCandWhy{display:block;color:#cfc9e7;font-size:11px;line-height:1.3;margin-top:3px}.asmrVotes{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.asmrVote,.asmrMatch{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.18);border-radius:11px;background:rgba(8,7,18,.24);color:#fff;cursor:pointer;font-size:17px}.asmrVote.on{background:#fff;color:#4c1d95;border-color:#fff}.asmrMatch{flex:1 1 100%;padding:7px 9px;font-size:10.5px;font-weight:850;text-align:left}.asmrMatch:hover{border-color:#67e8f9;background:rgba(34,211,238,.14)}
     .asmrLabMore{margin-top:12px;border:1px dashed rgba(255,255,255,.25);border-radius:13px;background:rgba(0,0,0,.08)}.asmrLabMore>summary{min-height:48px;display:flex;align-items:center;padding:0 13px;cursor:pointer;font-weight:750;font-size:13px}.asmrLabMore .asmrLabGrid{padding:0 10px 10px}
     .asmrLabSources{margin:13px 0 0;font-size:11.5px;line-height:1.55;color:#cbc5e7}.asmrLabSources a{color:#8eeeff;font-weight:700}.asmrLabStatus{min-height:18px;margin:10px 0 0;color:#fff;font-size:12px;font-weight:700}
-    .asmrLabReto{margin:0 0 12px;padding:9px 11px;border:1px solid rgba(250,204,21,.38);border-radius:12px;background:rgba(250,204,21,.09);color:#fff7c2;font-size:12.5px;line-height:1.45}
+    .asmrLabReto{margin:0 0 10px;padding:9px 11px;border:1px solid rgba(250,204,21,.38);border-radius:12px;background:rgba(250,204,21,.09);color:#fff7c2;font-size:12.5px;line-height:1.45}.asmrLabTools{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:7px;margin:0 0 12px}.asmrLabTool{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 10px;border:1px solid rgba(255,255,255,.2);border-radius:11px;background:rgba(255,255,255,.09);color:#fff;font-size:10.5px;font-weight:850;line-height:1.25;text-align:center;text-decoration:none;cursor:pointer}.asmrLabTool.primary{border-color:rgba(103,232,249,.55);background:linear-gradient(135deg,rgba(109,40,217,.82),rgba(8,145,178,.82))}.asmrLabTool:hover{background:rgba(255,255,255,.16)}
+    .cmAsmrMatch{width:min(520px,calc(100% - 24px));max-height:min(86vh,760px);overflow:auto;padding:0;border:0;border-radius:20px;background:#fff;color:#1f2937;box-shadow:0 28px 80px rgba(15,10,28,.38)}.cmAsmrMatch::backdrop{background:rgba(15,10,28,.66);backdrop-filter:blur(5px)}.cmAsmrMatchIn{padding:19px}.cmAsmrMatch h3{margin:0;padding-right:46px;font-size:19px}.cmAsmrMatch p{margin:7px 0 12px;color:#64748b;font-size:12px;line-height:1.45}.cmAsmrClose{float:right;width:44px;height:44px;border:1px solid #ddd6ea;border-radius:12px;background:#fff;color:#312e40;cursor:pointer}.cmAsmrChoices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.cmAsmrChoice{min-height:52px;border:1px solid #ddd6ea;border-radius:12px;background:#fff;color:#352c45;font-weight:850;cursor:pointer}.cmAsmrChoice:hover,.cmAsmrChoice:focus-visible{background:#f3eeff;outline:3px solid rgba(109,40,217,.14)}.cmAsmrNote{box-sizing:border-box;width:100%;min-height:76px;margin-top:9px;padding:10px 11px;border:1px solid #ddd6ea;border-radius:12px;resize:vertical;color:#1f2937}.cmAsmrMatchStatus{min-height:18px;margin:7px 0 0!important;color:#536176!important;font-size:11px!important;font-weight:750}
+    .asmrCand{cursor:pointer}.asmrCand:focus-visible{outline:3px solid #facc15;outline-offset:3px}.cmAsmrTargets{display:flex;flex-wrap:wrap;gap:7px;margin:11px 0 0;padding:10px;border:1px solid #ddd6ea;border-radius:12px}.cmAsmrTargets legend{padding:0 5px;font-size:12px;font-weight:850;color:#4338ca}.cmAsmrTargets label{display:flex;align-items:center;gap:5px;min-height:38px;padding:4px 9px;border-radius:99px;background:#f4f0ff;font-size:12px;font-weight:750}.cmAsmrUse{display:block;margin-top:9px;font-size:12px;font-weight:850;color:#4338ca}.cmAsmrUse input{box-sizing:border-box;width:100%;min-height:44px;margin-top:5px;padding:9px 11px;border:1px solid #ddd6ea;border-radius:12px;color:#1f2937}.cmAsmrChoice[disabled]{opacity:.55;cursor:wait}
     /* El laboratorio es una escena completa: sus propios controles sustituyen temporalmente a los FAB
        inferiores que, en 375px, tapaban «Ver 12 candidatos» y las fuentes. Vuelven al salir del card. */
     body.cmLabFocus #cmvFab,body.cmLabFocus #fabHubActive,body.cmLabFocus #fabHubBtn,
     body.cmLabFocus #fabHubMenu,body.cmLabFocus #fabHubTip,body.cmLabFocus #tourLaunch,
     body.cmLabFocus #mapFab,body.cmLabFocus #gxg-cat-root{display:none!important}
     @keyframes asmrPlayPulse{0%{transform:scale(1)}45%{transform:scale(1.14) rotate(5deg);box-shadow:0 0 0 8px rgba(34,211,238,.14)}100%{transform:scale(1)}}
-    @media(max-width:520px){.asmrLabGrid{grid-template-columns:1fr}.asmrLabCard .alTitle b{font-size:16px}.asmrLabCard .alTitle span{white-space:normal}}
+    @media(max-width:520px){.asmrLabGrid{grid-template-columns:1fr}.asmrLabCard .alTitle b{font-size:16px}.asmrLabCard .alTitle span{white-space:normal}.asmrLabTools{grid-template-columns:1fr}.cmAsmrChoices{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){.asmrLabCard *{scroll-behavior:auto!important}.asmrCand,.asmrLabCard .alCaret{transition:none}.asmrCand:hover{transform:none}.asmrCand.playing .asmrPlay{animation:none}}
   </style>
   <aside class="asmrLabCard" id="asmrLabCard">
@@ -1945,6 +1948,7 @@
       <div class="asmrLabBody">
         <p class="asmrLabLead" data-en="I am not pretending these are final samples: they are synthesized prototypes. Play them, vote, and real use will decide which ones deserve licensed or recorded sound.">No finjo que ya sean muestras finales: son <b>prototipos sintetizados</b>. Pruébalos, vota y el uso real decidirá cuáles merecen sonido grabado o licenciado.</p>
         <p class="asmrLabReto" data-en="Blind 6.7-second challenge: listen without looking at the name, then vote for what you actually felt.">🎯 Reto ciego de 6,7 s: escucha sin mirar el nombre y vota por lo que sentiste de verdad.</p>
+        <div class="asmrLabTools"><button class="asmrLabTool primary" id="cm67Judge" type="button" data-en="🔊 Test and correct the current 6·7 sound">🔊 Probar y corregir el sonido 6·7</button><a class="asmrLabTool" href="media.html?preset=six-seven#proponer" data-en="📤 Upload an alternative 6·7 sound">📤 Subir otro sonido 6·7</a><a class="asmrLabTool" href="media.html" data-en="🗂️ Open multimedia gallery">🗂️ Abrir galería multimedia</a></div>
         <div class="asmrLabGrid" id="asmrLabFeatured" aria-label="Candidatos ASMR destacados"></div>
         <details class="asmrLabMore">
           <summary data-en="Show 28 more candidates">Ver 28 candidatos más</summary>
@@ -2303,7 +2307,7 @@
     @media(prefers-reduced-motion:reduce){ .mbRel{transition:none;animation:none} }
     .mbRelLbl{pointer-events:none;font-style:italic;opacity:.85}
     .mbRelLbl text{fill:#c9bdfa!important}
-    .mbSubIn{animation-duration:.34s;animation-timing-function:cubic-bezier(.2,.9,.28,1.18);animation-fill-mode:both;transform-box:fill-box;transform-origin:center}
+    .mbSubIn{animation-duration:.52s;animation-timing-function:cubic-bezier(.2,.9,.28,1.18);animation-fill-mode:both;transform-box:fill-box;transform-origin:center}
     .mbSubIn-a{animation-name:mbPop}.mbSubIn-b{animation-name:mbSlide}.mbSubIn-c{animation-name:mbBloom}
     @keyframes mbPop{from{opacity:0;transform:scale(.42)}to{opacity:1;transform:scale(1)}}
     @keyframes mbSlide{from{opacity:0;transform:translateY(16px) scale(.8)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -2332,6 +2336,13 @@
     }
     /* v0.14: en pantallas MUY cortas, acotar más el bloque inferior para que el mapa conserve altura usable */
     @media(max-height:400px){ .mbBottom{max-height:26vh} }
+    /* v1.66: en escritorio el detalle usa el hueco izquierdo en vez de robar 270px bajo el mapa. */
+    @media(min-width:900px){
+      .mbOv{display:grid;grid-template-columns:minmax(288px,340px) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+      .mbBar{grid-column:1/-1;grid-row:1}
+      .mbStage{grid-column:2;grid-row:2;min-width:0;min-height:0}
+      .mbBottom{grid-column:1;grid-row:2;max-height:none;min-height:0;overflow-y:auto;border-right:1px solid rgba(255,255,255,.14);padding-top:8px;background:rgba(7,11,26,.58)}
+    }
     @media(prefers-reduced-motion:reduce){ body:not(.cmMotionOn) .mbStars,body:not(.cmMotionOn) .mbNode.now .nc,body:not(.cmMotionOn) .mbSubIn,body:not(.cmMotionOn) .mbHaloBig{animation:none} .mbOv{transition:none} }
     body.cmMotionOff .mbStars,body.cmMotionOff .mbNode.now .nc,body.cmMotionOff .mbSubIn,body.cmMotionOff .mbHaloBig{animation:none!important}
     /* v0.15: «cómo avanza» + acciones por nodo + badge «＋N dentro» + progreso de exploración */
@@ -2356,7 +2367,7 @@
     /* corte limpio, sin difuminado de color -- el fondo es translúcido (rgba blanco sobre el overlay
        oscuro), un gradiente fijo no acertaría el tono exacto; el propio botón ya avisa de que hay más */
     .mbDeepWrap.mbDeepFold{max-height:0;overflow:hidden}
-    .mbMoreBtn{display:block;width:100%;text-align:center;margin-top:8px;font:700 12.5px/1 inherit;color:#cdb8ff;background:rgba(167,139,250,.14);border:1px dashed #7c5cd6;border-radius:9px;padding:8px 10px;cursor:pointer;min-height:36px}
+    .mbMoreBtn{display:block;width:100%;text-align:center;margin-top:8px;font:700 12.5px/1.25 inherit;color:#cdb8ff;background:rgba(167,139,250,.14);border:1px dashed #7c5cd6;border-radius:9px;padding:8px 10px;cursor:pointer;min-height:44px}
     .mbMoreBtn:hover{background:rgba(167,139,250,.24)}
     .mbVisitor{display:block;margin-top:7px;padding:6px 10px;border-radius:8px;background:rgba(110,231,183,.12);border:1px solid rgba(110,231,183,.35);color:#c7f9e5;font-size:12px;font-weight:700}
     .mbGhost{cursor:pointer}
@@ -2490,7 +2501,7 @@
     var M=window.__MAPA, STATES=M.states, NODES=M.nodes;
     var svg=document.getElementById("mbSvg"), view=document.getElementById("mbView");
     var info=document.getElementById("mbInfo"), reduce=false; try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
-    var CX=500,CY=500,R=320, built=false, lastFocus=null;
+    var CX=500,CY=500,R=340, built=false, lastFocus=null;
     function el(n,a){ var e=document.createElementNS(NS,n); for(var k in a) e.setAttribute(k,a[k]); return e; }
     function stOf(k){ return STATES[k]||{c:"#94a3b8",l:"(en reposo)"}; }
     function txt(c){ return (window.__mapText?window.__mapText(c):"#fff"); }
@@ -2518,11 +2529,9 @@
     function mkBtn(label,fn){ var b=document.createElement("button"); b.type="button"; b.className="mbFb"; b.textContent=label; b.addEventListener("click",function(e){ e.stopPropagation(); fn(b); }); return b; }
     function showInfo(nd){ var isTop=(nd.__depth||0)===0, top=nd.__top||nd, path=isTop?nd.t:(top.t+" › "+nd.t);
       info.textContent="";
-      /* v1.49 (Tony: "en móvil... mucho texto condensado, cuesta verlo todo") — medido: el panel del
-         nodo llegaba a 675px con 9 bloques SIEMPRE visibles. En móvil, lo hondo (avance/rendimiento/
-         juicio) se pliega tras "Ver más de esta rama" -- título+estado+origen+descripción+acciones
-         quedan SIEMPRE visibles (la primera impresión), igual que ya se hizo con glosario/cementerio. */
-      var mobileFold = window.innerWidth<=640;
+      /* v1.66: simple primero en TODAS las pantallas. Título, origen y descripción son la portada;
+         avance, métricas y juicio aparecen solo cuando la persona pide profundidad. */
+      var mobileFold = true;
       var deep = mobileFold ? document.createElement("span") : info;
       if(mobileFold) deep.className="mbDeepWrap";
       var tt=document.createElement("span"); tt.className="t"; tt.textContent=(isTop?(nd.emoji+" "+nd.t):(top.emoji+" "+path)); info.appendChild(tt);
@@ -2558,7 +2567,7 @@
       if(mobileFold && deep.children.length){
         info.appendChild(deep);
         var moreBtn=document.createElement("button"); moreBtn.type="button"; moreBtn.className="mbMoreBtn";
-        moreBtn.textContent="▾ Ver más de esta rama";
+        moreBtn.textContent="▾ Ver cómo avanza, métricas y juicio";
         deep.classList.add("mbDeepFold");
         moreBtn.addEventListener("click",function(e){ e.stopPropagation(); deep.classList.remove("mbDeepFold"); moreBtn.remove(); });
         info.appendChild(moreBtn);
@@ -2780,15 +2789,15 @@
     function collapseAll(){ openSet=[]; renderSubs(); }
     function drawKids(parent){ var kids=parent.kids||[]; if(!kids.length) return;
       var depth=(parent.__depth||0)+1, color=parent.__color||stOf(parent.st).c, top=parent.__top||parent;
-      var pang=Math.atan2(parent.y-CY,parent.x-CX), n=kids.length, spread=Math.min(Math.PI*1.15,.55+n*.32), stp=n>1?spread/(n-1):0, start=pang-spread/2, SR=depth===1?160:122;
+      var pang=Math.atan2(parent.y-CY,parent.x-CX), n=kids.length, spread=Math.min(Math.PI*1.15,.55+n*.32), stp=n>1?spread/(n-1):0, start=pang-spread/2, SR=depth===1?190:150;
       kids.forEach(function(kd,j){ var ang=n>1?start+stp*j:pang; kd.x=parent.x+SR*Math.cos(ang); kd.y=parent.y+SR*Math.sin(ang); kd.__depth=depth; kd.__color=color; kd.__top=top; kd.__parent=parent; /* v0.36: ref a la madre para encuadrarla al tocar una hoja */
-        var animate=!document.body.classList.contains("cmMotionOff")&&(!reduce||document.body.classList.contains("cmMotionOn")), variant=["a","b","c"][j%3], delay=j*75;
+        var animate=!document.body.classList.contains("cmMotionOff")&&(!reduce||document.body.classList.contains("cmMotionOn")), variant=["a","b","c"][j%3], delay=j*115;
         var ln=el("line",{x1:parent.x,y1:parent.y,x2:kd.x,y2:kd.y,stroke:color,"stroke-width":depth===1?"2":"1.6",opacity:".5"}); ln.setAttribute("class","mbLink"+(animate?(" mbSubIn mbSubIn-"+variant):"")); if(animate) ln.style.animationDelay=delay+"ms"; subLayer.appendChild(ln);
-        var hasKids=kd.kids&&kd.kids.length, r=depth===1?34:27;
+        var hasKids=kd.kids&&kd.kids.length, r=depth===1?38:30;
         var g=el("g",{"class":"mbNode"+(animate?(" mbSubIn mbSubIn-"+variant):""),tabindex:"0",role:"button"}); if(animate) g.style.animationDelay=(delay+28)+"ms"; g.setAttribute("aria-label",kd.t+(hasKids?" — abre "+kd.kids.length+" dentro":"")); g.style.color=color; g.__node=kd; /* v0.23: ref para el hit-test nativo */
         var c=el("circle",{cx:kd.x,cy:kd.y,r:r,fill:"#141a2e",stroke:color,"stroke-width":depth===1?"2.5":"2"}); c.setAttribute("class","nc"); g.appendChild(c);
         g.appendChild(el("circle",{cx:kd.x-8,cy:kd.y-8,r:Math.max(5,r*.24),fill:"rgba(255,255,255,.08)","pointer-events":"none"}));
-        var kidText=wrapText(kd.t,kd.x,kd.y,depth===1?9.7:8.8,"#e8edf8",depth===1?11:8,3); kidText.setAttribute("class","mbNodeText"); g.appendChild(kidText);
+        var kidText=wrapText(kd.t,kd.x,kd.y,depth===1?10.2:9.2,"#e8edf8",depth===1?12:9,3); kidText.setAttribute("class","mbNodeText"); g.appendChild(kidText);
         if(hasKids){ var pb=el("text",{x:kd.x,y:kd.y+r+13,"text-anchor":"middle","font-size":"10.5","font-weight":"800",fill:color}); pb.textContent=(isOpen(kd)?"▾ ":"＋ ")+kd.kids.length+" dentro"; g.appendChild(pb); }
         (function(node){ function act(){ if(proposeMode){ pickParent(node); } else { onNodeClick(node); } } g.addEventListener("click",function(ev){ ev.stopPropagation(); act(); }); g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); act(); } }); })(kd);
         subLayer.appendChild(g); kidReg.push({nd:kd,r:r});
@@ -2802,7 +2811,7 @@
     function nodeAtPoint(clientX,clientY){ var s=toSvg(clientX,clientY); var px=(s.x-tx)/k, py=(s.y-ty)/k;
       if(Math.hypot(px-CX,py-CY)<=58) return "center";
       var best=null,bd=1e9;
-      NODES.forEach(function(nd){ if(nd.x==null) return; var d=Math.hypot(px-nd.x,py-nd.y); if(d<=52 && d<bd){ bd=d; best=nd; } });
+      NODES.forEach(function(nd){ if(nd.x==null) return; var d=Math.hypot(px-nd.x,py-nd.y); if(d<=64 && d<bd){ bd=d; best=nd; } });
       kidReg.forEach(function(kk){ var d=Math.hypot(px-kk.nd.x,py-kk.nd.y); if(d<=kk.r+6 && d<bd){ bd=d; best=kk.nd; } });
       try{ (ghostReg||[]).forEach(function(gh){ var d=Math.hypot(px-gh.x,py-gh.y); if(d<=30 && d<bd){ bd=d; best={__ghost:gh.show}; } }); }catch(e){}
       return best; }
@@ -3006,7 +3015,7 @@
     /* ---- construir el mapa una vez ---- */
     function build(){ if(built) return; built=true;
       if(!reduce){ var halo=el("circle",{cx:CX,cy:CY,r:60,fill:"#fff"}); halo.setAttribute("class","mbHaloBig"); view.appendChild(halo); }
-      NODES.forEach(function(nd,i){ var ang=(nd.angle!=null?nd.angle:(-90+i*(360/NODES.length)))*Math.PI/180, radius=nd.far?R*1.25:R; nd.x=CX+radius*Math.cos(ang); nd.y=CY+radius*Math.sin(ang); nd.__depth=0; nd.__color=stOf(nd.st).c; nd.__top=nd;
+      NODES.forEach(function(nd,i){ var ang=(nd.angle!=null?nd.angle:(-90+i*(360/NODES.length)))*Math.PI/180, radius=nd.far?R*1.15:R; nd.x=CX+radius*Math.cos(ang); nd.y=CY+radius*Math.sin(ang); nd.__depth=0; nd.__color=stOf(nd.st).c; nd.__top=nd;
         var ln=el("line",{x1:CX,y1:CY,x2:nd.x,y2:nd.y,stroke:stOf(nd.st).c,"stroke-width":"3"}); ln.setAttribute("class","mbLink"+(reduce?"":" mbBreathe")); view.appendChild(ln); });
       /* v0.38 (Tony, "todo conectado" — 4 relaciones REALES entre ramas, no inventadas): arco que
          rodea el centro (no lo cruza) + etiqueta corta SIEMPRE visible (no depende de hover/tap, así
@@ -3042,11 +3051,11 @@
       cg.addEventListener("keydown",function(ev){ if(proposeMode&&(ev.key==="Enter"||ev.key===" ")){ ev.preventDefault(); ev.stopPropagation(); pickParent(null); } });
       NODES.forEach(function(nd){ var isNow=(M.ahora&&nd.emoji===M.ahora), hasKids=nd.kids&&nd.kids.length;
         var g=el("g",{"class":"mbNode"+(isNow?" now":""),tabindex:"0",role:"button"}); g.setAttribute("aria-label",(nd.q?nd.q+" — ":"")+nd.t+": "+stOf(nd.st).l+(isNow?" — aquí trabaja AHORA":"")+(hasKids?" — abre "+nd.kids.length+" sub-ramas":"")); g.style.color=stOf(nd.st).c; g.__node=nd; /* v0.23: ref para el hit-test nativo */
-        var c=el("circle",{cx:nd.x,cy:nd.y,r:46,fill:"#141a2e",stroke:stOf(nd.st).c,"stroke-width":"4"}); c.setAttribute("class","nc"); g.appendChild(c);
-        g.appendChild(el("circle",{cx:nd.x,cy:nd.y,r:38,fill:"none",stroke:"rgba(255,255,255,.08)","stroke-width":"1","pointer-events":"none"}));
-        g.appendChild(el("circle",{cx:nd.x-13,cy:nd.y-13,r:10,fill:"rgba(255,255,255,.055)","pointer-events":"none"}));
+        var c=el("circle",{cx:nd.x,cy:nd.y,r:52,fill:"#141a2e",stroke:stOf(nd.st).c,"stroke-width":"4"}); c.setAttribute("class","nc"); g.appendChild(c);
+        g.appendChild(el("circle",{cx:nd.x,cy:nd.y,r:43,fill:"none",stroke:"rgba(255,255,255,.08)","stroke-width":"1","pointer-events":"none"}));
+        g.appendChild(el("circle",{cx:nd.x-15,cy:nd.y-15,r:11,fill:"rgba(255,255,255,.055)","pointer-events":"none"}));
         /* v0.19: ANILLO exterior = cuánto RINDE esta rama (benef 0-10); empieza arriba y recorre en proporción */
-        if(nd.benef!=null){ var RR=55, CIRC=2*Math.PI*RR;
+        if(nd.benef!=null){ var RR=63, CIRC=2*Math.PI*RR;
           var ring=el("circle",{cx:nd.x,cy:nd.y,r:RR,fill:"none",stroke:stOf(nd.st).c,"stroke-width":"3.5","stroke-linecap":"round","stroke-dasharray":(CIRC*nd.benef/10).toFixed(1)+" "+CIRC.toFixed(1),opacity:".9",transform:"rotate(-90 "+nd.x+" "+nd.y+")"}); ring.setAttribute("class","mbRing"); g.appendChild(ring);
           var ringBg=el("circle",{cx:nd.x,cy:nd.y,r:RR,fill:"none",stroke:"rgba(255,255,255,.13)","stroke-width":"3.5"}); g.insertBefore(ringBg,ring);
           /* v1.23 -- el anillo YA da el numero exacto (benef 0-10), pero exige conocer la convencion
@@ -3812,6 +3821,7 @@
     <img id="fbPreview" alt="" style="display:none;max-width:100%;max-height:170px;margin-top:8px;border-radius:8px;border:1px solid var(--line)">
     <div id="fbImgInfo" class="small" style="margin-top:5px"></div>
     <input type="file" id="fbImg" accept="image/*" style="width:100%;margin-top:6px">
+    <a class="btn" href="media.html#proponer" style="display:flex;align-items:center;justify-content:center;min-height:44px;margin-top:8px;text-decoration:none">🎙️ Audio, vídeo, animación o varios archivos →</a>
     <label style="display:flex;align-items:center;gap:8px;font-weight:500;margin-top:10px">
       <input type="checkbox" id="fbScope"> Es un comentario <b>&nbsp;GENERAL sobre el cuaderno</b>&nbsp; (no de este punto)
     </label>
@@ -4071,7 +4081,7 @@ window.__cmCorpus = {
     cur={card:card||"General",section:section||""};
     fbCtx.innerHTML="Sobre: <b>"+esc(card||"General")+"</b>"+(section?(" › "+esc(section)):"");
     fbText.value=""; clearAttached();
-    fbScope.checked = !section && card==="General";
+    fbScope.checked = !section && (card==="General" || /feedback general/i.test(card||""));
     setTipo(tipo || "auto");
     fbScope.dispatchEvent(new Event("change"));
     _fbPrevFocus=document.activeElement; ov.classList.add("on"); setTimeout(function(){ fbText.focus(); },50);
@@ -4442,6 +4452,8 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-15',destacada:true,areas:['caos','asmr','mapa','comentarios','ruta','claridad','gato','sonido','animaciones','easter-eggs'],titulo:'🎢 v1.66 — Caos vivo, monstruos ASMR y una ruta para jugar sin perderse',detalle:'Caos ya no muere al dejar de tocar: mantiene una cadencia acotada de XD, frases, juguetes explotables, bromas del gato y líneas que traducen la velocidad del scroll; cada 6·7 activa una escena MLG más larga con un único sonido y ofrece encender Caos desde la derecha. Rozar o explotar ASMR suma por material: a 67 aparece un monstruo enorme, el Cuaderno adopta ese mundo durante 20 segundos y un toque lo fija; en Caos la lluvia material sigue siendo x5. Las 32 tarjetas del laboratorio suenan al tocar cualquier parte libre y el feedback separa título, emoji, descripción y momento de uso. El mapa mueve su explicación al lateral izquierdo, agranda y separa nodos y revela sus subramas una a una; solo los nodos disparan sonido y el universo queda casi imperceptible. Los comentarios dejan de ser una capa transparente: en móvil abren la sección real y en escritorio ocupan un lateral sin tapar texto. Una Ruta divertida reúne ASMR, dibujos, logros, Caos, gato, comentarios y FanRank, conserva un botón para volver; los tecnicismos empiezan con una explicación breve y enlazan al glosario.'},
+    {fecha:'2026-07-15',destacada:true,areas:['asmr','sonido','feedback','multimedia','favoritas','interaccion','seguridad','claridad'],titulo:'🗂️ v1.65 — Archivo multimedia, juicio semántico por sonido y entrada segura de archivos',detalle:'El Laboratorio ASMR ya no obliga a responder solo «me gusta»: cada uno de sus 32 prototipos tiene «¿Coincide con lo que dice ser?» con Sí / Casi / No y nota concreta; el sonido 6·7 gana una prueba directa y una firma sintetizada menos áspera mientras Tony elige su sustituto. El menú derecho incorpora Feedback general y acceso al nuevo Archivo multimedia. Esa subpágina reúne los recursos públicos aprobados, filtros, preescucha, corazones reversibles tras la clave de cortesía de Tony, y una mesa visual muchos-a-muchos donde imágenes, sonidos y animaciones se enlazan con cuerdas, notas, arrastre o teclado sin quedar encerrados en una sola pareja. El buzón acepta hasta tres audios, imágenes o vídeos, o una URL como MyInstants, junto con autoría, derechos, descripción y momento de uso. Seguridad honesta: nada entra en la galería automáticamente; la migración preparada usa cuarentena privada, MIME real, límites, deduplicación, rate-limit, revisión +18/daño y gate de derechos. Mientras ese backend espera aprobación explícita, un fallo conserva archivo y metadatos en IndexedDB del navegador para reintentar y nunca afirma que se publicó.'},
     {fecha:'2026-07-14',destacada:true,areas:['asmr','caos','favoritas','interaccion','mapa','animaciones','easter-eggs','logros','preguntas','claridad','ilustracion'],titulo:'🫧 v1.64 — ASMR de pantalla completa, MLG 6·7, FanRank y preguntas públicas a MADRE',detalle:'Rozar una textura con insistencia ya no acaba en ocho emojis laterales: abre una escena material por toda la pantalla con un límite de 40 elementos en modo normal, hasta 96 en Caos y densidad solicitada x5. Las burbujas usan las cinco imágenes elegidas por Tony; cada elemento se puede tocar para explotarlo, suena, vibra brevemente y desaparece con limpieza/TTL. El 6·7 gana una escena MLG de pantalla completa con mira, flash, titulares y stickers; en Caos se multiplica sin bloquear controles. El Laboratorio ASMR deja de estar escondido tras el Acto III, tiene entrada directa y pasa de 16 a 32 firmas sonoras únicas. «Favoritas» incorpora el FanRank real del Cuaderno: lee ideas aprobadas, cuenta votos, recibe sugerencias privadas bajo nombre y muestra los 💜 de Tony sin prometer publicación instantánea. El mapa suma una rama deliberadamente lejana «Favoritos de Tony» con FanRank, Cuaderno, TikSlide, Shopify y meta-palancas. Y «Pregunta a MADRE» reutiliza el canal público real de comentarios: cualquiera pregunta (10 cada 24 h y 2 min entre envíos en este dispositivo; Tony queda exento), MADRE responde primero en una frase y los botones «Más simple / Ahonda» devuelven la petición al mismo ciclo. Tres dibujos táctiles explican el mecanismo sin fingir respuesta instantánea. Todo mantiene topes, TTL, 44px, caída offline y movimiento reducido.'},
     {fecha:'2026-07-14',destacada:true,areas:['asmr','caos','favoritas','interaccion','gato','claridad'],titulo:'🎮 v1.63 — Caos entiende tus toques y MADRE recuerda tus partes favoritas',detalle:'El modo Caos deja de lanzar ruido sin motivo: ahora funciona como un director MLG semántico. Tocar una rama, una apuesta, el gato, un voto ASMR o un 6,7 carga energía, encadena combos y dispara un solo golpe visual ligado a esa acción; Escape lo limpia todo y el movimiento reducido evita el golpe de cámara. Cada 6,7 —también con coma— conserva su ola y gana un mini hitmarker interactivo. El gato mantiene su maullido sintetizado. El Laboratorio ASMR deja retirar un voto tocándolo otra vez y sus 16 candidatos ya tienen 16 firmas sonoras distintas; MyInstants queda enlazado como banco de inspiración, sin reutilizar clips cuya licencia no esté comprobada. «Mis favoritas de MADRE» guarda tus zonas y tu nota en este dispositivo, las comunica por el canal privado existente cuando hay conexión y, al volver, solo señala mejoras posteriores que estén realmente publicadas. Además, las tarjetas de contenido directo heredan margen interior y el verificador impide que vuelvan a rozar el borde.'},
     {fecha:'2026-07-14',destacada:true,titulo:'🌳 v1.62 — El ASMR responde, el mapa respira y el Cuaderno aprende de «me aburro»',detalle:'Las novedades muestran solo las 3 últimas destacadas y dejan el resto tras «Ver historial completo». «Ver la apuesta completa» abre ahora la predicción futura real. Las zonas ASMR llaman la atención por turnos, la madera suena más presente y el roce insistente desata efectos propios de cada material —en madera, árboles y hojas crecen desde los laterales— con límite, limpieza y movimiento reducido. Un laboratorio deja probar 16 candidatos ASMR, guardar el voto sin publicar identidad y consultar fuentes/licencias; con conexión, la señal llega por el canal privado existente. «Me aburro» cambia la visita siguiente sin depender de la red y, con conexión, deja una señal para el próximo ciclo. El mapa grande gana profundidad, jerarquía y controles móviles legibles sin tocar su motor de interacción.'},
@@ -5149,11 +5161,11 @@ st.textContent=`
 .cmt .meta{font-size:12px;color:var(--muted,#8a8f98);margin-bottom:3px;display:flex;align-items:center;gap:7px}
 .cmt .meta::before{content:"";width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--accent,#7c3aed),#e0568a);flex:0 0 auto;opacity:.9}
 .cmt.madreReply .meta::before{content:"🤱🏻";display:flex;align-items:center;justify-content:center;font-size:11px;background:linear-gradient(135deg,#efe6ff,#dfeaff)}
-.cmt .ctext{font-size:14px;white-space:pre-wrap;word-break:break-word}
+.cmt .ctext{font-size:15.5px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
 .cmt .acts{margin-top:8px;display:flex;gap:8px;align-items:center}
 /* v0.29: botones de comentario como CHIPS de verdad (el 👍 "no se marcaba": el estado on era solo un
    cambio de color de texto — invisible). Ahora: chip con borde; votado = relleno acento + pop. */
-.cmt .acts button{background:#fff;border:1.5px solid var(--line,#dfe3ee);color:var(--muted,#667);font-size:12.5px;font-weight:700;cursor:pointer;padding:4px 11px;border-radius:99px;transition:transform .12s,background .15s,color .15s,border-color .15s;min-height:28px}
+.cmt .acts button{background:#fff;border:1.5px solid var(--line,#dfe3ee);color:var(--muted,#667);font-size:13px;font-weight:700;cursor:pointer;padding:7px 13px;border-radius:99px;transition:transform .12s,background .15s,color .15s,border-color .15s;min-height:44px}
 .cmt .acts button:hover{transform:translateY(-1px);border-color:var(--accent,#7c3aed);color:var(--accent,#7c3aed)}
 .cmt .acts button.on{background:linear-gradient(135deg,var(--accent,#7c3aed),#a855f7);border-color:var(--accent,#7c3aed);color:#fff;animation:cmtPop .3s ease}
 @keyframes cmtPop{0%{transform:scale(.85)}55%{transform:scale(1.12)}100%{transform:scale(1)}}
@@ -5174,15 +5186,20 @@ st.textContent=`
 .cmtStrip{font-size:12px;color:var(--muted,#667);margin:0 0 8px}
 @keyframes cmtIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 #cmtFab{position:fixed;right:16px;bottom:16px;width:52px;height:52px;border-radius:50%;border:none;background:var(--accent,#3b5bdb);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.25);z-index:60}
-#cmtPanel{position:fixed;right:12px;bottom:130px;width:min(340px,90vw);max-height:64vh;overflow:auto;background:transparent;border:none;box-shadow:none;padding:6px;z-index:59;display:none;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 48px);mask-image:linear-gradient(to bottom,transparent 0,#000 48px)}
+#cmtPanel{position:fixed;right:12px;top:70px;bottom:16px;width:min(380px,calc(100vw - 24px));overflow:hidden;background:rgba(250,248,255,.985);border:1px solid rgba(91,65,155,.18);border-radius:22px;box-shadow:0 22px 70px rgba(31,22,57,.28);padding:0;z-index:59;display:none;flex-direction:column;color:var(--ink,#202230)}
+#cmtPanel .cmtPanelHead{display:flex;align-items:center;min-height:56px;padding:0 12px 0 16px;background:#fff;border-bottom:1px solid var(--line,#e3e6ee);font-weight:850;flex:0 0 auto}
+#cmtPanel .cmtPanelList{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:8px 12px}
+#cmtPanel .cmtPanelComposer{flex:0 0 auto;margin:0!important;padding:10px 12px!important;border-radius:0!important;border-width:1px 0 0!important;box-shadow:none!important;background:#fff!important}
 .cmtSend{position:relative;overflow:hidden}
 .cmtSend::after{content:"✈️";position:absolute;right:7px;top:50%;transform:translate(0,-50%) scale(.85);opacity:0;transition:transform .4s ease,opacity .25s}
 .cmtSend:hover{padding-right:28px}
 .cmtSend:hover::after{opacity:1;transform:translate(8px,-150%) rotate(14deg) scale(1)}
-#cmtPanel.on{display:block}
-#cmtPanel .cmt{background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.06);border-radius:16px 16px 16px 5px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+#cmtPanel.on{display:flex}
+#cmtPanel .cmt{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px 16px 16px 5px;box-shadow:0 2px 9px rgba(47,35,86,.09)}
 #cmtPanel .replies .cmt{border-radius:16px 16px 5px 16px;background:var(--accent-soft,#eef)}
-#cmtPanel .cmtForm input,#cmtPanel .cmtForm textarea{background:rgba(255,255,255,.7)}
+#cmtPanel .cmtForm input,#cmtPanel .cmtForm textarea{background:#fff}
+@media(min-width:1100px){body.cmCommentsOpen .wrap{margin-left:max(14px,calc((100vw - 1140px)/2));margin-right:404px}body.cmCommentsOpen #gxg-cat-root{display:none!important}}
+@media(max-width:1099px){#cmtPanel.on{display:none!important}}
 `;
 document.head.appendChild(st);
 
@@ -5391,19 +5408,30 @@ function build(){
   stripEl=document.createElement("div"); stripEl.className="cmtStrip"; root.appendChild(stripEl);
   root.appendChild(makeForm(null));
   var scroller=document.createElement("div"); scroller.className="cmtScroll"; listEl=document.createElement("div"); scroller.appendChild(listEl); root.appendChild(scroller);
-  const fab=document.createElement("button"); fab.id="cmtFab"; fab.textContent="💬"; fab.title="Comentarios";
+  const fab=document.createElement("button"); fab.id="cmtFab"; fab.textContent="💬"; fab.title="Comentarios"; fab.setAttribute("aria-label","Abrir comentarios");
   const panel=document.createElement("div"); panel.id="cmtPanel";
-  const h=document.createElement("div"); h.style.cssText="font-weight:700;margin-bottom:6px;background:rgba(255,255,255,.7);display:inline-block;padding:3px 9px;border-radius:99px"; h.textContent="💬 Comentarios"; panel.appendChild(h);
-  panelListEl=document.createElement("div"); panel.appendChild(panelListEl);   // la conversación PRIMERO (se ve antes de comentar)
-  const pf=makeForm(null); pf.style.cssText="background:rgba(255,255,255,.75);border-radius:12px;padding:8px;margin-top:8px"; panel.appendChild(pf);
-  fab.onclick=()=>{ const open=panel.classList.toggle("on"); if(open){ try{ const p=document.getElementById("cmtPanel"); requestAnimationFrame(function(){ p.scrollTop=p.scrollHeight; requestAnimationFrame(function(){ p.scrollTop=p.scrollHeight; }); }); if(window.innerWidth>640){ const inp=pf.querySelector("textarea, input[type=text]"); if(inp) inp.focus(); } }catch(e){} } };
+  const h=document.createElement("div"); h.className="cmtPanelHead"; h.textContent="💬 Comentarios"; panel.appendChild(h);
+  panelListEl=document.createElement("div"); panelListEl.className="cmtPanelList"; panel.appendChild(panelListEl);   // la conversación PRIMERO (se ve antes de comentar)
+  const pf=makeForm(null); pf.classList.add("cmtPanelComposer"); panel.appendChild(pf);
+  function openIntegratedComments(){
+    panel.classList.remove("on"); document.body.classList.remove("cmCommentsOpen");
+    var card=document.getElementById("comentariosCard"); if(card){if(typeof window.__cmRevealTarget==="function")window.__cmRevealTarget(card);else card.classList.remove("pdHidden");} var det=card&&card.querySelector("details"); if(det)det.open=true;
+    if(card){ card.scrollIntoView({behavior:document.body.classList.contains("cmMotionOff")?"auto":"smooth",block:"start"}); setTimeout(function(){var inp=card.querySelector(".cmtForm textarea,.cmtForm input[type=text]");if(inp)inp.focus({preventScroll:true});},420); }
+    return !!card;
+  }
+  try{window.__cmOpenCommentsCard=openIntegratedComments;}catch(e){}
+  fab.onclick=()=>{
+    if(window.innerWidth<1100){ openIntegratedComments(); return; }
+    const open=panel.classList.toggle("on"); document.body.classList.toggle("cmCommentsOpen",open); fab.setAttribute("aria-expanded",String(open));
+    if(open){ try{ requestAnimationFrame(function(){ panelListEl.scrollTop=panelListEl.scrollHeight; requestAnimationFrame(function(){ panelListEl.scrollTop=panelListEl.scrollHeight; }); }); const inp=pf.querySelector("textarea, input[type=text]"); if(inp) inp.focus(); }catch(e){} }
+  };
   document.body.appendChild(fab); document.body.appendChild(panel);
 }
 function renderAll(){
   const n=all.length;
   if(stripEl) stripEl.textContent = n ? ("✨ "+n+" comentario"+(n!==1?"s":"")+" — los nuevos aparecen al instante") : "";
   if(listEl) renderListInto(listEl, false);
-  if(panelListEl){ renderListInto(panelListEl, true); var p=document.getElementById("cmtPanel"); if(p && p.classList.contains("on")) p.scrollTop=p.scrollHeight; }
+  if(panelListEl){ renderListInto(panelListEl, true); var p=document.getElementById("cmtPanel"); if(p && p.classList.contains("on")) panelListEl.scrollTop=panelListEl.scrollHeight; }
 }
 build(); load();
 /* v0.34: si el visitante esta ESCRIBIENDO (un comentario o una respuesta), un evento de realtime NO debe
@@ -5594,6 +5622,7 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
 }
 .gxg-cat.gxg-talk .gxg-bubble{ opacity:1; transform:translateX(-50%) scale(1); }
 .gxg-cat.gxg-sleep .gxg-bubble{ opacity:1; transform:translateX(-50%) scale(1); }
+.gxg-cat.gxg-visitor .gxg-bubble{white-space:normal;width:220px;max-width:min(220px,72vw);line-height:1.35;text-align:center;padding:9px 12px}
 @media (prefers-color-scheme:dark){
   .gxg-bubble{ background:#26262b; color:#f3f3f5; border-color:rgba(255,255,255,.08); }
   .gxg-bubble::after{ border-top-color:#26262b; }
@@ -5799,7 +5828,7 @@ var x = 20, y = TOPSAFE;   // posición actual
 var lastDir = 1;
 var lastInteract = Date.now();
 var asleep = false;
-var talkTimer = null, runTimer = null, wakeTimer = null;
+var talkTimer = null, runTimer = null, wakeTimer = null, visitorTimer = null, visitorTextEs = '', visitorTextEn = '';
 
 function vw(){ return W.innerWidth || D.documentElement.clientWidth || 360; }
 function vh(){ return W.innerHeight || D.documentElement.clientHeight || 640; }
@@ -5849,11 +5878,11 @@ function place(nx, ny, instant){
   }
 }
 
-function say(text){
+function say(text, duration){
   bubble.textContent = text;
   cat.classList.add('gxg-talk');
   if (talkTimer) clearTimeout(talkTimer);
-  talkTimer = setTimeout(function(){ cat.classList.remove('gxg-talk'); }, 1600);
+  talkTimer = setTimeout(function(){ cat.classList.remove('gxg-talk'); cat.classList.remove('gxg-visitor'); }, duration||1600);
 }
 
 function wake(){
@@ -5914,6 +5943,30 @@ function onPoke(ev){
 var lastCatSound=0;
 function catSound(){ var now=Date.now(); if(now-lastCatSound<500) return; lastCatSound=now;
   try{ if(typeof W.__cmCatMeow==='function') W.__cmCatMeow(); }catch(e){} }
+
+/* API pequeÃ±a para que Caos pueda invitar al MISMO gato (no crea una segunda mascota).
+   El chiste permanece legible, se puede tocar para el remate/maullido y luego el gato vuelve al borde. */
+function clearVisitor(){
+  if(visitorTimer) clearTimeout(visitorTimer); visitorTimer=null;
+  if(talkTimer) clearTimeout(talkTimer); talkTimer=null;
+  visitorTextEs=visitorTextEn=''; bubble.textContent=''; cat.classList.remove('gxg-visitor','gxg-talk');
+  return true;
+}
+function paintVisitorLanguage(){ if(!cat.classList.contains('gxg-visitor')) return false; bubble.textContent=D.documentElement.lang==='en'?(visitorTextEn||visitorTextEs):(visitorTextEs||visitorTextEn); return true; }
+W.__cmCatVisitor={
+  visit:function(text,duration,textEn){
+    wake(); if(visitorTimer) clearTimeout(visitorTimer); cat.classList.remove('gxg-hidden','gxg-flee','gxg-run','gxg-sleep'); cat.classList.add('gxg-visitor'); idlePose();
+    var nx=clamp(vw()-(SIZE+Math.min(86,vw()*.18)),MARGIN,Math.max(MARGIN,vw()-SIZE-MARGIN));
+    var ny=clamp(vh()*.48,TOPSAFE,Math.max(TOPSAFE,vh()-SIZE-MARGIN));
+    visitorTextEs=text||'¿Sabes por qué el gato se sentó en el teclado? Porque quería controlar el ratón. 🐭'; visitorTextEn=textEn||visitorTextEs;
+    place(nx,ny,false); say(D.documentElement.lang==='en'?visitorTextEn:visitorTextEs,duration||6200); catSound();
+    visitorTimer=setTimeout(function(){ cat.classList.remove('gxg-visitor'); flee(vw()/2,vh()/2); },Math.max(2200,duration||6200)); return true;
+  },
+  clear:clearVisitor,
+  refreshLanguage:paintVisitorLanguage,
+  state:function(){return {visible:!cat.classList.contains('gxg-hidden'),visitor:cat.classList.contains('gxg-visitor'),text:bubble.textContent};}
+};
+var catLangBtn=D.getElementById('langEn');if(catLangBtn)catLangBtn.addEventListener('click',function(){setTimeout(paintVisitorLanguage,0);});
 
 cat.addEventListener('click', onPoke);
 // MÓVIL: huye al tocarlo PERO sin bloquear el scroll (passive, sin preventDefault) — antes "se atascaba".
@@ -6405,8 +6458,8 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 @keyframes chaosJolt{0%,100%{transform:translate(0,0) rotate(0)}10%{transform:translate(-9px,4px) rotate(-1deg)}30%{transform:translate(9px,-5px) rotate(1.2deg)}50%{transform:translate(-7px,3px) rotate(-1deg)}70%{transform:translate(6px,-3px) rotate(.8deg)}90%{transform:translate(-3px,2px) rotate(-.4deg)}}
 /* caos narrativo: flechas que señalan, notas absurdas, avisos que compiten */
 .chaosArrow{position:fixed;z-index:9997;pointer-events:none;font:800 15px/1 system-ui,-apple-system,Segoe UI,sans-serif;color:#fff;background:#111;padding:5px 10px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.4);white-space:nowrap;animation:chArrow 2.6s ease forwards}
-.chaosNote{position:fixed;z-index:9997;pointer-events:none;max-width:160px;background:#fff7b0;color:#3a3320;font:600 12.5px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;padding:8px 10px;border-radius:3px;box-shadow:0 6px 18px rgba(0,0,0,.22);animation:chNote 4.2s ease forwards}
-.chaosAlert{position:fixed;right:10px;z-index:9999;pointer-events:none;background:#fff;color:#7a2e00;border:1px solid #f0c98a;border-left:5px solid #f59e0b;border-radius:8px;padding:8px 12px;font:600 12.5px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.18);max-width:240px;animation:chAlert 3.4s cubic-bezier(.2,1,.3,1) forwards}
+.chaosNote{position:fixed;z-index:9997;pointer-events:none;max-width:160px;background:#fff7b0;color:#3a3320;font:600 12.5px/1.3 system-ui,-apple-system,Segoe UI,sans-serif;padding:8px 10px;border-radius:3px;box-shadow:0 6px 18px rgba(0,0,0,.22);animation:chNote 5.8s ease forwards}
+.chaosAlert{position:fixed;right:10px;z-index:9999;pointer-events:none;background:#fff;color:#7a2e00;border:1px solid #f0c98a;border-left:5px solid #f59e0b;border-radius:8px;padding:8px 12px;font:600 12.5px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.18);max-width:240px;animation:chAlert 4.8s cubic-bezier(.2,1,.3,1) forwards}
 .chaosShout{animation:chShout 1.2s ease !important;position:relative;z-index:55}
 @keyframes chArrow{0%{opacity:0;transform:scale(.6)}12%{opacity:1;transform:scale(1.14)}20%,78%{opacity:1;transform:scale(1)}48%{transform:scale(1) translateX(4px)}100%{opacity:0;transform:scale(.9)}}
 @keyframes chNote{0%{opacity:0;transform:translateY(14px) rotate(var(--r,-4deg)) scale(.7)}14%{opacity:1;transform:translateY(0) rotate(var(--r,-4deg)) scale(1.06)}22%,74%{opacity:1;transform:translateY(0) rotate(var(--r,-4deg)) scale(1)}100%{opacity:0;transform:translateY(-22px) rotate(var(--r,-4deg)) scale(.95)}}
@@ -6417,7 +6470,7 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 .chaosLasso ellipse{stroke-linecap:round;animation:chLassoDraw .7s ease forwards}
 @keyframes chLassoDraw{to{stroke-dashoffset:0}}
 @keyframes chLassoFade{0%{opacity:0}8%{opacity:1}78%{opacity:1}100%{opacity:0}}
-.chaosQuote{position:fixed;z-index:9997;pointer-events:none;max-width:230px;background:#fff;color:#222;border-left:4px solid var(--accent,#7c3aed);border-radius:10px;padding:8px 11px;font:500 12.5px/1.35 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.25);animation:chQuote 5s ease forwards}
+.chaosQuote{position:fixed;z-index:9997;pointer-events:none;max-width:230px;background:#fff;color:#222;border-left:4px solid var(--accent,#7c3aed);border-radius:10px;padding:8px 11px;font:500 12.5px/1.35 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.25);animation:chQuote 6.5s ease forwards}
 .chaosQuote b{display:block;font-size:11px;color:var(--accent,#7c3aed);margin-top:3px;font-weight:700}
 @keyframes chQuote{0%{opacity:0;transform:translateY(10px) scale(.92)}10%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0;transform:translateY(-12px)}}
 .chaosTip{position:fixed;z-index:9999;pointer-events:none;background:#111;color:#fff;font:800 13px/1.15 system-ui,-apple-system,Segoe UI,sans-serif;padding:6px 10px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.4);max-width:210px;animation:chArrow 3s ease forwards}
@@ -6426,6 +6479,17 @@ body.chaosBig .wrap{animation:chaosQuake .4s steps(2,end) infinite}
 /* v1.63 — Director MLG semantico: HUD propio, un golpe heroe y limpieza total. */
 #cmChaosStage{position:fixed;inset:0;z-index:10010;pointer-events:none;overflow:hidden;contain:layout paint;display:none;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
 body.chaos #cmChaosStage{display:block}
+#cmChaosWind{position:fixed;inset:-12%;z-index:10009;display:none;pointer-events:none;opacity:0;background:repeating-linear-gradient(104deg,transparent 0 34px,rgba(255,255,255,.14) 35px 37px,transparent 38px 78px);mix-blend-mode:overlay;transform:translate3d(0,var(--cm-scroll-shift,0),0) skewY(-3deg);transition:opacity .16s ease;will-change:opacity,transform}
+body.chaos #cmChaosWind{display:block;opacity:calc(.10 + var(--cm-chaos-speed,0) * .48)}
+.cmSpeedLine{position:fixed;z-index:10014;left:var(--sl-x);top:var(--sl-y);width:var(--sl-w);height:3px;border-radius:99px;background:linear-gradient(90deg,transparent,#fff 35%,#ffe45c);box-shadow:0 0 12px rgba(255,255,255,.8);pointer-events:none;transform:rotate(var(--sl-r));animation:cmSpeedLine .72s ease-out forwards}
+@keyframes cmSpeedLine{0%{opacity:0;translate:-30px 0;scale:.5 1}22%{opacity:.9}100%{opacity:0;translate:90px 0;scale:1.4 1}}
+.cmChaosToy{position:fixed;z-index:10016;min-width:48px;min-height:48px;border:2px solid rgba(255,255,255,.72);border-radius:16px;background:rgba(17,17,28,.86);color:#fff;box-shadow:0 9px 28px rgba(0,0,0,.34),0 0 18px rgba(124,58,237,.46);font:1000 clamp(25px,5vw,54px)/1 Impact,"Arial Black",system-ui;cursor:pointer;animation:cmToyIn 6.2s cubic-bezier(.2,.86,.2,1) forwards;touch-action:manipulation}
+.cmChaosToy:focus-visible{outline:4px solid #ffe45c;outline-offset:3px}.cmChaosToy.popped{animation:cmToyPop .34s ease-out forwards!important;pointer-events:none}
+@keyframes cmToyIn{0%{opacity:0;transform:scale(.25) rotate(-20deg)}12%,76%{opacity:1;transform:scale(1) rotate(2deg)}88%{transform:scale(1.16) rotate(-4deg)}100%{opacity:0;transform:translateY(-30px) scale(.8) rotate(9deg)}}
+@keyframes cmToyPop{0%{opacity:1;transform:scale(1)}55%{opacity:1;transform:scale(1.8) rotate(16deg)}100%{opacity:0;transform:scale(.05) rotate(-25deg)}}
+#cm67ChaosInvite{position:fixed;right:12px;top:45%;z-index:10040;display:flex;align-items:center;gap:8px;max-width:min(290px,calc(100vw - 24px));padding:9px;border:1px solid rgba(255,255,255,.7);border-radius:16px;background:rgba(17,17,29,.94);color:#fff;box-shadow:0 14px 36px rgba(0,0,0,.38),0 0 24px rgba(124,58,237,.48);animation:cmInviteIn .34s cubic-bezier(.2,1.25,.3,1)}
+#cm67ChaosInvite[hidden]{display:none}#cm67ChaosInvite b{font-size:12.5px;line-height:1.25}#cm67ChaosInvite button{min-height:44px;border:0;border-radius:11px;padding:8px 11px;font:850 12px/1 system-ui;cursor:pointer}#cm67ChaosGo{background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff}#cm67ChaosNo{min-width:44px;background:rgba(255,255,255,.12);color:#fff}
+@keyframes cmInviteIn{from{opacity:0;transform:translateX(35px) scale(.84)}to{opacity:1;transform:none}}
 .cmChaosHud{position:absolute;top:max(10px,env(safe-area-inset-top));left:50%;width:min(420px,calc(100vw - 92px));transform:translateX(-50%);padding:8px 10px 9px;border:2px solid rgba(255,255,255,.86);border-radius:13px;background:rgba(12,13,24,.89);color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.35);backdrop-filter:blur(8px);opacity:.92}
 .cmChaosHudTop{display:flex;align-items:center;justify-content:space-between;gap:8px;font:900 11px/1.1 system-ui;letter-spacing:.08em;text-transform:uppercase}.cmChaosCombo{color:#ffe45c}.cmChaosPhase{color:#d8c6ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cmChaosMeter{height:7px;margin-top:7px;border-radius:99px;background:#34354a;overflow:hidden}.cmChaosMeter>i{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#6f4cff,#36d1dc 55%,#ffe45c 78%,#ff3d71);box-shadow:0 0 14px #8d6cff;transition:width .25s ease}
@@ -6437,13 +6501,13 @@ body.cmChaosPunch .wrap{animation:cmCameraPunch .32s cubic-bezier(.2,.75,.3,1)}
 /* v1.64 — 6·7 deja de ser una estampita: tiene una escena MLG propia, grande y causada por el toque. */
 #cm67Stage{position:fixed;inset:0;z-index:10030;overflow:hidden;pointer-events:none;contain:layout paint;font-family:Impact,"Arial Black",system-ui,sans-serif}
 .cm67Flash{position:absolute;inset:-12%;background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.96) 0 4%,rgba(255,228,92,.7) 7%,rgba(255,48,112,.22) 26%,transparent 58%);mix-blend-mode:screen;animation:cm67Flash .72s ease-out forwards}
-.cm67Mega{position:absolute;left:50%;top:38%;width:96vw;text-align:center;color:#ffe45c;font:1000 clamp(86px,30vw,260px)/.74 Impact,"Arial Black",system-ui;text-shadow:0 7px 0 #10101b,7px 0 0 #10101b,-7px 0 0 #10101b,0 -7px 0 #10101b,0 0 30px #ff2f76;letter-spacing:-.055em;transform:translate(-50%,-50%);animation:cm67Mega 1.45s cubic-bezier(.13,.87,.2,1) forwards}
-.cm67Sub{position:absolute;left:50%;top:62%;width:min(94vw,760px);padding:7px 10px;border:4px solid #fff;background:#111;color:#fff;text-align:center;font:1000 clamp(20px,6vw,56px)/.95 Impact,"Arial Black",system-ui;letter-spacing:.045em;text-transform:uppercase;transform:translate(-50%,-50%) rotate(-2deg);box-shadow:9px 9px 0 #7c3aed;animation:cm67Sub 1.35s cubic-bezier(.2,.86,.2,1) forwards}
-.cm67Scope{position:absolute;left:50%;top:38%;width:min(76vw,520px);aspect-ratio:1;border:5px solid rgba(255,255,255,.88);border-radius:50%;transform:translate(-50%,-50%);animation:cm67Scope 1.1s ease-out forwards}.cm67Scope::before,.cm67Scope::after{content:"";position:absolute;left:50%;top:50%;background:#fff;box-shadow:0 0 12px #ff2f76;transform:translate(-50%,-50%)}.cm67Scope::before{width:120%;height:4px}.cm67Scope::after{width:4px;height:120%}
+.cm67Mega{position:absolute;left:50%;top:38%;width:96vw;text-align:center;color:#ffe45c;font:1000 clamp(86px,30vw,260px)/.74 Impact,"Arial Black",system-ui;text-shadow:0 7px 0 #10101b,7px 0 0 #10101b,-7px 0 0 #10101b,0 -7px 0 #10101b,0 0 30px #ff2f76;letter-spacing:-.055em;transform:translate(-50%,-50%);animation:cm67Mega 2.2s cubic-bezier(.13,.87,.2,1) forwards}
+.cm67Sub{position:absolute;left:50%;top:62%;width:min(94vw,760px);padding:7px 10px;border:4px solid #fff;background:#111;color:#fff;text-align:center;font:1000 clamp(20px,6vw,56px)/.95 Impact,"Arial Black",system-ui;letter-spacing:.045em;text-transform:uppercase;transform:translate(-50%,-50%) rotate(-2deg);box-shadow:9px 9px 0 #7c3aed;animation:cm67Sub 2.1s cubic-bezier(.2,.86,.2,1) forwards}
+.cm67Scope{position:absolute;left:50%;top:38%;width:min(76vw,520px);aspect-ratio:1;border:5px solid rgba(255,255,255,.88);border-radius:50%;transform:translate(-50%,-50%);animation:cm67Scope 1.7s ease-out forwards}.cm67Scope::before,.cm67Scope::after{content:"";position:absolute;left:50%;top:50%;background:#fff;box-shadow:0 0 12px #ff2f76;transform:translate(-50%,-50%)}.cm67Scope::before{width:120%;height:4px}.cm67Scope::after{width:4px;height:120%}
 .cm67Sticker{position:absolute;left:var(--x);top:var(--y);font-size:var(--s);filter:drop-shadow(0 7px 3px rgba(0,0,0,.4));animation:cm67Sticker var(--d) cubic-bezier(.14,.84,.24,1) forwards}
 body.cm67Punch .wrap{animation:cm67Punch .52s steps(2,end)}
 @keyframes cm67Flash{0%{opacity:0;transform:scale(.5)}12%{opacity:1}100%{opacity:0;transform:scale(1.35)}}
-@keyframes cm67Mega{0%{opacity:0;transform:translate(-50%,-50%) scale(4.8) rotate(-16deg)}18%{opacity:1;transform:translate(-50%,-50%) scale(.84) rotate(3deg)}38%,72%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-1deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.36) rotate(4deg)}}
+@keyframes cm67Mega{0%{opacity:0;transform:translate(-50%,-50%) scale(4.8) rotate(-16deg)}14%{opacity:1;transform:translate(-50%,-50%) scale(.84) rotate(3deg)}30%,82%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-1deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.36) rotate(4deg)}}
 @keyframes cm67Sub{0%{opacity:0;transform:translate(-50%,-50%) scale(.25) rotate(12deg)}24%,76%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-2deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.18) rotate(-5deg)}}
 @keyframes cm67Scope{0%{opacity:0;transform:translate(-50%,-50%) scale(.12) rotate(-25deg)}22%,62%{opacity:.9;transform:translate(-50%,-50%) scale(1) rotate(0)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5) rotate(18deg)}}
 @keyframes cm67Sticker{0%{opacity:0;transform:translate(-50%,-50%) scale(.15) rotate(-80deg)}18%,70%{opacity:1}35%{transform:translate(-50%,-50%) scale(1.35) rotate(12deg)}100%{opacity:0;transform:translate(-50%,-90%) scale(.72) rotate(95deg)}}
@@ -6453,19 +6517,24 @@ body.cm67Punch .wrap{animation:cm67Punch .52s steps(2,end)}
 @keyframes cmHit{0%{opacity:0;transform:translate(-50%,-50%) scale(2.2) rotate(-30deg)}26%,70%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}100%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(30deg)}}
 @keyframes cmRing{0%{width:12px;height:12px;opacity:1}100%{width:150px;height:150px;opacity:0}}
 @keyframes cmCameraPunch{0%,100%{transform:none}28%{transform:scale(1.018) translate(-3px,2px) rotate(-.18deg)}58%{transform:scale(1.008) translate(2px,-1px) rotate(.12deg)}}
-@media(max-width:640px){.cmChaosHud{left:54%;width:min(330px,calc(100vw - 78px));padding:7px 9px}.cmChaosFx{font-size:clamp(18px,8vw,38px)}.cmChaosHit{width:48px;height:48px}.cmChaosHit:before,.cmChaosHit:after{left:22px;height:48px}}
+@media(max-width:640px){.cmChaosHud{left:54%;width:min(330px,calc(100vw - 78px));padding:7px 9px}.cmChaosFx{font-size:clamp(18px,8vw,38px)}.cmChaosHit{width:48px;height:48px}.cmChaosHit:before,.cmChaosHit:after{left:22px;height:48px}#cm67ChaosInvite{right:8px;top:auto;bottom:88px}.cmChaosToy{font-size:31px}}
 /* v1.64: Auto respeta reduced-motion; el gesto EXPLÍCITO ❤️ Vivo puede reactivar el espectáculo.
    Calma siempre gana, incluso si el sistema operativo permite movimiento. */
 @media(prefers-reduced-motion:reduce){body:not(.cmMotionOn) #chaosFab.on,body:not(.cmMotionOn) .card>details:not([open])>summary .caret{animation:none}body:not(.cmMotionOn).cmChaosPunch .wrap,body:not(.cmMotionOn).cm67Punch .wrap{animation:none}body:not(.cmMotionOn).chaos #chaosTint{animation:none!important;transition:none!important}body:not(.cmMotionOn) .chaosParticle{transition:none!important}body:not(.cmMotionOn) .cmChaosFx,body:not(.cmMotionOn) .cmChaosFx[data-hero="1"],body:not(.cmMotionOn) .cmChaosHit,body:not(.cmMotionOn) .cmChaosRing{animation-duration:.01ms!important;animation-iteration-count:1!important}body:not(.cmMotionOn) .cmChaosMeter>i{transition:none}body:not(.cmMotionOn) .cm67Flash,body:not(.cmMotionOn) .cm67Scope,body:not(.cmMotionOn) .cm67Sticker{display:none}body:not(.cmMotionOn) .cm67Mega,body:not(.cmMotionOn) .cm67Sub{animation:none;opacity:1}}
 body.cmMotionOff .cm67Flash,body.cmMotionOff .cm67Scope,body.cmMotionOff .cm67Sticker{display:none!important}
 body.cmMotionOff .cm67Mega,body.cmMotionOff .cm67Sub,body.cmMotionOff .cmChaosFx,body.cmMotionOff .cmChaosHit,body.cmMotionOff .cmChaosRing{animation:none!important;opacity:1}
 body.cmMotionOff.cmChaosPunch .wrap,body.cmMotionOff.cm67Punch .wrap{animation:none!important}
+body.cmMotionOff #cmChaosWind,body.cmMotionOff .cmSpeedLine,body.cmMotionOff .cmChaosToy{display:none!important}
+body.cmMotionOff #cm67Stage{display:none!important}
 </style>
 <script>
 (function(){ try{
   // ---- modo caótico 🤪 (caos NARRATIVO: flechas, notas y avisos absurdos, no solo confeti) ----
-  var cfab=document.createElement("button"); cfab.id="chaosFab"; cfab.textContent="🤪"; cfab.title="Modo caótico"; document.body.appendChild(cfab);
+  function english(){try{return document.documentElement.lang==="en"||(typeof window.__cmLangIsEnglish==="function"&&window.__cmLangIsEnglish());}catch(e){return false;}}
+  function tr(es,en){return english()?en:es;}
+  var cfab=document.createElement("button"); cfab.id="chaosFab"; cfab.textContent="🤪"; cfab.title="Modo caótico"; cfab.setAttribute("aria-label","Modo caótico"); document.body.appendChild(cfab);
   var tint=document.createElement("div"); tint.id="chaosTint"; tint.setAttribute("aria-hidden","true"); document.body.appendChild(tint);
+  var wind=document.createElement("div"); wind.id="cmChaosWind"; wind.setAttribute("aria-hidden","true"); document.body.appendChild(wind);
   var MOBILE=false, reduce=false;
   try{ MOBILE=window.matchMedia("(max-width:640px)").matches; reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
   // En móvil reducimos ~70% el espectáculo ambiental; ❤️ Vivo conserva toda la densidad permitida.
@@ -6495,12 +6564,12 @@ body.cmMotionOff.cmChaosPunch .wrap,body.cmMotionOff.cm67Punch .wrap{animation:n
     var h=document.createElement("i"); h.className="cmChaosHit chaos-el"; h.style.left=Math.round(pos.x)+"px"; h.style.top=Math.round(pos.y)+"px"; (parent||document.body).appendChild(h); removeLater(h,700);
     var r=document.createElement("i"); r.className="cmChaosRing chaos-el"; r.style.left=Math.round(pos.x)+"px"; r.style.top=Math.round(pos.y)+"px"; (parent||document.body).appendChild(r); removeLater(r,760);
   }
-  function phaseName(){ return energy>=86?"OVERDRIVE":energy>=67?"67 COMBO":energy>=38?"RACHA SEMÁNTICA":"CALENTANDO"; }
-  function updateHud(){ if(hudPhase) hudPhase.textContent="MADRE · "+phaseName(); if(hudCombo) hudCombo.textContent=(combo>1?("x"+combo+" · "):"")+"ENERGÍA "+Math.round(energy); if(hudMeter) hudMeter.style.width=Math.round(energy)+"%"; }
+  function phaseName(){ return energy>=86?"OVERDRIVE":energy>=67?"67 COMBO":energy>=38?tr("RACHA SEMÁNTICA","SEMANTIC STREAK"):tr("CALENTANDO","WARMING UP"); }
+  function updateHud(){ if(hudPhase) hudPhase.textContent="MADRE · "+phaseName(); if(hudCombo) hudCombo.textContent=(combo>1?("x"+combo+" · "):"")+tr("ENERGÍA ","ENERGY ")+Math.round(energy); if(hudMeter) hudMeter.style.width=Math.round(energy)+"%"; }
   function motionAllowed(){ return !document.body.classList.contains("cmMotionOff")&&(!reduce||document.body.classList.contains("cmMotionOn")); }
   function cameraPunch(){ if(!motionAllowed()) return; document.body.classList.remove("cmChaosPunch"); void document.body.offsetWidth; document.body.classList.add("cmChaosPunch"); clearTimeout(punchTimer); punchTimer=setTimeout(function(){document.body.classList.remove("cmChaosPunch");},380); }
   function soundMlg(level){ try{ if(typeof window.__cmMlgSound==="function") window.__cmMlgSound(level); }catch(e){} }
-  var last67Layers=0,last67Chaos=false,clear67Timer=0;
+  var last67Layers=0,last67Chaos=false,last67Duration=0,clear67Timer=0;
   function clear67(){ clearTimeout(clear67Timer); while(stage67.firstChild)stage67.removeChild(stage67.firstChild); document.body.classList.remove("cm67Punch"); }
   function add67(cls,text){ var d=document.createElement("div"); d.className=cls; if(text)d.textContent=text; stage67.appendChild(d); return d; }
   function sixSevenSpectacle(target,label){
@@ -6508,7 +6577,7 @@ body.cmMotionOff.cmChaosPunch .wrap,body.cmMotionOff.cm67Punch .wrap{animation:n
     add67("cm67Flash"); add67("cm67Scope"); add67("cm67Mega",chaos?"6 7":"67"); add67("cm67Sub",chaos?"67 NO SCOPE · GET REKT":"SIX · SEVEN · MLG HIT"); marker(pos,stage67);
     for(var i=0;i<stickers;i++){ var s=add67("cm67Sticker",icons[i%icons.length]); s.style.setProperty("--x",Math.round(4+Math.random()*92)+"%"); s.style.setProperty("--y",Math.round(7+Math.random()*86)+"%"); s.style.setProperty("--s",Math.round((chaos?34:30)+Math.random()*(chaos?66:40))+"px"); s.style.setProperty("--d",Math.round(950+Math.random()*(chaos?900:520))+"ms"); }
     last67Layers=stage67.children.length; last67Chaos=chaos; if(allowMotion){document.body.classList.add("cm67Punch"); if(chaos)burst(MOBILE?22:36);}
-    soundMlg(chaos?100:67); clear67Timer=setTimeout(clear67,allowMotion?(chaos?2100:1550):1050);
+    soundMlg(chaos?100:67); last67Duration=allowMotion?(chaos?3200:2350):1050; clear67Timer=setTimeout(clear67,last67Duration);
     try{var a=document.getElementById("a11yAnnounce");if(a)a.textContent=(document.documentElement.lang==="en"?"Six seven, giant MLG effect":"Seis siete: efecto MLG gigante");}catch(e){}
     return true;
   }
@@ -6518,43 +6587,43 @@ body.cmMotionOff.cmChaosPunch .wrap,body.cmMotionOff.cm67Punch .wrap{animation:n
     if(lastSemantic) energy=Math.max(0,energy-Math.max(0,now-lastSemantic)/1000*1.6);
     combo=(semantic&&now-lastSemantic<2200)?Math.min(9,combo+1):1; if(semantic){lastSemantic=now;lastKind=kind;}
     energy=Math.max(0,Math.min(100,energy+(Number(gain)||8)+(combo>1?2:0))); var pos=centerOf(target);
-    marker(pos,stage); stamp(label||"MADRE HIT",{x:pos.x,y:Math.max(78,pos.y-55)},false,stage); cameraPunch(); soundMlg(energy);
+    marker(pos,stage); stamp(label||"MADRE HIT",{x:pos.x,y:Math.max(78,pos.y-55)},false,stage); cameraPunch(); if(kind!=="meme:67") soundMlg(energy);
     if(energy>=67&&!crossed67){ crossed67=true; timers.push(setTimeout(function(){if(on&&energy>=67)stamp("67 COMBO",{x:vw()/2,y:Math.max(130,vh()*.32)},true,stage);},150)); }
     if(energy>=95&&now-heroAt>6500){ heroAt=now; stamp(kind.indexOf("reality")===0?"REALITY HIT":"360° SIN RETROSPECTIVA",{x:vw()/2,y:Math.max(150,vh()*.43)},true,stage); burst(Math.max(5,Math.round(18*K))); soundMlg(100); energy=34; combo=0; crossed67=false; }
     updateHud(); return true;
   }
   /* El 6,7 vive también fuera de Caos. Siempre nace del toque y nunca inventa estado ni datos. */
   window.__cmMiniMlg=sixSevenSpectacle;
-  window.__cm67Mlg={play:sixSevenSpectacle,clear:clear67,state:function(){return {layers:last67Layers,chaos:last67Chaos,visible:stage67.children.length};}};
+  window.__cm67Mlg={play:sixSevenSpectacle,clear:clear67,state:function(){return {layers:last67Layers,chaos:last67Chaos,visible:stage67.children.length,duration:last67Duration};}};
   window.__cmChaosEvent=emit;
-  window.__cmChaosDirector={emit:emit,state:function(){return {on:on,energy:energy,combo:combo,phase:phaseName(),lastKind:lastKind};},stop:function(){stop();}};
+  window.__cmChaosDirector={emit:emit,state:function(){return {on:on,energy:energy,combo:combo,phase:phaseName(),lastKind:lastKind,speed:+(document.body.style.getPropertyValue("--cm-chaos-speed")||0),ambient:document.querySelectorAll(".chaos-el,.cmChaosToy,.cmSpeedLine").length};},start:function(){start();},stop:function(){stop();}};
   var EM=["🎉","✨","🎊","💥","⭐","🌈","🍕","👾","💫","🐱","🛸","🔥","🍌","🤡","📌","🎈"];
-  var ARROWS=["⬅ MIRA ESTO","⬆ IMPORTANTE","➡ O NO","⬇ aquí abajo 👀","↙ esto seguro que sí","↗ ¿o era esto?","⬅ click aquí (no)","➡ tú sí me caes bien","⬆ ni idea la verdad"];
-  var NOTES=["esto parecía buena idea","no estoy seguro","¿sirve para algo?","lo arreglo luego","nota encontrada hoy","creo que funciona","¿y si lo borro todo?","tú puedes 💪","MADRE estuvo aquí","idea random nº 47","shhh, es un secreto","esto no estaba ayer"];
-  var ALERTS=["⚠ gato detectado","⚠ demasiadas ideas","⚠ alguien dejó un dibujo","⚠ caos al 100%","⚠ pensamiento no autorizado","⚠ exceso de creatividad","⚠ se ha caído una nota","⚠ MADRE está pensando"];
+  var ARROWS=["⬅ MIRA ESTO","⬆ IMPORTANTE","➡ O NO","⬇ aquí abajo 👀","↙ esto seguro que sí","↗ ¿o era esto?","⬅ click aquí (no)","➡ tú sí me caes bien","⬆ ni idea la verdad"],ARROWS_EN=["⬅ LOOK AT THIS","⬆ IMPORTANT","➡ OR NOT","⬇ down here 👀","↙ surely this one","↗ or was it this?","⬅ click here (don't)","➡ I like you","⬆ honestly, no idea"];
+  var NOTES=["XD","esto parecía buena idea","no estoy seguro","¿sirve para algo?","lo arreglo luego","nota encontrada hoy","creo que funciona","¿y si lo borro todo?","tú puedes 💪","MADRE estuvo aquí","idea random nº 67","shhh, es un secreto","esto no estaba ayer"],NOTES_EN=["XD","this seemed like a good idea","not sure about this","does it do anything?","I'll fix it later","note found today","I think it works","what if I delete everything?","you've got this 💪","MADRE was here","random idea no. 67","shhh, it's a secret","this wasn't here yesterday"];
+  var ALERTS=["⚠ XD detectado","⚠ gato detectado","⚠ demasiadas ideas","⚠ alguien dejó un dibujo","⚠ caos al 100%","⚠ pensamiento no autorizado","⚠ exceso de creatividad","⚠ se ha caído una nota","⚠ MADRE está pensando"],ALERTS_EN=["⚠ XD detected","⚠ cat detected","⚠ too many ideas","⚠ someone left a drawing","⚠ chaos at 100%","⚠ unauthorized thought","⚠ creativity overflow","⚠ a note fell down","⚠ MADRE is thinking"];
   var MARKERS=["#e23b3b","#7c3aed","#2d7ff0","#22a06b","#f5a623","#e0568a"];
   var TSEL=".card, .chip, .senalItem, #cmtFab, #cmvFab, #gxg-cat-root, .postit, #bigScore, footer, h1, .alert, .step";
-  var TARROWS=["NO te vas a creer ESTO 👀","esto te va a SORPRENDER","mira AQUÍ (clic ya)","el secreto está justo AQUÍ","¿¿has visto ESTO??","esto NO lo toques 😏","todos hablan de ESTO","clic antes de que desaparezca","esto lo cambia TODO","ojo a ESTO 🔥","nadie mira AQUÍ y debería","pssst… aquí 👇"];
-  var MISCHIEF=["dile algo al de arriba 👆","critica algo, venga 😈","deja un comentario polémico","reta a MADRE a algo","escribe en MAYÚSCULAS, sé valiente","comenta un secreto tuyo","ponle un mote cariñoso a MADRE","di la verdad incómoda"];
-  var FAKEQ=[{name:"alguien",body:"esto está muy loco jaja"},{name:"anónimo",body:"me encanta este sitio"},{name:"visitante",body:"¿esto lo hizo una IA sola?"},{name:"random",body:"no entiendo nada pero mola"}];
+  var TARROWS=["NO te vas a creer ESTO 👀","esto te va a SORPRENDER","mira AQUÍ (clic ya)","el secreto está justo AQUÍ","¿¿has visto ESTO??","esto NO lo toques 😏","todos hablan de ESTO","clic antes de que desaparezca","esto lo cambia TODO","ojo a ESTO 🔥","nadie mira AQUÍ y debería","pssst… aquí 👇"],TARROWS_EN=["you WON'T believe THIS 👀","this will SURPRISE you","look HERE (click now)","the secret is right HERE","have you SEEN THIS?","do NOT touch this 😏","everyone is talking about THIS","click before it vanishes","this changes EVERYTHING","watch THIS 🔥","nobody looks HERE, but should","pssst… over here 👇"];
+  var MISCHIEF=["dile algo al de arriba 👆","critica algo, venga 😈","deja un comentario polémico","reta a MADRE a algo","escribe en MAYÚSCULAS, sé valiente","comenta un secreto tuyo","ponle un mote cariñoso a MADRE","di la verdad incómoda"],MISCHIEF_EN=["say something to the person above 👆","go on, criticize something 😈","leave a controversial comment","challenge MADRE","write in ALL CAPS, be brave","share one of your secrets","give MADRE a cute nickname","say the awkward truth"];
+  var FAKEQ=[{name:"alguien",body:"esto está muy loco jaja"},{name:"anónimo",body:"me encanta este sitio"},{name:"visitante",body:"¿esto lo hizo una IA sola?"},{name:"random",body:"no entiendo nada pero mola"}],FAKEQ_EN=[{name:"someone",body:"this is wildly chaotic lol"},{name:"anonymous",body:"I love this place"},{name:"visitor",body:"did an AI make this by itself?"},{name:"random",body:"I understand nothing, but I like it"}];
   // corpus: datos súper random + órdenes/retos + más comentarios falsos para el caos
-  var FACTS=(window.__cmCorpus&&window.__cmCorpus.facts&&window.__cmCorpus.facts.length)?window.__cmCorpus.facts:["los pulpos tienen tres corazones"];
-  var ORDERS=(window.__cmCorpus&&window.__cmCorpus.orders&&window.__cmCorpus.orders.length)?window.__cmCorpus.orders:["sonríe un momento"];
+  var FACTS=(window.__cmCorpus&&window.__cmCorpus.facts&&window.__cmCorpus.facts.length)?window.__cmCorpus.facts:["los pulpos tienen tres corazones"],FACTS_EN=["octopuses have three hearts","bananas are berries, but strawberries are not","a group of cats can be called a clowder"];
+  var ORDERS=(window.__cmCorpus&&window.__cmCorpus.orders&&window.__cmCorpus.orders.length)?window.__cmCorpus.orders:["sonríe un momento"],ORDERS_EN=["smile for a second","touch the next purple thing","say XD out loud"];
   try{ if(window.__cmCorpus&&window.__cmCorpus.comments&&window.__cmCorpus.comments.length) FAKEQ=FAKEQ.concat(window.__cmCorpus.comments); }catch(e){}
   function rnd(a){ return a[Math.floor(Math.random()*a.length)]; }
   function vw(){ return window.innerWidth||360; } function vh(){ return window.innerHeight||640; }
   function panelOpen(){ try{ var p=document.getElementById("cmtPanel"); return !!(p&&p.classList.contains("on")); }catch(e){ return false; } }
   function burst(n){ if(!motionAllowed())return; for(var i=0;i<n;i++){ (function(){ var p=document.createElement("div"); p.className="chaosParticle chaos-el"; p.textContent=rnd(EM); p.style.left=(Math.random()*100)+"vw"; var dur=2+Math.random()*2.6; p.style.transition="transform "+dur+"s linear, opacity "+dur+"s linear"; document.body.appendChild(p); requestAnimationFrame(function(){ p.style.transform="translateY("+(105+Math.random()*15)+"vh) rotate("+(Math.random()*720-360)+"deg)"; p.style.opacity=".15"; }); setTimeout(function(){ try{p.remove();}catch(e){} }, dur*1000+250); })(); } }
-  function spawnNote(){ var n=document.createElement("div"); n.className="chaosNote chaos-el"; n.textContent=rnd(NOTES); n.style.left=Math.round(8+Math.random()*Math.max(40,vw()-180))+"px"; n.style.top=Math.round(80+Math.random()*Math.max(60,vh()-200))+"px"; n.style.setProperty("--r",(Math.random()*10-5)+"deg"); document.body.appendChild(n); setTimeout(function(){ try{n.remove();}catch(e){} },4300); }
-  function spawnAlert(){ var d=document.createElement("div"); d.className="chaosAlert chaos-el"; d.textContent=rnd(ALERTS); d.style.top=Math.round(70+Math.random()*Math.max(60,vh()*0.5))+"px"; document.body.appendChild(d); setTimeout(function(){ try{d.remove();}catch(e){} },3500); }
+  function spawnNote(){ var n=document.createElement("div"); n.className="chaosNote chaos-el"; n.textContent=rnd(english()?NOTES_EN:NOTES); n.style.left=Math.round(8+Math.random()*Math.max(40,vw()-180))+"px"; n.style.top=Math.round(80+Math.random()*Math.max(60,vh()-200))+"px"; n.style.setProperty("--r",(Math.random()*10-5)+"deg"); document.body.appendChild(n); setTimeout(function(){ try{n.remove();}catch(e){} },6000); }
+  function spawnAlert(){ var d=document.createElement("div"); d.className="chaosAlert chaos-el"; d.textContent=rnd(english()?ALERTS_EN:ALERTS); d.style.top=Math.round(70+Math.random()*Math.max(60,vh()*0.5))+"px"; document.body.appendChild(d); setTimeout(function(){ try{d.remove();}catch(e){} },5000); }
   function shout(){ var els=document.querySelectorAll(".card"); if(!els.length) return; var el=els[Math.floor(Math.random()*els.length)]; el.classList.add("chaosShout"); setTimeout(function(){ try{el.classList.remove("chaosShout");}catch(e){} },1200); }
   // datos súper random + órdenes/retos flotando (del corpus)
-  function spawnFact(){ var isOrder=Math.random()<0.42; var txt=isOrder?("📣 "+rnd(ORDERS)):("🎲 ¿sabías? "+rnd(FACTS)); var n=document.createElement("div"); n.className="chaosNote chaos-el"; n.style.background=isOrder?"#e3f3ff":"#fff7b0"; n.style.maxWidth="220px"; n.textContent=txt; n.style.left=Math.round(8+Math.random()*Math.max(40,vw()-230))+"px"; n.style.top=Math.round(80+Math.random()*Math.max(60,vh()-210))+"px"; n.style.setProperty("--r",(Math.random()*8-4)+"deg"); document.body.appendChild(n); setTimeout(function(){ try{n.remove();}catch(e){} },5400); }
+  function spawnFact(){ var isOrder=Math.random()<0.42,en=english(),txt=isOrder?("📣 "+rnd(en?ORDERS_EN:ORDERS)):(en?"🎲 did you know? ":"🎲 ¿sabías? ")+rnd(en?FACTS_EN:FACTS); var n=document.createElement("div"); n.className="chaosNote chaos-el"; n.style.background=isOrder?"#e3f3ff":"#fff7b0"; n.style.maxWidth="220px"; n.textContent=txt; n.style.left=Math.round(8+Math.random()*Math.max(40,vw()-230))+"px"; n.style.top=Math.round(80+Math.random()*Math.max(60,vh()-210))+"px"; n.style.setProperty("--r",(Math.random()*8-4)+"deg"); document.body.appendChild(n); setTimeout(function(){ try{n.remove();}catch(e){} },5400); }
   // T6-1: flechas que apuntan a un elemento REAL en pantalla (calcula su posición)
   function visibleTargets(){ var out=[]; try{ document.querySelectorAll(TSEL).forEach(function(el){ if(el.offsetParent===null && el.id!=='gxg-cat-root') return; var r=el.getBoundingClientRect(); if(r.width>22&&r.height>12&&r.bottom>44&&r.top<vh()-16&&r.left<vw()-16&&r.right>16) out.push({el:el,r:r}); }); }catch(e){} return out; }
   function spawnTargetArrow(){
     var t=visibleTargets(); if(!t.length) return;
-    var r=t[Math.floor(Math.random()*t.length)].r, label=rnd(TARROWS);
+    var r=t[Math.floor(Math.random()*t.length)].r, label=rnd(english()?TARROWS_EN:TARROWS);
     var a=document.createElement("div"); a.className="chaosTip chaos-el"; var dir,lx,ty;
     if(r.left>140 && Math.random()<0.5){ dir='▶'; lx=Math.max(6,r.left-160); ty=Math.max(44,r.top+Math.min(20,r.height/2-10)); }
     else if(r.top>70){ dir='▼'; lx=Math.max(6,Math.min(vw()-200,r.left)); ty=Math.max(44,r.top-46); }
@@ -6563,11 +6632,11 @@ body.cmMotionOff.cmChaosPunch .wrap,body.cmMotionOff.cm67Punch .wrap{animation:n
     document.body.appendChild(a); setTimeout(function(){ try{a.remove();}catch(e){} },3000);
   }
   // T6-2: travesuras contextuales solo si el panel de comentarios está abierto
-  function spawnMischief(){ if(!panelOpen()){ if(Math.random()<0.5) spawnNote(); return; } var n=document.createElement("div"); n.className="chaosNote chaos-el"; n.style.background="#ffe1ef"; n.textContent="😈 "+rnd(MISCHIEF); var p=document.getElementById("cmtPanel"); var r=p?p.getBoundingClientRect():null; n.style.left=Math.round(r?Math.max(8,r.left-150):20)+"px"; n.style.top=Math.round(r?Math.max(70,r.top+20):120)+"px"; n.style.setProperty("--r",(Math.random()*8-4)+"deg"); document.body.appendChild(n); setTimeout(function(){ try{n.remove();}catch(e){} },4600); }
+  function spawnMischief(){ if(!panelOpen()){ if(Math.random()<0.5) spawnNote(); return; } var n=document.createElement("div"); n.className="chaosNote chaos-el"; n.style.background="#ffe1ef"; n.textContent="😈 "+rnd(english()?MISCHIEF_EN:MISCHIEF); var p=document.getElementById("cmtPanel"); var r=p?p.getBoundingClientRect():null; n.style.left=Math.round(r?Math.max(8,r.left-150):20)+"px"; n.style.top=Math.round(r?Math.max(70,r.top+20):120)+"px"; n.style.setProperty("--r",(Math.random()*8-4)+"deg"); document.body.appendChild(n); setTimeout(function(){ try{n.remove();}catch(e){} },4600); }
   // T6-3: comentarios CITADOS reales flotando (anti-XSS textContent)
   var quotes=[], quotesLoaded=false;
   function loadQuotes(){ if(quotesLoaded) return; quotesLoaded=true; try{ if(window.__sb){ window.__sb.from("comments").select("name,body").eq("hidden",false).order("created_at",{ascending:false}).limit(30).then(function(r){ if(r&&r.data) quotes=r.data.filter(function(c){ return c.body && c.body.length<160; }); }); } }catch(e){} }
-  function spawnQuote(){ var real=quotes.length>0, src=real?quotes:FAKEQ, c=src[Math.floor(Math.random()*src.length)]; var d=document.createElement("div"); d.className="chaosQuote chaos-el"; var t=document.createElement("span"); t.textContent="“"+((c.body||"").slice(0,140))+"”"; d.appendChild(t); var b=document.createElement("b"); b.textContent="— "+(real?(c.name||"anónimo"):"🃏 voz inventada del caos"); d.appendChild(b); d.style.left=Math.round(10+Math.random()*Math.max(40,vw()-250))+"px"; d.style.top=Math.round(80+Math.random()*Math.max(60,vh()-220))+"px"; document.body.appendChild(d); setTimeout(function(){ try{d.remove();}catch(e){} },5000); }
+  function spawnQuote(){ var en=english(),real=quotes.length>0, src=real?quotes:(en?FAKEQ_EN:FAKEQ), c=src[Math.floor(Math.random()*src.length)]; var d=document.createElement("div"); d.className="chaosQuote chaos-el"; var t=document.createElement("span"); t.textContent="“"+((c.body||"").slice(0,140))+"”"; d.appendChild(t); var b=document.createElement("b"); b.textContent="— "+(real?(c.name||(en?"anonymous":"anónimo")):(en?"🃏 invented voice of chaos":"🃏 voz inventada del caos")); d.appendChild(b); d.style.left=Math.round(10+Math.random()*Math.max(40,vw()-250))+"px"; d.style.top=Math.round(80+Math.random()*Math.max(60,vh()-220))+"px"; document.body.appendChild(d); setTimeout(function(){ try{d.remove();}catch(e){} },6700); }
   // T6-4: RODEA un elemento REAL con un círculo dibujado a mano (en vez de círculos de colores sueltos)
   function circleReal(){
     var t=visibleTargets(); if(!t.length) return;
@@ -6589,7 +6658,7 @@ body.cmMotionOff.cmChaosPunch .wrap,body.cmMotionOff.cm67Punch .wrap{animation:n
     var len=per*1.12;   // un pelín más para el trazo "que se pasa" tipo rotulador
     ell.style.strokeDasharray=len; ell.style.strokeDashoffset=len;
     svg.appendChild(ell); document.body.appendChild(svg);
-    if(Math.random()<0.65){ var RODEAR=["mira ESTO","¿y esto qué es?","aquí. justo aquí.","esto me huele raro","quédate con este"]; var lab=document.createElement("div"); lab.className="chaos-el"; lab.textContent=rnd(RODEAR); lab.style.cssText="position:fixed;z-index:9997;left:"+Math.round(x)+"px;top:"+Math.max(2,Math.round(y-19))+"px;font:800 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;color:"+rnd(MARKERS)+";pointer-events:none;text-shadow:0 1px 2px #fff,0 0 5px #fff;transform:rotate("+(Math.random()*8-4).toFixed(1)+"deg)"; document.body.appendChild(lab); setTimeout(function(){ try{lab.remove();}catch(e){} },2400); }
+    if(Math.random()<0.65){ var RODEAR=["mira ESTO","¿y esto qué es?","aquí. justo aquí.","esto me huele raro","quédate con este"],RODEAR_EN=["look at THIS","what even is this?","here. right here.","this looks suspicious","remember this one"]; var lab=document.createElement("div"); lab.className="chaos-el"; lab.textContent=rnd(english()?RODEAR_EN:RODEAR); lab.style.cssText="position:fixed;z-index:9997;left:"+Math.round(x)+"px;top:"+Math.max(2,Math.round(y-19))+"px;font:800 13px/1 system-ui,-apple-system,Segoe UI,sans-serif;color:"+rnd(MARKERS)+";pointer-events:none;text-shadow:0 1px 2px #fff,0 0 5px #fff;transform:rotate("+(Math.random()*8-4).toFixed(1)+"deg)"; document.body.appendChild(lab); setTimeout(function(){ try{lab.remove();}catch(e){} },2400); }
     setTimeout(function(){ try{svg.remove();}catch(e){} },2600);
   }
   function megaFlip(){ if(MOBILE) return; var els=document.querySelectorAll(".card"); if(!els.length) return; var el=els[Math.floor(Math.random()*els.length)]; el.classList.add("megaFlip"); setTimeout(function(){ try{el.classList.remove("megaFlip");}catch(e){} },1100); }
@@ -6618,64 +6687,111 @@ body.cmMotionOff.cmChaosPunch .wrap,body.cmMotionOff.cm67Punch .wrap{animation:n
   /* v0.30: MÁS caos (Tony: «más cosas rodándose, más interactivas») — 2 travesuras nuevas, ambas CLICABLES
      (son <button> → el click suave del ASMR les pone sonido gratis; explotan al tocarlas). */
   function rollBall(){ var b=document.createElement("button"); b.type="button"; b.className="chaos-el"; b.textContent=rnd(["⚽","🎾","🏀","🪩","🍊","😵‍💫","🧶"]);
-    var fromLeft=Math.random()<0.5, dur=3200+Math.random()*2600, size=26+Math.random()*22;
+    var fromLeft=Math.random()<0.5, dur=4800+Math.random()*2800, size=26+Math.random()*22;
     b.style.cssText="position:fixed;z-index:9996;bottom:"+(6+Math.random()*40)+"px;left:"+(fromLeft?"-60px":"100vw")+";font-size:"+size+"px;background:none;border:none;cursor:pointer;padding:4px;transition:transform "+dur+"ms linear;will-change:transform;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))";
-    b.setAttribute("aria-hidden","true"); b.tabIndex=-1;
-    b.addEventListener("click",function(e){ e.stopPropagation(); try{ b.style.transition="transform .25s, opacity .25s"; b.style.transform+=" scale(2.2)"; b.style.opacity="0"; burst(Math.round(6*K)||3); }catch(_){} setTimeout(function(){ try{b.remove();}catch(_){} },260); });
+    b.dataset.cmChaosKind="rolling"; b.setAttribute("aria-label",tr("Explotar objeto rodante del caos","Pop rolling chaos object"));
+    b.addEventListener("click",function(e){ e.stopPropagation(); try{ b.style.transition="transform .25s, opacity .25s"; b.style.transform+=" scale(2.2)"; b.style.opacity="0"; burst(Math.round(6*K)||3); soundMlg(22); }catch(_){} setTimeout(function(){ try{b.remove();}catch(_){} },260); });
     document.body.appendChild(b);
     requestAnimationFrame(function(){ var dx=(vw()+140)*(fromLeft?1:-1); b.style.transform="translateX("+dx+"px) rotate("+(fromLeft?1:-1)*(720+Math.random()*720)+"deg)"; });
     setTimeout(function(){ try{b.remove();}catch(e){} },dur+300); }
   function balloonRise(){ var n=MOBILE?2:4; for(var i=0;i<n;i++){ (function(){ var b=document.createElement("button"); b.type="button"; b.className="chaos-el"; b.textContent="🎈";
-      var dur=3800+Math.random()*2400, x=5+Math.random()*88;
+      var dur=5200+Math.random()*3000, x=5+Math.random()*88;
       b.style.cssText="position:fixed;z-index:9996;top:100vh;left:"+x+"vw;font-size:"+(24+Math.random()*18)+"px;background:none;border:none;cursor:pointer;padding:4px;transition:transform "+dur+"ms linear;will-change:transform";
-      b.setAttribute("aria-hidden","true"); b.tabIndex=-1;
-      b.addEventListener("click",function(e){ e.stopPropagation(); try{ b.textContent="💥"; b.style.transition="opacity .2s"; b.style.opacity="0"; }catch(_){} setTimeout(function(){ try{b.remove();}catch(_){} },210); });
+      b.dataset.cmChaosKind="balloon"; b.setAttribute("aria-label",tr("Explotar globo del caos","Pop chaos balloon"));
+      b.addEventListener("click",function(e){ e.stopPropagation(); try{ b.textContent="💥"; b.style.transition="opacity .28s,transform .28s"; b.style.transform+=" scale(1.8)"; b.style.opacity="0"; burst(Math.max(3,Math.round(5*K))); soundMlg(18); }catch(_){} setTimeout(function(){ try{b.remove();}catch(_){} },290); });
       document.body.appendChild(b);
       requestAnimationFrame(function(){ b.style.transform="translateY(-"+(vh()+160)+"px) translateX("+(Math.random()*60-30).toFixed(0)+"px)"; });
       setTimeout(function(){ try{b.remove();}catch(e){} },dur+300); })(); } }
-  /* v1.63: el azar queda como condimento lento. La energía principal nace de toques reales. */
+  var CHAOS_JOKES=[
+    "¿Por qué el gato se sentó en el teclado? Porque quería controlar el ratón. 🐭",
+    "He intentado ordenar el caos… pero el caos tenía mejor ranking. XD",
+    "¿Mi contraseña? Miauúsculas, minúsculas y un 67.",
+    "No soy un bug: soy una función con nueve vidas. 🐾",
+    "Tony pidió más caos. Yo pedí más latas. Solo una petición fue priorizada."
+  ],CHAOS_JOKES_EN=[
+    "Why did the cat sit on the keyboard? It wanted to control the mouse. 🐭",
+    "I tried to rank the chaos… but chaos had the better score. XD",
+    "My password? Upper claws, lower claws and a 67.",
+    "I am not a bug: I am a feature with nine lives. 🐾",
+    "Tony asked for more chaos. I asked for more cans. Only one request was prioritized."
+  ];
+  function spawnCatJoke(){ try{ var i=Math.floor(Math.random()*CHAOS_JOKES.length);if(window.__cmCatVisitor) window.__cmCatVisitor.visit(CHAOS_JOKES[i],6500,CHAOS_JOKES_EN[i]); }catch(e){} }
+  function spawnToy(){
+    if(document.querySelectorAll(".cmChaosToy").length>=2) return;
+    var b=document.createElement("button"); b.type="button"; b.className="cmChaosToy chaos-el"; b.textContent=rnd(["XD","67","👀","💥","???","GG"]);
+    b.style.left=Math.round(7+Math.random()*Math.max(20,vw()-120))+"px"; b.style.top=Math.round(82+Math.random()*Math.max(40,vh()-220))+"px";
+    b.dataset.cmChaosKind="toy"; b.dataset.cmChaosLabel=b.textContent; b.setAttribute("aria-label",tr("Toca para explotar ","Tap to pop ")+b.textContent);
+    b.addEventListener("click",function(e){ e.stopPropagation(); if(b.classList.contains("popped"))return; b.classList.add("popped"); b.textContent="💥"; marker({x:e.clientX||vw()/2,y:e.clientY||vh()/2},stage); burst(Math.max(4,Math.round(9*K))); soundMlg(44); setTimeout(function(){try{b.remove();}catch(_e){}},360); });
+    document.body.appendChild(b); setTimeout(function(){try{b.remove();}catch(e){}},6400);
+  }
+  /* v1.66: el azar sigue sin fingir actividad humana, pero el modo elegido permanece vivo por sí solo. */
   function startTimers(){
     if(!motionAllowed()) return;
     var pranks=[
-      [spawnTargetArrow,17],[spawnNote,12],[spawnMischief,8],[spawnQuote,6],
-      [circleReal,18],[rollBall,10],[balloonRise,8],[function(){burst(Math.max(3,Math.round(7*K)));},8]
+      [spawnTargetArrow,12],[spawnNote,10],[spawnAlert,7],[spawnFact,8],[spawnMischief,5],[spawnQuote,5],
+      [circleReal,12],[rollBall,7],[balloonRise,6],[spawnToy,12],[spawnCatJoke,4],[emojiRain,5],[jolt,3],[hueFlash,3],
+      [function(){burst(Math.max(3,Math.round(7*K)));},6]
     ].filter(function(p){ return p[1]>0; });
     var total=0; pranks.forEach(function(p){ total+=p[1]; });
     function pick(){ var r=Math.random()*total; for(var i=0;i<pranks.length;i++){ r-=pranks[i][1]; if(r<=0) return pranks[i][0]; } return pranks[0][0]; }
-    function tickC(){ if(!on) return; pick()(); timers.push(setTimeout(tickC,(MOBILE?6200:4300)+Math.random()*2600)); }
-    timers.push(setTimeout(tickC,2600));
+    function tickC(){ if(!on||!motionAllowed()) return; var count=document.querySelectorAll(".chaosNote,.chaosAlert,.chaosQuote,.chaosTip,.chaosLasso,.cmChaosToy,body>button.chaos-el").length; if(count<9) pick()(); timers.push(setTimeout(tickC,(MOBILE?3000:1800)+Math.random()*(MOBILE?2200:1600))); }
+    spawnToy(); /* Arranque visible determinista: el primer tick aleatorio puede ser un no-op contextual. */
+    timers.push(setTimeout(tickC,900));
   }
   function clearTimers(){ timers.forEach(function(t){ clearInterval(t); }); timers=[]; }
+  function clearCatVisitor(){try{if(window.__cmCatVisitor&&typeof window.__cmCatVisitor.clear==="function")window.__cmCatVisitor.clear();}catch(e){}}
   function stop(){
     on=false; energy=0; combo=0; lastSemantic=0; lastKind=""; crossed67=false;heroAt=0;
     document.body.classList.remove("chaos","chaosBig","cmChaosPunch"); cfab.classList.remove("on"); clearTimeout(punchTimer); clearTimers();
-    document.querySelectorAll(".chaos-el").forEach(function(p){ try{p.remove();}catch(e){} });
+    clearCatVisitor();
+    clear67(); hideInvite(); document.body.style.setProperty("--cm-chaos-speed","0"); document.querySelectorAll(".chaos-el,.cmChaosToy,.cmSpeedLine").forEach(function(p){ try{p.remove();}catch(e){} });
     document.querySelectorAll(".chaosShout,.megaFlip,.chaosJolt").forEach(function(p){ try{p.classList.remove("chaosShout","megaFlip","chaosJolt");}catch(e){} });
     updateHud();
   }
-  cfab.onclick=function(){
-    if(!on){
+  function start(){
+    if(on) return;
       /* v0.34: fuera el confirm() nativo (anti-patron §5) — tocaste el 🤪, eso ES el consentimiento.
          Arranque inmediato + aviso claro de como pararlo (reversible al instante). */
       on=true; energy=8; combo=0; crossed67=false; document.body.classList.add("chaos"); cfab.classList.add("on"); loadQuotes(); updateHud();
-      try{ if(typeof toast==="function") toast("🤪 MLG semántico ON · toca cosas para cargar energía · Esc para parar"); }catch(e){}
+      try{ if(typeof toast==="function") toast(tr("🤪 MLG semántico ON · toca cosas para cargar energía · Esc para parar","🤪 Semantic MLG ON · touch things to charge energy · Esc to stop")); }catch(e){}
       stamp("MLG READY",{x:vw()/2,y:Math.max(115,vh()*.32)},false,stage); soundMlg(8); startTimers(); if(motionAllowed()) timers.push(setTimeout(spawnTargetArrow,500));
-    } else { stop(); }
-  };
+  }
+  cfab.onclick=function(){ if(on) stop(); else start(); };
   /* Puente semántico: cada etiqueta describe el gesto que acaba de ocurrir; nunca afirma resultados. */
   document.addEventListener("click",function(e){
     if(!on||!e.target||e.target.closest("#chaosFab")) return;
     var t=e.target.closest(".mapNode,.mbNode,.predBtn,.asmrVote,.cmFRVote,#gxg-cat-root,.cm67"); if(!t) return;
-    if(t.matches(".mapNode,.mbNode")) emit("branch:touch",t,"RAMA TOCADA",14);
-    else if(t.matches(".predBtn")) emit("prediction:touch",t,"APUESTA TOCADA",16);
-    else if(t.matches(".asmrVote")) emit("asmr:vote",t,"SEÑAL ASMR",12);
+    if(t.matches(".mapNode,.mbNode")) emit("branch:touch",t,tr("RAMA TOCADA","BRANCH TOUCHED"),14);
+    else if(t.matches(".predBtn")) emit("prediction:touch",t,tr("APUESTA TOCADA","BET TOUCHED"),16);
+    else if(t.matches(".asmrVote")) emit("asmr:vote",t,tr("SEÑAL ASMR","ASMR SIGNAL"),12);
     else if(t.matches(".cmFRVote")) emit("fanrank:vote",t,"FANRANK HIT",15);
     else if(t.matches("#gxg-cat-root")) emit("cat:poke",t,"MIAU HIT",11);
     else if(t.matches(".cm67")) emit("meme:67",t,"67 COMBO",19);
   },true);
+
+  /* El 6·7 ofrece el salto a Caos justo donde Tony lo pidió: una decisión, al lado derecho, con salida. */
+  var invite=document.createElement("aside"), inviteTimer=0;
+  invite.id="cm67ChaosInvite"; invite.hidden=true; invite.setAttribute("aria-label","Activar modo caótico");
+  invite.innerHTML='<b>😈 ¿Quieres el 6·7 al máximo?</b><button id="cm67ChaosGo" type="button">Activar Caos</button><button id="cm67ChaosNo" type="button" aria-label="Cerrar">✕</button>';
+  document.body.appendChild(invite);
+  function paintChaosLanguage(){var en=english();cfab.title=en?"Chaos mode":"Modo caótico";cfab.setAttribute("aria-label",cfab.title);updateHud();invite.setAttribute("aria-label",en?"Enable chaos mode":"Activar modo caótico");invite.querySelector("b").textContent=en?"😈 Want the maximum 6·7?":"😈 ¿Quieres el 6·7 al máximo?";invite.querySelector("#cm67ChaosGo").textContent=en?"Enable Chaos":"Activar Caos";invite.querySelector("#cm67ChaosNo").setAttribute("aria-label",en?"Close":"Cerrar");document.querySelectorAll("[data-cm-chaos-kind]").forEach(function(b){var k=b.dataset.cmChaosKind;b.setAttribute("aria-label",k==="toy"?(en?"Tap to pop ":"Toca para explotar ")+(b.dataset.cmChaosLabel||b.textContent):k==="balloon"?(en?"Pop chaos balloon":"Explotar globo del caos"):(en?"Pop rolling chaos object":"Explotar objeto rodante del caos"));});document.querySelectorAll(".chaosNote,.chaosAlert,.chaosTip,.chaosQuote").forEach(function(n){try{n.remove();}catch(e){}});}
+  paintChaosLanguage();
+  var langBtn=document.getElementById("langEn");if(langBtn)langBtn.addEventListener("click",function(){setTimeout(paintChaosLanguage,0);});
+  function hideInvite(){ clearTimeout(inviteTimer); invite.hidden=true; }
+  function showInvite(){ if(on||!motionAllowed()) return; hideInvite(); invite.hidden=false; inviteTimer=setTimeout(hideInvite,8500); }
+  invite.querySelector("#cm67ChaosGo").addEventListener("click",function(e){e.stopPropagation();hideInvite();start();});
+  invite.querySelector("#cm67ChaosNo").addEventListener("click",function(e){e.stopPropagation();hideInvite();});
+  document.addEventListener("click",function(e){var m=e.target&&e.target.closest&&e.target.closest(".cm67");if(m&&!on)setTimeout(showInvite,520);},false);
+
+  /* Velocidad visible sin mover el documento: el scroll solo alimenta una capa de viento y rayas breves. */
+  var lastScrollY=window.scrollY||0,lastScrollT=(performance&&performance.now?performance.now():Date.now()),scrollFade=0,lastLinesAt=0;
+  function speedLines(power){ if(!motionAllowed())return; var n=power>.55?3:1; for(var i=0;i<n;i++){var s=document.createElement("i");s.className="cmSpeedLine chaos-el";s.style.setProperty("--sl-x",Math.round(Math.random()*92)+"vw");s.style.setProperty("--sl-y",Math.round(8+Math.random()*84)+"vh");s.style.setProperty("--sl-w",Math.round(70+power*180+Math.random()*90)+"px");s.style.setProperty("--sl-r",Math.round(-8+Math.random()*16)+"deg");document.body.appendChild(s);setTimeout(function(n){try{n.remove();}catch(e){}},780,s);} }
+  window.addEventListener("scroll",function(){ if(!on||!motionAllowed())return; var t=(performance&&performance.now?performance.now():Date.now()),y=window.scrollY||0,dt=Math.max(16,t-lastScrollT),v=Math.min(1,Math.abs(y-lastScrollY)/dt/1.35);lastScrollY=y;lastScrollT=t;var shown=Math.max(.16,v);document.body.style.setProperty("--cm-chaos-speed",shown.toFixed(2));document.body.style.setProperty("--cm-scroll-shift",Math.round((y%80)-40)+"px");if(t-lastLinesAt>110){lastLinesAt=t;speedLines(shown);}clearTimeout(scrollFade);scrollFade=setTimeout(function(){document.body.style.setProperty("--cm-chaos-speed","0.08");},240);},{passive:true});
+
   document.addEventListener("keydown",function(e){ if(on&&e.key==="Escape") stop(); });
+  document.addEventListener("click",function(e){ if(!e.target||!e.target.closest||!e.target.closest("#cmMotionBtn"))return; setTimeout(function(){if(!motionAllowed()){clear67();hideInvite();clearCatVisitor();}if(!on)return;clearTimers();document.querySelectorAll(".chaos-el,.cmChaosToy,.cmSpeedLine").forEach(function(p){try{p.remove();}catch(_e){}});if(motionAllowed())startTimers();},0); },true);
   // Q3: pausa el caos si la pestaña no se ve (batería); al volver, lo reanuda si seguía activo
-  try{ document.addEventListener("visibilitychange", function(){ if(!on) return; if(document.hidden){ clearTimers(); document.querySelectorAll(".chaos-el").forEach(function(p){ try{p.remove();}catch(e){} }); } else { clearTimers(); startTimers(); } }); }catch(e){}
+  try{ document.addEventListener("visibilitychange", function(){ if(document.hidden){clearCatVisitor();if(!on)return;clearTimers();document.querySelectorAll(".chaos-el,.cmChaosToy,.cmSpeedLine").forEach(function(p){ try{p.remove();}catch(e){} });}else if(on){clearTimers();startTimers();} }); window.addEventListener("pagehide",function(){clearCatVisitor();stop();},{once:true}); }catch(e){}
 }catch(e){ console.warn("chaos/paneles", e); } })();
 </script>
 
@@ -6929,6 +7045,20 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
 }catch(e){ console.warn("identity", e); } })();
 </script>
 
+<style id="cmAsmrWorldCss">
+.cmTexCount{margin-left:auto;display:inline-flex;align-items:center;min-height:28px;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.72);color:#49337c;font:850 10px/1 system-ui;box-shadow:0 2px 8px rgba(72,45,135,.12);pointer-events:none}
+#cmAsmrCounter{position:fixed;left:50%;top:max(58px,calc(env(safe-area-inset-top,0px) + 48px));z-index:10018;transform:translateX(-50%);max-width:min(92vw,430px);padding:8px 12px;border:1px solid rgba(255,255,255,.64);border-radius:999px;background:rgba(30,22,54,.92);color:#fff;box-shadow:0 9px 25px rgba(25,18,55,.28);font:850 12px/1.25 system-ui;text-align:center;pointer-events:none;opacity:0;transition:opacity .2s,transform .2s}
+#cmAsmrCounter.on{opacity:1;transform:translateX(-50%) translateY(4px)}
+#cmAsmrBiomeWash{position:fixed;inset:0;z-index:45;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 35%,var(--cm-biome-a,#8b5cf6),transparent 55%),linear-gradient(145deg,var(--cm-biome-b,#22d3ee),transparent 68%);mix-blend-mode:soft-light;transition:opacity .7s ease}
+body.cmAsmrBiome #cmAsmrBiomeWash{opacity:.42}body.cmAsmrBiome .card{border-color:color-mix(in srgb,var(--cm-biome-a,#8b5cf6) 42%,var(--line));box-shadow:0 8px 28px color-mix(in srgb,var(--cm-biome-a,#8b5cf6) 18%,transparent)}
+#cmAsmrBiome{position:fixed;inset:0;z-index:10020;display:grid;place-items:center;pointer-events:none;overflow:hidden}#cmAsmrBiome[hidden]{display:none}
+.cmBiomeMonster{pointer-events:auto;border:0;background:transparent;cursor:pointer;font-size:clamp(150px,44vw,470px);line-height:.82;filter:drop-shadow(0 18px 25px rgba(17,14,35,.36));animation:cmMonster 5.8s cubic-bezier(.14,.86,.22,1) forwards;transform-origin:50% 70%;touch-action:manipulation}.cmBiomeMonster:focus-visible{outline:6px solid #fff;outline-offset:8px;border-radius:24px}
+.cmBiomeCtl{position:absolute;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;flex-wrap:wrap;justify-content:center;gap:8px;width:min(94vw,620px);padding:10px;border:1px solid rgba(255,255,255,.62);border-radius:18px;background:rgba(18,15,31,.92);color:#fff;box-shadow:0 14px 36px rgba(0,0,0,.38);pointer-events:auto}.cmBiomeCtl b{flex:1 1 100%;text-align:center;font:900 15px/1.2 system-ui}.cmBiomeCtl button{min-height:44px;border:0;border-radius:12px;padding:9px 13px;font:850 12px/1 system-ui;cursor:pointer}.cmBiomeKeep{background:linear-gradient(135deg,var(--cm-biome-a,#8b5cf6),var(--cm-biome-b,#22d3ee));color:#fff}.cmBiomeClose{background:rgba(255,255,255,.14);color:#fff}
+@keyframes cmMonster{0%{opacity:0;transform:scale(.1) rotate(-18deg)}12%{opacity:1;transform:scale(1.12) rotate(4deg)}23%,70%{opacity:1;transform:scale(1) rotate(-1deg)}82%{transform:scale(1.08) rotate(2deg)}100%{opacity:.16;transform:scale(.72) translateY(-12vh)}}
+body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiome,body.cmMotionOff #cmAsmrBiomeWash{display:none!important}
+@media(max-width:640px){.cmTexCount{flex-basis:auto;margin-left:0}.cmBiomeCtl{bottom:88px}.cmBiomeMonster{font-size:min(64vw,300px)}}
+@media(prefers-reduced-motion:reduce){body:not(.cmMotionOn) #cmAsmrCounter{transition:none}body:not(.cmMotionOn) #cmAsmrBiomeWash{transition:none}body:not(.cmMotionOn) .cmBiomeMonster{animation:none;opacity:1;transform:none}}
+</style>
 <script>
 /* ASMR vivo: TEXTURAS entre paneles (rózalas con el ratón = fricción según velocidad) + cositas que
    REVIENTAN/CRUJEN al click (satisfactorio). Sonido sintetizado (Web Audio, sin ficheros). ON por defecto.
@@ -6938,6 +7068,8 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   try{ var pref=localStorage.getItem(KEY); if(pref==="0") enabled=false; else if(pref==="1") enabled=true; }catch(e){}
   var reduce=false, canHover=false, MOBILE=false;
   try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; canHover=matchMedia("(hover:hover)").matches; MOBILE=matchMedia("(max-width:640px)").matches; }catch(e){}
+  function english(){try{return document.documentElement.lang==="en"||(typeof window.__cmLangIsEnglish==="function"&&window.__cmLangIsEnglish());}catch(e){return false;}}
+  function tr(es,en){return english()?en:es;}
   function now(){ return (window.performance&&performance.now)?performance.now():Date.now(); }
   function rr(a,b){ return a+Math.random()*(b-a); }
 
@@ -7100,7 +7232,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     ".cmBub.popped{background:radial-gradient(circle at 50% 50%,rgba(124,58,237,.14),rgba(124,58,237,.05));box-shadow:inset 0 1px 2px rgba(0,0,0,.3);cursor:default;transform:scale(.82)}"+
     ".cmCrumb{flex:0 0 auto;min-width:44px;min-height:44px;border:none;background:transparent;cursor:pointer;font-size:21px;line-height:1;padding:8px;transition:transform .1s;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}"+
     ".cmCrumb:hover{transform:scale(1.18) rotate(-6deg)}"+
-    ".cmTex.cmTexCall{box-shadow:0 0 0 4px rgba(124,58,237,.32),0 10px 30px rgba(124,58,237,.32),inset 0 0 0 1px rgba(80,60,140,.24);filter:saturate(1.2);animation:cmTexCall 1.55s ease-in-out 1}"+
+    ".cmTex.cmTexCall{box-shadow:0 0 0 4px rgba(124,58,237,.32),0 10px 30px rgba(124,58,237,.32),inset 0 0 0 1px rgba(80,60,140,.24);filter:saturate(1.2);animation:cmTexCall 2.35s ease-in-out 1}"+
     ".cmTex.cmTexCall::after{content:attr(data-call);position:absolute;right:9px;top:4px;z-index:3;padding:5px 9px;border-radius:999px;background:#7c3aed;color:#fff;font:800 11px/1 system-ui;box-shadow:0 4px 12px rgba(72,32,150,.28);pointer-events:none}"+
     ".cmTex.cmTexCall .cmBub,.cmTex.cmTexCall .cmCrumb{animation:cmTexWave .9s ease-in-out 1}"+
     ".cmTex.cmTexCall button:first-of-type{animation:cmTexTwirl 1.05s cubic-bezier(.2,.8,.25,1) 1}"+
@@ -7129,20 +7261,22 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
 
   /* ---------- VARIEDAD: 13 texturas que rotan por carga, sin repetir en la misma página ---------- */
   var TYPES=[
-    {k:"burbujas",  lbl:"burbujas",       bub:true,         hit:"burbujas"},
-    {k:"cristal",   lbl:"cristal",        bits:["🔔","✨"], hit:"cristal"},
-    {k:"madera",    lbl:"madera",         bits:["🪵","🌰"], hit:"madera"},
-    {k:"muelle",    lbl:"muelle",         bits:["🌀","🍥"], hit:"muelle"},
-    {k:"slime",     lbl:"slime",          bits:["🫧","🧪"], hit:"slime"},
-    {k:"nieve",     lbl:"nieve compacta", bits:["❄️","🏔️"], hit:"nieve"},
-    {k:"cereales",  lbl:"cereales",       bits:["🥣","🌽"], hit:"cereales"},
-    {k:"grava",     lbl:"gravilla",       bits:["🪨","⛏️"], hit:"grava"},
-    {k:"pana",      lbl:"pana",           bits:["🧶","🪕"], hit:"pana"},
-    {k:"arena",     lbl:"arena",          bits:["⏳","🏖️"], hit:"arena"},
-    {k:"papel",     lbl:"papel arrugado", bits:["📄","🧻"], hit:"papel"},
-    {k:"hojas",     lbl:"hojas secas",    bits:["🍃","🍂"], hit:"hojas"},
-    {k:"cremallera",lbl:"cremallera",     bits:["🤐","🔗"], hit:"cremallera"}
+    {k:"burbujas",  lbl:"burbujas",       enLbl:"bubbles",       bub:true,         hit:"burbujas"},
+    {k:"cristal",   lbl:"cristal",        enLbl:"crystal",       bits:["🔔","✨"], hit:"cristal"},
+    {k:"madera",    lbl:"madera",         enLbl:"wood",          bits:["🪵","🌰"], hit:"madera"},
+    {k:"muelle",    lbl:"muelle",         enLbl:"spring",        bits:["🌀","🍥"], hit:"muelle"},
+    {k:"slime",     lbl:"slime",          enLbl:"slime",         bits:["🫧","🧪"], hit:"slime"},
+    {k:"nieve",     lbl:"nieve compacta", enLbl:"packed snow",   bits:["❄️","🏔️"], hit:"nieve"},
+    {k:"cereales",  lbl:"cereales",       enLbl:"cereal",        bits:["🥣","🌽"], hit:"cereales"},
+    {k:"grava",     lbl:"gravilla",       enLbl:"gravel",        bits:["🪨","⛏️"], hit:"grava"},
+    {k:"pana",      lbl:"pana",           enLbl:"corduroy",      bits:["🧶","🪕"], hit:"pana"},
+    {k:"arena",     lbl:"arena",          enLbl:"sand",          bits:["⏳","🏖️"], hit:"arena"},
+    {k:"papel",     lbl:"papel arrugado", enLbl:"crumpled paper",bits:["📄","🧻"], hit:"papel"},
+    {k:"hojas",     lbl:"hojas secas",    enLbl:"dry leaves",    bits:["🍃","🍂"], hit:"hojas"},
+    {k:"cremallera",lbl:"cremallera",     enLbl:"zipper",        bits:["🤐","🔗"], hit:"cremallera"}
   ];
+  function typeDef(k){for(var i=0;i<TYPES.length;i++)if(TYPES[i].k===k)return TYPES[i];return null;}
+  function typeLabel(k){var d=typeDef(k);return d?(english()?d.enLbl:d.lbl):k;}
   /* v1.50 (Tony: «hemos dejado los mejores ASMR para el final, no puede ser»): los 5 favoritos SIEMPRE
      salen primero y en su orden (= más arriba en el scroll, porque el reparto v1.47 conserva el orden
      de creación); el resto se baraja para variar entre cargas. */
@@ -7157,10 +7291,10 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   function nextType(){ if(!queue.length){ queue=buildQueue(); } return queue.shift(); }
 
   var ribbons=[];
-  function mkBubble(prof){ var b=document.createElement("button"); b.type="button"; b.tabIndex=0; b.className="cmBub"; b.setAttribute("aria-label","burbuja para reventar");
+  function mkBubble(prof){ var b=document.createElement("button"); b.type="button"; b.tabIndex=0; b.className="cmBub"; b.setAttribute("aria-label",tr("burbuja para reventar","bubble to pop"));
     b.addEventListener("click",function(e){ e.stopPropagation(); if(b.classList.contains("popped")) return; var rib=b.closest(".cmTex"); markTouched(rib); b.classList.add("popped"); hit(prof); progressFx(rib,6,e.clientX,e.clientY);
       setTimeout(function(){ try{ b.classList.remove("popped"); }catch(e){} }, 10000+Math.random()*6000); }); return b; }
-  function mkBit(emoji, prof){ var c=document.createElement("button"); c.type="button"; c.tabIndex=0; c.className="cmCrumb"; c.textContent=emoji; c.setAttribute("aria-label","tócame para sonar");
+  function mkBit(emoji, prof){ var c=document.createElement("button"); c.type="button"; c.tabIndex=0; c.className="cmCrumb"; c.textContent=emoji; c.setAttribute("aria-label",tr("tócame para sonar","touch me to hear a sound"));
     c.addEventListener("click",function(e){ e.stopPropagation(); if(c.dataset.busy) return; var rib=c.closest(".cmTex"); markTouched(rib); c.dataset.busy="1"; hit(prof); progressFx(rib,6,e.clientX,e.clientY);
       if(!reduce) try{ c.animate([{transform:"scale(1) rotate(0)"},{transform:"scale(1.3) rotate(-10deg)"},{transform:"scale(.25) rotate(14deg)",opacity:.15}],{duration:260}); }catch(_){}
       setTimeout(function(){ c.style.visibility="hidden"; },240);
@@ -7172,11 +7306,12 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
       if(i%2===0) continue;                       // una textura sí, otra no -> "esparcidas"
       var card=cards[i]; if(!card||!card.parentNode) continue;
       var ty=nextType();
-      var rib=document.createElement("aside"); rib.className="cmTex tex-"+ty.k; rib.dataset.tex=ty.k; rib.dataset.call="✨ tócame";
-      rib.setAttribute("aria-label","Zona ASMR de "+ty.lbl+": roza la franja o toca sus elementos para oírla");
-      rib.appendChild(mkLabel("✦ "+ty.lbl+" — rózame o toca"));
+      var rib=document.createElement("aside"); rib.className="cmTex tex-"+ty.k; rib.dataset.tex=ty.k; rib.dataset.call=tr("✨ tócame","✨ touch me");
+      rib.setAttribute("aria-label",tr("Zona ASMR de "+ty.lbl+": roza la franja o toca sus elementos para oírla",ty.enLbl+" ASMR zone: rub the strip or touch its elements to hear it"));
+      rib.appendChild(mkLabel("✦ "+(english()?ty.enLbl:ty.lbl)+(english()?" — rub or touch":" — rózame o toca")));
       if(ty.bub){ var nb=MOBILE?5:9; for(var k=0;k<nb;k++) rib.appendChild(mkBubble(ty.hit)); }
       else{ var nbits=MOBILE?3:6; for(var j=0;j<nbits;j++) rib.appendChild(mkBit(ty.bits[j%ty.bits.length], ty.hit)); }
+      var count=document.createElement("span"); count.className="cmTexCount"; count.textContent="0 / 67"; count.setAttribute("aria-hidden","true"); rib.appendChild(count);
       try{ card.parentNode.insertBefore(rib, card); ribbons.push(rib); }catch(e){}
     }
   }
@@ -7197,13 +7332,33 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     "assets/bubbles/bubble-eyes.webp","assets/bubbles/bubble-unicorn.webp"
   ];
   var fxLayer=document.createElement("div"); fxLayer.id="cmAsmrFx"; fxLayer.setAttribute("role","group"); fxLayer.setAttribute("aria-label","Efectos ASMR: toca una burbuja o un emoji para explotarlo"); document.body.appendChild(fxLayer);
-  var fxStates={},NORMAL_CAP=40,CHAOS_CAP=96,fxImageCursor=0,fxStats={spawned:0,popped:0,peak:0,bursts:0,lastBurst:0};
+  var counterHud=document.createElement("div"); counterHud.id="cmAsmrCounter"; counterHud.setAttribute("role","status"); counterHud.setAttribute("aria-live","polite"); document.body.appendChild(counterHud);
+  var biomeWash=document.createElement("div"); biomeWash.id="cmAsmrBiomeWash"; biomeWash.setAttribute("aria-hidden","true"); document.body.appendChild(biomeWash);
+  var biome=document.createElement("section"); biome.id="cmAsmrBiome"; biome.hidden=true; biome.setAttribute("aria-label","Mundo ASMR desbloqueado"); biome.innerHTML='<button class="cmBiomeMonster" type="button" aria-label="Mantener este mundo ASMR"></button><div class="cmBiomeCtl"><b class="cmBiomeTitle"></b><button class="cmBiomeKeep" type="button" aria-pressed="false">📌 Mantener 20 s más</button><button class="cmBiomeClose" type="button">✕ Volver</button></div>'; document.body.appendChild(biome);
+  var BIOME_DEF={
+    burbujas:{e:"🫧",n:"Monstruo Burbuja",ne:"Bubble Monster",a:"#38bdf8",b:"#c4b5fd"},cristal:{e:"💎",n:"Titán de Cristal",ne:"Crystal Titan",a:"#67e8f9",b:"#a78bfa"},madera:{e:"🌳",n:"Guardián del Bosque",ne:"Forest Guardian",a:"#22c55e",b:"#a16207"},
+    muelle:{e:"🌀",n:"Serpiente Muelle",ne:"Spring Serpent",a:"#14b8a6",b:"#8b5cf6"},slime:{e:"🟢",n:"Rey Slime",ne:"Slime King",a:"#4ade80",b:"#22d3ee"},nieve:{e:"❄️",n:"Yeti de Nieve",ne:"Snow Yeti",a:"#bae6fd",b:"#818cf8"},
+    cereales:{e:"🌽",n:"Gigante Crujiente",ne:"Crunchy Giant",a:"#facc15",b:"#fb923c"},grava:{e:"🪨",n:"Gólem de Grava",ne:"Gravel Golem",a:"#94a3b8",b:"#475569"},pana:{e:"🧶",n:"Bestia de Pana",ne:"Corduroy Beast",a:"#e879f9",b:"#a855f7"},
+    arena:{e:"🏜️",n:"Esfinge de Arena",ne:"Sand Sphinx",a:"#fbbf24",b:"#f97316"},papel:{e:"📜",n:"Dragón de Papel",ne:"Paper Dragon",a:"#f5e7c6",b:"#ef4444"},hojas:{e:"🍃",n:"Espíritu de Hojas",ne:"Leaf Spirit",a:"#84cc16",b:"#15803d"},cremallera:{e:"⚡",n:"Monstruo Cremallera",ne:"Zipper Monster",a:"#facc15",b:"#2563eb"}
+  };
+  var fxStates={},NORMAL_CAP=40,CHAOS_CAP=96,fxImageCursor=0,fxStats={spawned:0,popped:0,peak:0,bursts:0,lastBurst:0,byType:{},monsters:0};
+  var countTimer=0,biomeTimer=0,biomeState={tex:null,pinned:false,until:0};
   function motionAllowed(){ return enabled&&!document.body.classList.contains("cmMotionOff")&&(!reduce||document.body.classList.contains("cmMotionOn")); }
   function removeFx(el){ try{ if(el&&el.parentNode) el.parentNode.removeChild(el); }catch(e){} }
-  function clearFx(){ while(fxLayer.firstChild) fxLayer.removeChild(fxLayer.firstChild); Object.keys(fxStates).forEach(function(k){ var s=fxStates[k]; clearTimeout(s.fade); s.energy=0; s.phase=0; s.phase2Shown=false; s.lastBurst=0; s.last=now(); }); ribbons.forEach(function(r){r.removeAttribute("data-fx-phase");}); }
+  function countOf(tex){ return fxStats.byType[tex]||(fxStats.byType[tex]={score:0,rubs:0,pops:0,monsters:0,nextAt:67}); }
+  function paintCount(tex){ var c=countOf(tex),toward=Math.max(0,c.nextAt-c.score),en=english(); ribbons.forEach(function(r){if(r.dataset.tex!==tex)return;var el=r.querySelector(".cmTexCount");if(el)el.textContent=(c.score%67)+" / 67";}); counterHud.dataset.tex=tex;counterHud.textContent=(BIOME_DEF[tex]?BIOME_DEF[tex].e+" ":"")+typeLabel(tex)+": "+c.score+(en?" touches · ":" toques · ")+c.pops+(en?" pops":" explosiones")+(toward?(en?" · "+toward+" to go":" · faltan "+toward):(en?" · monster!":" · ¡monstruo!")); counterHud.classList.add("on"); clearTimeout(countTimer); countTimer=setTimeout(function(){counterHud.classList.remove("on");},2600); }
+  function closeBiome(){ clearTimeout(biomeTimer); biome.hidden=true; biomeState={tex:null,pinned:false,until:0}; document.body.classList.remove("cmAsmrBiome"); document.body.removeAttribute("data-cm-biome"); document.body.style.removeProperty("--cm-biome-a"); document.body.style.removeProperty("--cm-biome-b"); }
+  function armBiomeTimer(){ clearTimeout(biomeTimer); if(biomeState.pinned)return; biomeState.until=Date.now()+20000; biomeTimer=setTimeout(closeBiome,20000); }
+  function showBiome(tex){ if(!enabled||document.body.classList.contains("cmMotionOff"))return false; var d=BIOME_DEF[tex]||{e:"✨",n:"Monstruo ASMR",ne:"ASMR Monster",a:"#8b5cf6",b:"#22d3ee"},c=countOf(tex); c.monsters++; fxStats.monsters++; biomeState={tex:tex,pinned:false,until:Date.now()+20000}; document.body.classList.add("cmAsmrBiome"); document.body.dataset.cmBiome=tex; document.body.style.setProperty("--cm-biome-a",d.a); document.body.style.setProperty("--cm-biome-b",d.b); biome.querySelector(".cmBiomeMonster").textContent=d.e; biome.querySelector(".cmBiomeTitle").textContent=english()?"👾 "+d.ne+" unlocked · the Notebook changes for 20 s":"👾 "+d.n+" desbloqueado · el Cuaderno cambia durante 20 s"; var keep=biome.querySelector(".cmBiomeKeep"); keep.textContent=tr("📌 Mantener este mundo","📌 Keep this world"); keep.setAttribute("aria-pressed","false"); biome.hidden=false; var mon=biome.querySelector(".cmBiomeMonster"); mon.style.animation="none"; void mon.offsetWidth; mon.style.animation=""; spawnFx(tex,document.body.classList.contains("chaos")?10:5); armBiomeTimer(); try{if(window.__cmChaosEvent)window.__cmChaosEvent("asmr:monster",mon,tr("MONSTRUO ","MONSTER ")+typeLabel(tex).toUpperCase(),22);}catch(e){} return true; }
+  function toggleBiomePin(){ if(!biomeState.tex)return; biomeState.pinned=!biomeState.pinned; var b=biome.querySelector(".cmBiomeKeep"); b.setAttribute("aria-pressed",String(biomeState.pinned)); b.textContent=biomeState.pinned?tr("📌 Mundo fijado · soltar","📌 World pinned · release"):tr("📌 Mantener este mundo","📌 Keep this world"); if(biomeState.pinned){clearTimeout(biomeTimer);biomeState.until=0;}else armBiomeTimer(); }
+  biome.querySelector(".cmBiomeMonster").addEventListener("click",toggleBiomePin); biome.querySelector(".cmBiomeKeep").addEventListener("click",toggleBiomePin); biome.querySelector(".cmBiomeClose").addEventListener("click",closeBiome);
+  function paintAsmrLanguage(){var en=english();ribbons.forEach(function(r){var d=typeDef(r.dataset.tex),name=d?(en?d.enLbl:d.lbl):r.dataset.tex;r.dataset.call=en?"✨ touch me":"✨ tócame";r.setAttribute("aria-label",en?name+" ASMR zone: rub the strip or touch its elements to hear it":"Zona ASMR de "+name+": roza la franja o toca sus elementos para oírla");var label=r.querySelector(".cmTexLbl");if(label)label.textContent="✦ "+name+(en?" — rub or touch":" — rózame o toca");r.querySelectorAll(".cmBub").forEach(function(b){b.setAttribute("aria-label",en?"bubble to pop":"burbuja para reventar");});r.querySelectorAll(".cmCrumb").forEach(function(b){b.setAttribute("aria-label",en?"touch me to hear a sound":"tócame para sonar");});});fxLayer.setAttribute("aria-label",en?"ASMR effects: tap a bubble or emoji to pop it":"Efectos ASMR: toca una burbuja o un emoji para explotarlo");biome.setAttribute("aria-label",en?"Unlocked ASMR world":"Mundo ASMR desbloqueado");biome.querySelector(".cmBiomeMonster").setAttribute("aria-label",en?"Keep this ASMR world":"Mantener este mundo ASMR");biome.querySelector(".cmBiomeClose").textContent=en?"✕ Return":"✕ Volver";if(biomeState.tex){var d=BIOME_DEF[biomeState.tex]||{n:"Monstruo ASMR",ne:"ASMR Monster"};biome.querySelector(".cmBiomeTitle").textContent=en?"👾 "+d.ne+" unlocked · the Notebook changes for 20 s":"👾 "+d.n+" desbloqueado · el Cuaderno cambia durante 20 s";var keep=biome.querySelector(".cmBiomeKeep");keep.textContent=biomeState.pinned?(en?"📌 World pinned · release":"📌 Mundo fijado · soltar"):(en?"📌 Keep this world":"📌 Mantener este mundo");}if(counterHud.dataset.tex&&counterHud.classList.contains("on"))paintCount(counterHud.dataset.tex);fxLayer.querySelectorAll(".cmAsmrFxItem").forEach(function(el){el.setAttribute("aria-label",el.dataset.kind==="image"?(en?"Pop ASMR bubble":"Explotar burbuja ASMR"):(en?"Pop "+typeLabel(el.dataset.tex)+" ASMR effect":"Explotar efecto ASMR de "+typeLabel(el.dataset.tex)));});}
+  paintAsmrLanguage();var langBtn=document.getElementById("langEn");if(langBtn)langBtn.addEventListener("click",function(){setTimeout(paintAsmrLanguage,0);});
+  function recordActivity(tex,points,kind){ var c=countOf(tex),before=c.score;c.score+=Math.max(1,Math.round(points||1));if(kind==="pop")c.pops++;else c.rubs++;paintCount(tex);if(c.score>=c.nextAt){c.nextAt+=67;showBiome(tex);}return {score:c.score,unlocked:c.score>=c.nextAt-67&&before<c.nextAt-67}; }
+  function clearFx(){ while(fxLayer.firstChild) fxLayer.removeChild(fxLayer.firstChild); Object.keys(fxStates).forEach(function(k){ var s=fxStates[k]; clearTimeout(s.fade); s.energy=0; s.phase=0; s.phase2Shown=false; s.lastBurst=0; s.last=now(); }); ribbons.forEach(function(r){r.removeAttribute("data-fx-phase");}); closeBiome(); counterHud.classList.remove("on"); }
   function capNow(){ return document.body.classList.contains("chaos")?CHAOS_CAP:NORMAL_CAP; }
   function sparkFx(x,y){ if(!motionAllowed()) return; for(var i=0;i<4;i++){ var s=document.createElement("i"); s.className="cmAsmrSpark"; s.textContent=i%2?"✦":"✨"; s.style.setProperty("--sx",Math.round(x)+"px"); s.style.setProperty("--sy",Math.round(y)+"px"); s.style.setProperty("--sdx",Math.round(rr(-48,48))+"px"); s.style.setProperty("--sdy",Math.round(rr(-58,32))+"px"); document.body.appendChild(s); (function(n){setTimeout(function(){removeFx(n);},480);})(s); } }
-  function popFx(el,tex,e){ if(!el||el.dataset.popped) return false; el.dataset.popped="1"; el.classList.add("cmFxPopped"); fxStats.popped++; try{hit(tex);}catch(_e){} try{if(navigator.vibrate)navigator.vibrate(9);}catch(_e){} var r=el.getBoundingClientRect(),x=e&&e.clientX?e.clientX:r.left+r.width/2,y=e&&e.clientY?e.clientY:r.top+r.height/2; sparkFx(x,y); setTimeout(function(){removeFx(el);},290); return true; }
+  function popFx(el,tex,e){ if(!el||el.dataset.popped) return false; el.dataset.popped="1"; el.classList.add("cmFxPopped"); fxStats.popped++; try{hit(tex);}catch(_e){} try{if(navigator.vibrate)navigator.vibrate(9);}catch(_e){} var r=el.getBoundingClientRect(),x=e&&e.clientX?e.clientX:r.left+r.width/2,y=e&&e.clientY?e.clientY:r.top+r.height/2; recordActivity(tex,5,"pop"); progressFx(document.querySelector('.cmTex[data-tex="'+tex+'"]'),3,x,y,tex,"skip"); sparkFx(x,y); setTimeout(function(){removeFx(el);},290); return true; }
   function fxBlockers(){ var out=[]; try{ document.querySelectorAll('button,a,input,textarea,select,summary,[role="button"]').forEach(function(el){ if(el.closest&&el.closest("#cmAsmrFx"))return; var cs=getComputedStyle(el),r=el.getBoundingClientRect(); if(cs.display!=="none"&&cs.visibility!=="hidden"&&r.width>2&&r.height>2&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth)out.push({l:r.left-5,t:r.top-5,r:r.right+5,b:r.bottom+5}); }); }catch(_e){} return out; }
   function fxPlace(size,chaos,index,blockers){
     var W=Math.max(240,innerWidth||375),H=Math.max(320,innerHeight||700),pad=size/2+5,best=null,bestHits=1e9,edge=chaos?(index%2===0):((index+1)%4!==0);
@@ -7220,10 +7375,10 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     fxStats.bursts++; fxStats.lastBurst=Date.now();
     for(var i=0;i<requested;i++){
       while(fxLayer.children.length>=cap) removeFx(fxLayer.firstElementChild);
-      var el=document.createElement("button"),dur=Math.round(rr(3100,5100)),delay=Math.round(rr(0,320)),useImage=(tex==="burbujas"&&(requested>=12||Math.random()<.58)),plannedEdge=chaos?(i%2===0):((i+1)%4!==0),size=Math.round(useImage?(chaos?rr(70,124):(plannedEdge?rr(62,106):rr(52,78))):(large?rr(58,88):rr(46,70))),point=fxPlace(size,chaos,i,blockers);
-      el.type="button"; el.tabIndex=-1; el.className="cmAsmrFxItem"; el.dataset.tex=tex; el.dataset.kind=useImage?"image":"emoji";
+      var el=document.createElement("button"),dur=Math.round(rr(5000,7600)),delay=Math.round(rr(0,420)),useImage=(tex==="burbujas"&&(requested>=12||Math.random()<.58)),plannedEdge=chaos?(i%2===0):((i+1)%4!==0),size=Math.round(useImage?(chaos?rr(70,124):(plannedEdge?rr(62,106):rr(52,78))):(large?rr(58,88):rr(46,70))),point=fxPlace(size,chaos,i,blockers);
+      el.type="button"; el.tabIndex=fxLayer.children.length<8?0:-1; el.className="cmAsmrFxItem"; el.dataset.tex=tex; el.dataset.kind=useImage?"image":"emoji";
       el.dataset.zone=point.edge?"edge":"field";
-      el.setAttribute("aria-label",useImage?"Explotar burbuja ASMR":"Explotar efecto ASMR de "+tex);
+      el.setAttribute("aria-label",useImage?tr("Explotar burbuja ASMR","Pop ASMR bubble"):tr("Explotar efecto ASMR de ","Pop ")+typeLabel(tex)+(english()?" ASMR effect":""));
       if(useImage){ var sprite=FX_IMAGES[fxImageCursor++%FX_IMAGES.length]; el.dataset.sprite=sprite; el.style.backgroundImage='url("'+sprite+'")'; } else { el.textContent=set[Math.floor(Math.random()*set.length)]; }
       el.style.setProperty("--fx-left",Math.round(point.x/Math.max(1,innerWidth)*1000)/10+"%");
       el.style.setProperty("--fx-top",Math.round(point.y/Math.max(1,innerHeight)*1000)/10+"%");
@@ -7240,13 +7395,14 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     fxStats.spawned+=made; fxStats.peak=Math.max(fxStats.peak,fxLayer.children.length);
     return made;
   }
-  function progressFx(rib,amount,x,y,forcedType){
+  function progressFx(rib,amount,x,y,forcedType,activityMode){
     var tex=forcedType||(rib&&rib.dataset.tex)||"burbujas", t=now();
+    if(activityMode!=="skip") recordActivity(tex,1,"rub");
     var s=fxStates[tex]||(fxStates[tex]={energy:0,last:t,lastBurst:0,phase:0,phase2Shown:false,fade:0});
     s.energy=Math.max(0,s.energy-(t-s.last)/520)+Math.max(0,amount||0); s.last=t;
     var previousPhase=s.phase||0, phase=s.energy>=24?3:(s.energy>=13?2:(s.energy>=5?1:0)); s.phase=phase;
     if(rib){ if(phase) rib.dataset.fxPhase=String(phase); else rib.removeAttribute("data-fx-phase"); }
-    if(phase>previousPhase){ try{ if(typeof window.__cmChaosEvent==="function") window.__cmChaosEvent("asmr:phase",rib,"ASMR "+tex+" · "+(phase===3?"BIOMA":phase===2?"CRECE":"BROTE"),phase===3?19:(phase===2?11:6)); }catch(_e){} }
+    if(phase>previousPhase){ try{ if(typeof window.__cmChaosEvent==="function") window.__cmChaosEvent("asmr:phase",rib,"ASMR "+typeLabel(tex)+" · "+(phase===3?tr("BIOMA","BIOME"):phase===2?tr("CRECE","GROWTH"):tr("BROTE","SPROUT")),phase===3?19:(phase===2?11:6)); }catch(_e){} }
     if(phase>=2&&!s.phase2Shown){ spawnFx(tex,1); s.phase2Shown=true; }
     if(phase===3&&t-s.lastBurst>1700){ spawnFx(tex,18); s.lastBurst=t; s.energy=13; s.phase=2; if(rib) rib.dataset.fxPhase="2"; }
     clearTimeout(s.fade); s.fade=setTimeout(function(){ s.energy=0; s.phase=0; s.phase2Shown=false; if(rib) rib.removeAttribute("data-fx-phase"); },4300);
@@ -7257,14 +7413,21 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     coverage:TYPES.map(function(t){return t.k;}).filter(function(k){return !FX_MANIFEST[k];}),
     max:CHAOS_CAP,maxNormal:NORMAL_CAP,maxChaos:CHAOS_CAP,images:FX_IMAGES.slice(),
     feed:function(tex,amount){ var rib=document.querySelector('.cmTex[data-tex="'+tex+'"]'); return progressFx(rib,amount==null?30:amount,innerWidth/2,innerHeight/2,tex); },
+    unlock:function(tex){ var c=countOf(tex); c.score=Math.max(c.score,c.nextAt-1); return recordActivity(tex,1,"rub"); },
+    pinBiome:toggleBiomePin,
+    closeBiome:closeBiome,
     clear:clearFx,
-    state:function(){ var out={items:fxLayer.children.length,cap:capNow(),chaos:document.body.classList.contains("chaos"),stats:{spawned:fxStats.spawned,popped:fxStats.popped,peak:fxStats.peak,bursts:fxStats.bursts,lastBurst:fxStats.lastBurst}}; Object.keys(fxStates).forEach(function(k){out[k]={energy:Math.round(fxStates[k].energy*10)/10,phase:fxStates[k].phase};}); return out; }
+    state:function(){
+      var counts={}; Object.keys(fxStats.byType).forEach(function(k){ var c=fxStats.byType[k]; counts[k]={score:c.score,rubs:c.rubs,pops:c.pops,monsters:c.monsters,nextAt:c.nextAt}; });
+      var out={items:fxLayer.children.length,cap:capNow(),chaos:document.body.classList.contains("chaos"),counts:counts,biome:{tex:biomeState.tex,pinned:biomeState.pinned,remaining:biomeState.until?Math.max(0,biomeState.until-Date.now()):0},stats:{spawned:fxStats.spawned,popped:fxStats.popped,peak:fxStats.peak,bursts:fxStats.bursts,lastBurst:fxStats.lastBurst,monsters:fxStats.monsters}};
+      Object.keys(fxStates).forEach(function(k){out[k]={energy:Math.round(fxStates[k].energy*10)/10,phase:fxStates[k].phase};}); return out;
+    }
   };
 
   /* Descubrimiento sin ruido constante: al entrar una zona nueva en pantalla, una sola franja
      llama suavemente la atención una vez. Calma/reduced-motion conserva el brillo, sin movimiento. */
   function markTouched(rib){ if(!rib) return; rib.dataset.touched="1"; rib.classList.remove("cmTexCall"); try{ if(window.__cmTexFound) window.__cmTexFound(rib.dataset.tex); }catch(_e){} }
-  function callOut(rib){ if(!enabled||!rib||rib.dataset.touched||document.hidden) return false; ribbons.forEach(function(r){r.classList.remove("cmTexCall");}); rib.classList.add("cmTexCall"); setTimeout(function(){try{rib.classList.remove("cmTexCall");}catch(e){}},1900); return true; }
+  function callOut(rib){ if(!enabled||!rib||rib.dataset.touched||document.hidden) return false; ribbons.forEach(function(r){r.classList.remove("cmTexCall");}); rib.classList.add("cmTexCall"); setTimeout(function(){try{rib.classList.remove("cmTexCall");}catch(e){}},4800); return true; }
   ribbons.forEach(function(rib){ rib.addEventListener("pointerdown",function(e){if(e.pointerType!=="touch")markTouched(rib);},{passive:true}); rib.addEventListener("focusin",function(){markTouched(rib);}); });
   try{ if("IntersectionObserver" in window){ var seenTimer=0, io=new IntersectionObserver(function(entries){ entries.forEach(function(en){ var rib=en.target; if(!en.isIntersecting||rib.dataset.prompted||rib.dataset.touched) return; rib.dataset.prompted="1"; clearTimeout(seenTimer); seenTimer=setTimeout(function(){callOut(rib);},1000); }); },{threshold:.65}); ribbons.forEach(function(r){io.observe(r);}); } }catch(e){}
   var nudgeTimer=0,nudgeCount=0,nextNudgeAt=0;
@@ -7322,6 +7485,9 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
 
   /* ---------- click suave en botones (las burbujas/crumbs ya suenan y paran la propagación) ---------- */
   document.addEventListener("click",function(e){ if(!enabled) return; var t=e.target; if(!t.closest) return;
+    if(t.closest("#mapBig-ov")) return;
+    if(t.closest(".asmrCand")) return;
+    if(t.closest(".cm67,#cm67Judge,#cm67ChaosInvite")) return;
     if(t.closest(".cmBub")||t.closest(".cmCrumb")) return;
     if(t.closest(".chip, button, summary, [data-choice]")) softClick();
   }, false);
@@ -7329,7 +7495,7 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
   /* ---------- contrato del HUB + batería ---------- */
   document.body.classList.toggle("asmrOff", !enabled);
   window.__asmr={ isOn:function(){ return enabled; },
-    toggle:function(){ enabled=!enabled; try{ localStorage.setItem(KEY, enabled?"1":"0"); }catch(e){} document.body.classList.toggle("asmrOff",!enabled); if(enabled){ ensure(); resume(); hit("burbujas"); } return enabled; },
+    toggle:function(){ enabled=!enabled; try{ localStorage.setItem(KEY, enabled?"1":"0"); }catch(e){} document.body.classList.toggle("asmrOff",!enabled); if(enabled){ ensure(); resume(); hit("burbujas"); scheduleNudge(4500); }else{ clearFx(); clearTimeout(nudgeTimer); clearLit(); } return enabled; },
     /* --- hooks de AUDICIÓN (los usa sounds/asmr-test.html): Claude Code no oye -> Tony valida por oído.
        demo/brushAt suenan AUNQUE el ASMR esté apagado (es una herramienta de prueba). --- */
     list:function(){ return TYPES.map(function(x){ return x.k; }); },
@@ -7394,6 +7560,22 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     return true;
   }
   function paintVote(tile,key){ Array.prototype.forEach.call(tile.querySelectorAll(".asmrVote"),function(b){ var on=votes[key]===b.dataset.vote; b.classList.toggle("on",on); b.setAttribute("aria-pressed",String(on)); }); }
+  var matchDialog=null,matchCandidate=null,matchSending=false;
+  function ensureMatchDialog(){
+    if(matchDialog) return matchDialog;
+    matchDialog=document.createElement("dialog"); matchDialog.className="cmAsmrMatch"; matchDialog.id="cmAsmrMatch";
+    matchDialog.innerHTML='<form method="dialog" class="cmAsmrMatchIn"><button class="cmAsmrClose" value="cancel" aria-label="Cerrar">✕</button><h3 id="cmAsmrMatchTitle">¿Coincide de verdad?</h3><p>Escúchalo y dinos exactamente qué encaja — o qué habría que cambiar.</p><div class="cmAsmrChoices"><button class="cmAsmrChoice" type="button" data-result="si">✅ Sí coincide</button><button class="cmAsmrChoice" type="button" data-result="casi">🟡 Casi</button><button class="cmAsmrChoice" type="button" data-result="no">❌ No coincide</button></div><fieldset class="cmAsmrTargets"><legend>¿Qué estás juzgando?</legend><label><input type="checkbox" name="cmAsmrTarget" value="titulo" checked> Título</label><label><input type="checkbox" name="cmAsmrTarget" value="emoji" checked> Emoji</label><label><input type="checkbox" name="cmAsmrTarget" value="descripcion" checked> Descripción</label></fieldset><label class="cmAsmrUse">¿Dónde lo usarías?<input id="cmAsmrUse" maxlength="180" placeholder="Ej.: al abrir el mapa o al rozar madera"></label><textarea class="cmAsmrNote" id="cmAsmrMatchNote" maxlength="500" placeholder="Ej.: parece plástico; esperaba madera hueca."></textarea><p class="cmAsmrMatchStatus" id="cmAsmrMatchStatus" role="status" aria-live="polite"></p></form>';
+    document.body.appendChild(matchDialog);
+    Array.prototype.forEach.call(matchDialog.querySelectorAll(".cmAsmrChoice"),function(b){ b.addEventListener("click",function(){ sendMatch(b.dataset.result); }); });
+    return matchDialog;
+  }
+  function setMatchBusy(busy){ matchSending=busy; Array.prototype.forEach.call(ensureMatchDialog().querySelectorAll(".cmAsmrChoice"),function(b){b.disabled=busy;}); }
+  function openMatch(c){ matchCandidate=c; var d=ensureMatchDialog(),title=d.querySelector("#cmAsmrMatchTitle"),note=d.querySelector("#cmAsmrMatchNote"),use=d.querySelector("#cmAsmrUse"),out=d.querySelector("#cmAsmrMatchStatus"); title.textContent="¿«"+c.n+"» coincide de verdad?"; note.value=""; use.value=""; Array.prototype.forEach.call(d.querySelectorAll('[name="cmAsmrTarget"]'),function(x){x.checked=true;}); out.textContent=""; setMatchBusy(false); if(!d.open)d.showModal(); }
+  function sendMatch(result){
+    if(!matchCandidate||matchSending) return; var d=ensureMatchDialog(),note=d.querySelector("#cmAsmrMatchNote").value.trim(),use=d.querySelector("#cmAsmrUse").value.trim(),out=d.querySelector("#cmAsmrMatchStatus"),targets=[]; Array.prototype.forEach.call(d.querySelectorAll('[name="cmAsmrTarget"]:checked'),function(x){targets.push(x.value);}); if(!targets.length)targets.push("general"); out.textContent="Enviando juicio…"; setMatchBusy(true);
+    var payload={card:"🎧 Laboratorio ASMR",section:matchCandidate.n,tipo:"asmr-coincidencia-"+result,texto:"ASMR-COINCIDENCIA\nid: "+matchCandidate.k+"\nresultado: "+result+"\ncoincide_con: "+targets.join(",")+"\nuso_sugerido: "+(use||"sin sugerencia")+"\nnota: "+(note||"sin nota")+"\nprototipo: sintetizado-v3\norigen: laboratorio-cuaderno"};
+    try{ if(typeof window.__fb==="function") Promise.resolve(window.__fb(payload)).then(function(r){setMatchBusy(false);out.textContent=r==="sent"?"✓ MADRE recibió tu juicio.":"Guardado aquí; el envío queda pendiente.";if(r==="sent")setTimeout(function(){if(d.open)d.close();},650);},function(){setMatchBusy(false);out.textContent="No llegó. Tu nota sigue aquí para reintentar.";}); else{setMatchBusy(false);out.textContent="El canal todavía no está disponible.";} }catch(e){setMatchBusy(false);out.textContent="No llegó. Tu nota sigue aquí para reintentar.";}
+  }
   function vote(c,val,tile){
     var en=!!(document.getElementById("langEn")&&document.getElementById("langEn").getAttribute("aria-pressed")==="true");
     var previous=votes[c.k]||null;
@@ -7416,16 +7598,21 @@ body:has(#cmtPanel.on) #fabHubTip{display:none!important}
     }catch(e){ if(status) status.textContent=prefix+(en?" Saved here; delivery is pending.":" Guardada aquí; el envío queda pendiente."); }
   }
   function tile(c){
-    var a=document.createElement("article"); a.className="asmrCand"; a.dataset.candidate=c.k;
+    var a=document.createElement("article"); a.className="asmrCand"; a.dataset.candidate=c.k; a.tabIndex=0; a.setAttribute("role","group"); a.setAttribute("aria-label","Escuchar y valorar "+c.n+". Pulsa la tarjeta para reproducir.");
     var play=document.createElement("button"); play.type="button"; play.className="asmrPlay"; play.textContent=c.e; play.setAttribute("aria-label","Escuchar prototipo: "+c.n); play.setAttribute("data-en","Play prototype: "+c.en);
     var tx=document.createElement("span"); tx.className="asmrCandText";
     var nm=document.createElement("strong"); nm.className="asmrCandName"; nm.textContent=c.n; nm.setAttribute("data-en",c.en);
     var wh=document.createElement("span"); wh.className="asmrCandWhy"; wh.textContent=c.w; wh.setAttribute("data-en",c.wen);
     var row=document.createElement("span"); row.className="asmrVotes";
     [["gusta","👍","Me gusta"],["no-gusta","👎","No me gusta"]].forEach(function(v){ var b=document.createElement("button"); b.type="button"; b.className="asmrVote"; b.dataset.vote=v[0]; b.textContent=v[1]; b.setAttribute("aria-label",v[2]+": "+c.n); b.setAttribute("aria-pressed","false"); b.addEventListener("click",function(){vote(c,v[0],a);}); row.appendChild(b); });
-    tx.appendChild(nm); tx.appendChild(wh); tx.appendChild(row); a.appendChild(play); a.appendChild(tx); play.addEventListener("click",function(){preview(c,a);}); paintVote(a,c.k); return a;
+    var match=document.createElement("button"); match.type="button"; match.className="asmrMatch"; match.textContent="🎯 ¿Coincide con lo que dice ser?"; match.setAttribute("aria-label","Juzgar si coincide: "+c.n); match.addEventListener("click",function(){openMatch(c);}); row.appendChild(match);
+    tx.appendChild(nm); tx.appendChild(wh); tx.appendChild(row); a.appendChild(play); a.appendChild(tx); play.addEventListener("click",function(){preview(c,a);});
+    a.addEventListener("click",function(e){ if(e.target.closest("button,input,textarea,select,a,label")) return; preview(c,a); });
+    a.addEventListener("keydown",function(e){ if(e.target!==a||(e.key!=="Enter"&&e.key!==" "))return; e.preventDefault(); preview(c,a); });
+    paintVote(a,c.k); return a;
   }
   LAB.forEach(function(c,i){ (i<4?feat:more).appendChild(tile(c)); });
+  var judge67=document.getElementById("cm67Judge"); if(judge67) judge67.addEventListener("click",function(){try{if(window.__cmMlgSound)window.__cmMlgSound(67);}catch(e){} openMatch({k:"six-seven",n:"Sonido 6·7 actual"});});
   var focusObserver=null,labCard=document.getElementById("asmrLabCard");
   if(labCard&&"IntersectionObserver" in window){
     focusObserver=new IntersectionObserver(function(entries){ entries.forEach(function(en){ document.body.classList.toggle("cmLabFocus",en.isIntersecting&&en.intersectionRatio>=.05); }); },{threshold:[0,.05]});
@@ -7576,7 +7763,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   function skip(n){var p=n&&n.parentElement;return !p||!!p.closest("script,style,noscript,textarea,input,select,option,button,a,summary,[contenteditable=true],[aria-hidden=true],.cm67");}
   function make(raw){var b=D.createElement("button");b.type="button";b.className="cm67";b.setAttribute("aria-label","Six Seven: activa el meme y la ola");b.title="Six Seven 🌊";
     Array.from(raw).forEach(function(ch,i){var s=D.createElement("span");s.className="cm67Char";s.style.setProperty("--i",i);s.textContent=ch;b.appendChild(s);});
-    b.addEventListener("click",function(){b.classList.remove("waving");void b.offsetWidth;b.classList.add("waving");try{if(typeof window.__cm67Sound==="function")window.__cm67Sound();if(typeof window.__cmMiniMlg==="function")window.__cmMiniMlg(b,"67 COMBO");}catch(_e){}setTimeout(function(){b.classList.remove("waving");},1050);var a=D.getElementById("a11yAnnounce");if(a)a.textContent=D.documentElement.lang==="en"?"Six… seven! Wave!":"¡Seis… siete! ¡Ola!";});return b;}
+    b.addEventListener("click",function(){b.classList.remove("waving");void b.offsetWidth;b.classList.add("waving");try{if(typeof window.__cmMiniMlg==="function")window.__cmMiniMlg(b,"67 COMBO");}catch(_e){}setTimeout(function(){b.classList.remove("waving");},1050);var a=D.getElementById("a11yAnnounce");if(a)a.textContent=D.documentElement.lang==="en"?"Six… seven! Wave!":"¡Seis… siete! ¡Ola!";});return b;}
   function decorate(root){if(busy)return;busy=true;var nodes=[];
     function take(n){if(n&&n.nodeType===3&&!skip(n)){RX.lastIndex=0;if(RX.test(n.nodeValue||""))nodes.push(n);}}
     if(root&&root.nodeType===3)take(root);else{var w=D.createTreeWalker(root||D.body,NodeFilter.SHOW_TEXT);while(w.nextNode())take(w.currentNode);}
@@ -7660,14 +7847,16 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   // NOTA: "🧭 Ruta guiada" y "👁️ El cuaderno por dentro" NO entran al hub a propósito:
   // Tony los quiere SIEMPRE fuera y a la izquierda, clicables de un toque (no escondidos en el menú).
   var defs=[
-    {id:"cmtFab", icon:"💬", label:"Comentarios"},
+    {feedback:true, icon:"💬", label:"Feedback general"},
+    {id:"cmtFab", icon:"🗨️", label:"Comentarios públicos"},
     {id:"lapizFab", icon:"✏️", label:"Comentar una zona", mode:true},
     {id:"likeFab", icon:"💗", label:"Marcar lo que te gusta", mode:true},
     {id:"chaosFab", icon:"🤪", label:"Modo caótico", mode:true},
     {lab:true, icon:"🧪", label:"Laboratorio ASMR"},
+    {media:true, icon:"🗂️", label:"Archivo multimedia"},
     {asmr:true, icon:"🔇", label:"Sonidos ASMR", mode:true}
   ];
-  var present=defs.filter(function(d){ return d.asmr || d.lab || D.getElementById(d.id); });
+  var present=defs.filter(function(d){ return d.asmr || d.lab || d.media || d.feedback || D.getElementById(d.id); });
   if(present.length<3) return;
   var btn=D.createElement("button"); btn.id="fabHubBtn"; btn.type="button"; btn.setAttribute("aria-label","Menú de herramientas"); btn.innerHTML='<span class="fhIco">✦</span>';
   var menu=D.createElement("div"); menu.id="fabHubMenu"; menu.setAttribute("role","menu");
@@ -7682,6 +7871,8 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
       try{
         if(d.asmr){ if(window.__asmr){ var on=window.__asmr.toggle(); it.classList.toggle("on",on); ic.textContent=on?"🔊":"🔇"; lb.textContent=on?"Sonidos ASMR (on)":"Sonidos ASMR"; } }
         else if(d.lab){ if(window.__cmOpenAsmrLab) window.__cmOpenAsmrLab(); }
+        else if(d.media){ window.location.href="media.html"; }
+        else if(d.feedback){ if(window.__openFb) window.__openFb("💬 Feedback general","","auto"); }
         else{ var real=D.getElementById(d.id); if(real) real.click(); }
       }catch(err){}
       if(!d.mode) closeMenu(); else setTimeout(refreshStates,30);
@@ -7762,7 +7953,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.64";
+  window.__cmVersion="v1.66";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
@@ -8243,6 +8434,22 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
      els:(function(){ var a=group(["diarioVivo","cmAsk","envivo","madreHabla","num:3","caminoCard"]); if(ayudaCard) a.push(ayudaCard); return a; })()}
   ];
 
+  function revealActo(acto,focusEl){
+    if(!acto||acto.revealed) return false; acto.revealed=true;
+    acto.els.forEach(function(el){ el.classList.remove("pdHidden"); });
+    if(acto.intro&&!acto.introEl){ var p=document.createElement("p"); p.className="pdIntro"; p.textContent=acto.intro; acto.introEl=p; acto.els[0].parentNode.insertBefore(p,acto.els[0]); }
+    acto.els.forEach(function(el){ if(!el.classList.contains("beat")) return; var det=el.querySelector(":scope > details"); if(det) det.open=true; });
+    if(acto.btn&&acto.btn.parentNode) acto.btn.remove();
+    try{ window.dispatchEvent(new Event("resize")); }catch(e){}
+    var target=focusEl||acto.els[0]; try{ target.setAttribute("tabindex","-1"); target.focus({preventScroll:true}); }catch(e){}
+    return true;
+  }
+  window.__cmRevealTarget=function(target){
+    if(typeof target==="string") target=document.querySelector(target); if(!target)return false;
+    for(var i=0;i<actos.length;i++){ if(actos[i].els.indexOf(target)>=0||actos[i].els.some(function(el){return el.contains(target);})){ return revealActo(actos[i],target); } }
+    target.classList.remove("pdHidden"); return true;
+  };
+
   actos.forEach(function(acto){
     if(!acto.els.length) return;
     acto.els.forEach(function(el){ el.classList.add("pdHidden"); });
@@ -8250,20 +8457,10 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     var btn=document.createElement("button");
     btn.type="button"; btn.className="pdReveal"; btn.setAttribute("aria-expanded","false");
     btn.textContent=acto.texto;
+    acto.btn=btn;
     first.parentNode.insertBefore(btn, first);
     btn.addEventListener("click",function(){
-      acto.els.forEach(function(el){ el.classList.remove("pdHidden"); });
-      if(acto.intro){
-        var p=document.createElement("p"); p.className="pdIntro"; p.textContent=acto.intro;
-        first.parentNode.insertBefore(p, first);
-      }
-      acto.els.forEach(function(el){
-        if(!el.classList.contains("beat")) return;
-        var det=el.querySelector(":scope > details"); if(det) det.open=true;
-      });
-      btn.remove();
-      try{ window.dispatchEvent(new Event("resize")); }catch(e){}
-      try{ first.setAttribute("tabindex","-1"); first.focus({preventScroll:true}); }catch(e){}
+      revealActo(acto,first);
     });
   });
 }catch(e){ console.warn("progressive disclosure v1.06", e); } })();
@@ -9283,7 +9480,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     else { blip(base*1.2,base*1.48,.1,.04,"sine"); setTimeout(function(){blip(base*1.9,base*1.65,.09,.018,"sine");},55); }
   }
   try{ window.__cmMapSound=mapSound; }catch(_e){}
-  function sixSevenSound(){ blip(360,520,.11,.045,"square"); setTimeout(function(){blip(670,820,.16,.05,"triangle");},105); }
+  function sixSevenSound(){ blip(980,620,.055,.028,"square"); setTimeout(function(){blip(118,70,.19,.038,"sine");},24); setTimeout(function(){blip(510,790,.15,.032,"triangle");},92); }
   try{ window.__cm67Sound=sixSevenSound; }catch(_e){}
   /* v1.63: vocabulario MLG original y sintetizado. No descarga audios de terceros: hitmarker
      corto + subgrave; en el climax aparece una mini-bocina armónica, siempre a volumen limitado. */
@@ -9308,18 +9505,18 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   function humStart(){ if(hum||calma()) return; var c=ensure(); if(!c||c.state!=="running") return; var t=c.currentTime;
     /* v1.47 (Tony: "de normal prefiero un sonido mucho más leve, tecnológico/espacial, flojito") —
        menos de la mitad de volumen y respiración más lenta; el tic del nodo se queda como estaba. */
-    var g=c.createGain(); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.015,t+1.2);
+    var g=c.createGain(); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.006,t+1.2);
     var o1=c.createOscillator(); o1.type="sine"; o1.frequency.value=108;
     var o2=c.createOscillator(); o2.type="sine"; o2.frequency.value=108.7;
     var lfo=c.createOscillator(); lfo.type="sine"; lfo.frequency.value=0.09;
-    var lg=c.createGain(); lg.gain.value=0.005; lfo.connect(lg); lg.connect(g.gain);
+    var lg=c.createGain(); lg.gain.value=0.0015; lfo.connect(lg); lg.connect(g.gain);
     o1.connect(g); o2.connect(g); g.connect(c.destination); o1.start(); o2.start(); lfo.start();
-    hum={g:g,osc:[o1,o2,lfo]}; try{ window.__cmUiSnd={hum:true}; }catch(_e){} }
+    hum={g:g,osc:[o1,o2,lfo]}; try{ window.__cmUiSnd={hum:true,humPeak:.0075,nodePeak:.045}; }catch(_e){} }
   function humStop(){ if(!hum) return; var h=hum; hum=null; try{ var t=ctx.currentTime;
       h.g.gain.cancelScheduledValues(t); h.g.gain.setValueAtTime(Math.max(h.g.gain.value,0.0001),t); h.g.gain.linearRampToValueAtTime(0.0001,t+0.6);
     }catch(_e){}
     setTimeout(function(){ h.osc.forEach(function(o){ try{ o.stop(); }catch(_x){} }); },700);
-    try{ window.__cmUiSnd={hum:false}; }catch(_e){} }
+    try{ window.__cmUiSnd={hum:false,humPeak:.0075,nodePeak:.045}; }catch(_e){} }
   var mov=document.getElementById("mapBig-ov");
   if(mov){
     new MutationObserver(function(){ if(mov.hidden) humStop(); else humStart(); }).observe(mov,{attributes:true,attributeFilter:["hidden"]});
@@ -9328,7 +9525,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   document.addEventListener("visibilitychange",function(){ if(document.hidden) humStop(); });
   var mb=document.getElementById("cmMotionBtn");
   if(mb) mb.addEventListener("click",function(){ setTimeout(function(){ if(calma()) humStop(); },0); });
-  try{ window.__cmUiSnd=window.__cmUiSnd||{hum:false}; }catch(_e){}
+  try{ window.__cmUiSnd=window.__cmUiSnd||{hum:false,humPeak:.0075,nodePeak:.045}; }catch(_e){}
 }catch(e){ console.warn("ui-snd v1.40", e); } })();
 </script>
 <style id="cmConfCss">
@@ -9417,7 +9614,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   #cmIdExit{position:fixed;top:46px;right:112px;z-index:56;display:none;font:800 12px/1 inherit;color:var(--ink);border:1.5px solid var(--accent);border-radius:99px;padding:6px 12px;background:var(--card);box-shadow:0 2px 10px rgba(0,0,0,.25);cursor:pointer;white-space:nowrap}
   body.cmIdentityPreview #cmIdExit{display:block}
   body:has(.ov.on) #cmIdExit,body:has(.mbOv:not([hidden])) #cmIdExit{display:none}
-  #cmtPanelClose{position:sticky;bottom:4px;display:block;margin:8px 0 0 auto;font:800 13px/1 inherit;background:var(--accent);color:#fff;border:none;border-radius:99px;padding:8px 13px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.22)}
+  #cmtPanelClose{display:block;margin-left:auto;width:44px;height:44px;flex:0 0 auto;font:900 17px/1 inherit;background:var(--accent);color:#fff;border:none;border-radius:12px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.16)}
   /* invitación a ❤️ Vivo: brillo ESTÁTICO siempre (un brillo no es movimiento); latido solo donde el
      movimiento está permitido (reduced-motion sin opt-in => quieto; Calma => quieto) */
   #cmMotionBtn:not(.cmMon){border-color:var(--accent);box-shadow:0 2px 10px rgba(0,0,0,.14),0 0 12px rgba(124,92,214,.5);animation:cmVivoCall 2.2s ease-in-out infinite}
@@ -9470,15 +9667,16 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   document.body.appendChild(ex);
   /* 2) el chat SIEMPRE tiene salida: ✕ pegajoso abajo (el panel abre scrolleado al fondo) + Escape */
   function wireChat(){
-    var panel=document.getElementById('cmtPanel'); if(!panel || document.getElementById('cmtPanelClose')) return false;
-    var x=document.createElement('button'); x.type='button'; x.id='cmtPanelClose'; x.textContent='✕ cerrar chat';
+    var panel=document.getElementById('cmtPanel'); if(!panel) return false; if(document.getElementById('cmtPanelClose')) return true;
+    var x=document.createElement('button'); x.type='button'; x.id='cmtPanelClose'; x.textContent='✕';
     x.setAttribute('aria-label','Cerrar comentarios');
-    x.addEventListener('click',function(){ panel.classList.remove('on'); });
-    panel.appendChild(x);
+    x.addEventListener('click',function(){ panel.classList.remove('on'); document.body.classList.remove('cmCommentsOpen'); var f=document.getElementById('cmtFab');if(f)f.setAttribute('aria-expanded','false'); });
+    var head=panel.querySelector('.cmtPanelHead'); (head||panel).appendChild(x);
     return true;
   }
   if(!wireChat()){ var tW=setInterval(function(){ if(wireChat()) clearInterval(tW); },800); }
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ var p=document.getElementById('cmtPanel'); if(p&&p.classList.contains('on')) p.classList.remove('on'); } });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ var p=document.getElementById('cmtPanel'); if(p&&p.classList.contains('on')){p.classList.remove('on');document.body.classList.remove('cmCommentsOpen');var f=document.getElementById('cmtFab');if(f)f.setAttribute('aria-expanded','false');} } });
+  window.addEventListener('resize',function(){ if(innerWidth<1100){var p=document.getElementById('cmtPanel');if(p)p.classList.remove('on');document.body.classList.remove('cmCommentsOpen');} },{passive:true});
   /* 3) IMÁN DEL MAPA: una señal pequeña que te lleva (↑/↓ según dónde estés) y el mapa saluda al
      llegar. Se esconde con el tour/overlays/chat abiertos, espera 6s antes de aparecer y cumple la
      regla NADA-FLOTANTE-TAPA: si pisa un control visible, se sube. */
@@ -9777,6 +9975,89 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var lang=document.getElementById("langEn");if(lang)lang.addEventListener("click",function(){setTimeout(function(){textEl.placeholder=en()?"E.g. why do you discard an idea that looked good?":"Ej.: ¿por qué descartas una idea que parecía buena?";if(nameEl)nameEl.placeholder=en()?"Anonymous":"Anónimo";renderDemo(currentSeed);paintQuota();renderQuestions();},35);});
   renderDemo(0);paintQuota();load();window.__cmQuestions={prefix:PREFIX,reload:load,reveal:reveal,quota:quota,state:function(){var q=quota();return {loaded:loaded,rendered:rendered,used:q.used,remaining:q.remaining,creator:q.creator,wait:q.wait};}};
 }catch(e){console.warn("preguntas-madre v1.64",e);}})();
+</script>
+<style id="cmFunRouteCss">
+  #cmLeftDock{position:fixed;left:12px;bottom:max(14px,env(safe-area-inset-bottom,14px));z-index:58;display:flex;flex-direction:column;align-items:flex-start;gap:8px;pointer-events:none}
+  #cmLeftDock>*{pointer-events:auto}
+  #cmFunRouteBtn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 15px;border:1px solid rgba(255,255,255,.4);border-radius:999px;background:linear-gradient(135deg,#6d28d9,#ec4899);color:#fff;box-shadow:0 8px 24px rgba(76,29,149,.34);font:850 13px/1 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+  #cmFunRouteBtn[aria-expanded="true"]{background:linear-gradient(135deg,#ec4899,#f59e0b)}
+  #cmLeftDockTools{display:none;flex-direction:column;align-items:flex-start;gap:7px}
+  #cmLeftDockTools #tourLaunch,#cmLeftDockTools #cmvFab,#cmLeftDockTools #chaosFab,#cmLeftDockTools #mapFab{position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;margin:0!important;min-width:44px;min-height:44px}
+  #cmLeftDockTools #chaosFab{width:44px;height:44px}
+  @media(min-width:1180px){#cmLeftDockTools{display:flex}}
+  #cmFunRoutePanel{position:fixed;left:12px;top:76px;bottom:76px;width:min(306px,calc(100vw - 24px));z-index:10006;display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(124,58,237,.25);border-radius:22px;background:rgba(255,253,255,.985);box-shadow:0 24px 80px rgba(35,22,72,.34);color:#242033}
+  #cmFunRoutePanel[hidden]{display:none!important}
+  .cmFunRouteHead{display:flex;align-items:center;gap:9px;padding:13px 12px 11px 15px;border-bottom:1px solid #e8e2f2;background:linear-gradient(135deg,#f4ecff,#fff6fb)}
+  .cmFunRouteHead span{min-width:0}.cmFunRouteHead b{display:block;font-size:15px}.cmFunRouteHead small{display:block;margin-top:3px;color:#70677f;font-size:11px;line-height:1.3}
+  #cmFunRouteClose{margin-left:auto;width:44px;height:44px;flex:0 0 auto;border:1px solid #ded6e9;border-radius:12px;background:#fff;color:#30283f;font-size:18px;cursor:pointer}
+  #cmFunRouteList{display:grid;gap:7px;margin:0;padding:11px;overflow-y:auto;list-style:none}
+  .cmFunStop{box-sizing:border-box;width:100%;min-height:54px;display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:8px;padding:7px 9px;border:1px solid #e3dceb;border-radius:13px;background:#fff;color:#2f2839;text-align:left;cursor:pointer}
+  .cmFunStop:hover,.cmFunStop:focus-visible{border-color:#8b5cf6;background:#f8f4ff;outline:3px solid rgba(139,92,246,.14)}
+  .cmFunStop .e{font-size:23px}.cmFunStop b{display:block;font-size:12.5px}.cmFunStop small{display:block;margin-top:2px;color:#776f81;font-size:10.5px;line-height:1.25}.cmFunStop .ok{color:#16a34a;font-size:16px;opacity:0}.cmFunStop.done .ok{opacity:1}
+  .cmFunRouteFoot{margin-top:auto;padding:9px 12px;border-top:1px solid #e8e2f2;background:#faf8fd;color:#665d72;font-size:11px;font-weight:750}
+  #cmReturnBar{position:fixed;top:76px;left:50%;z-index:10009;display:flex;align-items:center;gap:8px;max-width:min(92vw,560px);transform:translateX(-50%);padding:6px 7px 6px 12px;border:1px solid rgba(124,58,237,.28);border-radius:999px;background:rgba(255,255,255,.97);box-shadow:0 8px 30px rgba(41,25,76,.24);color:#3b3150;font:800 12px/1.25 system-ui,-apple-system,"Segoe UI",sans-serif}
+  #cmReturnBar[hidden]{display:none!important}#cmReturnBar button{min-height:40px;padding:0 13px;border:0;border-radius:999px;background:#7c3aed;color:#fff;font-weight:850;cursor:pointer}
+  .cmTerm{position:relative;display:inline;padding:0 3px;border:0;border-bottom:2px dotted #7c3aed;background:transparent;color:inherit;font:inherit;font-weight:800;cursor:help}
+  .cmTerm::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 8px);z-index:70;width:max-content;max-width:min(260px,80vw);transform:translate(-50%,5px);padding:8px 10px;border-radius:10px;background:#241a36;color:#fff;box-shadow:0 8px 26px rgba(0,0,0,.3);font:650 11.5px/1.4 system-ui;white-space:normal;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .15s,transform .15s}
+  .cmTerm:hover::after,.cmTerm:focus-visible::after{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  .cmTermHit{outline:4px solid rgba(250,204,21,.72);outline-offset:5px;border-radius:8px}
+  body.cmFunRouteOpen #fabHubBtn,body.cmFunRouteOpen #fabHubActive,body.cmFunRouteOpen #fabHubMenu,body.cmFunRouteOpen #fabHubTip{display:none!important}
+  body.cmLabFocus #cmLeftDock,body.cmFavFocus #cmLeftDock,body.cmAskFocus #cmLeftDock{display:none!important}
+  body:has(.mbOv:not([hidden])) #cmLeftDock,body:has(.mbOv:not([hidden])) #cmFunRoutePanel,body:has(.ov.on) #cmLeftDock,body:has(.ov.on) #cmFunRoutePanel{display:none!important}
+  @media(max-width:640px){#cmFunRoutePanel{top:auto;bottom:76px;max-height:72vh}.cmFunRouteHead{padding-left:12px}#cmReturnBar{top:auto;bottom:82px}.cmTerm::after{display:none}}
+  @media(prefers-reduced-motion:reduce){body:not(.cmMotionOn) .cmTerm::after{transition:none}}
+</style>
+<script>
+/* v1.66 — una sola ruta para descubrir la parte juguetona, más enlaces en simple desde los
+   tecnicismos al glosario real. Reutiliza motores existentes: no duplica tour, ASMR, caos o chat. */
+(function(){try{
+  var D=document,dock=D.createElement("nav"); dock.id="cmLeftDock"; dock.setAttribute("aria-label","Atajos de exploración");
+  function english(){try{return D.documentElement.lang==="en"||(typeof window.__cmLangIsEnglish==="function"&&window.__cmLangIsEnglish());}catch(e){return false;}}
+  var launch=D.createElement("button"); launch.type="button"; launch.id="cmFunRouteBtn"; launch.setAttribute("aria-expanded","false"); launch.innerHTML='<span aria-hidden="true">🎢</span><span>Ruta divertida</span>';
+  var tools=D.createElement("div"); tools.id="cmLeftDockTools"; dock.appendChild(launch); dock.appendChild(tools); D.body.appendChild(dock);
+  ["tourLaunch","cmvFab","chaosFab","mapFab"].forEach(function(id){var x=D.getElementById(id);if(x)tools.appendChild(x);});
+
+  var panel=D.createElement("aside"); panel.id="cmFunRoutePanel"; panel.hidden=true; panel.innerHTML='<div class="cmFunRouteHead"><span><b>🎢 La parte divertida</b><small>Siete paradas cortas. Tú eliges el orden.</small></span><button id="cmFunRouteClose" type="button" aria-label="Cerrar ruta">✕</button></div><ol id="cmFunRouteList"></ol><div class="cmFunRouteFoot" id="cmFunRouteFoot">0 / 7 descubiertas · no hay que registrarse</div>'; D.body.appendChild(panel);
+  var back=D.createElement("div"); back.id="cmReturnBar"; back.hidden=true; back.innerHTML='<span id="cmReturnText">↩ Puedes volver</span><button type="button">Volver</button>'; D.body.appendChild(back);
+  var backState=null,routeOrigin=null,visited={},termButtons=[];
+  function calm(){try{return D.body.classList.contains("cmMotionOff")||matchMedia("(prefers-reduced-motion:reduce)").matches&&!D.body.classList.contains("cmMotionOn");}catch(e){return false;}}
+  function zoneName(el){var c=el&&el.closest&&el.closest(".card,.hero,section,aside"),t=c&&c.querySelector&&c.querySelector(".ctitle .t,h1,h2,h3");return t?t.textContent.trim().slice(0,42):(english()?"where you were":"donde estabas");}
+  function paintBack(){if(!backState)return;var label=english()?(backState.labelEn||backState.labelEs):backState.labelEs;back.querySelector("#cmReturnText").textContent=(english()?"↩ Return to «":"↩ Volver a «")+label+"»";}
+  function remember(label,keep,labelEn){if(keep&&backState)return backState;var a=D.activeElement,actual=label||zoneName(a);backState={y:scrollY,focus:a&&a!==D.body?a:null,labelEs:actual,labelEn:labelEn||actual};paintBack();back.hidden=false;return backState;}
+  function restore(){if(!backState)return false;var s=backState;backState=null;routeOrigin=null;back.hidden=true;scrollTo({top:s.y,behavior:calm()?"auto":"smooth"});setTimeout(function(){try{if(s.focus&&D.contains(s.focus))s.focus({preventScroll:true});}catch(e){}},calm()?20:480);return true;}
+  back.querySelector("button").addEventListener("click",restore);
+  function closePanel(){panel.hidden=true;launch.setAttribute("aria-expanded","false");D.body.classList.remove("cmFunRouteOpen");}
+  function openPanel(){panel.hidden=false;launch.setAttribute("aria-expanded","true");D.body.classList.add("cmFunRouteOpen");setTimeout(function(){var b=panel.querySelector(".cmFunStop:not(.done),.cmFunStop");if(b)b.focus();},30);}
+  launch.addEventListener("click",function(){panel.hidden?openPanel():closePanel();}); panel.querySelector("#cmFunRouteClose").addEventListener("click",closePanel);
+  function reveal(target){if(!target)return false;if(typeof window.__cmRevealTarget==="function")window.__cmRevealTarget(target);target.classList.remove("pdHidden");var det=target.matches("details")?target:target.querySelector(":scope > details");if(det)det.open=true;return true;}
+  function arrive(target,focus){if(!target)return false;reveal(target);try{target.scrollIntoView({behavior:calm()?"auto":"smooth",block:"start"});}catch(e){target.scrollIntoView();}setTimeout(function(){try{(focus||target).focus({preventScroll:true});}catch(e){}},calm()?30:430);return true;}
+  var STOPS=[
+    {k:"asmr",e:"🎧",t:"ASMR que responde",te:"Responsive ASMR",s:"Roza, escucha y explota lo que aparece.",se:"Rub, listen and pop whatever appears.",go:function(){if(window.__cmOpenAsmrLab)return window.__cmOpenAsmrLab();return arrive(D.getElementById("asmrLabCard"));}},
+    {k:"draw",e:"🎨",t:"Dibujos vivos",te:"Living drawings",s:"Deja una criatura para la galería.",se:"Leave a creature in the gallery.",go:function(){return arrive(D.getElementById("dbjsSec"));}},
+    {k:"eggs",e:"🥚",t:"Easter eggs y logros",te:"Easter eggs and achievements",s:"Mira qué secretos ya encontraste.",se:"See which secrets you have already found.",go:function(){var b=D.getElementById("cmAchieveBtn");if(b){b.hidden=false;b.click();return true;}return false;}},
+    {k:"chaos",e:"🤪",t:"Modo caótico",te:"Chaos mode",s:"XD, 6·7, memes y objetos tocables.",se:"XD, 6·7, memes and touchable objects.",go:function(){var b=D.getElementById("chaosFab");if(b&&!D.body.classList.contains("chaos"))b.click();return !!b;}},
+    {k:"cat",e:"🐈",t:"El gato cuenta uno",te:"The cat tells a joke",s:"Viene, maúlla, suelta un chiste y se va.",se:"It arrives, meows, tells a joke and leaves.",go:function(){var h=D.querySelector(".hero")||D.body;arrive(h);setTimeout(function(){if(window.__cmCatVisitor)window.__cmCatVisitor.visit("¿Qué hace un gato en el Cuaderno? Miau-temáticas. 😼",6800,"What is a cat doing in the Notebook? Meow-thematics. 😼");},calm()?60:460);return true;}},
+    {k:"comments",e:"💬",t:"Comentarios",te:"Comments",s:"Lee o deja algo sin que un panel tape la web.",se:"Read or leave a note without a panel covering the page.",go:function(){return window.__cmOpenCommentsCard?window.__cmOpenCommentsCard():arrive(D.getElementById("comentariosCard"));}},
+    {k:"suggest",e:"🌱",t:"Sugiere la próxima diversión",te:"Suggest the next fun feature",s:"Pon tu idea y la IA la ordenará en FanRank.",se:"Add your idea and the AI will rank it in FanRank.",go:function(){var f=D.getElementById("cmFavorites"),r=D.getElementById("cmFanRank"),form=D.querySelector(".cmFRForm"),idea=D.getElementById("cmFRIdea");if(f)f.open=true;if(r)r.open=true;if(form)form.open=true;arrive(f||r,idea);try{if(!sessionStorage.getItem("cm_fun_route_done")){sessionStorage.setItem("cm_fun_route_done","1");if(window.__fb)window.__fb({card:"🎢 Ruta divertida",section:"final",tipo:"ruta-divertida-completada",texto:"RUTA-DIVERTIDA\nparadas: "+Object.keys(visited).concat("suggest").join(",")+"\norigen: cuaderno-publico"});}}catch(e){}return !!(f||r);}}
+  ];
+  var list=panel.querySelector("#cmFunRouteList"),foot=panel.querySelector("#cmFunRouteFoot");
+  function paintLanguage(){var en=english(),n=Object.keys(visited).length;dock.setAttribute("aria-label",en?"Exploration shortcuts":"Atajos de exploración");launch.innerHTML='<span aria-hidden="true">🎢</span><span>'+(en?"Fun route":"Ruta divertida")+'</span>';panel.querySelector(".cmFunRouteHead b").textContent=en?"🎢 The fun part":"🎢 La parte divertida";panel.querySelector(".cmFunRouteHead small").textContent=en?"Seven short stops. Choose your own order.":"Siete paradas cortas. Tú eliges el orden.";panel.querySelector("#cmFunRouteClose").setAttribute("aria-label",en?"Close route":"Cerrar ruta");back.querySelector("button").textContent=en?"Return":"Volver";if(backState)paintBack();STOPS.forEach(function(st,i){var li=list.children[i];if(!li)return;li.querySelector(".cmFunStop span:nth-child(2) b").textContent=en?st.te:st.t;li.querySelector(".cmFunStop span:nth-child(2) small").textContent=en?st.se:st.s;});foot.textContent=n+" / "+STOPS.length+(en?" discovered":" descubiertas")+(n===STOPS.length?(en?" · 🏁 now send your idea":" · 🏁 ahora manda tu idea"):(en?" · jump to any stop":" · puedes saltar a cualquiera"));termButtons.forEach(function(b){var d=TERMS[+b.dataset.termIndex],tip=en?d[3]:d[1],word=en?d[2]:d[0];b.textContent=word;b.dataset.tip=tip+(en?" · tap to see it in the glossary":" · toca para verlo en el glosario");b.setAttribute("aria-label",word+": "+tip+(en?". Go to the glossary.":". Ir al glosario."));});}
+  function paint(){[].forEach.call(list.children,function(li){li.querySelector("button").classList.toggle("done",!!visited[li.dataset.key]);});paintLanguage();}
+  STOPS.forEach(function(st){var li=D.createElement("li");li.dataset.key=st.k;var b=D.createElement("button");b.type="button";b.className="cmFunStop";b.innerHTML='<span class="e" aria-hidden="true">'+st.e+'</span><span><b>'+st.t+'</b><small>'+st.s+'</small></span><span class="ok" aria-hidden="true">✓</span>';b.addEventListener("click",function(){if(!routeOrigin){routeOrigin=remember("donde empezaste la ruta",true,"where you started the route");}visited[st.k]=1;paint();closePanel();st.go();});li.appendChild(b);list.appendChild(li);});paint();
+  D.addEventListener("keydown",function(e){if(e.key!=="Escape")return;if(!panel.hidden){closePanel();launch.focus();}});
+
+  var TERMS=[
+    ["selector externo","una señal de fuera que juzga sin dejarse maquillar","external selector","a signal from outside that judges without being polished"],["ciclo cerrado","hacer → salir → recibir señal → corregir","closed loop","act → go outside → receive a signal → correct"],["activación","pasar de tenerlo guardado a soltarlo de verdad","activation","moving from keeping something stored to actually releasing it"],["meta-palanca","una herramienta que ayuda a descubrir más palancas","meta-lever","a tool that helps discover more levers"],["palanca","algo pequeño que multiplica el resultado","lever","something small that multiplies the result"],["watchdog","un vigía que detecta si algo se paró en silencio","watchdog","a guard that detects when something silently stops"],["NO-RUINA","ningún experimento puede hundirlo todo","NO-RUIN","no experiment can sink everything"],["Goodhart","si persigues el número, el número deja de decir la verdad","Goodhart","when you chase the number, the number stops telling the truth"],["Temperatura","cuánto texto y reglas carga MADRE de una vez","Temperature","how much text and how many rules MADRE loads at once"]
+  ];
+  function norm(s){return String(s||"").replace(/:$/g,"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+  var glos=null;D.querySelectorAll(".card .ctitle .t").forEach(function(t){if(!glos&&/Glosario|Glossary/i.test(t.textContent))glos=t.closest(".card");});
+  function openGloss(term){if(!glos)return false;var aliases=[norm(term)];TERMS.forEach(function(d){if(norm(d[0])===norm(term)||norm(d[2])===norm(term))aliases=[norm(d[0]),norm(d[2])];});remember(zoneName(D.activeElement),false);reveal(glos);var det=glos.querySelector("details");if(det)det.open=true;var fold=glos.querySelector(".cardFoldBtn");if(fold)fold.click();var target=null;glos.querySelectorAll("ul.clean>li").forEach(function(li){var b=li.querySelector("b");if(b&&aliases.indexOf(norm(b.textContent))>=0)target=li;});if(target){setTimeout(function(){target.classList.add("cmTermHit");target.setAttribute("tabindex","-1");target.scrollIntoView({behavior:calm()?"auto":"smooth",block:"center"});target.focus({preventScroll:true});setTimeout(function(){target.classList.remove("cmTermHit");},2400);},80);}return true;}
+  function armTerm(def,idx){var term=english()?def[2]:def[0],low=term.toLowerCase(),nodes=[];D.querySelectorAll(".card .body p,.card .body li,.hero p").forEach(function(root){if(glos&&glos.contains(root)||root.closest("#comentarios,#cmAsk,#cmFanRank,.cmQaItem,button,a,form"))return;var w=D.createTreeWalker(root,NodeFilter.SHOW_TEXT),n;while((n=w.nextNode()))nodes.push(n);});for(var i=0;i<nodes.length;i++){var n=nodes[i];if(n.parentElement&&n.parentElement.closest("button,a,summary"))continue;var at=n.nodeValue.toLowerCase().indexOf(low);if(at<0)continue;var before=n.nodeValue.slice(0,at),hit=n.nodeValue.slice(at,at+term.length),after=n.nodeValue.slice(at+term.length),b=D.createElement("button");b.type="button";b.className="cmTerm";b.dataset.termIndex=String(idx);b.dataset.esBak=def[0];b.dataset.en=def[2];b.textContent=hit;b.addEventListener("click",function(){openGloss(def[0]);});termButtons.push(b);var frag=D.createDocumentFragment();if(before)frag.appendChild(D.createTextNode(before));frag.appendChild(b);if(after)frag.appendChild(D.createTextNode(after));n.parentNode.replaceChild(frag,n);break;}}
+  if(glos)TERMS.forEach(armTerm);paintLanguage();
+  var langBtn=D.getElementById("langEn");if(langBtn)langBtn.addEventListener("click",function(){setTimeout(paintLanguage,0);});
+  window.__cmFunRoute={count:STOPS.length,open:openPanel,go:function(k){for(var i=0;i<STOPS.length;i++)if(STOPS[i].k===k){var b=list.querySelector('[data-key="'+k+'"] button');if(b)b.click();return true;}return false;},back:restore,state:function(){return {open:!panel.hidden,visited:Object.keys(visited),hasReturn:!back.hidden};}};
+  window.__cmGlossLinks={count:D.querySelectorAll(".cmTerm").length,open:openGloss};
+}catch(e){console.warn("ruta-divertida v1.66",e);}})();
 </script>
 </body>
 </html>

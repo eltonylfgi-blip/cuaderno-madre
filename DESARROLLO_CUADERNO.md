@@ -12,6 +12,10 @@ llamativas, MUY explicativas, easter-eggs y recompensa por explorar — **sin ro
 5. Actualiza este doc con cualquier lección nueva.
 
 ## ⚠️ Lecciones / gotchas (errores ya cometidos — no repetir)
+- **Un gesto interactivo tiene UN dueño de audio.** Un 6·7 y los nodos mezclaban su sonido local con listeners globales. Excluye esas zonas del click global y verifica el gesto REAL contra la mezcla directa: debe invocar una sola ruta y crear la misma huella de osciladores que el prototipo, no “cero osciladores” ni una muestra paralela.
+- **«Vivo sin tocar» necesita tres guardas juntas:** cadencia acotada, cap de elementos y un `clear()` idempotente invocado por Calma/Escape/`visibilitychange`/`pagehide`. Si falta una, más diversión se convierte en ruido o timers huérfanos. El estado `prefers-reduced-motion` sigue mandando salvo opt-in explícito.
+- **En una interfaz espacial, usa primero la dimensión desperdiciada.** Pasar el detalle inferior del mapa al lateral izquierdo liberó toda la altura del lienzo sin reescribir pan/zoom/hit-test; dibujo y hit-test deben compartir radios cuando crecen los nodos.
+- **Aprobar metadatos no equivale a gobernar los bytes.** Un catálogo moderado que publica una URL externa mutable sigue pudiendo cambiar después de la revisión. Copia el archivo revisado a Storage privado, enlázalo por `file_id` inmutable y sirve cada lectura tras volver a comprobar `approved/safe/verified`; retirar la fila debe convertir la misma URL en 404.
 - **`mask-image` + `mask-composite` (esquinas rotas)**: frágil entre navegadores; dejó la nota "rara". NO usar para recortes; usar `border-radius` irregular.
 - **`backdrop-filter:blur` en un overlay a pantalla completa** deja BORROSA también la zona que quieres destacar. Para spotlight usa el truco `box-shadow:0 0 0 9999px rgba(0,0,0,.6)` SOBRE el elemento destacado (su interior queda nítido) y backdrop transparente.
 - **Selectores de "señala una zona" (lápiz/corazón)**: incluir TAMBIÉN cabecera y bordes (`h1, .sub, .postit, #gateBar, footer, .heronote, .dec, .alert, .step, .chip, #senalesCard, #comentarios`), no solo `.card/.hero`.
