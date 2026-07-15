@@ -1,3 +1,11 @@
+## v1.73 — 2026-07-15 · Novedades visuales + grabaciones ASMR con procedencia
+- **Tour sobre el producto:** `Ver novedades guiadas` ya no enfoca filas de este changelog. Sus tres pasos revelan y resaltan componentes reales: el estante de grabaciones ASMR, `Voz y aspecto` y el hub de proyectos públicos.
+- **Texto mínimo:** cada paso usa un título y una sola frase breve, revelada en fragmentos durante menos de un segundo. `prefers-reduced-motion` y Calma muestran la frase completa al instante. El foco se limpia al avanzar o salir.
+- **Ocho muestras reales:** teclado, lluvia, fuego, mar, páginas, lápiz, agua y tijeras reproducen preescuchas oficiales de Mixkit durante un máximo de 6,7 s. Cada ficha declara `🎙️ real · Mixkit`; los 32 modelos anteriores declaran `🧪 sintetizado` y quedan en un desplegable separado.
+- **Procedencia y licencia:** título, ID, página y activo exactos viven en `sounds/MIXKIT_SOURCES.md` y viajan con el feedback. No se redistribuyen binarios en el repositorio; la web reproduce el activo oficial dentro del producto y cae a síntesis con aviso si la red falla.
+- **Selector:** el recorrido debe terminar con 0 objetivos dentro de `#changelog`; cada ficha grabada debe tener ID/URL únicos y un clic debe iniciar una sola ruta sonora.
+- **Revertir:** `git revert <commit de v1.73>`.
+
 ## v1.72 — 2026-07-15 · Voz y aspecto fuera del camino principal
 - **Jerarquía:** el ambiguo «⋯ más (voz, identidad nueva)» deja de interrumpir la explicación y el CTA principal. La opción secundaria «✨ Voz y aspecto» sale de la portada y aparece después de la primera tarjeta real y sus datos de estado.
 - **Claridad:** «Escúchalo» pasa a «Oír a MADRE» y el «prototipo» técnico se presenta como «aspecto bioluminiscente», con etiquetas completas ES/EN también al cambiar de estado.

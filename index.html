@@ -191,6 +191,16 @@
   .cmWebSignal{margin:9px 0 0;text-align:center;color:var(--muted);font-size:11px}
   @media(max-width:520px){.cmWebHub{padding:13px 11px}.cmWebHubGrid{grid-template-columns:1fr}.cmWebLink{min-height:52px}}
 
+  /* v1.73 — las novedades se demuestran sobre la interfaz real, no sobre su documentación. */
+  .cmNoveltyTour{position:fixed;z-index:100090;left:50%;bottom:max(12px,env(safe-area-inset-bottom,12px));display:none;box-sizing:border-box;width:min(520px,calc(100% - 24px));padding:12px;transform:translateX(-50%);grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;border:2px solid var(--accent);border-radius:18px;background:color-mix(in srgb,var(--card) 96%,transparent);color:var(--ink);box-shadow:0 18px 55px rgba(28,20,60,.32);backdrop-filter:blur(12px)}
+  .cmNoveltyTour.on{display:grid}.cmNoveltyCopy{min-width:0}.cmNoveltyKicker{display:block;margin-bottom:3px;color:var(--accent);font-size:10.5px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.cmNoveltyTitle{display:block;font-size:14px;line-height:1.25}.cmNoveltyDetail{display:block;min-height:2.5em;margin-top:4px;color:var(--muted);font-size:11.5px;line-height:1.35}.cmNoveltyActions{display:flex;gap:7px}.cmNoveltyTour .btn{min-height:44px;margin:0;padding:8px 13px}.cmNoveltyTour .btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .cmNoveltySpotlight{outline:4px solid #22d3ee!important;outline-offset:6px;border-radius:14px;scroll-margin-top:84px;scroll-margin-bottom:190px;animation:cmNoveltyGlow 1.65s ease-in-out infinite}
+  @keyframes cmNoveltyGlow{0%,100%{box-shadow:0 0 0 0 rgba(34,211,238,.12)}50%{box-shadow:0 0 0 12px rgba(34,211,238,.16)}}
+  body.cmNoveltyTourOn #cmvFab,body.cmNoveltyTourOn #fabHubActive,body.cmNoveltyTourOn #fabHubBtn,body.cmNoveltyTourOn #fabHubMenu,body.cmNoveltyTourOn #fabHubTip,body.cmNoveltyTourOn #tourLaunch,body.cmNoveltyTourOn #mapFab,body.cmNoveltyTourOn #gxg-cat-root{display:none!important}
+  body.cmNoveltyTourOn::after{content:"";display:block;height:190px}
+  @media(max-width:520px){.cmNoveltyTour{grid-template-columns:1fr;align-items:stretch}.cmNoveltyDetail{min-height:0}.cmNoveltyActions{justify-content:stretch}.cmNoveltyActions .btn:first-child{flex:1}.asmrRealShelf .asmrLabGrid{display:flex;gap:10px;overflow-x:auto;padding:0 0 8px;scroll-snap-type:x mandatory;overscroll-behavior-inline:contain;scrollbar-width:thin}.asmrRealShelf .asmrCand{flex:0 0 min(290px,calc(100vw - 76px));scroll-snap-align:start}}
+  @media(prefers-reduced-motion:reduce){body:not(.cmMotionOn) .cmNoveltySpotlight{animation:none}.cmNoveltyTour{backdrop-filter:none}}
+
   /* ===== v2: variedad visual + señales + animaciones ===== */
   @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
   @keyframes softpulse{0%,100%{box-shadow:0 0 0 0 rgba(59,110,245,0)}50%{box-shadow:0 0 0 7px var(--accent-soft)}}
@@ -723,7 +733,7 @@
       <button class="btn" id="btnStatus" data-en="📨 My messages to MADRE">📨 Mis mensajes a MADRE</button>
       <button class="btn primary cmAskJump" id="cmAskJump" data-en="❓ Ask MADRE">❓ Pregúntale a MADRE</button>
     </div>
-    <button type="button" class="cmLabJump" id="cmLabJump"><span aria-hidden="true">🎧</span><span><b>Entrar al Laboratorio ASMR</b><small>32 prototipos sonoros distintos para juzgar</small></span><span class="cmLabArrow" aria-hidden="true">›</span></button>
+    <button type="button" class="cmLabJump" id="cmLabJump"><span aria-hidden="true">🎧</span><span><b>Entrar al Laboratorio ASMR</b><small>8 grabaciones reales + 32 prototipos para comparar</small></span><span class="cmLabArrow" aria-hidden="true">›</span></button>
     <details class="cmFav" id="cmFavorites">
       <summary><b data-en="💜 My favorite parts of MADRE">💜 Mis favoritas de MADRE</b><small data-en="They come back with you">Vuelven contigo</small></summary>
       <div class="cmFavBody">
@@ -2047,7 +2057,7 @@
     .asmrPlay{width:48px;height:48px;border:0;border-radius:14px;background:linear-gradient(145deg,#8b5cf6,#22d3ee);color:#fff;font-size:23px;cursor:pointer;box-shadow:0 7px 18px rgba(34,211,238,.18)}.asmrPlay:focus-visible,.asmrVote:focus-visible,.asmrLabMore>summary:focus-visible{outline:3px solid #facc15;outline-offset:2px}.asmrCand.playing .asmrPlay{animation:asmrPlayPulse .55s ease-out 1}
     .asmrCandText{min-width:0}.asmrCandName{display:block;font-weight:800;font-size:13px;line-height:1.2}.asmrCandWhy{display:block;color:#cfc9e7;font-size:11px;line-height:1.3;margin-top:3px}.asmrVotes{display:grid;grid-template-columns:max-content 44px 44px;gap:6px;margin-top:7px}.asmrVote,.asmrMatch,.asmrQuickMatch{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.18);border-radius:11px;background:rgba(8,7,18,.24);color:#fff;cursor:pointer;font-size:17px}.asmrVote[data-vote="gusta"]{grid-column:1;grid-row:1}.asmrVote[data-vote="no-gusta"]{grid-column:2;grid-row:1}.asmrVote.on{background:#fff;color:#4c1d95;border-color:#fff}.asmrMatchLabel{display:flex;grid-column:1;grid-row:2;align-items:center;min-height:44px;color:#e8e3ff;font-size:10.5px;font-weight:900}.asmrQuickMatch{padding:7px 10px;font-size:11px;font-weight:900}.asmrQuickMatch[data-match="si"]{grid-column:2;grid-row:2}.asmrQuickMatch[data-match="no"]{grid-column:3;grid-row:2}.asmrQuickMatch.on{border-color:#fff;background:#fff;color:#4c1d95;box-shadow:0 0 0 3px rgba(103,232,249,.2)}.asmrQuickMatch[disabled]{opacity:.55;cursor:wait}.asmrMatch{grid-column:1/-1;grid-row:3;width:100%;padding:7px 9px;font-size:10.5px;font-weight:850;text-align:center}.asmrMatch:hover,.asmrQuickMatch:hover{border-color:#67e8f9;background:rgba(34,211,238,.14)}
     .asmrLabMore{margin-top:12px;border:1px dashed rgba(255,255,255,.25);border-radius:13px;background:rgba(0,0,0,.08)}.asmrLabMore>summary{min-height:48px;display:flex;align-items:center;padding:0 13px;cursor:pointer;font-weight:750;font-size:13px}.asmrLabMore .asmrLabGrid{padding:0 10px 10px}
-    .asmrLabSources{margin:13px 0 0;font-size:11.5px;line-height:1.55;color:#cbc5e7}.asmrLabSources a{color:#8eeeff;font-weight:700}.asmrLabStatus{min-height:18px;margin:10px 0 0;color:#fff;font-size:12px;font-weight:700}
+    .asmrRealShelf{margin:12px 0 0;padding:11px;border:1px solid rgba(103,232,249,.38);border-radius:15px;background:linear-gradient(145deg,rgba(8,145,178,.13),rgba(124,58,237,.12));scroll-margin:88px 0 190px}.asmrRealHead{display:flex;align-items:flex-start;gap:9px;margin:0 0 10px;color:#f8fdff}.asmrRealHead>span{font-size:24px}.asmrRealHead b{display:block;font-size:13px;line-height:1.25}.asmrRealHead small{display:block;margin-top:2px;color:#bdeffc;font-size:10.5px;line-height:1.35}.asmrOrigin{display:inline-flex;align-items:center;min-height:24px;margin-top:5px;padding:2px 7px;border:1px solid rgba(103,232,249,.38);border-radius:999px;background:rgba(8,145,178,.14);color:#a5f3fc;font-size:9.5px;font-weight:850;text-decoration:none}.asmrOrigin.synth{border-color:rgba(196,181,253,.3);background:rgba(124,58,237,.12);color:#ddd6fe}.asmrOrigin:hover{background:rgba(103,232,249,.2);color:#fff}.asmrLabSources{margin:13px 0 0;font-size:11.5px;line-height:1.55;color:#cbc5e7}.asmrLabSources a{color:#8eeeff;font-weight:700}.asmrLabStatus{min-height:18px;margin:10px 0 0;color:#fff;font-size:12px;font-weight:700}
     .asmrLabReto{margin:0 0 10px;padding:9px 11px;border:1px solid rgba(250,204,21,.38);border-radius:12px;background:rgba(250,204,21,.09);color:#fff7c2;font-size:12.5px;line-height:1.45}.asmrLabTools{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:7px;margin:0 0 12px}.asmrLabTool{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 10px;border:1px solid rgba(255,255,255,.2);border-radius:11px;background:rgba(255,255,255,.09);color:#fff;font-size:10.5px;font-weight:850;line-height:1.25;text-align:center;text-decoration:none;cursor:pointer}.asmrLabTool.primary{border-color:rgba(103,232,249,.55);background:linear-gradient(135deg,rgba(109,40,217,.82),rgba(8,145,178,.82))}.asmrLabTool:hover{background:rgba(255,255,255,.16)}
     .cmAsmrMatch{width:min(520px,calc(100% - 24px));max-height:min(86vh,760px);overflow:auto;padding:0;border:0;border-radius:20px;background:#fff;color:#1f2937;box-shadow:0 28px 80px rgba(15,10,28,.38)}.cmAsmrMatch::backdrop{background:rgba(15,10,28,.66);backdrop-filter:blur(5px)}.cmAsmrMatchIn{padding:19px}.cmAsmrMatch h3{margin:0;padding-right:46px;font-size:19px}.cmAsmrMatch p{margin:7px 0 12px;color:#64748b;font-size:12px;line-height:1.45}.cmAsmrClose{float:right;width:44px;height:44px;border:1px solid #ddd6ea;border-radius:12px;background:#fff;color:#312e40;cursor:pointer}.cmAsmrChoices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.cmAsmrChoice{min-height:52px;border:1px solid #ddd6ea;border-radius:12px;background:#fff;color:#352c45;font-weight:850;cursor:pointer}.cmAsmrChoice:hover,.cmAsmrChoice:focus-visible{background:#f3eeff;outline:3px solid rgba(109,40,217,.14)}.cmAsmrNote{box-sizing:border-box;width:100%;min-height:76px;margin-top:9px;padding:10px 11px;border:1px solid #ddd6ea;border-radius:12px;resize:vertical;color:#1f2937}.cmAsmrMatchStatus{min-height:18px;margin:7px 0 0!important;color:#536176!important;font-size:11px!important;font-weight:750}
     .asmrCand{cursor:pointer}.asmrCand:focus-visible{outline:3px solid #facc15;outline-offset:3px}.cmAsmrTargets{display:flex;flex-wrap:wrap;gap:7px;margin:11px 0 0;padding:10px;border:1px solid #ddd6ea;border-radius:12px}.cmAsmrTargets legend{padding:0 5px;font-size:12px;font-weight:850;color:#4338ca}.cmAsmrTargets label{display:flex;align-items:center;gap:5px;min-height:38px;padding:4px 9px;border-radius:99px;background:#f4f0ff;font-size:12px;font-weight:750}.cmAsmrUse{display:block;margin-top:9px;font-size:12px;font-weight:850;color:#4338ca}.cmAsmrUse input{box-sizing:border-box;width:100%;min-height:44px;margin-top:5px;padding:9px 11px;border:1px solid #ddd6ea;border-radius:12px;color:#1f2937}.cmAsmrChoice[disabled]{opacity:.55;cursor:wait}
@@ -2064,17 +2074,20 @@
     <details open>
       <summary>
         <span class="alIcon" aria-hidden="true">🎧</span>
-        <span class="alTitle"><b data-en="ASMR laboratory · choose what comes next">Laboratorio ASMR · elige lo siguiente</b><span data-en="4 featured prototypes + 28 more · 32 genuinely different sound signatures">4 prototipos destacados + 28 más · 32 firmas sonoras realmente distintas</span></span>
+        <span class="alTitle"><b data-en="ASMR laboratory · choose what comes next">Laboratorio ASMR · elige lo siguiente</b><span data-en="8 real recordings + 32 prototypes · each source is visible">8 grabaciones reales + 32 prototipos · cada origen está visible</span></span>
         <span class="alCaret" aria-hidden="true">▶</span>
       </summary>
       <div class="asmrLabBody">
-        <p class="asmrLabLead" data-en="I am not pretending these are final samples: they are synthesized prototypes. Play them, vote, and real use will decide which ones deserve licensed or recorded sound.">No finjo que ya sean muestras finales: son <b>prototipos sintetizados</b>. Pruébalos, vota y el uso real decidirá cuáles merecen sonido grabado o licenciado.</p>
+        <p class="asmrLabLead" data-en="Compare eight real Mixkit recordings with the synthesized prototypes. Every card says what it is, and the real sample falls back to synthesis only when the network fails.">Compara ocho <b>grabaciones reales de Mixkit</b> con los prototipos sintetizados. Cada ficha dice qué es; una grabación solo cae a síntesis si falla la red.</p>
         <p class="asmrLabReto" data-en="Blind 6.7-second challenge: listen without looking at the name, then vote for what you actually felt.">🎯 Reto ciego de 6,7 s: escucha sin mirar el nombre y vota por lo que sentiste de verdad.</p>
         <div class="asmrLabTools"><button class="asmrLabTool primary" id="cm67Judge" type="button" data-en="🔊 Test and correct the current 6·7 sound">🔊 Probar y corregir el sonido 6·7</button><a class="asmrLabTool" href="media.html?preset=six-seven#proponer" data-en="📤 Upload an alternative 6·7 sound">📤 Subir otro sonido 6·7</a><a class="asmrLabTool" href="media.html" data-en="🗂️ Open multimedia gallery">🗂️ Abrir galería multimedia</a></div>
-        <div class="asmrLabGrid" id="asmrLabFeatured" aria-label="Candidatos ASMR destacados"></div>
+        <section class="asmrRealShelf" id="asmrRealShelf" aria-labelledby="asmrRealTitle">
+          <div class="asmrRealHead"><span aria-hidden="true">🎙️</span><div><b id="asmrRealTitle" data-en="Real recordings — tap the whole card">Grabaciones reales — toca toda la ficha</b><small data-en="Curated from Mixkit · exact title and source on every sample">Curadas de Mixkit · título y procedencia exactos en cada muestra</small></div></div>
+          <div class="asmrLabGrid" id="asmrLabFeatured" aria-label="Grabaciones ASMR reales destacadas"></div>
+        </section>
         <details class="asmrLabMore">
-          <summary data-en="Show 28 more candidates">Ver 28 candidatos más</summary>
-          <div class="asmrLabGrid" id="asmrLabMore" aria-label="Más candidatos ASMR"></div>
+          <summary data-en="Show 32 synthesized prototypes">Ver 32 prototipos sintetizados</summary>
+          <div class="asmrLabGrid" id="asmrLabMore" aria-label="Prototipos ASMR sintetizados"></div>
         </details>
         <p class="asmrLabSources"><b data-en="Where sounds can come from:">De dónde pueden salir los sonidos:</b>
           <a href="https://pixabay.com/sound-effects/search/asmr/" target="_blank" rel="noopener">Pixabay ASMR</a> ·
@@ -2085,7 +2098,7 @@
           <a href="https://www.myinstants.com/es/search/?name=asmr" target="_blank" rel="noopener">MyInstants ASMR</a> ·
           <a href="https://www.myinstants.com/es/search/?name=mlg" target="_blank" rel="noopener">MyInstants MLG</a>
           <span data-en="(Tony-authorized for reuse in MADRE; keep the original URL as provenance).">(autorizado por Tony para reutilización en MADRE; se conserva la URL original como procedencia).</span>
-          <span data-en="Current exact credits:">Créditos exactos actuales:</span> <a href="sounds/CREDITS.txt" target="_blank" rel="noopener">Kenney + Breviceps/CC0</a>.
+          <span data-en="Current exact credits:">Créditos exactos actuales:</span> <a href="sounds/CREDITS.txt" target="_blank" rel="noopener">Kenney + Breviceps/CC0</a> · <a href="sounds/MIXKIT_SOURCES.md" target="_blank" rel="noopener">8 fichas Mixkit</a>.
         </p>
         <p class="asmrLabStatus" id="asmrLabStatus" role="status" aria-live="polite"></p>
       </div>
@@ -4614,6 +4627,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-15',destacada:true,areas:['claridad','novedades','tour','asmr','sonido','feedback','accesibilidad'],titulo:'🎙️ v1.73 — Las novedades se ven y los sonidos dicen de dónde salen',detalle:'«Ver novedades guiadas» deja de pasear por párrafos del changelog: ahora enfoca tres componentes reales —las grabaciones ASMR, Voz y aspecto y el hub de proyectos— mientras una frase breve aparece por fragmentos; movimiento reducido la muestra al instante. El Laboratorio separa ocho grabaciones reales de Mixkit de sus 32 prototipos sintetizados, enseña la procedencia en cada ficha, limita la escucha a 6,7 segundos, envía ese origen con el feedback y conserva un fallback sintetizado explícito si la red falla.'},
     {fecha:'2026-07-15',destacada:true,areas:['claridad','onboarding','voz','identidad','accesibilidad'],titulo:'✨ v1.72 — La voz y el aspecto dejan de cortar la presentación',detalle:'El antiguo «⋯ más (voz, identidad nueva)» mezclaba controles experimentales con la promesa principal y abría una caja casi vacía. Ahora «Voz y aspecto» sale de la portada y vive después de la primera tarjeta real y sus datos de estado; se presenta como una opción secundaria compacta, elimina la jerga de prototipo y ofrece controles visibles de al menos 44 px. Voz, aspecto bioluminiscente, persistencia e inglés conservan su comportamiento.'},
     {fecha:'2026-07-15',destacada:true,areas:['autonomia','feedback','cuaderno','accesibilidad','seguridad'],titulo:'👀 v1.71 — Si MADRE necesita tu mano, ya no puede enterrarlo',detalle:'Regla de raíz: si MADRE puede hacerlo, lo hace sin pedirte que recuerdes una skill. Solo identidad, banco, CAPTCHA/2FA, gusto personal o una acción física inevitable pueden llegar a ti; esa última exige demostrar vías automáticas agotadas. Una excepción real enciende arriba un aviso táctil de 44 px, abre su tarjeta en «MADRE te dice» y solo desaparece cuando «Lo he visto» se envía de verdad. El acuse prueba ese navegador, no identidad legal, y nunca autoriza pagos, borrados ni acciones irreversibles.'},
     {fecha:'2026-07-15',destacada:true,areas:['comentarios','claude','referido','transparencia'],titulo:'🧰 v1.70 — El hilo que admite a Claude y deja el pase sin letra pequeña',detalle:'Comentarios fija la frase «Se nota que esto lo has hecho con Claude» y MADRE contesta sin fingir: Claude le presta manos, pero las decisiones y los fallos quedan a la vista. La respuesta enlaza el pase de Tony —7 días gratis de Claude Pro con Claude Code y Cowork—, declara que es un referido, que Tony puede recibir créditos de uso si la persona continúa de pago y que los pases son limitados y caducan; también avisa del método de pago y la conversión automática si no se cancela. Aparece tanto en la sección como en el panel lateral.'},
@@ -4831,7 +4845,7 @@ window.__cmCorpus = {
     }catch(e){}
   }
 
-  /* v1.56 — Novedades Interactivas (Tour del changelog) */
+  /* v1.73 — Novedades Interactivas: enseña componentes reales; el changelog solo lanza el tour. */
   (function(){ try {
     var KEY = "cm_last_version_seen";
     var MAX_FEATURED = 3;
@@ -4840,6 +4854,12 @@ window.__cmCorpus = {
     var list = (window.__cmCambiosDestacados||allList.slice(0,MAX_FEATURED)).slice(0,MAX_FEATURED);
     if(!allList.length||!list.length) return;
     var currentVer = allList[0].titulo;
+    var TOUR_DEMOS=[
+      {id:"asmr-real",selector:"#asmrRealShelf",focusSelector:'#asmrLabFeatured .asmrCand[data-kind="recorded"]',title:"🎙️ Sonidos que sí son lo que dicen",titleEn:"🎙️ Sounds that match their names",detail:"Ocho grabaciones reales, con origen visible y feedback propio.",detailEn:"Eight real recordings, with visible provenance and their own feedback.",block:"center",prepare:function(target){var card=target.closest("#asmrLabCard"),det=card&&card.querySelector("details");if(card){card.classList.remove("pdHidden");card.dataset.tourReveal="1";}if(det)det.open=true;}},
+      {id:"voice-look",selector:"#cmExperienceExtras",title:"✨ Voz y aspecto, sin cortar la entrada",titleEn:"✨ Voice and appearance, without blocking the intro",detail:"La opción secundaria vive aquí; la promesa principal queda limpia.",detailEn:"The secondary option lives here, keeping the main promise clean.",block:"center",prepare:function(target){if(target.tagName==="DETAILS")target.open=true;}},
+      {id:"project-hub",selector:"#cmWebHub",title:"🌐 El Cuaderno ya abre el resto del mundo",titleEn:"🌐 The Notebook now opens the rest of the world",detail:"Cuatro proyectos públicos, juntos y a un toque.",detailEn:"Four public projects, together and one tap away.",block:"center",prepare:function(){}}
+    ].filter(function(step){return !!document.querySelector(step.selector);});
+    function tourEnglish(){return document.documentElement.lang==="en"||(document.getElementById("langEn")&&document.getElementById("langEn").getAttribute("aria-pressed")==="true");}
     
     var newCount = 0;
     if(saved && saved !== currentVer) {
@@ -4848,8 +4868,8 @@ window.__cmCorpus = {
         newCount++;
       }
     }
-    var shownCount=Math.min(MAX_FEATURED,newCount||MAX_FEATURED,list.length);
-    window.__cmNoveltyState={totalNew:newCount,shown:shownCount,max:MAX_FEATURED,tourActive:false};
+    var shownCount=Math.min(MAX_FEATURED,TOUR_DEMOS.length);
+    window.__cmNoveltyState={totalNew:newCount,shown:shownCount,max:MAX_FEATURED,tourActive:false,targets:TOUR_DEMOS.map(function(x){return x.focusSelector||x.selector;})};
     
     // Si no había guardado, es primera visita -> guardamos y no saludamos
     if(!saved) {
@@ -4859,10 +4879,10 @@ window.__cmCorpus = {
       var toast = document.createElement("div");
       toast.id = "toastNovedades";
       toast.style.cssText = "position:fixed; bottom:max(20px, env(safe-area-inset-bottom, 20px)); right:20px; background:var(--card); color:var(--ink); border:2px solid var(--accent); padding:16px; border-radius:12px; z-index:9999; box-shadow:0 10px 25px rgba(0,0,0,0.2); font-size:14px; max-width: 320px; transform:translateY(150%); transition:transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);";
-      toast.innerHTML = '<div style="margin-bottom:12px;font-weight:600;line-height:1.4">👋 Hay novedades. Te enseño '+(shownCount===1?'la última destacada':'las '+shownCount+' destacadas')+', no todo el historial.</div>'+
+      toast.innerHTML = '<div style="margin-bottom:12px;font-weight:600;line-height:1.4">👋 Hay novedades. Te enseño '+(shownCount===1?'una mejora visual':'las '+shownCount+' mejoras visuales destacadas')+', no el historial.</div>'+
         '<div style="display:flex;gap:8px">'+
-          '<button id="toastNovYes" class="btn primary" style="min-height:36px;padding:6px 12px;flex:1;margin:0">Sí, guíame</button>'+
-          '<button id="toastNovNo" class="btn" style="min-height:36px;padding:6px 12px;flex:1;margin:0">Ahora no</button>'+
+          '<button id="toastNovYes" class="btn primary" style="min-height:44px;padding:8px 12px;flex:1;margin:0">Sí, guíame</button>'+
+          '<button id="toastNovNo" class="btn" style="min-height:44px;padding:8px 12px;flex:1;margin:0">Ahora no</button>'+
         '</div>';
       document.body.appendChild(toast);
       
@@ -4888,7 +4908,7 @@ window.__cmCorpus = {
        btnRow.innerHTML = '<button id="btnTourNovedades" class="cardFoldBtn" style="margin:0;width:auto;display:inline-flex">✨ Ver novedades guiadas</button>';
        chLog.parentNode.insertBefore(btnRow, chLog);
        document.getElementById("btnTourNovedades").onclick = function(){
-           var count = (newCount > 0) ? shownCount : Math.min(MAX_FEATURED,list.length);
+           var count = (newCount > 0) ? shownCount : Math.min(MAX_FEATURED,TOUR_DEMOS.length);
            iniciarTourNovedades(count, currentVer);
        };
     }
@@ -4899,15 +4919,15 @@ window.__cmCorpus = {
     var tourCount = 0;
     var tourTargetVer = null;
     var tourFloat = document.createElement("div");
-    tourFloat.style.cssText = "display:none; position:fixed; bottom:max(20px, env(safe-area-inset-bottom, 20px)); left:50%; transform:translateX(-50%); background:var(--card); color:var(--ink); border:2px solid var(--accent); padding:12px 16px; border-radius:12px; z-index:9999; box-shadow:0 10px 30px rgba(0,0,0,0.25); align-items:center; gap:16px; flex-wrap:wrap; justify-content:center; width:calc(100% - 40px); max-width:350px;";
-    tourFloat.innerHTML = '<span id="tourNovText" style="font-weight:700;font-size:14.5px"></span>'+
-      '<div style="display:flex;gap:8px;flex-shrink:0">'+
-        '<button id="tourNovNext" class="btn primary" style="min-height:36px;padding:6px 16px;margin:0">Siguiente</button>'+
-        '<button id="tourNovExit" class="btn" style="min-height:36px;padding:6px 12px;margin:0">Salir</button>'+
+    tourFloat.id="cmNoveltyTour";tourFloat.className="cmNoveltyTour";tourFloat.setAttribute("role","dialog");tourFloat.setAttribute("aria-label","Recorrido por novedades visuales");
+    tourFloat.innerHTML = '<div class="cmNoveltyCopy"><span id="tourNovText" class="cmNoveltyKicker"></span><strong id="tourNovTitle" class="cmNoveltyTitle"></strong><span id="tourNovDetail" class="cmNoveltyDetail" aria-live="polite"></span></div>'+
+      '<div class="cmNoveltyActions">'+
+        '<button id="tourNovNext" class="btn primary" data-en="Next">Siguiente</button>'+
+        '<button id="tourNovExit" class="btn" data-en="Exit">Salir</button>'+
       '</div>';
     document.body.appendChild(tourFloat);
     
-    var lastHl = null;
+    var lastHl = null,copyTimer=0;
     
     document.getElementById("tourNovExit").onclick = endTour;
     document.getElementById("tourNovNext").onclick = function(){
@@ -4918,55 +4938,51 @@ window.__cmCorpus = {
     function endTour() {
         tourActive = false;
         window.__cmNoveltyState.tourActive=false;
-        tourFloat.style.display = "none";
-        if(lastHl) { lastHl.style.background = ""; lastHl.style.boxShadow = ""; }
+        window.__cmNoveltyState.currentTarget=null;
+        clearInterval(copyTimer);tourFloat.classList.remove("on");document.body.classList.remove("cmNoveltyTourOn");
+        if(lastHl) { lastHl.classList.remove("cmNoveltySpotlight");lastHl=null; }
         try{ localStorage.setItem(KEY, tourTargetVer); }catch(e){}
     }
     
     function iniciarTourNovedades(count, ver) {
-        count=Math.max(1,Math.min(MAX_FEATURED,count||MAX_FEATURED,list.length));
+        if(!TOUR_DEMOS.length)return;
+        count=Math.max(1,Math.min(MAX_FEATURED,count||MAX_FEATURED,TOUR_DEMOS.length));
         tourCount = count;
         tourIdx = 0;
         tourTargetVer = ver;
         tourActive = true;
         window.__cmNoveltyState.tourActive=true;
         window.__cmNoveltyState.shown=count;
-        tourFloat.style.display = "flex";
-        
-        // Reusa el revelado progresivo oficial: abrir <details> no sirve si la tarjeta sigue pdHidden.
-        var pCard = document.getElementById("evolucionCard");
-        if(pCard&&pCard.offsetParent===null){
-          var revealBtns=document.querySelectorAll(".pdReveal");
-          for(var ri=0;ri<revealBtns.length&&pCard.offsetParent===null;ri++) revealBtns[ri].click();
-        }
-        var pDetails=pCard&&pCard.querySelector("details");
-        if(pDetails) pDetails.open = true;
-        if(window.__cmSetCambiosExpanded) window.__cmSetCambiosExpanded(false);
-        
+        tourFloat.classList.add("on");document.body.classList.add("cmNoveltyTourOn");
         showTourStep();
+    }
+
+    function revealBrief(el,text){
+        clearInterval(copyTimer);el.textContent="";
+        var reduced=(document.body.classList.contains("cmMotionOff")||(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches&&!document.body.classList.contains("cmMotionOn")));
+        if(reduced){el.textContent=text;return;}
+        var words=text.split(/\s+/),at=0;
+        copyTimer=setInterval(function(){var end=Math.min(words.length,at+2);el.textContent+=(at?" ":"")+words.slice(at,end).join(" ");at=end;if(at>=words.length)clearInterval(copyTimer);},95);
     }
     
     function showTourStep() {
         if(tourIdx >= tourCount) { endTour(); return; }
-        document.getElementById("tourNovText").textContent = "Novedad " + (tourIdx+1) + " de " + tourCount;
+        var step=TOUR_DEMOS[tourIdx],isEn=tourEnglish();
+        document.getElementById("tourNovText").textContent = (isEn?"Update ":"Novedad ") + (tourIdx+1) + " / " + tourCount;
+        document.getElementById("tourNovTitle").textContent=isEn?step.titleEn:step.title;
+        revealBrief(document.getElementById("tourNovDetail"),isEn?step.detailEn:step.detail);
         var btnNext = document.getElementById("tourNovNext");
-        btnNext.textContent = (tourIdx === tourCount - 1) ? "Terminar" : "Siguiente";
+        btnNext.textContent = (tourIdx === tourCount - 1) ? (isEn?"Finish":"Terminar") : (isEn?"Next":"Siguiente");
         
-        if(lastHl) { lastHl.style.background = ""; lastHl.style.boxShadow = ""; }
-        
-        var items = document.querySelectorAll(".cm-changelog-item");
-        if(items && items[tourIdx]) {
-            var item = items[tourIdx];
-            lastHl = item;
-            
-            // Highlight
-            item.style.background = "var(--accent-soft)";
-            item.style.boxShadow = "0 0 0 4px var(--accent-soft)";
-            
-            // Scroll
-            var prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            item.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "center" });
-        }
+        if(lastHl) lastHl.classList.remove("cmNoveltySpotlight");
+        var item=document.querySelector(step.selector);
+        if(!item){tourIdx++;showTourStep();return;}
+        try{step.prepare(item);}catch(e){}
+        if(step.focusSelector)item=document.querySelector(step.focusSelector)||item;
+        lastHl=item;item.classList.add("cmNoveltySpotlight");window.__cmNoveltyState.currentTarget=step.focusSelector||step.selector;
+        var prefersReduced=document.body.classList.contains("cmMotionOff")||(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches&&!document.body.classList.contains("cmMotionOn"));
+        item.scrollIntoView({behavior:prefersReduced?"auto":"smooth",block:step.block||"center"});
+        setTimeout(function(){try{var r=item.getBoundingClientRect(),p=tourFloat.getBoundingClientRect(),room=p.top-18;if(r.height<room&&r.bottom>room)window.scrollBy({top:r.bottom-room,behavior:prefersReduced?"auto":"smooth"});}catch(e){}},prefersReduced?0:520);
     }
     
     // Expone para que renderCambios pueda reactivar el UI si fuera necesario
@@ -7798,10 +7814,20 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
 </script>
 
 <script>
-/* v1.64 — 32 candidatos ASMR, como experimento. Usa el motor real del Cuaderno y el inbox
-   privado de feedback ya existente; no crea un backend paralelo ni afirma que un prototipo ganó. */
+/* v1.73 — 8 grabaciones reales de Mixkit delante de los 32 prototipos. Se distinguen por
+   construcción y conservan título, id y página de origen; la síntesis queda como fallback. */
 (function(){ try{
-  var LAB=[
+  var RECORDED=[
+    {k:"mixkit-teclado",e:"⌨️",n:"Teclado escribiendo",en:"Keyboard typing",w:"Pulsaciones reales, secas y continuas",wen:"Real, dry, continuous key presses",m:"teclado",kind:"recorded",src:"https://assets.mixkit.co/active_storage/sfx/1386/1386-preview.mp3",sourceId:"1386",sourceTitle:"Keyboard typing",sourcePage:"https://mixkit.co/free-sound-effects/keyboard/"},
+    {k:"mixkit-lluvia",e:"🌧️",n:"Lluvia suave",en:"Light rain loop",w:"Gotas reales, sin tormenta encima",wen:"Real drops without a storm over them",m:"lluvia",kind:"recorded",src:"https://assets.mixkit.co/active_storage/sfx/2393/2393-preview.mp3",sourceId:"2393",sourceTitle:"Light rain loop",sourcePage:"https://mixkit.co/free-sound-effects/rain/"},
+    {k:"mixkit-fuego",e:"🔥",n:"Fuego de campamento",en:"Campfire crackles",w:"Crepitar real, cálido e irregular",wen:"Real, warm, irregular crackles",m:"fuego",kind:"recorded",src:"https://assets.mixkit.co/active_storage/sfx/1330/1330-preview.mp3",sourceId:"1330",sourceTitle:"Campfire crackles",sourcePage:"https://mixkit.co/free-sound-effects/fire/"},
+    {k:"mixkit-oceano",e:"🌊",n:"Olas cercanas",en:"Close sea waves loop",w:"Oleaje real que rompe cerca",wen:"Real waves breaking nearby",m:"oceano",kind:"recorded",src:"https://assets.mixkit.co/active_storage/sfx/1195/1195-preview.mp3",sourceId:"1195",sourceTitle:"Close sea waves loop",sourcePage:"https://mixkit.co/free-sound-effects/sea/"},
+    {k:"mixkit-paginas",e:"📖",n:"Pasar una página",en:"Single book paging",w:"Una hoja real con pliegue y caída",wen:"One real sheet folding and settling",m:"paginas",kind:"recorded",src:"https://assets.mixkit.co/active_storage/sfx/1101/1101-preview.mp3",sourceId:"1101",sourceTitle:"Single book paging",sourcePage:"https://mixkit.co/free-sound-effects/paper/"},
+    {k:"mixkit-lapiz",e:"✏️",n:"Lápiz escribiendo",en:"Writing pencil",w:"Grafito real rozando papel",wen:"Real graphite rubbing on paper",m:"escritura",kind:"recorded",src:"https://assets.mixkit.co/active_storage/sfx/3194/3194-preview.mp3",sourceId:"3194",sourceTitle:"Writing pencil",sourcePage:"https://mixkit.co/free-sound-effects/write/"},
+    {k:"mixkit-agua",e:"💧",n:"Agua en un vaso",en:"Pouring water in a glass",w:"Chorro y llenado reales",wen:"Real stream and glass filling",m:"agua",kind:"recorded",src:"https://assets.mixkit.co/active_storage/sfx/2826/2826-preview.mp3",sourceId:"2826",sourceTitle:"Pouring water in a glass",sourcePage:"https://mixkit.co/free-sound-effects/water/"},
+    {k:"mixkit-tijeras",e:"✂️",n:"Tijeras cortando papel",en:"Scissors cutting paper",w:"Cortes reales, breves y reconocibles",wen:"Real, short, recognisable snips",m:"tijeras",kind:"recorded",src:"https://assets.mixkit.co/active_storage/sfx/2378/2378-preview.mp3",sourceId:"2378",sourceTitle:"Scissors cutting paper",sourcePage:"https://mixkit.co/free-sound-effects/scissors/"}
+  ];
+  var SYNTH=[
     {k:"susurro",e:"🫢",n:"Susurro oído a oído",en:"Ear-to-ear whisper",w:"Suave y cercano",wen:"Soft and close",m:"arena"},
     {k:"cepillo-pelo",e:"💇",n:"Cepillado de pelo",en:"Hair brushing",w:"Fibras lentas",wen:"Slow fibres",m:"pana"},
     {k:"cepillo-micro",e:"🎙️",n:"Cepillo de micrófono",en:"Microphone brushing",w:"Barrido de lado a lado",wen:"Side-to-side sweep",m:"hojas"},
@@ -7835,20 +7861,43 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
     {k:"vinilo",e:"💿",n:"Vinilo con polvo",en:"Dusty vinyl",w:"Hum grave y chasquidos",wen:"Low hum and dust pops",m:"grava"},
     {k:"latido",e:"🫀",n:"Latido doble",en:"Double heartbeat",w:"Lub-dub suave y cercano",wen:"Soft, close lub-dub",m:"slime"}
   ];
+  var LAB=RECORDED.concat(SYNTH);
   var feat=document.getElementById("asmrLabFeatured"), more=document.getElementById("asmrLabMore"), status=document.getElementById("asmrLabStatus");
   if(!feat||!more) return;
   var VK="cm_asmr_lab_votes_v1", MK="cm_asmr_lab_matches_v1", votes={}, matches={}; try{votes=JSON.parse(localStorage.getItem(VK)||"{}");}catch(e){votes={};} try{matches=JSON.parse(localStorage.getItem(MK)||"{}");}catch(e){matches={};}
   function save(){ try{localStorage.setItem(VK,JSON.stringify(votes));}catch(e){} }
   function saveMatches(){ try{localStorage.setItem(MK,JSON.stringify(matches));}catch(e){} }
-  function preview(c,tile){
+  var activeRecording=null,activeStopTimer=0,lastPlayback={key:null,mode:null,source:null,fallback:false};
+  function stopRecording(){ clearTimeout(activeStopTimer);activeStopTimer=0;if(activeRecording){try{activeRecording.pause();activeRecording.currentTime=0;}catch(e){}activeRecording=null;} }
+  function playSynth(c,key){
     if(!window.__asmr) return false;
-    var own=typeof window.__asmr.labPreview==="function";
-    if(own) window.__asmr.labPreview(c.k,"hit"); else window.__asmr.demo(c.m);
-    setTimeout(function(){try{if(own)window.__asmr.labPreview(c.k,"brush");else window.__asmr.brushAt(c.m,.58);}catch(e){}},85);
-    tile.classList.remove("playing"); void tile.offsetWidth; tile.classList.add("playing"); setTimeout(function(){tile.classList.remove("playing");},650);
-    if(status) status.textContent="▶ Prototipo: "+c.n+". Tú decides si merece una muestra final.";
+    var own=typeof window.__asmr.labPreview==="function",profile=key||c.k;
+    if(own) window.__asmr.labPreview(profile,"hit"); else window.__asmr.demo(c.m);
+    setTimeout(function(){try{if(own)window.__asmr.labPreview(profile,"brush");else window.__asmr.brushAt(c.m,.58);}catch(e){}},85);
+    lastPlayback={key:c.k,mode:"synth",source:profile,fallback:c.kind==="recorded"};
     return true;
   }
+  function playRecorded(c){
+    stopRecording();
+    var audio;try{audio=new Audio(c.src);}catch(e){return playSynth(c,c.m);}
+    var settled=false;activeRecording=audio;audio.preload="auto";audio.volume=.58;
+    function fallback(){if(settled)return;settled=true;if(activeRecording===audio)stopRecording();playSynth(c,c.m);if(status)status.textContent="⚠ No cargó Mixkit: oyes el respaldo sintetizado de "+c.n+".";}
+    audio.addEventListener("error",fallback,{once:true});
+    audio.addEventListener("ended",function(){if(activeRecording===audio){clearTimeout(activeStopTimer);activeRecording=null;}},{once:true});
+    try{
+      var started=audio.play();
+      if(started&&typeof started.then==="function") started.then(function(){if(settled)return;settled=true;lastPlayback={key:c.k,mode:"recorded",source:c.sourceId,fallback:false};if(status)status.textContent="🎙️ Grabación real de Mixkit: "+c.n+" · máximo 6,7 s.";activeStopTimer=setTimeout(function(){if(activeRecording===audio)stopRecording();},6700);}).catch(fallback);
+      else{settled=true;lastPlayback={key:c.k,mode:"recorded",source:c.sourceId,fallback:false};activeStopTimer=setTimeout(function(){if(activeRecording===audio)stopRecording();},6700);}
+    }catch(e){fallback();}
+    return true;
+  }
+  function preview(c,tile){
+    var ok=c.kind==="recorded"?playRecorded(c):playSynth(c,c.k);if(!ok)return false;
+    if(tile){tile.classList.remove("playing");void tile.offsetWidth;tile.classList.add("playing");setTimeout(function(){tile.classList.remove("playing");},650);}
+    if(status&&c.kind!=="recorded") status.textContent="🧪 Prototipo sintetizado: "+c.n+". Tú decides si se parece.";
+    return true;
+  }
+  function soundMeta(c,version,channel){return c&&c.kind==="recorded"?("\nmuestra: grabacion-real\norigen_sonoro: mixkit\nsource_id: "+c.sourceId+"\nsource_title: "+c.sourceTitle+"\nsource_url: "+c.sourcePage+"\ncanal: "+channel):("\nprototipo: sintetizado-"+version+"\norigen_sonoro: laboratorio-cuaderno\ncanal: "+channel);}
   function paintVote(tile,key){ Array.prototype.forEach.call(tile.querySelectorAll(".asmrVote"),function(b){ var on=votes[key]===b.dataset.vote; b.classList.toggle("on",on); b.setAttribute("aria-pressed",String(on)); }); }
   function paintMatch(tile,key){ Array.prototype.forEach.call(tile.querySelectorAll(".asmrQuickMatch"),function(b){ var on=matches[key]===b.dataset.match; b.classList.toggle("on",on); b.setAttribute("aria-pressed",String(on)); }); }
   var matchDialog=null,matchCandidate=null,matchSending=false;
@@ -7864,7 +7913,7 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
   function openMatch(c){ matchCandidate=c; var d=ensureMatchDialog(),title=d.querySelector("#cmAsmrMatchTitle"),note=d.querySelector("#cmAsmrMatchNote"),use=d.querySelector("#cmAsmrUse"),out=d.querySelector("#cmAsmrMatchStatus"); title.textContent="¿«"+c.n+"» coincide de verdad?"; note.value=""; use.value=""; Array.prototype.forEach.call(d.querySelectorAll('[name="cmAsmrTarget"]'),function(x){x.checked=true;}); out.textContent=""; setMatchBusy(false); if(!d.open)d.showModal(); }
   function sendMatch(result){
     if(!matchCandidate||matchSending) return; var d=ensureMatchDialog(),note=d.querySelector("#cmAsmrMatchNote").value.trim(),use=d.querySelector("#cmAsmrUse").value.trim(),out=d.querySelector("#cmAsmrMatchStatus"),targets=[]; Array.prototype.forEach.call(d.querySelectorAll('[name="cmAsmrTarget"]:checked'),function(x){targets.push(x.value);}); if(!targets.length)targets.push("general"); out.textContent="Enviando juicio…"; setMatchBusy(true);
-    var payload={card:"🎧 Laboratorio ASMR",section:matchCandidate.n,tipo:"asmr-coincidencia-"+result,texto:"ASMR-COINCIDENCIA\nid: "+matchCandidate.k+"\nresultado: "+result+"\ncoincide_con: "+targets.join(",")+"\nuso_sugerido: "+(use||"sin sugerencia")+"\nnota: "+(note||"sin nota")+"\nprototipo: sintetizado-v3\norigen: laboratorio-cuaderno"};
+    var payload={card:"🎧 Laboratorio ASMR",section:matchCandidate.n,tipo:"asmr-coincidencia-"+result,texto:"ASMR-COINCIDENCIA\nid: "+matchCandidate.k+"\nresultado: "+result+"\ncoincide_con: "+targets.join(",")+"\nuso_sugerido: "+(use||"sin sugerencia")+"\nnota: "+(note||"sin nota")+soundMeta(matchCandidate,"v3","laboratorio-cuaderno")};
     try{ if(typeof window.__fb==="function") Promise.resolve(window.__fb(payload)).then(function(r){setMatchBusy(false);out.textContent=r==="sent"?"✓ MADRE recibió tu juicio.":"Guardado aquí; el envío queda pendiente.";if(r==="sent")setTimeout(function(){if(d.open)d.close();},650);},function(){setMatchBusy(false);out.textContent="No llegó. Tu nota sigue aquí para reintentar.";}); else{setMatchBusy(false);out.textContent="El canal todavía no está disponible.";} }catch(e){setMatchBusy(false);out.textContent="No llegó. Tu nota sigue aquí para reintentar.";}
   }
   function vote(c,val,tile){
@@ -7874,7 +7923,7 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
       delete votes[c.k]; save(); paintVote(tile,c.k);
       var removed=en?"↩ Vote removed. You can choose again.":"↩ Voto quitado. Puedes volver a elegir.";
       if(status) status.textContent=removed+(en?" Saved here · sending correction…":" Guardado aquí · enviando corrección…");
-      try{ if(typeof window.__fb==="function") Promise.resolve(window.__fb({card:"🎧 Laboratorio ASMR",section:c.n,tipo:"asmr-candidato-retirado",texto:"ASMR-CANDIDATO\nid: "+c.k+"\nvoto_anterior: "+val+"\nestado: retirado\nprototipo: sintetizado-v2\norigen: laboratorio-cuaderno"})).then(function(result){if(status&&!votes[c.k])status.textContent=removed+(result==="sent"?(en?" MADRE received the correction.":" MADRE recibió la corrección."):(en?" Saved here; delivery is pending.":" Guardado aquí; el envío queda pendiente."));},function(){}); }catch(e){}
+      try{ if(typeof window.__fb==="function") Promise.resolve(window.__fb({card:"🎧 Laboratorio ASMR",section:c.n,tipo:"asmr-candidato-retirado",texto:"ASMR-CANDIDATO\nid: "+c.k+"\nvoto_anterior: "+val+"\nestado: retirado"+soundMeta(c,"v2","laboratorio-cuaderno")})).then(function(result){if(status&&!votes[c.k])status.textContent=removed+(result==="sent"?(en?" MADRE received the correction.":" MADRE recibió la corrección."):(en?" Saved here; delivery is pending.":" Guardado aquí; el envío queda pendiente."));},function(){}); }catch(e){}
       return;
     }
     votes[c.k]=val; save(); paintVote(tile,c.k);
@@ -7882,7 +7931,7 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
     if(status) status.textContent=prefix+(en?" Saved here · sending signal…":" Preferencia guardada aquí · enviando señal…");
     try{
       if(typeof window.__fb==="function"){
-        Promise.resolve(window.__fb({card:"🎧 Laboratorio ASMR",section:c.n,tipo:"asmr-candidato-"+val,texto:"ASMR-CANDIDATO\nid: "+c.k+"\nvoto: "+val+"\nvoto_anterior: "+(previous||"ninguno")+"\nprototipo: sintetizado-v2\norigen: laboratorio-cuaderno"})).then(function(result){
+        Promise.resolve(window.__fb({card:"🎧 Laboratorio ASMR",section:c.n,tipo:"asmr-candidato-"+val,texto:"ASMR-CANDIDATO\nid: "+c.k+"\nvoto: "+val+"\nvoto_anterior: "+(previous||"ninguno")+soundMeta(c,"v2","laboratorio-cuaderno")})).then(function(result){
           if(status&&votes[c.k]===val) status.textContent=prefix+(result==="sent"?(en?" MADRE received the signal.":" MADRE recibió la señal."):(en?" Saved here; delivery is pending.":" Guardada aquí; el envío queda pendiente."));
         },function(){ if(status&&votes[c.k]===val) status.textContent=prefix+(en?" Saved here; delivery is pending.":" Guardada aquí; el envío queda pendiente."); });
       } else if(status) status.textContent=prefix+(en?" Saved here; delivery was unavailable.":" Guardada aquí; el envío no estaba disponible.");
@@ -7896,35 +7945,36 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
     Array.prototype.forEach.call(tile.querySelectorAll(".asmrQuickMatch"),function(b){b.disabled=true;});
     if(status) status.textContent=removed?(en?"↩ Match verdict removed.":"↩ Coincidencia retirada."):(result==="si"?(en?"✅ Marked as a match.":"✅ Marcado: sí coincide."):(en?"❌ Marked as not matching.":"❌ Marcado: no coincide."));
     var payload=removed?
-      {card:"🎧 Laboratorio ASMR",section:c.n,tipo:"asmr-coincidencia-retirada",texto:"ASMR-COINCIDENCIA\nid: "+c.k+"\nresultado_anterior: "+result+"\nestado: retirado\norigen: laboratorio-tarjeta-directa"}:
-      {card:"🎧 Laboratorio ASMR",section:c.n,tipo:"asmr-coincidencia-"+result,texto:"ASMR-COINCIDENCIA\nid: "+c.k+"\nresultado: "+result+"\ncoincide_con: general\nuso_sugerido: sin sugerencia\nnota: voto directo desde la ficha\nprototipo: sintetizado-v3\norigen: laboratorio-tarjeta-directa"};
+      {card:"🎧 Laboratorio ASMR",section:c.n,tipo:"asmr-coincidencia-retirada",texto:"ASMR-COINCIDENCIA\nid: "+c.k+"\nresultado_anterior: "+result+"\nestado: retirado"+soundMeta(c,"v3","laboratorio-tarjeta-directa")}:
+      {card:"🎧 Laboratorio ASMR",section:c.n,tipo:"asmr-coincidencia-"+result,texto:"ASMR-COINCIDENCIA\nid: "+c.k+"\nresultado: "+result+"\ncoincide_con: general\nuso_sugerido: sin sugerencia\nnota: voto directo desde la ficha"+soundMeta(c,"v3","laboratorio-tarjeta-directa")};
     function done(delivered){ delete tile.dataset.matchBusy;Array.prototype.forEach.call(tile.querySelectorAll(".asmrQuickMatch"),function(b){b.disabled=false;});paintMatch(tile,c.k);if(status&&delivered===false)status.textContent+=(en?" Saved here; delivery is pending.":" Guardado aquí; el envío queda pendiente."); }
     try{ if(typeof window.__fb==="function") Promise.resolve(window.__fb(payload)).then(function(r){done(r==="sent");},function(){done(false);}); else done(false); }catch(e){done(false);}
   }
   function tile(c){
-    var a=document.createElement("article"); a.className="asmrCand"; a.dataset.candidate=c.k; a.tabIndex=0; a.setAttribute("role","group"); a.setAttribute("aria-label","Escuchar y valorar "+c.n+". Pulsa la tarjeta para reproducir.");
-    var play=document.createElement("button"); play.type="button"; play.className="asmrPlay"; play.textContent=c.e; play.setAttribute("aria-label","Escuchar prototipo: "+c.n); play.setAttribute("data-en","Play prototype: "+c.en);
+    var a=document.createElement("article"); a.className="asmrCand"; a.dataset.candidate=c.k; a.dataset.kind=c.kind||"synth"; a.tabIndex=0; a.setAttribute("role","group"); a.setAttribute("aria-label","Escuchar y valorar "+c.n+". Pulsa la tarjeta para reproducir.");
+    var play=document.createElement("button"); play.type="button"; play.className="asmrPlay"; play.textContent=c.e; play.setAttribute("aria-label",(c.kind==="recorded"?"Escuchar grabación real: ":"Escuchar prototipo: ")+c.n); play.setAttribute("data-en",(c.kind==="recorded"?"Play real recording: ":"Play prototype: ")+c.en);
     var tx=document.createElement("span"); tx.className="asmrCandText";
     var nm=document.createElement("strong"); nm.className="asmrCandName"; nm.textContent=c.n; nm.setAttribute("data-en",c.en);
     var wh=document.createElement("span"); wh.className="asmrCandWhy"; wh.textContent=c.w; wh.setAttribute("data-en",c.wen);
+    var origin=document.createElement("span");origin.className="asmrOrigin"+(c.kind==="recorded"?"":" synth");origin.textContent=c.kind==="recorded"?("🎙️ real · Mixkit #"+c.sourceId):"🧪 sintetizado";origin.setAttribute("data-en",c.kind==="recorded"?("🎙️ real · Mixkit #"+c.sourceId):"🧪 synthesized");if(c.kind==="recorded"){origin.dataset.sourcePage=c.sourcePage;origin.title=c.sourceTitle+" · "+c.sourcePage;}
     var row=document.createElement("span"); row.className="asmrVotes";
     [["gusta","👍","Me gusta"],["no-gusta","👎","No me gusta"]].forEach(function(v){ var b=document.createElement("button"); b.type="button"; b.className="asmrVote"; b.dataset.vote=v[0]; b.textContent=v[1]; b.setAttribute("aria-label",v[2]+": "+c.n); b.setAttribute("aria-pressed","false"); b.addEventListener("click",function(){vote(c,v[0],a);}); row.appendChild(b); });
     var matchLabel=document.createElement("span");matchLabel.className="asmrMatchLabel";matchLabel.textContent="Coincide:";matchLabel.setAttribute("data-en","Matches:");row.appendChild(matchLabel);
     [["si","Sí","Yes"],["no","No","No"]].forEach(function(v){var b=document.createElement("button");b.type="button";b.className="asmrQuickMatch";b.dataset.match=v[0];b.textContent=v[1];b.setAttribute("data-en",v[2]);b.setAttribute("aria-label",v[1]+" coincide: "+c.n);b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){quickMatch(c,v[0],a);});row.appendChild(b);});
     var match=document.createElement("button"); match.type="button"; match.className="asmrMatch"; match.textContent="✍️ Matizar dónde o por qué"; match.setAttribute("data-en","✍️ Add where or why");match.setAttribute("aria-label","Añadir matiz sobre si coincide: "+c.n); match.addEventListener("click",function(){openMatch(c);}); row.appendChild(match);
-    tx.appendChild(nm); tx.appendChild(wh); tx.appendChild(row); a.appendChild(play); a.appendChild(tx); play.addEventListener("click",function(){preview(c,a);});
+    tx.appendChild(nm); tx.appendChild(wh); tx.appendChild(origin); tx.appendChild(row); a.appendChild(play); a.appendChild(tx); play.addEventListener("click",function(){preview(c,a);});
     a.addEventListener("click",function(e){ if(e.target.closest("button,input,textarea,select,a,label")) return; preview(c,a); });
     a.addEventListener("keydown",function(e){ if(e.target!==a||(e.key!=="Enter"&&e.key!==" "))return; e.preventDefault(); preview(c,a); });
     paintVote(a,c.k);paintMatch(a,c.k); return a;
   }
-  LAB.forEach(function(c,i){ (i<4?feat:more).appendChild(tile(c)); });
+  LAB.forEach(function(c){ (c.kind==="recorded"?feat:more).appendChild(tile(c)); });
   var judge67=document.getElementById("cm67Judge"); if(judge67) judge67.addEventListener("click",function(){try{if(window.__cmMlgSound)window.__cmMlgSound(67);}catch(e){} openMatch({k:"six-seven",n:"Sonido 6·7 actual"});});
   var focusObserver=null,labCard=document.getElementById("asmrLabCard");
   if(labCard&&"IntersectionObserver" in window){
     focusObserver=new IntersectionObserver(function(entries){ entries.forEach(function(en){ document.body.classList.toggle("cmLabFocus",en.isIntersecting&&en.intersectionRatio>=.05); }); },{threshold:[0,.05]});
     focusObserver.observe(labCard);
   }
-  window.__cmAsmrLab={count:LAB.length,featured:4,keys:LAB.map(function(c){return c.k;}),voteCount:function(){return Object.keys(votes).length;},focus:function(){return document.body.classList.contains("cmLabFocus");},preview:function(k){for(var i=0;i<LAB.length;i++)if(LAB[i].k===k)return preview(LAB[i],document.querySelector('[data-candidate="'+k+'"]'));return false;}};
+  window.__cmAsmrLab={count:LAB.length,recorded:RECORDED.length,synthesized:SYNTH.length,featured:RECORDED.length,keys:LAB.map(function(c){return c.k;}),sources:RECORDED.map(function(c){return {key:c.k,id:c.sourceId,title:c.sourceTitle,page:c.sourcePage,asset:c.src};}),voteCount:function(){return Object.keys(votes).length;},focus:function(){return document.body.classList.contains("cmLabFocus");},lastPlayback:function(){return Object.assign({},lastPlayback);},stop:stopRecording,preview:function(k){for(var i=0;i<LAB.length;i++)if(LAB[i].k===k)return preview(LAB[i],document.querySelector('[data-candidate="'+k+'"]'));return false;}};
 }catch(e){ console.warn("asmr-lab",e); } })();
 </script>
 
@@ -8263,7 +8313,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.72";
+  window.__cmVersion="v1.73";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
