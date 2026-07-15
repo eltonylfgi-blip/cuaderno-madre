@@ -1,46 +1,76 @@
-# Panel «MADRE te dice» — canal MADRE → Tony (cómo mantenerlo VIVO)
+# Panel «MADRE te dice» — canal visible MADRE → Tony
 
-> Añadido v0.15 (2026-06-29). El panel `#madreHabla` ya está en `index.html` y DESPLEGADO.
-> Esto documenta cómo se ALIMENTA (para que la rutina `cuaderno-feedback` lo complete).
+El panel `#madreHabla` vive dentro del recorrido del Cuaderno. Es el lugar donde MADRE deja solo lo que merece atención humana. Si hay una excepción humana pendiente, el panel se revela aunque la progresión visual todavía lo tuviera oculto.
 
-## Qué es
-Un panel en la web (tras `#diarioVivo`) donde MADRE le deja cosas a Tony en el sitio que más mira:
-- **avances** (públicos): lo que MADRE acaba de hacer.
-- **oportunidades** (públicas): negocio absorbido de los vídeos.
-- **decisiones** que requieren a Tony: SOLO visibles en «modo creador» (`localStorage cuaderno_madre_tony==="1"`);
-  a los visitantes solo se les dice cuántas hay. Cada una con **recomendación + fecha límite + auto-decide**.
+Además, la franja de señales de la portada muestra `#chipHuman` con el número de excepciones pendientes. Ese botón tiene un objetivo táctil mínimo de 44 px y lleva directamente al panel: una dependencia humana ya no puede quedar enterrada en el recorrido largo del Cuaderno.
 
-## Backend (Supabase, proyecto kopegamcjozrvmxruwdn)
-Tabla `public.madre_para_tony` (creada por migración `create_madre_para_tony`). Columnas:
-`id, tipo('avance'|'decision'|'oportunidad'), titulo, detalle, recomendacion, opciones, fecha_limite(date),
-estado('pendiente'|'decidido_tony'|'decidido_auto'|'hecho'|'info'), publico(bool), hidden(bool), created_at`.
-- **RLS:** anon SOLO lee filas `hidden=false`. Escribe SOLO `service_role` (la rutina). `publico=false` = oculto
-  en la UI (modo creador), **NO cifrado** → NADA SECRETO aquí (lo secreto sigue en el BUZÓN de MADRE).
-- El cliente lee con la clave publishable (`window.__sb`) y se suscribe al canal realtime `mpt-rt`.
+## Regla rectora: automático primero
 
-## LO QUE FALTA — que la rutina `cuaderno-feedback` lo mantenga (3 pasos, usa service_role)
-La rutina ya mantiene `PENDIENTE_TONY.md` y tiene credenciales service_role. Añadir a su SKILL un paso:
+Una sesión no puede depender de que Tony recuerde una skill, relea un chat o descubra una nota.
 
-1. **ALIMENTAR (cada pasada):** por cada decisión nueva de `PENDIENTE_TONY.md` (y avances/oportunidades nuevos
-   que decida mostrar), `upsert` a `madre_para_tony` (dedup por un hash del título). Ejemplo:
-   ```sql
-   insert into public.madre_para_tony (tipo,titulo,detalle,recomendacion,opciones,fecha_limite,estado,publico)
-   values ('decision', '<titulo>', '<detalle>', '<recomendacion>', 'A) ... · B) ...', '<YYYY-MM-DD>', 'pendiente', false);
-   ```
-   (Las decisiones con estrategia/secreto NO van aquí: se quedan en el buzón. Aquí solo lo que da igual o conviene ver.)
+1. Si la acción se puede automatizar, la hace el agente.
+2. Solo se admite una excepción por identidad, banco/dinero, CAPTCHA/2FA, gusto estrictamente personal o una acción física inevitable. Esta última exige dejar evidencia concreta de al menos dos vías agotadas entre API/conector, navegador y script/robot.
+3. La excepción no se puede delegar hasta que su tarjeta privada esté publicada y sea legible por el mismo REST que usa el Cuaderno.
+4. El cierre debe incluir `PENDIENTE_HUMANO_ID: <id>`; el hook `check_no_delegar.py` verifica el fichero y la fila externa. Una cola local sin tarjeta visible no basta.
 
-2. **RECOGER la respuesta de Tony:** cuando llega un feedback con texto `DECISION #<id> -> elijo: <opción>`
-   (lo manda el botón del panel vía `window.__fb`), marcar esa fila `estado='decidido_tony'` (y registrar la opción),
-   y aplicar/archivar la decisión como corresponda.
+El contrato ejecutable vive en:
 
-3. **AUTO-DECIDIR si Tony no responde (regla anti-bloqueo de Tony, CLAUDE.md 1e):** las filas `estado='pendiente'`
-   cuyo `fecha_limite < hoy` → ponerlas `estado='decidido_auto'`, ELEGIR la opción de `recomendacion` (solo si es
-   REVERSIBLE), aplicarla, y avisar a Tony (el panel ya muestra «🤖 lo decidí yo sola»). NUNCA auto-decidir algo
-   catastrófico-irreversible: eso espera a Tony sí o sí.
+- `C:/Users/anton/OneDrive/Escritorio/todo/CHAT GPT/Bot/PROYECTO MADRE/APRENDIZAJE_COMPUESTO/pendiente_humano.py`
+- `C:/Users/anton/OneDrive/Escritorio/todo/CHAT GPT/Bot/PROYECTO MADRE/.claude/hooks/check_no_delegar.py`
+- `C:/Users/anton/.claude/scheduled-tasks/cuaderno-feedback/SKILL.md`
 
-## Verificación hecha (2026-06-29)
-Navegador local: vista pública (2 avances + 2 oport + candado) y vista creador (3 decisiones, 1 ✅, 2 con fecha
-límite + botones; deadline «2 de julio»), 0 errores de consola. Web viva sirve `v0.15` con `#madreHabla`.
+## Qué enseña
 
-## Revertir todo
-`git revert` del commit v0.15 (quita el panel) + `drop table public.madre_para_tony` (quita el backend).
+- `cambio`: cambios permanentes del sistema.
+- `aviso`: acción exclusivamente humana; aparece arriba, reservada en la interfaz del modo creador, con `✓ Lo he visto`.
+- `decision`: preferencia/decisión que solo Tony puede tomar; recomendación, límite y auto-decisión si es reversible.
+- `trabajo`: trabajo ya ejecutado.
+- `conocimiento`: conocimiento evaluado, no solo guardado.
+- `metrica`: estado resumido del aprendizaje.
+
+La interfaz pública no enseña el título ni el detalle de `aviso` o `decision`; solo un conteo. Como el navegador descarga las filas desde un REST anónimo, esto **no es privacidad criptográfica** y el contenido nunca puede incluir secretos. El modo creador usa `localStorage cuaderno_madre_tony === "1"`: es un candado de cortesía, **no autenticación**.
+
+## Recibo de «Lo he visto»
+
+El botón envía a `public.feedback`:
+
+```text
+card: madre_para_tony
+tipo: acuse
+texto: VISTO #<id-fila> -> <titulo>
+```
+
+La interfaz solo marca el acuse local si `window.__fb` devuelve `sent`. Si cae la red, conserva el botón y dice que no quedó confirmado; copiar texto al portapapeles no cuenta. La rutina consume después el UUID y actualiza el aviso a `estado='hecho'`.
+
+Límite honesto: el recibo prueba que **ese navegador en modo creador** pulsó el botón. No demuestra legalmente que fue Tony y nunca autoriza pagos, borrados, publicación irreversible ni uso de credenciales. Añadir login solo se justifica si algún día el acuse pasa a tener consecuencias de seguridad.
+
+## Backend
+
+Proyecto Supabase `kopegamcjozrvmxruwdn`, tabla `public.madre_para_tony`:
+
+`id, tipo, titulo, detalle, recomendacion, opciones, fecha_limite, estado, publico, hidden, aprendido, consecuencia, impacto, accion, sustituye, orden, created_at`.
+
+- `hidden=false` permite la lectura anónima que necesita la web; por eso **no se guardan secretos**.
+- `publico=false` controla la presentación en modo creador, no cifra la fila.
+- El marcador de deduplicación es `accion='PENDIENTE_HUMANO_ID: <id>'`.
+- Las sesiones/rutina escriben con el conector autorizado; el navegador solo lee y deja feedback.
+
+## Flujo de una excepción real
+
+```text
+agotar automatización (y documentar las vías si es una acción física)
+  → pendiente_humano.py create
+  → insertar tipo=aviso y obtener row id
+  → pendiente_humano.py surface (verifica REST público)
+  → el hook permite PENDIENTE_HUMANO_ID
+  → Tony ve la tarjeta y pulsa «Lo he visto»
+  → cuaderno-feedback consume el acuse
+```
+
+La rutina `cuaderno-feedback` drena también recibos locales no publicados como recuperación ante una caída del conector. Ese camino no sustituye la publicación inmediata: mientras la tarjeta no sea legible, el hook no permite cerrar delegando.
+
+## Selector y pruebas
+
+- Selector técnico: crear → publicar → verificar REST → renderizar en 375/1280 px → enviar acuse; una caída de envío no puede fingir éxito.
+- Selector externo: el primer caso humano real debe producir un acuse o seguir visible; si Tony vuelve a descubrir una dependencia solo por chat, el mecanismo falló.
+- Reversión web: `git revert <commit>`.

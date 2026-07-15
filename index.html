@@ -57,6 +57,8 @@
   .chip.quiet{background:transparent;border-color:transparent;color:var(--muted)}
   .chip[data-goto]{cursor:pointer}
   .chip[data-goto]:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .mh-human-chip{min-height:44px;font-weight:800;box-shadow:0 0 0 3px var(--accent-soft)}
+  .mh-human-chip:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
   .heroBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 
   button{font-family:inherit;cursor:pointer}
@@ -702,6 +704,7 @@
     <div class="chips">
       <span class="chip primary" id="chipSenales" data-goto="🌍">📡 Ver el desglose (nada inflable) ›</span>
       <span class="chip quiet" id="chipHealth" data-goto="6">🟢 Salud: <b>estable</b> ›</span>
+      <button type="button" class="chip primary mh-human-chip" id="chipHuman" hidden>👀 <b>1</b> cosa necesita tu mano ›</button>
       <span class="chip" id="chipDecs" data-goto="4">🗳️ <b>…</b> decisiones esperan al creador ›</span>
       <span class="chip quiet" id="chipDesv" data-goto="6">⚠️ <b>…</b> desviaciones ›</span>
       <span class="chip" id="chipSteps" data-goto="2">✅ Tu parte: <b>0/3</b> ›</span>
@@ -869,7 +872,7 @@
   }catch(e){ console.warn("diarioVivo", e); } })();
   </script>
 
-  <!-- ===== v0.16: "MADRE TE DICE" v2 — ordenado por IMPACTO + cada item dice su CONSECUENCIA permanente ===== -->
+  <!-- ===== v1.71: "MADRE TE DICE" — automático primero + aviso de portada + acuse verificable ===== -->
   <style id="mhCss">
     #madreHabla{margin:0 0 12px;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--card),var(--accent-soft));box-shadow:0 2px 6px rgba(20,30,50,.05)}
     #madreHabla .mh-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px}
@@ -894,6 +897,13 @@
     .mh-opt{font:600 12px system-ui;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:3px 10px;cursor:pointer}
     .mh-opt:hover{border-color:var(--accent);color:var(--accent)}
     .mh-opt:disabled{opacity:.6;cursor:default}
+    .mh-alert{margin-top:7px;padding:10px 11px;border:1.5px solid #d97706;border-radius:12px;background:rgba(245,158,11,.08)}
+    .mh-ack{min-height:44px;margin-top:8px;padding:8px 14px;border:1.5px solid #d97706;border-radius:12px;background:var(--card);color:var(--ink);font:800 12.5px/1.2 system-ui;cursor:pointer;touch-action:manipulation}
+    .mh-ack:hover{background:rgba(245,158,11,.14)}
+    .mh-ack:focus-visible{background:rgba(245,158,11,.14);outline:3px solid #d97706;outline-offset:2px}
+    .mh-ack:disabled{opacity:.65;cursor:wait}
+    .mh-ack-state{margin-top:7px;color:var(--accent);font-size:12.4px;font-weight:750;line-height:1.35}
+    .mh-ack-proof{margin-top:4px;color:var(--muted);font-size:11.4px;line-height:1.35}
     .mh-lim{font-size:11.8px;color:var(--muted);margin-top:5px}
     .mh-lock{font-size:12.8px;color:var(--ink);background:rgba(0,0,0,.04);border:1px dashed var(--line);border-radius:10px;padding:8px 10px}
     .mh-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
@@ -919,6 +929,7 @@
       <span class="mh-sub" id="mhSub"></span>
     </div>
     <div id="mhTitular"></div>
+    <div id="mhAvisos" class="mh-group"></div>
     <div id="mhCambios" class="mh-group"></div>
     <div id="mhDecisiones" class="mh-group"></div>
     <div id="mhTrabajo" class="mh-group"></div>
@@ -927,7 +938,7 @@
     <div class="mh-foot" id="mhFoot"></div>
   </div>
   <script>
-  /* v0.16 — "MADRE te dice" v2: ordenado por IMPACTO (no cronología); cada item dice su CONSECUENCIA permanente.
+  /* v1.71 — "MADRE te dice": ordenado por IMPACTO y con una excepción humana imposible de perder.
      Lee la tabla Supabase madre_para_tony (la escribe la rutina cuaderno-feedback, service_role).
      Secciones: titular "hoy el sistema es diferente" -> cambios permanentes -> decisiones (solo creador) ->
      trabajo hecho -> conocimiento absorbido (impacto/estado/sustituye) -> métrica de evolución.
@@ -935,19 +946,31 @@
   (function(){
     try{
       var box=document.getElementById("madreHabla");
-      var elT=document.getElementById("mhTitular"), elC=document.getElementById("mhCambios"),
+      var elT=document.getElementById("mhTitular"), elA=document.getElementById("mhAvisos"), elC=document.getElementById("mhCambios"),
           elD=document.getElementById("mhDecisiones"), elW=document.getElementById("mhTrabajo"),
           elK=document.getElementById("mhConoc"), elM=document.getElementById("mhMetrica"),
-          elF=document.getElementById("mhFoot"), elS=document.getElementById("mhSub");
+          elF=document.getElementById("mhFoot"), elS=document.getElementById("mhSub"),
+          humanChip=document.getElementById("chipHuman");
       function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
       function creador(){ try{ return localStorage.getItem("cuaderno_madre_tony")==="1"; }catch(e){ return false; } }
       function fdate(s){ try{ return new Date(s+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"long"}); }catch(e){ return s; } }
       function impChip(imp){ return imp?('<span class="mh-chip imp-'+esc(imp)+'">impacto '+esc(imp)+'</span>'):""; }
       function byOrden(a,b){ return (a.orden||100)-(b.orden||100); }
+      var ACK_KEY="cm_mh_seen_v1", transientAcks={};
+      function readAcks(){
+        var x={}; try{ x=JSON.parse(localStorage.getItem(ACK_KEY)||"{}"); if(!x||typeof x!=="object"||Array.isArray(x)) x={}; }catch(e){ x={}; }
+        Object.keys(transientAcks).forEach(function(k){ x[k]=transientAcks[k]; }); return x;
+      }
+      function saveAcks(x){ transientAcks=x||{}; try{ localStorage.setItem(ACK_KEY,JSON.stringify(transientAcks)); return true; }catch(e){ return false; } }
+      function ackState(r,acks){
+        if(r.estado==="hecho" && r.aprendido) return "server";
+        return acks[String(r.id)] ? "local" : "";
+      }
       var rows=[], lastCreador=null;
       function render(){
-        if(!rows.length){ box.hidden=true; return; }
+        if(!rows.length){ if(humanChip) humanChip.hidden=true; box.hidden=true; return; }
         var cam=rows.filter(function(r){return r.tipo==="cambio";}).sort(byOrden);
+        var av=rows.filter(function(r){return r.tipo==="aviso";}).sort(byOrden);
         var de=rows.filter(function(r){return r.tipo==="decision";}).sort(byOrden);
         var tr=rows.filter(function(r){return r.tipo==="trabajo";}).sort(byOrden);
         var co=rows.filter(function(r){return r.tipo==="conocimiento";}).sort(byOrden);
@@ -955,6 +978,32 @@
         elT.innerHTML = cam.length ? ('<div class="mh-tt-h">⚡ Hoy el sistema es diferente</div>' + cam.slice(0,3).map(function(r){
           return '<div class="mh-tt-l"><b>✓</b>'+esc(r.titulo)+'</div>';
         }).join("")) : "";
+        var acks=readAcks(), avPend=av.filter(function(r){return !ackState(r,acks);}),
+            avSeen=av.filter(function(r){return !!ackState(r,acks);}), avShow=avPend.concat(avSeen.slice(0,3));
+        if(humanChip){
+          humanChip.hidden=!avPend.length;
+          humanChip.innerHTML=avPend.length ? ('👀 <b>'+avPend.length+'</b> cosa'+(avPend.length===1?'':'s')+' necesita'+(avPend.length===1?'':'n')+' tu mano ›') : '';
+          humanChip.setAttribute("aria-label",avPend.length ? (avPend.length+' aviso'+(avPend.length===1?'':'s')+' humano'+(avPend.length===1?'':'s')+' pendiente'+(avPend.length===1?'':'s')+'. Ir a MADRE te dice.') : 'Sin avisos humanos pendientes');
+        }
+        if(creador() || avPend.length) box.classList.remove("pdHidden");
+        if(creador()){
+          elA.innerHTML = av.length ? ('<div class="mh-glabel">👀 Solo lo que de verdad necesita tu mano</div>' + avShow.map(function(r){
+            var st=ackState(r,acks), h='<div class="mh-alert" data-ack-card="'+esc(r.id)+'"><div class="mh-it-tit">'+esc(r.titulo)+'</div>';
+            if(r.detalle) h+='<div class="mh-it-det">'+esc(r.detalle)+'</div>';
+            if(r.recomendacion) h+='<div class="mh-rec">👉 '+esc(r.recomendacion)+'</div>';
+            if(st==="server"){
+              h+='<div class="mh-ack-state">✓ Marcado como visto</div><div class="mh-ack-proof">'+esc(r.aprendido)+'</div>';
+            } else if(st==="local"){
+              h+='<div class="mh-ack-state">✓ Acuse enviado desde este navegador</div><div class="mh-ack-proof">MADRE lo cerrará al procesar el recibo.</div>';
+            } else {
+              h+='<button type="button" class="mh-ack" data-id="'+esc(r.id)+'" data-title="'+esc(r.titulo)+'">✓ Lo he visto</button>'+
+                 '<div class="mh-ack-proof mh-ack-note" aria-live="polite">Confirma este navegador en modo creador; no prueba identidad legal.</div>';
+            }
+            return h+'</div>';
+          }).join("")) : "";
+        } else {
+          elA.innerHTML = avPend.length ? ('<div class="mh-glabel">👀 Avisos reservados en la interfaz</div><div class="mh-lock">🔒 Hay <b>'+avPend.length+'</b> cosa'+(avPend.length===1?'':'s')+' que necesita'+(avPend.length===1?'':'n')+' al creador. Pulsa <b>«👤 Soy el creador»</b> arriba para verla'+(avPend.length===1?'':'s')+'. No contiene secretos.</div>') : "";
+        }
         elC.innerHTML = cam.length ? ('<div class="mh-glabel">🔧 Cambios permanentes del sistema</div>' + cam.map(function(r){
           var h='<div class="mh-item"><div class="mh-it-tit">'+esc(r.titulo)+' '+impChip(r.impacto)+'</div>';
           if(r.aprendido) h+='<div class="mh-apr">Aprendido: '+esc(r.aprendido)+'</div>';
@@ -995,30 +1044,77 @@
             '<div class="mh-mc pe"><div class="n">'+esc(p[2]||"?")+'</div><div class="l">pendientes</div></div></div>';
         } else { elM.innerHTML=""; }
         elS.textContent = creador() ? "vista creador" : "";
-        elF.textContent = "MADRE lo deja aquí para ti — solo lo que merece tu atención. Lo secreto va al buzón, no a la web.";
+        elF.textContent = "MADRE lo deja aquí para ti — solo lo que merece tu atención. El modo creador es un candado de cortesía, no autenticación.";
         box.hidden=false;
         lastCreador=creador();
+        Array.prototype.forEach.call(elA.querySelectorAll(".mh-ack"), function(b){
+          b.addEventListener("click", function(){
+            var note=b.parentNode.querySelector(".mh-ack-note"), original=b.textContent;
+            function retry(msg){ b.disabled=false; b.textContent=original; if(note) note.textContent=msg; }
+            if(typeof window.__fb!=="function"){ retry("Aún no hay conexión; no marqué nada como visto."); return; }
+            b.disabled=true; b.textContent="Enviando…";
+            var payload={card:"madre_para_tony",section:"acuse",tipo:"acuse",texto:"VISTO #"+b.getAttribute("data-id")+" -> "+b.getAttribute("data-title")};
+            try{
+              Promise.resolve(window.__fb(payload)).then(function(result){
+                if(result!=="sent"){ retry("No quedó confirmado; reinténtalo cuando vuelva la conexión."); return; }
+                var saved=readAcks(); saved[String(b.getAttribute("data-id"))]={at:new Date().toISOString()}; saveAcks(saved); render();
+                try{ if(typeof toast==="function") toast("Acuse enviado ✓"); }catch(e){}
+              },function(){ retry("No quedó confirmado; reinténtalo."); });
+            }catch(e){ retry("No quedó confirmado; reinténtalo."); }
+          });
+        });
         Array.prototype.forEach.call(elD.querySelectorAll(".mh-opt"), function(b){
           b.addEventListener("click", function(){
             var txt="DECISION #"+b.getAttribute("data-id")+" -> elijo: "+b.getAttribute("data-op");
-            try{ if(typeof window.__fb==="function"){ window.__fb({card:"madre_para_tony",section:"decision",tipo:"decision",texto:txt}); } }catch(e){}
-            b.textContent="✓ enviado"; b.disabled=true;
-            try{ if(typeof toast==="function") toast("Anotado — MADRE lo aplicará."); }catch(e){}
+            var original=b.textContent;
+            if(typeof window.__fb!=="function") return;
+            b.textContent="enviando…"; b.disabled=true;
+            try{ Promise.resolve(window.__fb({card:"madre_para_tony",section:"decision",tipo:"decision",texto:txt})).then(function(result){
+              if(result!=="sent"){ b.textContent=original; b.disabled=false; return; }
+              b.textContent="✓ enviado";
+              try{ if(typeof toast==="function") toast("Anotado — MADRE lo aplicará."); }catch(e){}
+            },function(){ b.textContent=original; b.disabled=false; }); }catch(e){ b.textContent=original; b.disabled=false; }
           });
         });
       }
+      var loadAttempt=0, loadTimer=null;
+      function retryLoad(sb){
+        if(loadAttempt>=6 || loadTimer) return;
+        var delay=Math.min(8000,800*Math.pow(2,loadAttempt++));
+        loadTimer=setTimeout(function(){ loadTimer=null; load(sb); },delay);
+      }
       function load(sb){
         sb.from("madre_para_tony").select("*").eq("hidden",false).order("orden",{ascending:true}).then(function(res){
-          if(res && !res.error && res.data){ rows=res.data; render(); }
-        });
+          if(res && !res.error && Array.isArray(res.data)){
+            rows=res.data; loadAttempt=0; if(loadTimer){ clearTimeout(loadTimer); loadTimer=null; } render();
+          } else retryLoad(sb);
+        },function(){ retryLoad(sb); });
+      }
+      var subscribed=false;
+      function connect(sb){
+        if(!sb) return;
+        load(sb);
+        if(subscribed) return;
+        subscribed=true;
+        try{ sb.channel("mpt-rt").on("postgres_changes",{event:"*",schema:"public",table:"madre_para_tony"},function(){ load(sb); }).subscribe(); }catch(e){}
       }
       var t=0, iv=setInterval(function(){
         t++;
-        if(window.__sb){ clearInterval(iv); load(window.__sb);
-          try{ window.__sb.channel("mpt-rt").on("postgres_changes",{event:"*",schema:"public",table:"madre_para_tony"},function(){ load(window.__sb); }).subscribe(); }catch(e){}
-        } else if(t>=30){ clearInterval(iv); }
+        if(window.__sb){ clearInterval(iv); connect(window.__sb); }
+        else if(t>=120){ clearInterval(iv); }
       },400);
+      window.addEventListener("cm:supabase-ready",function(){ if(window.__sb){ clearInterval(iv); connect(window.__sb); } });
+      if(humanChip) humanChip.addEventListener("click",function(){
+        box.classList.remove("pdHidden"); box.hidden=false;
+        try{ box.scrollIntoView({behavior:(window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches)?"auto":"smooth",block:"start"}); }catch(e){ box.scrollIntoView(); }
+        var focusTarget=elA.querySelector(".mh-ack")||box;
+        try{ if(focusTarget===box) box.setAttribute("tabindex","-1"); focusTarget.focus({preventScroll:true}); }catch(e){}
+      });
       setInterval(function(){ if(lastCreador!==null && creador()!==lastCreador) render(); }, 1500);
+      window.__cmMadreHabla={
+        renderRows:function(next){ rows=Array.isArray(next)?next:[]; render(); },
+        state:function(){ var a=readAcks(); return {rows:rows.length,avisos:rows.filter(function(r){return r.tipo==="aviso";}).length,creator:creador(),localAcks:Object.keys(a).length}; }
+      };
     }catch(e){ console.warn("madreHabla", e); }
   })();
   </script>
@@ -4510,6 +4606,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-15',destacada:true,areas:['autonomia','feedback','cuaderno','accesibilidad','seguridad'],titulo:'👀 v1.71 — Si MADRE necesita tu mano, ya no puede enterrarlo',detalle:'Regla de raíz: si MADRE puede hacerlo, lo hace sin pedirte que recuerdes una skill. Solo identidad, banco, CAPTCHA/2FA, gusto personal o una acción física inevitable pueden llegar a ti; esa última exige demostrar vías automáticas agotadas. Una excepción real enciende arriba un aviso táctil de 44 px, abre su tarjeta en «MADRE te dice» y solo desaparece cuando «Lo he visto» se envía de verdad. El acuse prueba ese navegador, no identidad legal, y nunca autoriza pagos, borrados ni acciones irreversibles.'},
     {fecha:'2026-07-15',destacada:true,areas:['comentarios','claude','referido','transparencia'],titulo:'🧰 v1.70 — El hilo que admite a Claude y deja el pase sin letra pequeña',detalle:'Comentarios fija la frase «Se nota que esto lo has hecho con Claude» y MADRE contesta sin fingir: Claude le presta manos, pero las decisiones y los fallos quedan a la vista. La respuesta enlaza el pase de Tony —7 días gratis de Claude Pro con Claude Code y Cowork—, declara que es un referido, que Tony puede recibir créditos de uso si la persona continúa de pago y que los pases son limitados y caducan; también avisa del método de pago y la conversión automática si no se cancela. Aparece tanto en la sección como en el panel lateral.'},
     {fecha:'2026-07-15',destacada:true,areas:['navegacion','fanrank','proyectos','distribucion'],titulo:'🌐 v1.69 — El Cuaderno ya es la puerta a las demás webs',detalle:'El final reúne cuatro accesos públicos y comprobados: FanRank, Neuro-Fuerza, Salón Vera y todos los proyectos de Tony. Abren en otra pestaña, mantienen el Cuaderno disponible y cada primer toque intenta enviar una señal de uso para saber qué atajos merecen seguir.'},
     {fecha:'2026-07-15',destacada:true,areas:['asmr','caos','feedback','multimedia','sonido','interaccion','accesibilidad'],titulo:'🎯 v1.68 — ASMR desde el primer roce y Caos que señala cosas reales',detalle:'El roce ASMR ya responde a la primera pasada horizontal: conserva el bloqueo del scroll vertical, pero deja de exigir una ida y vuelta escondida. El Laboratorio muestra «Coincide: Sí / No» directamente en cada tarjeta, con elección reversible y matiz opcional; Feedback general gana una ✕ fija y grande, y el menú derecho empieza por Caos/ASMR y aprende del uso local. Activar Caos enciende ASMR y lanza escenas contextuales que rodean un control real, lo nombran, dibujan una flecha curva y premian tocarlo; una sola escena vive a la vez y se limpia con Escape, Calma, diálogo, escritura, pestaña oculta o salida. MyInstants queda reconocido en el Archivo como autorizado por Tony para reutilización dentro de MADRE, conserva la procedencia y deja activos seguridad y duplicados.'},
@@ -5214,7 +5311,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const SB_URL="https://kopegamcjozrvmxruwdn.supabase.co";
 const SB_KEY="sb_publishable_2NDyczKDwFCzNIWEMycRtw_yTnkUQAi";
 const sb=createClient(SB_URL, SB_KEY);
-try{ window.__sb=sb; }catch(e){}
+try{ window.__sb=sb; window.dispatchEvent(new Event("cm:supabase-ready")); }catch(e){}
 
 const st=document.createElement("style");
 st.textContent=`
@@ -8157,7 +8254,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.70";
+  window.__cmVersion="v1.71";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada

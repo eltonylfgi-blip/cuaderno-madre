@@ -1,9 +1,17 @@
+## v1.71 — 2026-07-15 · Automático primero + aviso humano imposible de perder
+- **Autonomía por defecto:** una sesión no puede depender de que Tony recuerde una skill o relea un chat. El carril humano solo admite identidad, banco/dinero, CAPTCHA/2FA, gusto estrictamente personal y acciones físicas inevitables; estas últimas exigen evidencia de haber agotado al menos dos vías entre API/conector, navegador y script/robot.
+- **Visible desde la portada:** si existe una excepción pendiente, la franja superior enseña un botón con el recuento y un objetivo táctil mínimo de 44 px. Al pulsarlo revela y enfoca la tarjeta correspondiente en `MADRE te dice`, aunque el recorrido progresivo aún tuviera esa sección plegada.
+- **Acuse honesto:** `✓ Lo he visto` solo se retira cuando el canal devuelve `sent`; una copia local, una caída de red o un error conservan el botón. El recibo prueba un toque desde ese navegador en modo creador, no autentica legalmente a Tony y nunca autoriza pagos, borrados ni acciones irreversibles.
+- **Fiabilidad y privacidad:** la carga escucha el momento real en que Supabase queda listo, reintenta fallos transitorios y no abandona a los 12 s. La interfaz pública oculta título y detalle, pero el REST es anónimo por diseño: las tarjetas rechazan secretos y declaran este límite sin fingir privacidad criptográfica.
+- **Selector:** el primer caso humano real debe terminar en acuse o seguir visible. Si Tony descubre una dependencia únicamente por chat, el mecanismo ha fallado.
+- **Revertir:** `git revert <commit de v1.71>`.
+
 ## v1.70 — 2026-07-15 · Referido transparente + objetivos de Caos sin carreras
 - **Referido sin letra pequeña:** Comentarios fija una respuesta honesta sobre el uso de Claude y enlaza el pase real de Tony. Declara que es referido, el posible crédito para Tony, los pases limitados, la caducidad, el método de pago y la conversión a Pro si no se cancela.
 - **Acceso y claridad:** el CTA abre en otra pestaña con `noopener sponsored`, conserva un objetivo táctil de 44 px, contraste medido y presencia tanto en la sección como en el panel lateral.
 - **Caos estable:** al acertar un objetivo contextual, anillo y flecha se limpian y el director espera 1,4 s antes de proponer otro. Evita que el temporizador sustituya la recompensa por una flecha nueva en el mismo gesto.
 - **Verificación:** oferta, renovación, contraste, panel, tour 7/7 y 375/1280 px; además, cinco ciclos dirigidos de objetivo→toque→reintento terminaron sin relanzamientos ni capas huérfanas.
-- **Revertir:** `git revert <hash de hotfix v1.70>`.
+- **Revertir:** `git revert 8968658`.
 
 ## v1.69 — 2026-07-15 · Cuaderno como puerta común a las webs de Tony
 - **Navegación:** el final del Cuaderno reúne cuatro destinos públicos comprobados: FanRank, Neuro-Fuerza, Salón Vera y el perfil con todos los proyectos públicos de Tony. Los enlaces abren en otra pestaña para conservar el punto de lectura.
