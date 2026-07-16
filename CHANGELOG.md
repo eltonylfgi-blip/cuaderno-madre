@@ -1,3 +1,12 @@
+## v1.78 — 2026-07-16 · Populares con procedencia + «No coincide» en la mesa
+- **Feedback donde se escucha:** cada ficha de audio de la mesa incorpora un botón táctil «No coincide». El toque guarda el veredicto con origen `mesa-relaciones` y abre el mismo diálogo de matiz/dictado; no inicia ni duplica la reproducción.
+- **Nombre libre:** desaparece la insignia superpuesta «🔊 toca» que podía invadir el título. La reproducción sigue disponible al pulsar el resto de la ficha y los puertos A/B conservan su función.
+- **Seis candidatos populares:** Vine Boom, Metal Pipe, Anime Wow, Meow, Among Us y ENRIQUE entran desde la lista popular actual de MyInstants. Cada MP3 se copia desde su página exacta, conserva ese enlace visible y tiene un hash distinto.
+- **Verdad antes que ranking:** se etiquetan como «popular · por juzgar», no como aprobados ni favoritos de Tony. Aparecen primero y el filtro `🔥 Populares` permite aislarlos.
+- **Volumen prudente:** cada impacto trae un límite propio por debajo del techo global para evitar un salto brusco al probar memes ruidosos.
+- **Selector:** en 375/1280 px el nombre y «No coincide» no se solapan; el botón mide ≥44 px, abre el diálogo con voto `no`, el toque de ficha crea un solo audio y los seis archivos existen, son distintos y conservan seis URL de origen.
+- **Revertir:** `git revert <commit de v1.78>`.
+
 ## v1.77 — 2026-07-16 · ASMR móvil controlado + feedback contextual
 - **Efectos que no tapan:** el límite móvil pasa a 8 elementos en modo normal y 18 en Caos; cada ráfaga tiene un techo menor y las nuevas piezas evitan tanto controles como efectos ya colocados. Redimensionar o hacer scroll vuelve a recortar y distribuir.
 - **Invitación sonora:** cada franja ASMR pide subir el volumen y mantiene toda la zona como objetivo táctil. El monstruo, el contador y prefers-reduced-motion conservan su contrato.
