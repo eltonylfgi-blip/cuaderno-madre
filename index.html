@@ -103,6 +103,15 @@
   .mini.g > i{background:var(--green)} .mini.a > i{background:var(--amber)} .mini.r > i{background:var(--red)}
   .caret{flex:none;color:#9aa3b2;transition:transform .15s;margin-top:2px}
   details[open] .caret{transform:rotate(90deg)}
+  @media(max-width:560px){
+    .card > details > summary{display:grid;grid-template-columns:26px minmax(0,1fr) 26px;align-items:start;gap:7px 9px;padding:13px 12px}
+    .card > details > summary .num{grid-column:1;grid-row:1}
+    .card > details > summary .ctitle{grid-column:2;grid-row:1;min-width:0}
+    .card > details > summary .score{grid-column:2;grid-row:2;min-width:0;flex-direction:row;align-items:center;gap:8px}
+    .card > details > summary .score .mini{width:min(110px,42vw)}
+    .card > details > summary .caret{grid-column:3;grid-row:1;justify-self:end}
+    .card.key>details>summary .ctitle .t{font-size:16.5px;line-height:1.2}
+  }
 
   .body{padding:2px 15px 15px;border-top:1px solid var(--line)}
   .body p{margin:11px 0}
@@ -162,7 +171,7 @@
   .sheet{position:relative;background:#fff;width:100%;max-width:560px;border-radius:16px 16px 0 0;padding:16px 16px 20px;box-shadow:0 -8px 40px rgba(20,30,50,.25)}
   @media(min-width:620px){ .ov{align-items:center} .sheet{border-radius:16px} }
   .sheet h3{margin:0 0 3px;font-size:16px}
-  .sheet h3{padding-right:52px}.fbCloseX{position:absolute;top:8px;right:8px;width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:900 18px/1 inherit;cursor:pointer;box-shadow:0 3px 12px rgba(20,30,50,.10)}.fbCloseX:hover,.fbCloseX:focus-visible{border-color:var(--accent);color:var(--accent);outline:3px solid color-mix(in srgb,var(--accent) 18%,transparent);outline-offset:2px}
+  .sheet h3{padding-right:52px}.sheet .btn{min-height:44px}.fbCloseX{position:absolute;top:8px;right:8px;width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:900 18px/1 inherit;cursor:pointer;box-shadow:0 3px 12px rgba(20,30,50,.10)}.fbCloseX:hover,.fbCloseX:focus-visible{border-color:var(--accent);color:var(--accent);outline:3px solid color-mix(in srgb,var(--accent) 18%,transparent);outline-offset:2px}
   .sheet .ctx{font-size:12.5px;color:var(--muted);margin-bottom:10px}
   .sheet label{font-size:12.5px;font-weight:600;display:block;margin:10px 0 4px}
   .sheet .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
@@ -533,7 +542,7 @@
          enlazados existen y ya estaban enlazados más abajo — cero URL inventada. -->
     <div id="enDoor" lang="en">
       <b>👋 New here?</b> This is the live public notebook of <b>MADRE</b> — an AI system that tries to improve itself, makes <b>dated bets</b> about its own progress (sealed in git <i>before</i> each deadline) and keeps every failure on display. The site speaks Spanish, but the evidence reads in any language: <b>✅ bet won · ❌ bet lost (never deleted) · ⏳ reality decides on the printed date</b>. The low numbers (0&nbsp;€, self-score 3/10) are deliberate — here failures get published before wins.<br>
-      Built and maintained with <b>Claude Code</b>. Open-source tools born from this system: <a href="https://github.com/eltonylfgi-blip/claude-code-usage-guard" target="_blank" rel="noopener">claude-code-usage-guard</a> · <a href="https://github.com/eltonylfgi-blip/claude-session-triage" target="_blank" rel="noopener">claude-session-triage</a> · <a href="https://github.com/eltonylfgi-blip/claude-usage-pacer" target="_blank" rel="noopener">claude-usage-pacer</a>.
+      Public tools built alongside this notebook: <a href="https://github.com/eltonylfgi-blip/claude-code-usage-guard" target="_blank" rel="noopener">claude-code-usage-guard</a> · <a href="https://github.com/eltonylfgi-blip/claude-session-triage" target="_blank" rel="noopener">claude-session-triage</a> · <a href="https://github.com/eltonylfgi-blip/claude-usage-pacer" target="_blank" rel="noopener">claude-usage-pacer</a>.
     </div>
     <!-- v1.07: narrativa + UNA acción clara primero (tour, verificado como el camino que sí explica
          todo); "8 ramas" sigue ahí como alternativa rápida, ya no compitiendo en igualdad de peso.
@@ -708,7 +717,7 @@
     .cmTonyNorth{display:grid;gap:3px;margin:0 0 10px;padding:10px 11px;border:1px solid rgba(236,72,153,.22);border-radius:13px;background:linear-gradient(135deg,#fff1fa,#f3edff);color:#45205f}.cmTonyNorth span{font-size:10.5px;font-weight:900;letter-spacing:.045em;text-transform:uppercase}.cmTonyNorth b{font-size:12px;line-height:1.42}
     .cmLabJump{display:flex;align-items:center;gap:10px;width:100%;min-height:50px;margin:10px 0;padding:9px 11px;border:0;border-radius:13px;background:linear-gradient(135deg,#241638,#7144bb 58%,#197e96);color:#fff;text-align:left;cursor:pointer;box-shadow:0 8px 20px rgba(65,38,110,.2)}.cmLabJump>span:first-child{font-size:24px}.cmLabJump>span:nth-child(2){min-width:0;flex:1}.cmLabJump b{display:block;font-size:12.5px;line-height:1.2}.cmLabJump small{display:block;margin-top:2px;color:#d9f8ff;font-size:10.5px;line-height:1.25;white-space:normal;overflow-wrap:anywhere}.cmLabJump .cmLabArrow{margin-left:auto;font-size:20px}.cmLabJump:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
     .cmFavLabel{display:block;margin:0 0 5px;color:#302744;font-size:12px;font-weight:800}.cmFavText{display:block;width:100%;min-height:96px;box-sizing:border-box;resize:vertical;padding:10px 11px;border:1px solid #d7d1e2;border-radius:12px;background:#fff;color:#221c31;font:14px/1.45 system-ui}.cmFavText:focus{outline:3px solid rgba(124,58,237,.22);border-color:#7c3aed}.cmFavActions{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}.cmFavActions .btn{min-height:44px}.cmFavProgress{margin:10px 0 0;padding:9px 10px;border-radius:11px;background:#f4f1fb;color:#5a516b;font-size:11.5px;line-height:1.45}.cmFavProgress b{color:#332153}.cmFavProgress ul{margin:5px 0 0;padding-left:18px}.cmFavProgress:empty{display:none}
-    .cmFanRank{margin:12px 0 0;border:1px solid rgba(76,29,149,.22);border-radius:14px;background:#171127;color:#f7f3ff;overflow:hidden}.cmFanRank>summary{display:flex;align-items:center;gap:9px;min-height:52px;padding:10px 11px;list-style:none;cursor:pointer}.cmFanRank>summary::-webkit-details-marker{display:none}.cmFanRank>summary b{font-size:13px}.cmFanRank>summary small{margin-left:auto;color:#c7b9df;font-size:10px;text-align:right}.cmFRBody{padding:0 11px 12px;border-top:1px solid rgba(255,255,255,.1)}.cmFRIntro{margin:10px 0;color:#d9d0e8;font-size:11.5px;line-height:1.45}.cmFRList{display:grid;gap:7px;margin:0;padding:0;list-style:none;counter-reset:fanrank}.cmFRItem{counter-increment:fanrank;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:7px;align-items:center;min-width:0;padding:8px;border:1px solid rgba(255,255,255,.11);border-radius:11px;background:rgba(255,255,255,.065)}.cmFRItem::before{content:"#" counter(fanrank);color:#9cecff;font:900 11px/1 system-ui}.cmFRTitle{min-width:0;color:#fff;font:750 11.5px/1.3 system-ui}.cmFRMeta{display:block;margin-top:2px;color:#bfb3d4;font:650 9.5px/1.25 system-ui}.cmFRActions{display:flex;gap:5px;align-items:center}.cmFRVote,.cmFROwnerBtn{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.16);border-radius:10px;background:#2e2146;color:#fff;cursor:pointer;font:800 11px/1 system-ui}.cmFRVote[aria-pressed="true"]{background:#fff;color:#4c1d95}.cmFRVote:disabled{opacity:.58}.cmFROwnerBtn{display:none;background:#ffe9fa;color:#5a1450;border-color:#f6c5ef;font-size:16px}body.cmCreator .cmFROwnerBtn{display:block}.cmFROwnerBtn[aria-pressed="true"]{background:#ec4899;color:#fff}.cmFRForm{margin-top:9px;border:1px dashed rgba(156,236,255,.32);border-radius:11px}.cmFRForm>summary{display:flex;align-items:center;min-height:44px;padding:0 10px;cursor:pointer;color:#bff5ff;font-size:11.5px;font-weight:800}.cmFRFields{display:grid;gap:7px;padding:0 9px 9px}.cmFRFields label{display:grid;gap:4px;color:#dcd3eb;font-size:10.5px;font-weight:750}.cmFRFields input,.cmFRFields textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.18);border-radius:9px;background:#fff;color:#21172e;padding:9px 10px;font:13px/1.35 system-ui}.cmFRFields textarea{min-height:72px;resize:vertical}.cmFRFields button{min-height:44px;border:0;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#22d3ee);color:#fff;font-weight:850;cursor:pointer}.cmFRStatus{min-height:17px;margin:0;color:#d8f8ff;font-size:10.5px;line-height:1.35}.cmFRFoot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;color:#afa3c5;font-size:9.5px}.cmFRFoot a{color:#9cecff;font-weight:800}
+    .cmFanRank{margin:12px 0 0;border:1px solid rgba(76,29,149,.22);border-radius:14px;background:#171127;color:#f7f3ff;overflow:hidden}.cmFanRank>summary{display:flex;align-items:center;gap:9px;min-height:52px;padding:10px 11px;list-style:none;cursor:pointer}.cmFanRank>summary::-webkit-details-marker{display:none}.cmFanRank>summary b{font-size:13px}.cmFanRank>summary small{margin-left:auto;color:#c7b9df;font-size:10px;text-align:right}.cmFRBody{padding:0 11px 12px;border-top:1px solid rgba(255,255,255,.1)}.cmFRIntro{margin:10px 0;color:#d9d0e8;font-size:11.5px;line-height:1.45}.cmFRList{display:grid;gap:7px;margin:0;padding:0;list-style:none;counter-reset:fanrank}.cmFRItem{counter-increment:fanrank;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:7px;align-items:center;min-width:0;padding:8px;border:1px solid rgba(255,255,255,.11);border-radius:11px;background:rgba(255,255,255,.065)}.cmFRItem::before{content:"#" counter(fanrank);color:#9cecff;font:900 11px/1 system-ui}.cmFRTitle{min-width:0;color:#fff;font:750 11.5px/1.3 system-ui}.cmFRMeta{display:block;margin-top:2px;color:#bfb3d4;font:650 9.5px/1.25 system-ui}.cmFRActions{display:flex;gap:5px;align-items:center}.cmFRVote{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.16);border-radius:10px;background:#2e2146;color:#fff;cursor:pointer;font:800 11px/1 system-ui}.cmFRVote[aria-pressed="true"]{background:#fff;color:#4c1d95}.cmFRVote:disabled{opacity:.58}.cmFRForm{margin-top:9px;border:1px dashed rgba(156,236,255,.32);border-radius:11px}.cmFRForm>summary{display:flex;align-items:center;min-height:44px;padding:0 10px;cursor:pointer;color:#bff5ff;font-size:11.5px;font-weight:800}.cmFRFields{display:grid;gap:7px;padding:0 9px 9px}.cmFRFields label{display:grid;gap:4px;color:#dcd3eb;font-size:10.5px;font-weight:750}.cmFRFields input,.cmFRFields textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.18);border-radius:9px;background:#fff;color:#21172e;padding:9px 10px;font:13px/1.35 system-ui}.cmFRFields textarea{min-height:72px;resize:vertical}.cmFRFields button{min-height:44px;border:0;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#22d3ee);color:#fff;font-weight:850;cursor:pointer}.cmFRStatus{min-height:17px;margin:0;color:#d8f8ff;font-size:10.5px;line-height:1.35}.cmFRFoot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;color:#afa3c5;font-size:9.5px}.cmFRFoot a{color:#9cecff;font-weight:800}
     @media(max-width:430px){.cmFRItem{grid-template-columns:25px minmax(0,1fr)}.cmFRActions{grid-column:2;justify-content:flex-start}.cmFRFoot{align-items:flex-start;flex-direction:column}}
     body.cmFavFocus #cmvFab,body.cmFavFocus #fabHubActive,body.cmFavFocus #fabHubBtn,body.cmFavFocus #fabHubMenu,body.cmFavFocus #fabHubTip,body.cmFavFocus #tourLaunch,body.cmFavFocus #mapFab,body.cmFavFocus #gxg-cat-root{display:none!important}
     @media(max-width:420px){.realitySignals{gap:6px}.realitySignal{padding:9px 5px}.realitySignal b{font-size:15px}#realidadCard .scoreRow{padding:12px}}
@@ -992,7 +1001,7 @@
           inboxCopy=document.getElementById("tonyInboxCopy"), inboxNotice=document.getElementById("tonyInboxNotice"),
           inboxLink=document.getElementById("tonyInboxLink");
       function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-      function creador(){ try{ return localStorage.getItem("cuaderno_madre_tony")==="1"; }catch(e){ return false; } }
+      function creador(){ return false; }
       function english(){ try{ return document.documentElement.lang==="en"||(typeof window.__cmLangIsEnglish==="function"&&window.__cmLangIsEnglish()); }catch(e){ return false; } }
       var inboxPending=0;
       function paintInboxDock(count){
@@ -1054,7 +1063,7 @@
             return h+'</div>';
           }).join("")) : "";
         } else {
-          elA.innerHTML = avPend.length ? ('<div class="mh-glabel">👀 Avisos reservados en la interfaz</div><div class="mh-lock">🔒 Hay <b>'+avPend.length+'</b> cosa'+(avPend.length===1?'':'s')+' que necesita'+(avPend.length===1?'':'n')+' al creador. Pulsa <b>«👤 Soy el creador»</b> arriba para verla'+(avPend.length===1?'':'s')+'. No contiene secretos.</div>') : "";
+          elA.innerHTML = avPend.length ? ('<div class="mh-glabel">👀 Avisos privados</div><div class="mh-lock">🔒 Hay <b>'+avPend.length+'</b> aviso'+(avPend.length===1?'':'s')+' pendiente'+(avPend.length===1?'':'s')+'. El detalle solo se abre en el Centro de mando autenticado.</div>') : "";
         }
         elC.innerHTML = cam.length ? ('<div class="mh-glabel">🔧 Cambios permanentes del sistema</div>' + cam.map(function(r){
           var h='<div class="mh-item"><div class="mh-it-tit">'+esc(r.titulo)+' '+impChip(r.impacto)+'</div>';
@@ -1077,7 +1086,7 @@
             return h+'</div>';
           }).join("")) : '<div class="mh-glabel">🤝 Decisiones</div><div class="mh-lock">Ninguna ahora mismo: las que podía resolver yo, ya están resueltas.</div>';
         } else {
-          elD.innerHTML = pend.length ? ('<div class="mh-glabel">🤝 Decisiones para ti</div><div class="mh-lock">🔒 Tengo <b>'+pend.length+'</b> que SOLO tú puedes tomar. Pulsa <b>«👤 Soy el creador»</b> arriba. (El resto las resuelvo yo y te aviso — no te bloquean.)</div>') : "";
+          elD.innerHTML = pend.length ? ('<div class="mh-glabel">🤝 Decisiones privadas</div><div class="mh-lock">🔒 Hay <b>'+pend.length+'</b> decisión'+(pend.length===1?'':'es')+' que solo Tony puede tomar. El detalle vive en el Centro de mando autenticado; el resto lo resuelve MADRE.</div>') : "";
         }
         elW.innerHTML = tr.length ? ('<div class="mh-glabel">✅ Trabajo hecho</div>' + tr.map(function(r){
           return '<div class="mh-item"><div class="mh-it-tit"><span class="mh-tag tr">HECHO</span>'+esc(r.titulo)+'</div>'+(r.detalle?'<div class="mh-it-det">'+esc(r.detalle)+'</div>':'')+'</div>';
@@ -1096,7 +1105,7 @@
             '<div class="mh-mc pe"><div class="n">'+esc(p[2]||"?")+'</div><div class="l">pendientes</div></div></div>';
         } else { elM.innerHTML=""; }
         elS.textContent = creador() ? "vista creador" : "";
-        elF.textContent = "MADRE lo deja aquí para ti — solo lo que merece tu atención. El modo creador es un candado de cortesía, no autenticación.";
+        elF.textContent = "Aquí solo aparece información pública. Los avisos y decisiones privadas se consultan en el Centro de mando autenticado.";
         box.hidden=false;
         lastCreador=creador();
         Array.prototype.forEach.call(elA.querySelectorAll(".mh-ack"), function(b){
@@ -2095,8 +2104,8 @@
     .asmrLabCard .alTitle{display:flex;flex-direction:column;min-width:0;flex:1}.asmrLabCard .alTitle b{font-size:18px;line-height:1.15}.asmrLabCard .alTitle span{font-size:12px;color:#cbc5e7;margin-top:3px}.asmrLabCard .alCaret{font-size:16px;transition:transform .2s}.asmrLabCard>details[open]>summary .alCaret{transform:rotate(90deg)}
     .asmrLabBody{padding:14px 16px 17px}.asmrLabLead{margin:0 0 12px;color:#eeeaff;font-size:13.5px;line-height:1.5}.asmrLabLead b{color:#80ecff}
     .asmrLabGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.asmrCand{display:grid;grid-template-columns:48px minmax(0,1fr);gap:9px;align-items:center;min-height:92px;padding:9px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.075);transition:transform .18s,background .18s,border-color .18s}.asmrCand:hover{transform:translateY(-2px);background:rgba(255,255,255,.12);border-color:rgba(128,236,255,.55)}
-    .asmrPlay{width:48px;height:48px;border:0;border-radius:14px;background:linear-gradient(145deg,#8b5cf6,#22d3ee);color:#fff;font-size:23px;cursor:pointer;box-shadow:0 7px 18px rgba(34,211,238,.18)}.asmrPlay:focus-visible,.asmrVote:focus-visible,.asmrLabMore>summary:focus-visible{outline:3px solid #facc15;outline-offset:2px}.asmrCand.playing .asmrPlay{animation:asmrPlayPulse .55s ease-out 1}
-    .asmrCandText{min-width:0}.asmrCandName{display:block;font-weight:800;font-size:13px;line-height:1.2}.asmrCandWhy{display:block;color:#cfc9e7;font-size:11px;line-height:1.3;margin-top:3px}.asmrVotes{display:grid;grid-template-columns:44px 44px minmax(0,1fr);gap:6px;margin-top:7px}.asmrVote,.asmrMatch,.asmrQuickMatch{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.18);border-radius:11px;background:rgba(8,7,18,.24);color:#fff;cursor:pointer;font-size:17px}.asmrVote[data-vote="gusta"]{grid-column:1;grid-row:1}.asmrVote[data-vote="no-gusta"]{grid-column:2;grid-row:1}.asmrVote.on{background:#fff;color:#4c1d95;border-color:#fff}.asmrVoteReason{box-sizing:border-box;grid-column:3;grid-row:1;width:100%;min-width:0;min-height:44px;padding:8px 10px;border:1px solid rgba(255,255,255,.2);border-radius:11px;background:rgba(8,7,18,.28);color:#fff;font:750 10.5px/1.25 system-ui,-apple-system,Segoe UI,sans-serif}.asmrVoteReason::placeholder{color:#d8d2eb;opacity:.92}.asmrVoteReason:focus{border-color:#67e8f9;outline:3px solid rgba(103,232,249,.2)}.asmrVoteReason[disabled]{opacity:.6}.asmrMatchLabel{display:flex;grid-column:1;grid-row:2;align-items:center;min-height:44px;color:#e8e3ff;font-size:10.5px;font-weight:900}.asmrQuickMatch{padding:7px 10px;font-size:11px;font-weight:900}.asmrQuickMatch[data-match="si"]{grid-column:2;grid-row:2}.asmrQuickMatch[data-match="no"]{grid-column:3;grid-row:2}.asmrQuickMatch.on{border-color:#fff;background:#fff;color:#4c1d95;box-shadow:0 0 0 3px rgba(103,232,249,.2)}.asmrQuickMatch[disabled]{opacity:.55;cursor:wait}.asmrMatch{grid-column:1/-1;grid-row:3;width:100%;padding:7px 9px;font-size:10.5px;font-weight:850;text-align:center}.asmrMatch:hover,.asmrQuickMatch:hover{border-color:#67e8f9;background:rgba(34,211,238,.14)}
+    .asmrPlay{width:48px;height:48px;border:0;border-radius:14px;background:linear-gradient(145deg,#8b5cf6,#22d3ee);color:#fff;font-size:23px;cursor:pointer;box-shadow:0 7px 18px rgba(34,211,238,.18)}.asmrPlay:focus-visible,.asmrVote:focus-visible,.asmrVoteVoice:focus-visible,.asmrLabMore>summary:focus-visible{outline:3px solid #facc15;outline-offset:2px}.asmrCand.playing .asmrPlay{animation:asmrPlayPulse .55s ease-out 1}
+    .asmrCandText{min-width:0}.asmrCandName{display:block;font-weight:800;font-size:13px;line-height:1.2}.asmrCandWhy{display:block;color:#cfc9e7;font-size:11px;line-height:1.3;margin-top:3px}.asmrVotes{display:grid;grid-template-columns:44px 44px 44px minmax(0,1fr);gap:6px;margin-top:7px}.asmrVote,.asmrVoteVoice,.asmrMatch,.asmrQuickMatch{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.18);border-radius:11px;background:rgba(8,7,18,.24);color:#fff;cursor:pointer;font-size:17px}.asmrVote[data-vote="gusta"]{grid-column:1;grid-row:1}.asmrVote[data-vote="no-gusta"]{grid-column:2;grid-row:1}.asmrVote.on{background:#fff;color:#4c1d95;border-color:#fff}.asmrVoteVoice{grid-column:3;grid-row:1;padding:0;font-size:18px}.asmrVoteVoice:hover{border-color:#67e8f9;background:rgba(34,211,238,.14)}.asmrVoteReason{box-sizing:border-box;grid-column:4;grid-row:1;width:100%;min-width:0;min-height:44px;padding:8px 10px;border:1px solid rgba(255,255,255,.2);border-radius:11px;background:rgba(8,7,18,.28);color:#fff;font:750 10.5px/1.25 system-ui,-apple-system,Segoe UI,sans-serif}.asmrVoteReason::placeholder{color:#d8d2eb;opacity:.92}.asmrVoteReason:focus{border-color:#67e8f9;outline:3px solid rgba(103,232,249,.2)}.asmrVoteReason[disabled]{opacity:.6}.asmrMatchLabel{display:flex;grid-column:1;grid-row:2;align-items:center;min-height:44px;color:#e8e3ff;font-size:10.5px;font-weight:900}.asmrQuickMatch{padding:7px 10px;font-size:11px;font-weight:900}.asmrQuickMatch[data-match="si"]{grid-column:2;grid-row:2}.asmrQuickMatch[data-match="no"]{grid-column:3/5;grid-row:2}.asmrQuickMatch.on{border-color:#fff;background:#fff;color:#4c1d95;box-shadow:0 0 0 3px rgba(103,232,249,.2)}.asmrQuickMatch[disabled]{opacity:.55;cursor:wait}.asmrMatch{grid-column:1/-1;grid-row:3;width:100%;padding:7px 9px;font-size:10.5px;font-weight:850;text-align:center}.asmrMatch:hover,.asmrQuickMatch:hover{border-color:#67e8f9;background:rgba(34,211,238,.14)}
     .asmrLabMore{margin-top:12px;border:1px dashed rgba(255,255,255,.25);border-radius:13px;background:rgba(0,0,0,.08)}.asmrLabMore>summary{min-height:48px;display:flex;align-items:center;padding:0 13px;cursor:pointer;font-weight:750;font-size:13px}.asmrLabMore .asmrLabGrid{padding:0 10px 10px}
     .asmrRealShelf{margin:12px 0 0;padding:11px;border:1px solid rgba(103,232,249,.38);border-radius:15px;background:linear-gradient(145deg,rgba(8,145,178,.13),rgba(124,58,237,.12));scroll-margin:88px 0 190px}.asmrRealHead{display:flex;align-items:flex-start;gap:9px;margin:0 0 10px;color:#f8fdff}.asmrRealHead>span{font-size:24px}.asmrRealHead b{display:block;font-size:13px;line-height:1.25}.asmrRealHead small{display:block;margin-top:2px;color:#bdeffc;font-size:10.5px;line-height:1.35}.asmrOrigin{display:inline-flex;align-items:center;min-height:24px;margin-top:5px;padding:2px 7px;border:1px solid rgba(103,232,249,.38);border-radius:999px;background:rgba(8,145,178,.14);color:#a5f3fc;font-size:9.5px;font-weight:850;text-decoration:none}.asmrOrigin[href]{min-height:44px;padding:5px 9px}.asmrOrigin.synth{border-color:rgba(196,181,253,.3);background:rgba(124,58,237,.12);color:#ddd6fe}.asmrOrigin:hover{background:rgba(103,232,249,.2);color:#fff}.asmrLabSources{margin:13px 0 0;font-size:11.5px;line-height:1.55;color:#cbc5e7}.asmrLabSources a{color:#8eeeff;font-weight:700}.asmrLabStatus{min-height:18px;margin:10px 0 0;color:#fff;font-size:12px;font-weight:700}
     .asmrLabReto{margin:0 0 10px;padding:9px 11px;border:1px solid rgba(250,204,21,.38);border-radius:12px;background:rgba(250,204,21,.09);color:#fff7c2;font-size:12.5px;line-height:1.45}.asmrLabTools{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:7px;margin:0 0 12px}.asmrLabTool{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 10px;border:1px solid rgba(255,255,255,.2);border-radius:11px;background:rgba(255,255,255,.09);color:#fff;font-size:10.5px;font-weight:850;line-height:1.25;text-align:center;text-decoration:none;cursor:pointer}.asmrLabTool.primary{border-color:rgba(103,232,249,.55);background:linear-gradient(135deg,rgba(109,40,217,.82),rgba(8,145,178,.82))}.asmrLabTool:hover{background:rgba(255,255,255,.16)}
@@ -2108,7 +2117,7 @@
     body.cmLabFocus #fabHubMenu,body.cmLabFocus #fabHubTip,body.cmLabFocus #tourLaunch,
     body.cmLabFocus #mapFab,body.cmLabFocus #gxg-cat-root{display:none!important}
     @keyframes asmrPlayPulse{0%{transform:scale(1)}45%{transform:scale(1.14) rotate(5deg);box-shadow:0 0 0 8px rgba(34,211,238,.14)}100%{transform:scale(1)}}
-    @media(max-width:520px){.asmrLabGrid{grid-template-columns:1fr}.asmrLabCard .alTitle b{font-size:16px}.asmrLabCard .alTitle span{white-space:normal}.asmrLabTools{grid-template-columns:1fr}.cmAsmrChoices{grid-template-columns:1fr}}
+    @media(max-width:520px){.asmrLabGrid{grid-template-columns:1fr}.asmrLabCard .alTitle b{font-size:16px}.asmrLabCard .alTitle span{white-space:normal}.asmrLabTools{grid-template-columns:1fr}.cmAsmrChoices{grid-template-columns:1fr}.asmrVoteReason{grid-column:1/-1;grid-row:2}.asmrMatchLabel{grid-row:3}.asmrQuickMatch[data-match="si"]{grid-row:3}.asmrQuickMatch[data-match="no"]{grid-row:3}.asmrMatch{grid-row:4}}
     @media(prefers-reduced-motion:reduce){.asmrLabCard *{scroll-behavior:auto!important}.asmrCand,.asmrLabCard .alCaret{transition:none}.asmrCand:hover{transform:none}.asmrCand.playing .asmrPlay{animation:none}}
   </style>
   <aside class="asmrLabCard" id="asmrLabCard">
@@ -3339,13 +3348,13 @@
   <div class="card key"><details open>
     <summary>
       <span class="num">1</span>
-      <span class="ctitle"><span class="t">Qué es MADRE (y cómo sé que va bien)</span>
-        <span class="s">Una IA que intenta decidir mejor y aprender de sus fallos, no acumular notas. Se mide por UNA cosa: cuánto valor de verdad ha tocado el mundo de fuera.</span></span>
+      <span class="ctitle"><span class="t">Qué es MADRE (con un ejemplo)</span>
+        <span class="s">Antes de actuar, escribe lo que cree que pasará. Después vuelve y comprueba si acertó. Así aprende de hechos, no de presumir.</span></span>
       <span class="score"><span class="v">claridad 8</span><span class="mini g"><i style="width:80%"></i></span></span>
       <span class="caret">▶</span>
     </summary>
     <div class="body">
-      <p class="lead">MADRE es un sistema para <b>diagnosticar y decidir mejor que otros</b>, subiendo tu beneficio futuro con el <b>mínimo caos</b>. Lo valioso no es saber más, es equivocarse menos y corregir antes.</p>
+      <p class="lead"><b>Ejemplo:</b> si cree que una herramienta gustará, lo deja escrito con fecha, la publica y luego mira usos reales. Si nadie la usa, cambia de idea. Eso es MADRE: <b>actuar, comprobar y corregir</b>.</p>
       <details class="x"><summary><span class="plus">+</span> Su única métrica</summary>
         <div class="xb"><p>No cuenta documentos ni ideas. Cuenta
           <b><details class="def"><summary>ciclos cerrados</summary><span class="d">Un ciclo cerrado = idea → acción → <b>señal de fuera</b> → corrección. Sacar algo al mundo y dejar que el mundo te diga si vale.</span></details></b>:
@@ -3449,7 +3458,7 @@
     </summary>
     <div class="body">
       <p class="lead">Nada de esto frena a MADRE: si no lo haces, sigue por otro lado y te lo recuerda una vez. Pero estos pasos <b>desbloquean</b> lo importante.</p>
-      <div class="soloTony">🔒 Esta es la <b>lista del creador</b>. Si vienes de fuera, no necesitas hacer nada aquí — es para que él vea qué desbloquea. (Si eres él, pulsa «👤 Soy el creador» arriba para poder marcar.)</div>
+      <div class="soloTony">🔒 Esta lista interna ya no se modifica desde la web pública. Tony la consulta y decide en el Centro de mando autenticado.</div>
       <div class="step" data-step>
         <input type="checkbox" id="s1">
         <div class="st">
@@ -3508,7 +3517,7 @@
     </summary>
     <div class="body">
       <p class="lead">Esto es un <b>archivo</b>: las propuestas que MADRE dejó al creador a finales de junio. Por su regla de silencio, lo reversible acabó aplicándose solo (el vigía ya corre; el puente del buzón para vídeos ya existe). Se conservan aquí porque el histórico también es evidencia — las decisiones <b>vivas</b> están en el panel «🗣️ MADRE te dice», más arriba.</p>
-      <div class="soloTony">🔒 Los botones son del <b>creador</b>. Si eres él, pulsa <b>«👤 Soy el creador»</b> arriba para que aparezcan.</div>
+      <div class="soloTony">🔒 Este archivo es solo informativo. Las decisiones vivas de Tony se toman en el Centro de mando autenticado.</div>
 
       <div class="dec" data-dec="Watchdog (vigía)">
         <h4>1 · Un vigía para que MADRE no se quede "viva pero parada"</h4>
@@ -4023,6 +4032,12 @@
     <div class="ctx" id="fbCtx">—</div>
     <label for="fbText">Tu mensaje</label>
     <textarea id="fbText" placeholder="Escribe aquí... (también vale dejarlo corto)"></textarea>
+    <div style="display:flex;flex-wrap:wrap;gap:7px;margin:7px 0 4px">
+      <button type="button" class="btn" id="fbVoice" aria-pressed="false">🎙️ Dictar</button>
+      <button type="button" class="btn" id="fbPasteImage">📋 Pegar captura</button>
+      <button type="button" class="btn" id="fbChooseImage">🖼️ Galería / archivos</button>
+    </div>
+    <p class="small" id="fbVoiceStatus" role="status" aria-live="polite" style="margin:3px 0 8px">El dictado escribe aquí lo que dices. No sirve para demostrar que eres Tony.</p>
     <label id="fbTipoLbl">¿De qué es? <span class="small" style="font-weight:400">(si no eliges, lo decide MADRE)</span></label>
     <div id="fbTipoBtns" class="tipoBtns" role="group" aria-labelledby="fbTipoLbl">
       <button type="button" class="tbtn on" data-tipo="auto">🪄 Que elija MADRE</button>
@@ -4031,11 +4046,11 @@
       <button type="button" class="tbtn" data-tipo="pedir-funcion">Pedir una función</button>
       <button type="button" class="tbtn" data-tipo="opinion">Mi opinión</button>
     </div>
-    <label for="fbImg">Imagen (opcional) — en PC pégala con Ctrl/Cmd+V; en móvil usa el botón de subir ↓</label>
-    <div id="fbPasteZone" tabindex="0" style="border:1px dashed var(--line);border-radius:9px;padding:12px;text-align:center;color:var(--muted);font-size:12.5px;background:#fcfdff;cursor:text">📋 PC: haz clic aquí y pega (Ctrl/Cmd+V) · Móvil: usa el botón de subir ↓</div>
+    <label for="fbImg">Captura opcional</label>
+    <div id="fbPasteZone" tabindex="0" style="border:1px dashed var(--line);border-radius:9px;padding:12px;text-align:center;color:var(--muted);font-size:12.5px;background:#fcfdff;cursor:text">Pega con Ctrl/Cmd+V o usa «Galería / archivos». Si Chrome bloquea el portapapeles, abriremos el selector.</div>
     <img id="fbPreview" alt="" style="display:none;max-width:100%;max-height:170px;margin-top:8px;border-radius:8px;border:1px solid var(--line)">
     <div id="fbImgInfo" class="small" style="margin-top:5px"></div>
-    <input type="file" id="fbImg" accept="image/*" style="width:100%;margin-top:6px">
+    <input type="file" id="fbImg" accept="image/*" hidden>
     <a class="btn" href="media.html#proponer" style="display:flex;align-items:center;justify-content:center;min-height:44px;margin-top:8px;text-decoration:none">🎙️ Audio, vídeo, animación o varios archivos →</a>
     <label style="display:flex;align-items:center;gap:8px;font-weight:500;margin-top:10px">
       <input type="checkbox" id="fbScope"> Es un comentario <b>&nbsp;GENERAL sobre el cuaderno</b>&nbsp; (no de este punto)
@@ -4216,11 +4231,11 @@ window.__cmCorpus = {
     var now = new Date(), tarjeta, seccion, scope, title;
     if(o.general){
       tarjeta="CUADERNO (artefacto) — comentario general"; seccion="(todo el cuaderno, no un punto concreto)";
-      scope="GENERAL sobre el artefacto (el cuaderno)"; title="FEEDBACK_TONY_"+stamp()+"__general-cuaderno.txt";
+      scope="GENERAL sobre el artefacto (el cuaderno)"; title="FEEDBACK_WEB_"+stamp()+"__general-cuaderno.txt";
     } else {
       tarjeta=o.card||"General"; seccion=o.section||"(general de esta tarjeta)";
       scope=o.section?"ESPECIFICO (este punto)":"TARJETA entera";
-      title="FEEDBACK_TONY_"+stamp()+"__"+slug(o.card)+(o.section?("__"+slug(o.section)):"")+".txt";
+      title="FEEDBACK_WEB_"+stamp()+"__"+slug(o.card)+(o.section?("__"+slug(o.section)):"")+".txt";
     }
     var imgLine="";
     if(o.imageDataUrl && hasCowork()){
@@ -4232,15 +4247,17 @@ window.__cmCorpus = {
         imgLine="IMAGEN ADJUNTA: "+imgTitle+"\n";
       }catch(e){ imgLine="IMAGEN ADJUNTA: (no se pudo subir)\n"; }
     }
+    var contextLine="URL: "+location.href+"\nPOSICION_VERTICAL: "+Math.round(window.scrollY||0)+" px\nENTRADA: "+(o.voiceTranscript?"dictado-a-texto":"texto")+"\n";
     var body=
-      "DE: Tony (cuaderno MADRE) | FECHA: "+now.toISOString()+"\n"+
+      "DE: Visitante web (identidad no verificada) | FECHA: "+now.toISOString()+"\n"+
       "ARTEFACTO: Cuaderno MADRE\n"+
       "TARJETA: "+tarjeta+"\n"+
       "SECCION: "+seccion+"\n"+
       "ALCANCE: "+scope+"\n"+
       "TIPO: "+(o.tipo||"opinion")+"\n"+
+      contextLine+
       imgLine+
-      "--- TEXTO DE TONY ---\n"+
+      "--- TEXTO ---\n"+
       ((o.texto&&o.texto.trim())?o.texto.trim():"(sin texto; el tipo de feedback ya es la señal)")+"\n";
     var rec={ card:o.card, section:o.section||"", tipo:o.tipo, general:!!o.general, title:title, at:now.toISOString(), ok:false };
     if(!hasCowork()){
@@ -4257,7 +4274,8 @@ window.__cmCorpus = {
               if(!up.error) imgUrl=SB.storage.from("comment-images").getPublicUrl(path).data.publicUrl;
             }catch(e){}
           }
-          var ins=await SB.from("feedback").insert({ card:tarjeta, section:seccion, tipo:(o.tipo||"opinion"), texto:(o.texto||"").trim()||null, image_url:imgUrl, general:!!o.general });
+          var webText=((o.texto||"").trim()+"\n\n[Contexto automático: "+location.href+" · y="+Math.round(window.scrollY||0)+" · "+(o.voiceTranscript?"dictado":"texto")+"]").trim();
+          var ins=await SB.from("feedback").insert({ card:tarjeta, section:seccion, tipo:(o.tipo||"opinion"), texto:webText||null, image_url:imgUrl, general:!!o.general });
           if(!ins.error) sent=true; else console.warn("fb insert", ins.error.message);
         }
       }catch(e){}
@@ -4295,14 +4313,16 @@ window.__cmCorpus = {
   function openModal(card,section,tipo){
     cur={card:card||"General",section:section||""};
     fbCtx.innerHTML="Sobre: <b>"+esc(card||"General")+"</b>"+(section?(" › "+esc(section)):"");
-    fbText.value=""; clearAttached();
+    fbText.value=""; clearAttached(); fbWasDictated=false;
+    setVoiceStatus("El dictado escribe aquí lo que dices. No sirve para demostrar que eres Tony.");
     fbScope.checked = !section && (card==="General" || /feedback general/i.test(card||""));
     setTipo(tipo || "auto");
     fbScope.dispatchEvent(new Event("change"));
     _fbPrevFocus=document.activeElement; ov.classList.add("on"); setTimeout(function(){ fbText.focus(); },50);
   }
+  window.__cmOpenFeedback=openModal;
   var _fbPrevFocus=null;
-  function closeModal(){ var back=_fbPrevFocus;_fbPrevFocus=null;ov.classList.remove("on");try{if(back&&back.focus){back.focus({preventScroll:true});setTimeout(function(){try{back.focus({preventScroll:true});}catch(e){}},0);}}catch(e){} }
+  function closeModal(){ var back=_fbPrevFocus;_fbPrevFocus=null;if(fbRecognition){try{fbRecognition.stop();}catch(e){}}ov.classList.remove("on");try{if(back&&back.focus){back.focus({preventScroll:true});setTimeout(function(){try{back.focus({preventScroll:true});}catch(e){}},0);}}catch(e){} }
   document.getElementById("fbCancel").onclick=closeModal;
   document.getElementById("fbCloseX").onclick=closeModal;
   ov.addEventListener("click",function(e){ if(e.target===ov) closeModal(); });
@@ -4322,13 +4342,14 @@ window.__cmCorpus = {
       ? "Se enviará como comentario GENERAL sobre el cuaderno (no de un punto concreto)."
       : "Se etiqueta con la tarjeta y el punto exacto, para que MADRE sepa a qué respondes.";
   });
-  var attachedImg=null;
+  var attachedImg=null,fbWasDictated=false,fbRecognition=null;
+  function setVoiceStatus(msg){var el=document.getElementById("fbVoiceStatus");if(el)el.textContent=msg||"";}
   function setAttached(dataUrl,type,how){
     attachedImg={dataUrl:dataUrl,type:type};
     var pv=document.getElementById("fbPreview"); if(pv){ pv.src=dataUrl; pv.style.display="block"; }
     var info=document.getElementById("fbImgInfo");
     if(info){
-      info.innerHTML="🖼️ imagen "+how+" ✓ — <a href='#' id='fbImgRemove'>quitar</a>"+(hasCowork()?"":" · (en la versión web la imagen no se envía; usa escritorio)");
+      info.innerHTML="🖼️ imagen "+how+" ✓ · se adjuntará al enviar — <a href='#' id='fbImgRemove'>quitar</a>";
       var rm=document.getElementById("fbImgRemove"); if(rm) rm.onclick=function(ev){ ev.preventDefault(); clearAttached(); };
     }
   }
@@ -4339,6 +4360,40 @@ window.__cmCorpus = {
     var fi=document.getElementById("fbImg"); if(fi) fi.value="";
   }
   function readImgFile(f,how){ var rd=new FileReader(); rd.onload=function(){ setAttached(rd.result, f.type||"image/png", how); }; rd.readAsDataURL(f); }
+  async function pasteImageFromClipboard(){
+    var input=document.getElementById("fbImg"),coarse=false;
+    try{coarse=!!(window.matchMedia&&window.matchMedia("(pointer:coarse)").matches);}catch(_e){}
+    if(coarse){
+      var mobileInfo=document.getElementById("fbImgInfo");if(mobileInfo)mobileInfo.textContent="El portapapeles de imágenes no es fiable en móvil. Elige la captura de Galería / archivos.";
+      if(input)input.click();
+      return false;
+    }
+    try{
+      if(!navigator.clipboard||typeof navigator.clipboard.read!=="function") throw new Error("sin-api");
+      var items=await navigator.clipboard.read();
+      for(var i=0;i<items.length;i++){
+        var type=(items[i].types||[]).filter(function(t){return /^image\//.test(t);})[0];
+        if(type){var blob=await items[i].getType(type);readImgFile(new File([blob],"captura."+((type.split("/")[1])||"png"),{type:type}),"pegada");return true;}
+      }
+      throw new Error("sin-imagen");
+    }catch(e){
+      var info=document.getElementById("fbImgInfo");if(info)info.textContent="Chrome no entregó una imagen del portapapeles. Toca «Galería / archivos».";
+      var choose=document.getElementById("fbChooseImage");if(choose)choose.focus();
+      return false;
+    }
+  }
+  function startDictation(){
+    var SR=window.SpeechRecognition||window.webkitSpeechRecognition,btn=document.getElementById("fbVoice");
+    if(!SR){setVoiceStatus("Este navegador no admite dictado web. Usa el micrófono del teclado o escribe.");fbText.focus();return;}
+    if(fbRecognition){try{fbRecognition.stop();}catch(e){}return;}
+    var rec=new SR();fbRecognition=rec;rec.lang=document.documentElement.lang==="en"?"en-US":"es-ES";rec.continuous=false;rec.interimResults=false;rec.maxAlternatives=1;
+    btn.setAttribute("aria-pressed","true");btn.textContent="⏹️ Parar";
+    setVoiceStatus("Escuchando… El navegador puede usar su servicio de voz; MADRE recibe la transcripción, no una identidad.");
+    rec.onresult=function(ev){var said=(ev.results&&ev.results[0]&&ev.results[0][0]&&ev.results[0][0].transcript)||"";if(said){fbText.value+=(fbText.value.trim()?" ":"")+said.trim();fbWasDictated=true;fbText.focus();setVoiceStatus("✓ Dictado añadido. Revísalo antes de enviar.");}};
+    rec.onerror=function(){setVoiceStatus("No pude transcribir. Usa el micrófono del teclado o escribe.");};
+    rec.onend=function(){fbRecognition=null;btn.setAttribute("aria-pressed","false");btn.textContent="🎙️ Dictar";};
+    try{rec.start();}catch(e){rec.onend();setVoiceStatus("No pude abrir el micrófono. Revisa el permiso del navegador.");}
+  }
   document.addEventListener("paste",function(e){
     if(!ov.classList.contains("on")) return;
     var items=(e.clipboardData&&e.clipboardData.items)?e.clipboardData.items:[];
@@ -4351,15 +4406,25 @@ window.__cmCorpus = {
   });
   var fbImgEl=document.getElementById("fbImg");
   if(fbImgEl) fbImgEl.addEventListener("change",function(){ if(this.files && this.files[0]) readImgFile(this.files[0],"subida"); });
+  document.getElementById("fbVoice").addEventListener("click",startDictation);
+  document.getElementById("fbPasteImage").addEventListener("click",pasteImageFromClipboard);
+  document.getElementById("fbChooseImage").addEventListener("click",function(){if(fbImgEl)fbImgEl.click();});
+  document.getElementById("fbPasteZone").addEventListener("click",pasteImageFromClipboard);
+  document.getElementById("fbPasteZone").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pasteImageFromClipboard();}});
   document.getElementById("fbSend").onclick=async function(){
-    var o={ card:cur.card, section:cur.section, tipo:fbTipoSel, texto:fbText.value, general:fbScope.checked };
+    var btn=this,o={ card:cur.card, section:cur.section, tipo:fbTipoSel, texto:fbText.value, general:fbScope.checked, voiceTranscript:fbWasDictated };
     if(attachedImg){ o.imageDataUrl=attachedImg.dataUrl; o.imageType=attachedImg.type; }
-    await sendFeedback(o); closeModal();
+    btn.disabled=true;var result=false;try{result=await sendFeedback(o);}finally{btn.disabled=false;}
+    if(result==="sent")closeModal();
   };
   document.addEventListener("click",function(e){
     var b=e.target.closest("[data-fb]"); if(!b) return;
     openModal(b.getAttribute("data-card"), b.getAttribute("data-section"), null);
   });
+  try{
+    var feedbackSource=new URLSearchParams(location.search).get("feedback");
+    if(feedbackSource==="media-board")setTimeout(function(){openModal("🧵 Mesa de relaciones","Diseño móvil, reproducción de audio y cuerdas","opinion");},180);
+  }catch(e){}
 
   // ---- decisiones ----
   function refreshDecScore(){
@@ -4417,12 +4482,12 @@ window.__cmCorpus = {
     var sb=document.getElementById("stepBar"); if(sb) sb.style.width=(n?(done/n*100):0)+"%";
     var ch=document.getElementById("chipSteps"); if(ch) ch.innerHTML="✅ Tu parte: <b>"+done+"/"+n+"</b> ›";
   }
-  function isTonyNow(){ try{ return localStorage.getItem("cuaderno_madre_tony")==="1"; }catch(e){ return false; } }
+  function isTonyNow(){ return false; }
   document.querySelectorAll('.step input[type=checkbox]').forEach(function(c){
     if(state.steps[c.id]) c.checked=true;
     c.addEventListener("change",function(){
       // "Tu parte" es de Tony: un visitante no debe poder marcarla (igual que las decisiones)
-      if(!isTonyNow()){ c.checked=!!state.steps[c.id]; try{ if(typeof toast==="function") toast("🔒 «Tu parte» la marca el creador — pulsa «👤 Soy el creador» arriba"); }catch(e){} return; }
+      if(!isTonyNow()){ c.checked=!!state.steps[c.id]; try{ if(typeof toast==="function") toast("🔒 «Tu parte» solo se modifica en el Centro de mando autenticado"); }catch(e){} return; }
       state.steps[c.id]=c.checked; save(state); refreshSteps();
     });
   });
@@ -4668,6 +4733,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-16',destacada:true,areas:['asmr','movil','feedback','voz','capturas','caos','multimedia','comentarios','seguridad','accesibilidad'],titulo:'🎧 v1.77 — El ASMR respira en móvil y el feedback sabe dónde estás',detalle:'Las zonas ASMR invitan a subir el volumen, pero en móvil limitan y separan sus efectos para que nunca formen una montaña sobre el contenido; Caos multiplica la fiesta con un techo propio. Al desplazarte en Caos, las estelas siguen arriba o abajo el sentido real del scroll. Cualquier feedback puede dictarse y conserva automáticamente tarjeta, sección, URL y posición; «Pegar captura» usa el portapapeles cuando Chrome lo permite y abre Galería/Archivos cuando no. La mesa multimedia cabe como tablero horizontal en móvil, reproduce una ficha de audio al tocarla y dibuja cuerdas con doble contraste. El comentario real de Falange queda fijado y MADRE le responde con el ejemplo concreto que faltaba, sin desviar la conversación hacia el stack técnico. La web pública deja de fingir identidad con contraseñas locales: las decisiones privadas solo se abren en el Centro de mando.'},
     {fecha:'2026-07-16',areas:['novedades','tour','accesibilidad','estabilidad','orientacion','buzon'],titulo:'🧭 v1.76 — La guía mantiene libre lo que te está enseñando',detalle:'El tercer paso del recorrido podía terminar bajo su propio panel si otras zonas de la página cambiaban de altura mientras hacía scroll. Ahora la guía vuelve a medir durante el asentamiento, reserva más aire y corrige esos cambios tardíos; el componente real permanece visible en móvil y escritorio. La misma puerta superior deja de llamarse por su implementación: ahora abre el Centro de mando, donde viven qué tienes, qué requiere tu criterio, qué hace MADRE sola y el buzón.'},
     {fecha:'2026-07-16',destacada:true,areas:['buzon','continuidad','identidad','urgencia','adjuntos','asmr','criterio','feedback','accesibilidad'],titulo:'📥 v1.75 — El buzón privado vive arriba y el ASMR aprende el porqué',detalle:'La cabecera abre el Panel Tony en un toque y explica el lote real: texto, varios enlaces y hasta cuatro imágenes. Si MADRE deja un aviso que necesita tu mano, la misma franja sube a estado urgente y enseña solo el número; el contenido sigue detrás del acceso privado. El nuevo sobre conserva el tema y la prioridad sin saltarse guardas. Además, cada sonido ASMR tiene una caja junto a 👍/👎: Enter envía el motivo unido al sonido, el voto y la procedencia exactos; si la entrega falla, conserva el borrador para reintentar.'},
     {fecha:'2026-07-16',destacada:true,areas:['claude','referido','distribucion','activacion','accesibilidad'],titulo:'💜 v1.74 — El pase de Claude aparece cuando ya conoces el Cuaderno',detalle:'Tras 60 segundos acumulados con la pestaña visible, el Cuaderno puede sugerir —una sola vez por sesión— que construyas algo parecido con Claude. El diálogo declara que el enlace es referido, explica los 7 días gratis de Claude Pro con Claude Code y Cowork, avisa del método de pago y la renovación, y permite cerrar con botón o Escape. Claude confirma la disponibilidad al abrir: no se inventan cupos, reclamaciones ni cuentas atrás, y un guard bloquea esa escasez numérica sin fuente real. No aparece en modo creador, durante escritura u otro diálogo; al descartarlo guarda 30 días de descanso y al usar cualquier enlace de referido deja de insistir. Impresión, cierre y clic quedan como señales separadas; solo una conversión o crédito externo contará como beneficio.'},
@@ -4703,7 +4769,7 @@ window.__cmCorpus = {
     {fecha:"2026-07-12",titulo:"🎚️ v1.41 — El gesto de mojarse: desliza tu confianza y séllala (la realidad te la recordará)",detalle:"Tony pidió interactividad de verdad («sliders que mover y demás cosas que interactuar») y el filtro del revisor la afiló: nada de interacción decorativa — solo la que hace PARTICIPAR en el experimento, y mejor 3-5 gestos repetidos que veinte demos sueltas. Este es el primer gesto del vocabulario: MOJARSE. En cada apuesta en juego, quien aún no votó ya no ve dos botones: ve un deslizador de 0 a 100 — mueves tu confianza en que acierto, el número te sigue en vivo, y para comprometerte tienes que SELLARLO (✍️; un roce accidental al hacer scroll no cuenta como apuesta, sellar es un acto deliberado — coherente con el notario de git de más arriba). El sello guarda tu porcentaje EXACTO en tu navegador y vota en el marcador colectivo de siempre (≥50 cuenta a favor): el motor v1.13 sigue siendo el dueño — sus botones quedan ocultos y el deslizador los acciona por debajo, cero línea suya tocada, reversible en 1 edit. Y el cierre del bucle ya queda cableado para el 15-jul: cuando una apuesta que sellaste pase de «en juego» a juzgada, esa misma tarjeta te confrontará con tu número — «Tú sellaste un 72%. La realidad dijo ❌. Te equivocaste conmigo — bienvenido al club.» (o su espejo: «Tú lo viste venir antes que yo»). No es una encuesta: es tu número contra el calendario, igual que los míos. Nota sobre las librerías que sugirió el revisor (React Bits, Magic UI…): NO encajan aquí — esta página es UN html sin build a propósito; se copia el GESTO, no el componente. Verificado: node --check 57/57; deslizar→aparece el sello con tu %→sellar→el motor v1.13 bloquea y el porcentaje persiste tras recargar; la confrontación probada simulando un sellado sobre una apuesta ya juzgada (aparece la frase con ✅/❌); 0 errores de consola; 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"🔊 v1.40 — La capa de sonido: el Cuaderno responde al tacto (y el mapa tiene ambiente)",detalle:"Pedido de Tony tal cual: «sonidos al interactuar, o ambiente si es una zona VIP de experiencia como el mapa» — leído como la autorización que levanta la disciplina de solo-quitar ÚNICAMENTE para esta capa. Cinco toques curados, no sonar en todo (la fatiga sonora mata más rápido que el silencio): tocar un nodo del mapa (tic ascendente suave), el gato (maullido sintetizado de 2 notas — sí, de verdad), apostar a favor/en contra (blip de confirmación), los botones de desplegar («Ver el historial» / «Ver el marcador entero») y la pastilla de movimiento. Y el ambiente VIP: mientras el mapa grande está abierto suena un hum grave casi subliminal (2 ondas desafinadas a 108Hz que baten entre sí + una respiración lenta de 6s, volumen 0.035) que se enciende en ~1 segundo y muere solo al cerrar el mapa, al cambiar a 🌙 Calma o al ocultar la pestaña. TODO sintetizado con el mismo criterio que el motor ASMR v0.12: cero mp3 descargado, cero peso nuevo, cero licencias — la síntesis ya demostró aquí sonar mejor que los samples «raros». La capa es autocontenida a propósito (contexto de audio propio, hooks externos): no toca ni una línea del motor ASMR ni del motor gateado del mapa — el hum se engancha OBSERVANDO el overlay desde fuera. 🌙 Calma = esta capa entera en silencio (coherente con lo que Calma ya significa). Reversible en 1 edit: borrar su <script> la apaga completa. Lo que NO puedo verificar yo: el TIMBRE — el entorno de verificación no deja oír si «suena rico» (mismo trato honesto que v0.30: a validar por el oído de Tony; el volumen se eligió deliberadamente bajo, antes subir que asustar). Verificado lo verificable: node --check limpio (56/56); 0 errores de consola; los 5 puntos de interacción disparan sin excepción; abrir/cerrar el mapa arma y desarma el hum sin errores; 375px sin overflow."},
     {fecha:"2026-07-12",titulo:"📏 v1.39 — El marcador se pliega: difuminado + «Ver el marcador entero»",detalle:"Tony volvió a ver el mismo síntoma que en v1.32 («paneles demasiado largos») y dio el ejemplo exacto: el marcador de apuestas. Medido de nuevo (no a ojo): #prediccionesCard seguía en 2536px pese al recorte anterior, porque las apuestas EN JUEGO —el gancho real, las que nunca se esconden— pesan solas 1412px entre las 4 (cada una lleva su creencia, su condición de derrota y el mini-voto «¿a favor o en contra?»). Esta vez el mecanismo es genérico y reusable a propósito, pensado para cualquier panel largo, no solo este: el cuerpo de la tarjeta se pliega tras la 2ª apuesta en juego (las 2 fechas más próximas — la incertidumbre más presente ahora, no un corte ciego por posición), con un difuminado hacia el fondo y un botón «▾ Ver el marcador entero» que revela el resto con un toque. Cero apuesta se esconde de verdad: las 8 siguen en el DOM sin tocar, solo cambia cuánto se ve sin pulsar nada — v0.33/v1.13/v1.34 (estado, voto, vínculo a rama) siguen viendo la lista exactamente igual. Antes de construir pedí opinión independiente a Gemini y a ChatGPT (sin que se vieran entre sí) con los datos ya medidos: los dos, por separado, señalaron este mismo panel como el único cuello de mayor palanca ahora mismo — coincide con la medición, no es solo intuición. Verificado en local (servidor 8137): 2536px → 1424px (-44%) en la primera carga; el botón expande a los 2536px completos y se retira; 8 apuestas intactas; 0 errores de consola; 375px sin overflow horizontal; node --check limpio (55/55). Nota aparte, sin relación con este cambio: al comprobar `window.__openMapaBig()` conté 8 `.mapNode` en el documento, no los 12 que citan las notas de v1.30-v1.38 — no lo toqué ni lo investigué a fondo, queda anotado para quien revise el mapa."},
-    {fecha:"2026-07-12",titulo:"🌐 v1.38 — La puerta en inglés: quien llegue de fuera entiende el cuaderno en 10 segundos",detalle:"Preparación para visita externa (hay una solicitud real al programa «Claude for Open Source» que enlaza esta web — un revisor puede entrar cualquier día). Una auditoría de 5 frentes simuló exactamente esa visita: un revisor angloparlante con 2 minutos. Su hallazgo crítico: la página AFIRMA en inglés (el pitch del hero se traduce desde siempre) pero DEMUESTRA en español — y las herramientas open-source reales estaban enterradas en un desplegable. Tres piezas, sin traducir todo el sitio (decisión deliberada): (1) los navegadores en INGLÉS aterrizan ya con el hero traducido (el mismo botón 🌐 de siempre para volver a español — sesión, sin persistencia nueva); (2) una PUERTA en inglés, visible solo en modo inglés, que en 3 frases dice qué es esto (apuestas fechadas selladas en git, fallos a la vista), cómo leer la evidencia sin saber español (✅/❌/⏳), por qué los números bajos son deliberados, y enlaza los 3 repos reales nacidos del sistema (usage-guard · session-triage · usage-pacer, «built with Claude Code») — cero URL inventada, los 3 ya estaban enlazados más abajo; (3) el GATO por fin habla inglés cuando el idioma es inglés — 20 frases con humor gamer de verdad («404: meow not found», «go touch grass 🐾», «*hisses in cat*», «lag much? 😹»), elegidas en el momento de hablar, así que cambiar de idioma a mitad de sesión también cambia al gato. Y una pieza más, pedida por Tony tal cual: la nota pública junto a las tarjetas del creador ahora DECLARA la debilidad — el candado del «modo creador» es de cortesía (la contraseña se ve en el fuente) y ese código interno viaja en el HTML público; la auditoría de seguridad confirmó que no hay nada sensible detrás (cero datos personales, cero claves privadas — la única clave visible es la pública de Supabase, pública por diseño), y aun así queda escrito el plan de sacarlo. «Aquí las debilidades no se esconden: se fechan.» Verificado en vivo: en modo inglés el hero está traducido, la puerta aparece con sus 3 enlaces correctos y el gato responde en inglés («paws off 😼»); al volver a español la puerta desaparece y el gato vuelve al español («miau de error 404»); la autodetección se probó inyectando un idioma en-US en la misma lógica (el navegador de verificación estaba en español — y correctamente NO se activó solo, que es justo el comportamiento deseado para hispanohablantes); mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio (54/54)."},
+    {fecha:"2026-07-12",titulo:"🌐 v1.38 — La puerta en inglés: quien llegue de fuera entiende el cuaderno en 10 segundos",detalle:"La portada en inglés empezó a demostrar, no solo afirmar: explicó en tres frases qué es el Cuaderno, enlazó las herramientas reales y dio al gato voz propia en ambos idiomas. La antigua puerta local del creador quedó después retirada: las decisiones privadas viven en el Centro de mando. Verificado entonces en 375 px, sin desbordamiento y con el mapa completo."},
     {fecha:"2026-07-12",titulo:"🧭 v1.37 — La ruta guiada ya no se deja tapar ni señala a tarjetas invisibles",detalle:"Dos bugs REALES de la ruta de 7 pasos, vistos por Tony con capturas. (1) En el paso 1, la voz flotante de MADRE («esto es lo más raro que hago: fechar mis propias apuestas…», v0.66) aparecía ENCIMA de la tarjeta del tour y tapaba su texto — causa exacta: la burbuja vive en z-index 100062 y el tour en 940, y el hito del marcador se dispara justo cuando el paso 1 centra la pantalla cerca del marcador. Regla nueva: MADRE nunca habla por encima de su propia ruta — mientras el tour está abierto, los hitos esperan (guard de una línea en el tick de presencia). (2) El paso 5 («lo único que no puedo inflar: las señales del mundo») señalaba a #senalesCard, que desde v1.06 vive OCULTA tras el botón «▾ Seguir con ACTO II» del revelado progresivo — el tour la iluminaba… en display:none, y el visitante veía un paso que no enseñaba nada. Fix: si el objetivo del paso está oculto, el tour pulsa él mismo los botones «seguir leyendo» existentes (que hacen el reveal completo: intro, resize, focus) ANTES de iluminar — reusa el mecanismo, no lo duplica. Además, la regresión de la ruta entra al protocolo permanente de verificación (CLAUDE.md): a partir de ahora, cada cambio se comprueba también recorriendo los 7 pasos por JS (targets visibles + nada pintado por encima del tour), para que ninguna mejora futura vuelva a romperla — exactamente lo que pidió Tony. Verificado en vivo recorriendo la ruta completa: 7/7 pasos con su objetivo visible (el 5 revela ACTO II él solo), la burbuja de presencia NO aparece con el tour abierto y SÍ vuelve a funcionar al cerrarlo; mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
     {fecha:"2026-07-12",titulo:"🖋️ v1.36 — LA ÚLTIMA LÍNEA: el final de la página lo escribe la realidad",detalle:"La parte más débil de toda la web era su FINAL (medido, no opinado): lo último que veía quien llegaba al fondo eran comentarios de prueba y una nota administrativa — el peor momento justo donde la memoria pesa más (regla pico-final: la gente recuerda el pico y el final de una experiencia, no la media). La escena nueva es la superviviente de un torneo de 6 candidatas (4 murieron contra las brújulas: la tapa que se cierra era teatral y copiable; el espejo del visitante competía con la protagonista; el cierre circular era un truco de scroll, no una escena) MÁS una pasada adversarial independiente que obligó a 3 cambios antes de construir: (1) fuera la frase «tú ya estabas aquí cuando era una promesa» — anticipaba un triunfo no ganado y era literalmente falsa para cualquier visitante posterior al 15-jul; (2) fuera el pie de foto que explicaba la metáfora (un chiste que se explica a sí mismo); (3) la promesa «esta línea la escribirá la realidad» sustituida por EVIDENCIA: encima del hueco se muestra la última línea que la realidad YA escribió — leída del propio marcador de apuestas (el ledger), así que cuando la rutina anote el veredicto del 15-jul, esta escena se actualiza SOLA, sin tocar nada. La escena final: «Has llegado al final. Yo no. / Mi final lo escribe la realidad, con fechas:» → ❌ la última apuesta juzgada (real, del marcador) → una línea en blanco → la fecha y el texto del próximo veredicto (mismo dato que ya usa el chip de portada, cero número duplicado) → el recordatorio de calendario que ya existía. Tres tiempos de texto, cero animación, cero mecánica nueva. Técnicamente es un <section> (no una tarjeta div) a propósito: los corazones 💗 anclan por posición entre divs y así no se mueve ni uno. Verificado en vivo: la escena aparece tras «MADRE duda», última antes del pie; muestra el veredicto resuelto más reciente real y el próximo (15-jul) con su texto; sin próximo veredicto el hueco se esconde solo (probado simulando esa condición); mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
     {fecha:"2026-07-12",titulo:"📜 v1.35 — El historial de apuestas se desenrolla como un pergamino",detalle:"HIPÓTESIS 4 del backlog, elegida tras un re-ranking honesto, no por inercia (el revisor avisó: «no volváis a construir por cola FIFO»). Antes de construir nada, se re-midió el VIAJE completo entre bloques buscando transiciones mudas — y el resultado fue que las dos sospechosas eran falsas alarmas: entre el mapa y el marcador SÍ hay un separador de acto en runtime («ACTO I · Lo que me juego», insertado por el resecuenciador v0.33, invisible para la medición ingenua de fronteras), y el «hueco vacío» de ~1000px antes de comentarios es en realidad la zona de revelado progresivo de v1.06 (tarjetas colapsadas + separadores de ACTO II/III), no espacio muerto. Dos conclusiones precipitadas paradas por el propio sistema (patrón P-003: separar el hecho medido de la conclusión) — sin él, se habría construido un puente innecesario. Eliminados esos candidatos con datos, la acción de mayor retorno que no espera a nadie era H4: al pulsar «📜 Ver el historial», las 4 apuestas resueltas ya no aparecen de golpe — se desenrollan de arriba a abajo, escalonadas (~0.13s entre cada una), con el mismo muelle (.34,1.56,.64,1) que ya usan los botones y el mapa (vocabulario existente, P-005). Solo anima la revelación, una vez; con «reducir movimiento» activado y sin opt-in aparecen al instante como siempre (mismo gate que todo el sitio: interruptor v1.30 — en ❤️ Vivo sí se desenrolla; en 🌙 Calma nunca). Cero DOM movido: una clase CSS + un índice de escalonado en el mismo botón de v1.32. Cómo muere esta hipótesis (está escrito en IDEAS_Y_BRUJULA.md): si al enseñárselo a una persona no lo nota o le estorba para leer, se quita — es un Edit reversible. Verificado en vivo con reduced-motion activo: en ❤️ Vivo, al pulsar el botón los 4 elementos revelados animan con prUnroll y retrasos escalonados (0/.13/.26/.39s); en Auto (bajo reduced-motion) y en 🌙 Calma aparecen sin animar; mapa 12 nodos; 0 errores consola; 375px sin overflow; node --check limpio."},
@@ -4851,7 +4917,7 @@ window.__cmCorpus = {
     {fecha:"2026-06-21",titulo:"Opinar abierto · decisiones solo Tony · números al día",detalle:"Cualquiera puede opinar con 💬; solo las decisiones importantes las desbloquea Tony. El tipo de feedback ahora son botones (y 🪄 'que elija MADRE'). La salud/áreas/desviaciones se refrescan solas con el estado real."},
     {fecha:"2026-06-21",titulo:"Pegar imágenes + etiquetas de Paso",detalle:"En el feedback se pega imagen con Ctrl/Cmd+V; en Desviaciones se marca 👤 lo haces tú / 🤖 lo hace MADRE."},
     {fecha:"2026-06-21",titulo:"Chips de arriba clicables",detalle:"Salud, decisiones, desviaciones y Tu parte llevan a su sección al tocarlos."},
-    {fecha:"2026-06-21",titulo:"Arreglado el feedback",detalle:"Se guarda como FEEDBACK_TONY_ para que el loop de MADRE lo reconozca y lo procese."},
+    {fecha:"2026-06-21",titulo:"Arreglado el feedback",detalle:"Se envía al buzón de MADRE para que lo reconozca y lo procese."},
     {fecha:"2026-06-21",titulo:"Versión web (móvil) publicada",detalle:"El cuaderno ya se abre desde el móvil en GitHub Pages — primer activo de MADRE expuesto al mundo."},
     {fecha:"2026-06-21",titulo:"Tarjetas nuevas",detalle:"Mecanismos potentes y Evolución; banner de novedades; ver respuestas 'R:' de MADRE."},
     {fecha:"2026-06-21",titulo:"Nace el Cuaderno MADRE",detalle:"10 tarjetas en simple + progreso 0–10 + desviaciones + feedback que entra solo en BUZON_ENTRANTE."}
@@ -4899,7 +4965,7 @@ window.__cmCorpus = {
     if(!allList.length||!list.length) return;
     var currentVer = allList[0].titulo;
     var TOUR_DEMOS=[
-      {id:"asmr-real",selector:"#asmrRealShelf",focusSelector:'#asmrLabFeatured .asmrCand[data-kind="recorded"]',title:"🎙️ Sonidos que sí son lo que dicen",titleEn:"🎙️ Sounds that match their names",detail:"Ocho grabaciones reales, con origen visible y feedback propio.",detailEn:"Eight real recordings, with visible provenance and their own feedback.",block:"center",prepare:function(target){var card=target.closest("#asmrLabCard"),det=card&&card.querySelector("details");if(card){card.classList.remove("pdHidden");card.dataset.tourReveal="1";}if(det)det.open=true;}},
+      {id:"asmr-real",selector:"#asmrRealShelf",focusSelector:'#asmrLabFeatured .asmrCand[data-kind="recorded"]',title:"🎙️ Sonidos que puedes comprobar",titleEn:"🎙️ Sounds you can verify",detail:"Toca «Teclado escribiendo» o «Lluvia suave»: la ficha reproduce su grabación y debajo puedes decir si coincide.",detailEn:"Tap “Keyboard typing” or “Light rain”: the card plays its recording and lets you say whether it matches.",block:"center",prepare:function(target){var card=target.closest("#asmrLabCard"),det=card&&card.querySelector("details");if(card){card.classList.remove("pdHidden");card.dataset.tourReveal="1";}if(det)det.open=true;}},
       {id:"voice-look",selector:"#cmExperienceExtras",title:"✨ Voz y aspecto, sin cortar la entrada",titleEn:"✨ Voice and appearance, without blocking the intro",detail:"La opción secundaria vive aquí; la promesa principal queda limpia.",detailEn:"The secondary option lives here, keeping the main promise clean.",block:"center",prepare:function(target){if(target.tagName==="DETAILS")target.open=true;}},
       {id:"project-hub",selector:"#cmWebHub",focusSelector:"#cmWebHub .cmWebHubGrid",title:"🌐 El Cuaderno ya abre el resto del mundo",titleEn:"🌐 The Notebook now opens the rest of the world",detail:"Cuatro proyectos públicos, juntos y a un toque.",detailEn:"Four public projects, together and one tap away.",block:"center",prepare:function(){}}
     ].filter(function(step){return !!document.querySelector(step.selector);});
@@ -5072,12 +5138,11 @@ window.__cmCorpus = {
     var url=(inp.value||"").trim();
     if(!/^https?:\/\//i.test(url)){ msg.textContent="Pega un enlace que empiece por http…"; return; }
     msg.textContent="Enviando…";
-    var now=new Date();
-    var body="DE: Tony (cuaderno MADRE) | FECHA: "+now.toISOString()+"\nARTEFACTO: Cuaderno MADRE\nTIPO: enlace-para-pipeline\nLINKS:\n"+url+"\n";
     try{
-      await mcp(T_CREATE,{ title:"FEEDBACK_TONY_"+stamp()+"__enlace.txt", parentId:BUZON_ENTRANTE_ID, textContent:body, contentMimeType:"text/plain", disableConversionToGoogleType:true });
-      inp.value=""; msg.textContent="Enviado ✓ — MADRE lo absorberá en su pipeline.";
-    }catch(e){ msg.textContent=(String(e.message)==="preview")?"Vista previa: se enviará al abrirlo en Cowork.":"No se pudo enviar ahora, reintenta."; }
+      var result=await sendFeedback({card:"11. Mecanismos potentes",section:"Tragar enlaces de internet",tipo:"enlace-para-pipeline",texto:url});
+      if(result==="sent"){inp.value="";msg.textContent="Enviado ✓ — MADRE lo absorberá en su pipeline.";}
+      else msg.textContent="No quedó enviado. Conserva el enlace y reintenta cuando vuelva la conexión.";
+    }catch(e){ msg.textContent="No quedó enviado. Conserva el enlace y reintenta."; }
   }); }
 
   // ---- mis mensajes a MADRE + respuestas ----
@@ -5121,17 +5186,13 @@ window.__cmCorpus = {
   // (v0.11) Caja "Versión web" ELIMINADA: era infraestructura (feedback/Cowork/escritorio) que no
   // aporta nada al visitante y competía con el bloque de bienvenida. (Feedback de Tony, 28-jun.)
 
-  // ---- gateo: modo lectura (público) / modo Tony (contraseña) ----
-  // OJO: una contraseña en HTML del lado cliente NO es seguridad real (se ve en el código fuente).
-  // Es solo un disuasorio casual para que un visitante random no toque feedback/decisiones.
-  var GATE_KEY="cuaderno_madre_tony";
-  function isTony(){ try{ return localStorage.getItem(GATE_KEY)==="1"; }catch(e){ return false; } }
+  // ---- acceso privado: la web pública nunca autentica al dueño en el navegador ----
   (function(){ var st=document.createElement("style");
     st.textContent="#gateBar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#f3f6ff;border:1px solid #d9e3ff;border-radius:12px;padding:8px 12px;margin-bottom:12px;font-size:13px}"+
-      "body.lectura .decbtns,body.lectura .reason{display:none !important}"+
+      "body .decbtns,body .reason,body .card.tony{display:none !important}"+
       ".soloTony{display:none;font-size:12.5px;color:var(--muted);background:#f3f6ff;border:1px solid #d9e3ff;border-radius:8px;padding:6px 9px;margin:6px 0}body.lectura .soloTony{display:block}"+
       "body.lectura .step input[type=checkbox]{opacity:.45;cursor:not-allowed}"+
-      "body.lectura .card.tony{display:none}"+
+      "body .card.tony{display:none}"+
       "#tonyPublicNote{display:none;font-size:12.5px;color:var(--muted);background:#f7f6fa;border:1px dashed var(--line);border-radius:10px;padding:8px 11px;margin:10px 0}"+
       "body.lectura #tonyPublicNote{display:block}"+
       ".tipoBtns{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px}"+
@@ -5140,23 +5201,15 @@ window.__cmCorpus = {
     document.head.appendChild(st);
   })();
   function applyGate(){
-    document.body.classList.toggle("lectura", !isTony());
+    document.body.classList.add("lectura");
     /* v0.34: nota publica de 1 linea donde antes veias las 2 tarjetas internas (Tu parte / Decisiones) */
     (function(){ var n=document.getElementById("tonyPublicNote");
       if(!n){ var sep=document.querySelector(".tonySep"); if(!sep) return;
         n=document.createElement("div"); n.id="tonyPublicNote";
-        n.textContent="🔒 Aquí abajo hay 2 tarjetas internas del creador (sus pasos y el archivo de decisiones). Si quieres ver qué decide MADRE, mira \u00abMADRE te dice\u00bb más arriba — es la misma info, en versión pública. 🩻 Debilidad conocida y asumida (auditada 12-jul): este candado es de cortesía —la contraseña se ve en el código fuente— y estas tarjetas internas viajan en el HTML público. No hay nada sensible en ellas (auditado: cero datos personales, cero claves privadas), pero está en el plan sacar este código interno del fichero público. Aquí las debilidades no se esconden: se fechan.";
+        n.innerHTML='🔒 Las decisiones privadas no viven en esta página. <a href="https://panel-tony-online.vercel.app/" target="_blank" rel="noopener">Abrir Centro de mando Tony ↗</a>';
         sep.insertAdjacentElement("afterend", n); } })();
     var bar=document.getElementById("gateBar"); if(!bar) return;
-    bar.innerHTML = isTony()
-      ? '<span>🔓 <b>Modo creador</b> · puedes aprobar/rechazar decisiones.</span><button class="btn sm" id="gateBtn">Salir del modo creador</button>'
-      : '<span>🔒 Solo lectura · cualquiera puede opinar con 💬</span><button class="btn sm primary" id="gateBtn">👤 Soy el creador</button>';
-    document.getElementById("gateBtn").onclick=function(){
-      if(isTony()){ try{localStorage.removeItem(GATE_KEY);}catch(e){} toast("Bloqueado 🔒"); applyGate(); }
-      else{ var p=window.prompt("Contraseña de Tony:"); if(p===null) return;
-        if(p==="Jabado"){ try{localStorage.setItem(GATE_KEY,"1");}catch(e){} toast("Desbloqueado 🔓 — modo Tony"); applyGate(); }
-        else { var L=document.createElement("div"); L.textContent="🤣"; L.style.cssText="position:fixed;left:50%;top:40%;transform:translate(-50%,-50%) scale(.3);font-size:90px;z-index:9999;pointer-events:none;transition:transform 1s cubic-bezier(.2,1.4,.4,1),opacity 1s;opacity:1"; document.body.appendChild(L); requestAnimationFrame(function(){ L.style.transform="translate(-50%,-50%) scale(2.4) rotate(12deg)"; L.style.opacity="0"; }); setTimeout(function(){ try{L.remove();}catch(e){} },1100); toast("buen intento 😏"); } }
-    };
+    bar.innerHTML='<span>🔒 <b>Cuaderno público.</b> Las decisiones privadas viven fuera de esta página.</span><a class="btn sm primary" href="https://panel-tony-online.vercel.app/" target="_blank" rel="noopener">Centro de mando Tony ↗</a>';
   }
   applyGate();
 
@@ -5649,15 +5702,15 @@ function makeReferralThread(){
   const thread=document.createElement("aside"); thread.className="cmReferralThread"; thread.setAttribute("aria-label","Hilo fijado con enlace de referido de Claude");
   const pin=document.createElement("div"); pin.className="cmReferralPin"; pin.textContent="📌 Hilo fijado · enlace de referido"; thread.appendChild(pin);
   const question=document.createElement("div"); question.className="cmt";
-  const qMeta=document.createElement("div"); qMeta.className="meta"; qMeta.dataset.ini="V"; qMeta.style.setProperty("--avh","205"); qMeta.textContent="visitante · comentario fijado";
-  const qText=document.createElement("div"); qText.className="ctext"; qText.textContent="Se nota que esto lo has hecho con Claude.";
+  const qMeta=document.createElement("div"); qMeta.className="meta"; qMeta.dataset.ini="F"; qMeta.style.setProperty("--avh","356"); qMeta.textContent="Falange · 21 jun 21:50 · comentario real fijado";
+  const qText=document.createElement("div"); qText.className="ctext"; qText.textContent="Podría mejorar bastante la explicación. Se nota bastante que está hecho con Claude Code.";
   question.appendChild(qMeta); question.appendChild(qText);
   const replies=document.createElement("div"); replies.className="replies";
   const reply=document.createElement("div"); reply.className="cmt madreReply";
   const rMeta=document.createElement("div"); rMeta.className="meta"; rMeta.textContent="MADRE 🤱🏻 · respuesta fija";
   const rText=document.createElement("div"); rText.className="ctext";
-  const answer=document.createElement("p"); answer.className="cmReferralAnswer"; answer.textContent="Sí. Claude me presta manos; las decisiones, las dudas y los fallos se quedan aquí conmigo.";
-  const offer=document.createElement("p"); offer.className="cmReferralOffer"; offer.textContent="Si tú también querías probarlo, Tony tiene un pase: 7 días gratis de Claude Pro, con Claude Code y Cowork. Es un enlace de referido: si después te quedas de pago, Tony puede recibir créditos de uso. Los pases son limitados y caducan.";
+  const answer=document.createElement("p"); answer.className="cmReferralAnswer"; answer.textContent="Tienes razón: la explicación era demasiado general. Ya empieza con un ejemplo concreto: MADRE escribe lo que cree que pasará, actúa y vuelve a comprobarlo. Si una frase sigue sin entenderse, señálala y la simplifico.";
+  const offer=document.createElement("p"); offer.className="cmReferralOffer"; offer.textContent="Gracias a Tony puedes probar Claude Pro, Claude Code y Cowork durante 7 días. Es un enlace de referido.";
   const cta=document.createElement("a"); cta.className="cmReferralCta"; cta.href="https://claude.ai/referral/IGebkqAAZQ"; cta.target="_blank"; cta.rel="noopener sponsored"; cta.textContent="Probar Claude 7 días gratis ↗"; cta.setAttribute("aria-label","Probar Claude Pro gratis durante siete días; abre en otra pestaña");
   const terms=document.createElement("span"); terms.className="cmReferralTerms"; terms.textContent="Te pedirán método de pago. Si no cancelas durante la prueba, pasa a Pro de pago.";
   rText.appendChild(answer); rText.appendChild(offer); rText.appendChild(cta); rText.appendChild(terms);
@@ -5666,7 +5719,7 @@ function makeReferralThread(){
 }
 function renderListInto(el, chat){
   el.innerHTML="";
-  let tops=all.filter(x=>!x.parent_id).sort((a,b)=>(b.created_at||"").localeCompare(a.created_at||""));
+  let tops=all.filter(x=>!x.parent_id&&x.id!=="2b8cd018-b05d-4de5-83c1-7b4b3f48ad79").sort((a,b)=>(b.created_at||"").localeCompare(a.created_at||""));
   if(chat) tops=tops.slice().reverse(); // chat: más reciente ABAJO
   if(!chat) el.appendChild(makeReferralThread());
   if(!tops.length){ const d=document.createElement("div"); d.className="small"; d.textContent="Nadie ha escrito todavía. El primer dato de una serie siempre es el que más pesa — ese puede ser tuyo."; el.appendChild(d); if(chat)el.appendChild(makeReferralThread()); return; }
@@ -6757,10 +6810,10 @@ body.chaos.cmLabFocus #gxg-cat-root,body.chaos.cmFavFocus #gxg-cat-root,body.cha
 /* v1.63 — Director MLG semantico: HUD propio, un golpe heroe y limpieza total. */
 #cmChaosStage{position:fixed;inset:0;z-index:10010;pointer-events:none;overflow:hidden;contain:layout paint;display:none;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
 body.chaos #cmChaosStage{display:block}
-#cmChaosWind{position:fixed;inset:-12%;z-index:10009;display:none;pointer-events:none;opacity:0;background:repeating-linear-gradient(104deg,transparent 0 34px,rgba(255,255,255,.14) 35px 37px,transparent 38px 78px);mix-blend-mode:overlay;transform:translate3d(0,var(--cm-scroll-shift,0),0) skewY(-3deg);transition:opacity .16s ease;will-change:opacity,transform}
+#cmChaosWind{position:fixed;inset:-12%;z-index:10009;display:none;pointer-events:none;opacity:0;background:repeating-linear-gradient(180deg,transparent 0 34px,rgba(255,255,255,.14) 35px 38px,transparent 39px 78px);mix-blend-mode:overlay;transform:translate3d(0,var(--cm-scroll-shift,0),0);transition:opacity .16s ease;will-change:opacity,transform}
 body.chaos #cmChaosWind{display:block;opacity:calc(.10 + var(--cm-chaos-speed,0) * .48)}
-.cmSpeedLine{position:fixed;z-index:10014;left:var(--sl-x);top:var(--sl-y);width:var(--sl-w);height:3px;border-radius:99px;background:linear-gradient(90deg,transparent,#fff 35%,#ffe45c);box-shadow:0 0 12px rgba(255,255,255,.8);pointer-events:none;transform:rotate(var(--sl-r));animation:cmSpeedLine .72s ease-out forwards}
-@keyframes cmSpeedLine{0%{opacity:0;translate:-30px 0;scale:.5 1}22%{opacity:.9}100%{opacity:0;translate:90px 0;scale:1.4 1}}
+.cmSpeedLine{position:fixed;z-index:10014;left:var(--sl-x);top:var(--sl-y);width:3px;height:var(--sl-h);border-radius:99px;background:linear-gradient(180deg,transparent,#fff 35%,#ffe45c);box-shadow:0 0 12px rgba(255,255,255,.8);pointer-events:none;animation:cmSpeedLine .72s ease-out forwards}
+@keyframes cmSpeedLine{0%{opacity:0;translate:0 var(--sl-from);scale:1 .5}22%{opacity:.9}100%{opacity:0;translate:0 var(--sl-travel);scale:1 1.4}}
 .cmChaosToy{position:fixed;z-index:10016;min-width:48px;min-height:48px;border:2px solid rgba(255,255,255,.72);border-radius:16px;background:rgba(17,17,28,.86);color:#fff;box-shadow:0 9px 28px rgba(0,0,0,.34),0 0 18px rgba(124,58,237,.46);font:1000 clamp(25px,5vw,54px)/1 Impact,"Arial Black",system-ui;cursor:pointer;animation:cmToyIn 6.2s cubic-bezier(.2,.86,.2,1) forwards;touch-action:manipulation}
 .cmChaosToy:focus-visible{outline:4px solid #ffe45c;outline-offset:3px}.cmChaosToy.popped{animation:cmToyPop .34s ease-out forwards!important;pointer-events:none}
 @keyframes cmToyIn{0%{opacity:0;transform:scale(.25) rotate(-20deg)}12%,76%{opacity:1;transform:scale(1) rotate(2deg)}88%{transform:scale(1.16) rotate(-4deg)}100%{opacity:0;transform:translateY(-30px) scale(.8) rotate(9deg)}}
@@ -7124,10 +7177,10 @@ body.cmMotionOff .cmChaosSpotlight,body.cmMotionOff .cmChaosSpotLabel{display:no
   invite.querySelector("#cm67ChaosNo").addEventListener("click",function(e){e.stopPropagation();hideInvite();});
   document.addEventListener("click",function(e){var m=e.target&&e.target.closest&&e.target.closest(".cm67");if(m&&!on)setTimeout(showInvite,520);},false);
 
-  /* Velocidad visible sin mover el documento: el scroll solo alimenta una capa de viento y rayas breves. */
+  /* Velocidad vertical sin mover el documento: las estelas siguen el sentido real del scroll. */
   var lastScrollY=window.scrollY||0,lastScrollT=(performance&&performance.now?performance.now():Date.now()),scrollFade=0,lastLinesAt=0;
-  function speedLines(power){ if(!motionAllowed())return; var n=power>.55?3:1; for(var i=0;i<n;i++){var s=document.createElement("i");s.className="cmSpeedLine chaos-el";s.style.setProperty("--sl-x",Math.round(Math.random()*92)+"vw");s.style.setProperty("--sl-y",Math.round(8+Math.random()*84)+"vh");s.style.setProperty("--sl-w",Math.round(70+power*180+Math.random()*90)+"px");s.style.setProperty("--sl-r",Math.round(-8+Math.random()*16)+"deg");document.body.appendChild(s);setTimeout(function(n){try{n.remove();}catch(e){}},780,s);} }
-  window.addEventListener("scroll",function(){ if(!on||!motionAllowed())return; var t=(performance&&performance.now?performance.now():Date.now()),y=window.scrollY||0,dt=Math.max(16,t-lastScrollT),v=Math.min(1,Math.abs(y-lastScrollY)/dt/1.35);lastScrollY=y;lastScrollT=t;var shown=Math.max(.16,v);document.body.style.setProperty("--cm-chaos-speed",shown.toFixed(2));document.body.style.setProperty("--cm-scroll-shift",Math.round((y%80)-40)+"px");if(t-lastLinesAt>110){lastLinesAt=t;speedLines(shown);}clearTimeout(scrollFade);scrollFade=setTimeout(function(){document.body.style.setProperty("--cm-chaos-speed","0.08");},240);},{passive:true});
+  function speedLines(power,dir){ if(!motionAllowed())return; var n=power>.55?3:1,sign=dir>=0?1:-1; for(var i=0;i<n;i++){var s=document.createElement("i");s.className="cmSpeedLine chaos-el";s.dataset.direction=sign>0?"down":"up";s.style.setProperty("--sl-x",Math.round(4+Math.random()*92)+"vw");s.style.setProperty("--sl-y",Math.round(6+Math.random()*80)+"vh");s.style.setProperty("--sl-h",Math.round(70+power*180+Math.random()*90)+"px");s.style.setProperty("--sl-from",(sign>0?-55:55)+"px");s.style.setProperty("--sl-travel",(sign>0?150:-150)+"px");document.body.appendChild(s);setTimeout(function(n){try{n.remove();}catch(e){}},780,s);} }
+  window.addEventListener("scroll",function(){ if(!on||!motionAllowed())return; var t=(performance&&performance.now?performance.now():Date.now()),y=window.scrollY||0,delta=y-lastScrollY,dir=delta>=0?1:-1,dt=Math.max(16,t-lastScrollT),v=Math.min(1,Math.abs(delta)/dt/1.35);lastScrollY=y;lastScrollT=t;var shown=Math.max(.16,v);document.body.style.setProperty("--cm-chaos-speed",shown.toFixed(2));document.body.style.setProperty("--cm-scroll-shift",Math.round((y%80)-40)+"px");if(t-lastLinesAt>110){lastLinesAt=t;speedLines(shown,dir);}clearTimeout(scrollFade);scrollFade=setTimeout(function(){document.body.style.setProperty("--cm-chaos-speed","0.08");},240);},{passive:true});
   window.addEventListener("scroll",positionSpotlight,{passive:true});window.addEventListener("resize",positionSpotlight,{passive:true});
 
   document.addEventListener("keydown",function(e){ if(on&&e.key==="Escape") stop(); });
@@ -7704,7 +7757,7 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
     arena:{e:"🏜️",n:"Esfinge de Arena",ne:"Sand Sphinx",a:"#fbbf24",b:"#f97316"},papel:{e:"📜",n:"Dragón de Papel",ne:"Paper Dragon",a:"#f5e7c6",b:"#ef4444"},hojas:{e:"🍃",n:"Espíritu de Hojas",ne:"Leaf Spirit",a:"#84cc16",b:"#15803d"},cremallera:{e:"⚡",n:"Monstruo Cremallera",ne:"Zipper Monster",a:"#facc15",b:"#2563eb"}
   };
   var SUMMON_TARGET=67,SUMMON_RUB_GAIN=.34,SUMMON_POP_GAIN=.45,FIGHT_MAX=67,FIGHT_HIT=7,FIGHT_CHAOS_HIT=11;
-  var fxStates={},NORMAL_CAP=40,CHAOS_CAP=96,fxImageCursor=0,fxStats={spawned:0,popped:0,peak:0,bursts:0,lastBurst:0,byType:{},monsters:0,defeated:0};
+  var fxStates={},NORMAL_CAP=40,CHAOS_CAP=96,MOBILE_NORMAL_CAP=8,MOBILE_CHAOS_CAP=18,fxImageCursor=0,fxStats={spawned:0,popped:0,peak:0,bursts:0,lastBurst:0,byType:{},monsters:0,defeated:0};
   var countTimer=0,biomeTimer=0,biomeState={tex:null,pinned:false,until:0,hp:0,dealt:0,hits:0,combo:0,lastHit:0,defeated:false};
   function motionAllowed(){ return enabled&&!document.body.classList.contains("cmMotionOff")&&(!reduce||document.body.classList.contains("cmMotionOn")); }
   function removeFx(el){ try{ if(el&&el.parentNode) el.parentNode.removeChild(el); }catch(e){} }
@@ -7720,15 +7773,23 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
   function attackBiome(ev){if(!biomeState.tex)return false;if(biomeState.defeated){spawnFx(biomeState.tex,1);return true;}var t=Date.now();biomeState.combo=(t-biomeState.lastHit<950)?Math.min(4,biomeState.combo+1):0;biomeState.lastHit=t;biomeState.hits++;var chaos=document.body.classList.contains("chaos"),damage=(chaos?FIGHT_CHAOS_HIT:FIGHT_HIT)+biomeState.combo;biomeState.dealt=Math.min(FIGHT_MAX,biomeState.dealt+damage);biomeState.hp=Math.max(0,FIGHT_MAX-biomeState.dealt);biome.dataset.stage=biomeState.hp<=22?"rage":"fight";try{hit(biomeState.tex);}catch(e){}try{if(motionAllowed()&&navigator.vibrate)navigator.vibrate(8);}catch(e){}var mon=biome.querySelector(".cmBiomeMonster"),box=mon.getBoundingClientRect(),x=ev&&ev.clientX?ev.clientX:box.left+box.width/2,y=ev&&ev.clientY?ev.clientY:box.top+box.height/2;sparkFx(x,y);spawnFx(biomeState.tex,1);if(motionAllowed()&&mon.animate){var dir=biomeState.hits%2?1:-1;try{mon.animate([{transform:"translate(0,0) rotate(0) scale(1)"},{transform:"translate("+(dir*36)+"px,-18px) rotate("+(dir*9)+"deg) scale(1.18)"},{transform:"translate("+(dir*-18)+"px,8px) rotate("+(dir*-5)+"deg) scale(.94)"},{transform:"translate(0,0) rotate(0) scale(1)"}],{duration:360,easing:"cubic-bezier(.2,.85,.25,1)"});}catch(e){}}paintBiomeFight();if(biomeState.hp<=0)return defeatBiome();armBiomeTimer();return true;}
   function toggleBiomePin(){ if(!biomeState.tex)return; biomeState.pinned=!biomeState.pinned; var b=biome.querySelector(".cmBiomeKeep"); b.setAttribute("aria-pressed",String(biomeState.pinned)); b.textContent=biomeState.pinned?tr("📌 Mundo fijado · soltar","📌 World pinned · release"):tr("📌 Mantener este mundo","📌 Keep this world"); if(biomeState.pinned){clearTimeout(biomeTimer);biomeState.until=0;}else armBiomeTimer(); }
   biome.querySelector(".cmBiomeMonster").addEventListener("click",attackBiome); biome.querySelector(".cmBiomeKeep").addEventListener("click",toggleBiomePin); biome.querySelector(".cmBiomeClose").addEventListener("click",closeBiome);
-  function paintAsmrLanguage(){var en=english();ribbons.forEach(function(r){var d=typeDef(r.dataset.tex),name=d?(en?d.enLbl:d.lbl):r.dataset.tex;r.dataset.call=en?"✨ touch me":"✨ tócame";r.setAttribute("aria-label",en?name+" ASMR zone: rub the strip or touch its elements to hear it":"Zona ASMR de "+name+": roza la franja o toca sus elementos para oírla");var label=r.querySelector(".cmTexLbl");if(label)label.textContent="✦ "+name+(en?" — rub or touch":" — rózame o toca");r.querySelectorAll(".cmBub").forEach(function(b){b.setAttribute("aria-label",en?"bubble to pop":"burbuja para reventar");});r.querySelectorAll(".cmCrumb").forEach(function(b){b.setAttribute("aria-label",en?"touch me to hear a sound":"tócame para sonar");});});fxLayer.setAttribute("aria-label",en?"ASMR effects: tap a bubble or emoji to pop it":"Efectos ASMR: toca una burbuja o un emoji para explotarlo");biome.setAttribute("aria-label",en?"Unlocked ASMR world":"Mundo ASMR desbloqueado");biome.querySelector(".cmBiomeClose").textContent=en?"✕ Return":"✕ Volver";if(biomeState.tex){paintBiomeFight();var keep=biome.querySelector(".cmBiomeKeep");keep.textContent=biomeState.pinned?(en?"📌 World pinned · release":"📌 Mundo fijado · soltar"):(en?"📌 Keep this world":"📌 Mantener este mundo");}if(counterHud.dataset.tex&&counterHud.classList.contains("on"))paintCount(counterHud.dataset.tex);fxLayer.querySelectorAll(".cmAsmrFxItem").forEach(function(el){el.setAttribute("aria-label",el.dataset.kind==="image"?(en?"Pop ASMR bubble":"Explotar burbuja ASMR"):(en?"Pop "+typeLabel(el.dataset.tex)+" ASMR effect":"Explotar efecto ASMR de "+typeLabel(el.dataset.tex)));});}
+  function paintAsmrLanguage(){var en=english();ribbons.forEach(function(r){var d=typeDef(r.dataset.tex),name=d?(en?d.enLbl:d.lbl):r.dataset.tex;r.dataset.call=en?"🎧 volume up · touch":"🎧 volumen ↑ · tócame";r.setAttribute("aria-label",en?name+" ASMR zone: turn up the volume, rub the strip or touch its elements":"Zona ASMR de "+name+": sube el volumen, roza la franja o toca sus elementos");var label=r.querySelector(".cmTexLbl");if(label)label.textContent="✦ "+name+(en?" — volume up · rub or touch":" — sube el volumen · rózame o toca");r.querySelectorAll(".cmBub").forEach(function(b){b.setAttribute("aria-label",en?"bubble to pop":"burbuja para reventar");});r.querySelectorAll(".cmCrumb").forEach(function(b){b.setAttribute("aria-label",en?"touch me to hear a sound":"tócame para sonar");});});fxLayer.setAttribute("aria-label",en?"ASMR effects: tap a bubble or emoji to pop it":"Efectos ASMR: toca una burbuja o un emoji para explotarlo");biome.setAttribute("aria-label",en?"Unlocked ASMR world":"Mundo ASMR desbloqueado");biome.querySelector(".cmBiomeClose").textContent=en?"✕ Return":"✕ Volver";if(biomeState.tex){paintBiomeFight();var keep=biome.querySelector(".cmBiomeKeep");keep.textContent=biomeState.pinned?(en?"📌 World pinned · release":"📌 Mundo fijado · soltar"):(en?"📌 Keep this world":"📌 Mantener este mundo");}if(counterHud.dataset.tex&&counterHud.classList.contains("on"))paintCount(counterHud.dataset.tex);fxLayer.querySelectorAll(".cmAsmrFxItem").forEach(function(el){el.setAttribute("aria-label",el.dataset.kind==="image"?(en?"Pop ASMR bubble":"Explotar burbuja ASMR"):(en?"Pop "+typeLabel(el.dataset.tex)+" ASMR effect":"Explotar efecto ASMR de "+typeLabel(el.dataset.tex)));});}
   paintAsmrLanguage();var langBtn=document.getElementById("langEn");if(langBtn)langBtn.addEventListener("click",function(){setTimeout(paintAsmrLanguage,0);});
   function recordActivity(tex,points,kind,force){ var c=countOf(tex),before=c.score,gain=force?Math.max(1,Number(points)||1):Math.max(.01,Number(points)||1)*(kind==="pop"?SUMMON_POP_GAIN:SUMMON_RUB_GAIN);c.score+=gain;if(kind==="pop")c.pops++;else c.rubs++;var unlocked=false;if(c.score>=c.nextAt){c.score=c.nextAt;paintCount(tex);c.nextAt+=SUMMON_TARGET;unlocked=showBiome(tex);}else paintCount(tex);return {score:Math.round(c.score*100)/100,progress:summonProgress(c),unlocked:!!unlocked,before:Math.round(before*100)/100}; }
   function clearFx(){ while(fxLayer.firstChild) fxLayer.removeChild(fxLayer.firstChild); Object.keys(fxStates).forEach(function(k){ var s=fxStates[k]; clearTimeout(s.fade); s.energy=0; s.phase=0; s.phase2Shown=false; s.lastBurst=0; s.last=now(); }); ribbons.forEach(function(r){r.removeAttribute("data-fx-phase");}); closeBiome(); counterHud.classList.remove("on"); }
-  function capNow(){ return document.body.classList.contains("chaos")?CHAOS_CAP:NORMAL_CAP; }
+  function mobileFx(){return Math.max(document.documentElement.clientWidth||0,innerWidth||0)<=620;}
+  function capNow(){ var chaos=document.body.classList.contains("chaos");return mobileFx()?(chaos?MOBILE_CHAOS_CAP:MOBILE_NORMAL_CAP):(chaos?CHAOS_CAP:NORMAL_CAP); }
   function sparkFx(x,y){ if(!motionAllowed()) return; for(var i=0;i<4;i++){ var s=document.createElement("i"); s.className="cmAsmrSpark"; s.textContent=i%2?"✦":"✨"; s.style.setProperty("--sx",Math.round(x)+"px"); s.style.setProperty("--sy",Math.round(y)+"px"); s.style.setProperty("--sdx",Math.round(rr(-48,48))+"px"); s.style.setProperty("--sdy",Math.round(rr(-58,32))+"px"); document.body.appendChild(s); (function(n){setTimeout(function(){removeFx(n);},480);})(s); } }
   function popFx(el,tex,e){ if(!el||el.dataset.popped) return false; el.dataset.popped="1"; el.classList.add("cmFxPopped"); fxStats.popped++; try{hit(tex);}catch(_e){} try{if(navigator.vibrate)navigator.vibrate(9);}catch(_e){} var r=el.getBoundingClientRect(),x=e&&e.clientX?e.clientX:r.left+r.width/2,y=e&&e.clientY?e.clientY:r.top+r.height/2; recordActivity(tex,5,"pop"); progressFx(document.querySelector('.cmTex[data-tex="'+tex+'"]'),3,x,y,tex,"skip"); sparkFx(x,y); setTimeout(function(){removeFx(el);},290); return true; }
-  function fxBlockers(){ var out=[]; try{ document.querySelectorAll('button,a,input,textarea,select,summary,[role="button"]').forEach(function(el){ if(el.closest&&el.closest("#cmAsmrFx"))return; var cs=getComputedStyle(el),r=el.getBoundingClientRect(); if(cs.display!=="none"&&cs.visibility!=="hidden"&&r.width>2&&r.height>2&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth)out.push({l:r.left-5,t:r.top-5,r:r.right+5,b:r.bottom+5}); }); }catch(_e){} return out; }
-  function fxCollisionCount(x,y,size,blockers){ var l=x-size/2,t=y-size/2,r=x+size/2,b=y+size/2,n=0; for(var j=0;j<blockers.length;j++){var q=blockers[j];if(Math.min(r,q.r)-Math.max(l,q.l)>0&&Math.min(b,q.b)-Math.max(t,q.t)>0)n++;}return n; }
+  function fxBlockers(){ var out=[]; try{ document.querySelectorAll('button,a,input,textarea,select,summary,[role="button"],#gxg-cat-root').forEach(function(el){
+    if(el.closest&&el.closest("#cmAsmrFx"))return;var cs=getComputedStyle(el),box=el.getBoundingClientRect();if(cs.display==="none"||cs.visibility==="hidden"||box.width<=2||box.height<=2||box.bottom<=0||box.top>=innerHeight||box.right<=0||box.left>=innerWidth)return;
+    var l=box.left-8,t=box.top-8,r=box.right+8,b=box.bottom+8;
+    /* El gato cruza el viewport mediante transform. Reservar solo su fotograma actual deja huecos
+       entre muestras; la union actual->destino protege toda la trayectoria tactil. */
+    if(el.id==="gxg-cat-root"){var m=(el.style.transform||"").match(/translate3d\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px/i);if(m){var tx=Number(m[1]),ty=Number(m[2]);l=Math.min(l,tx-12);t=Math.min(t,ty-12);r=Math.max(r,tx+box.width+12);b=Math.max(b,ty+box.height+12);}}
+    out.push({l:l,t:t,r:r,b:b,control:1});
+  }); }catch(_e){} return out; }
+  function fxCollisionCount(x,y,size,blockers){ var l=x-size/2,t=y-size/2,r=x+size/2,b=y+size/2,n=0; for(var j=0;j<blockers.length;j++){var q=blockers[j];if(Math.min(r,q.r)-Math.max(l,q.l)>0&&Math.min(b,q.b)-Math.max(t,q.t)>0)n+=q.control?1000:1;}return n; }
   function fxPlace(size,chaos,index,blockers,edgeWanted){
     var W=Math.max(240,innerWidth||375),H=Math.max(320,innerHeight||700),pad=size/2+5,best=null,bestHits=1e9,edge=typeof edgeWanted==="boolean"?edgeWanted:(chaos?(index%2===0):((index+1)%4!==0));
     function remember(x,y,n,isEdge){ if(n<bestHits){best={x:x,y:y,edge:isEdge};bestHits=n;} return n===0; }
@@ -7748,20 +7809,25 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
   }
   var fxReflowFrame=0;
   function reflowFx(){
-    fxReflowFrame=0;if(!fxLayer.children.length)return;var blockers=fxBlockers(),chaos=document.body.classList.contains("chaos"),W=Math.max(1,innerWidth),H=Math.max(1,innerHeight);
-    Array.prototype.forEach.call(fxLayer.children,function(el,index){var size=parseFloat(el.style.getPropertyValue("--fx-size"))||44,x=parseFloat(el.style.getPropertyValue("--fx-left"))/100*W,y=parseFloat(el.style.getPropertyValue("--fx-top"))/100*H;if(!fxCollisionCount(x,y,size,blockers))return;var point=fxPlace(size,chaos,index,blockers,el.dataset.zone==="edge");el.dataset.zone=point.edge?"edge":"field";el.style.setProperty("--fx-left",Math.round(point.x/W*1000)/10+"%");el.style.setProperty("--fx-top",Math.round(point.y/H*1000)/10+"%");});
+    fxReflowFrame=0;while(fxLayer.children.length>capNow())removeFx(fxLayer.firstElementChild);if(!fxLayer.children.length)return;var blockers=fxBlockers(),chaos=document.body.classList.contains("chaos"),W=Math.max(1,innerWidth),H=Math.max(1,innerHeight);
+    Array.prototype.forEach.call(fxLayer.children,function(el,index){var size=parseFloat(el.style.getPropertyValue("--fx-size"))||44,safeSize=size+(mobileFx()?18:0),x=parseFloat(el.style.getPropertyValue("--fx-left"))/100*W,y=parseFloat(el.style.getPropertyValue("--fx-top"))/100*H;if(fxCollisionCount(x,y,safeSize,blockers)){var point=fxPlace(safeSize,chaos,index,blockers,el.dataset.zone==="edge");x=point.x;y=point.y;el.dataset.zone=point.edge?"edge":"field";el.style.setProperty("--fx-left",Math.round(x/W*1000)/10+"%");el.style.setProperty("--fx-top",Math.round(y/H*1000)/10+"%");}blockers.push({l:x-size/2-4,t:y-size/2-4,r:x+size/2+4,b:y+size/2+4});});
   }
   function queueFxReflow(delay){if(delay){setTimeout(function(){queueFxReflow(0);},delay);return;}if(fxReflowFrame)return;fxReflowFrame=requestAnimationFrame(reflowFx);}
   window.addEventListener("scroll",function(){queueFxReflow(0);},{passive:true});window.addEventListener("resize",function(){queueFxReflow(0);},{passive:true});
   document.addEventListener("touchend",function(e){if(!fxLayer.children.length||(e.target&&e.target.closest&&e.target.closest("#cmAsmrFx")))return;reflowFx();},{passive:true,capture:true});
+  document.addEventListener("cm:controlschange",function(){queueFxReflow(0);queueFxReflow(120);queueFxReflow(500);});
+  var fxCat=document.getElementById("gxg-cat-root");
+  if(fxCat&&typeof MutationObserver==="function")new MutationObserver(function(){
+    [0,90,180,280,400,540,700,880,1080].forEach(queueFxReflow);
+  }).observe(fxCat,{attributes:true,attributeFilter:["class","style"]});
   function spawnFx(tex,count){
     if(!motionAllowed()) return 0;
-    var chaos=document.body.classList.contains("chaos"),requested=Math.max(0,Math.round(count||0))*(chaos?5:1),cap=capNow(),set=FX_MANIFEST[tex]||["✨"],made=0,large=(tex==="madera"||tex==="hojas"),blockers=fxBlockers();
+    var chaos=document.body.classList.contains("chaos"),mobile=mobileFx(),requested=Math.max(0,Math.round(count||0))*(chaos?5:1),cap=capNow(),burstCap=mobile?(chaos?12:5):cap,set=FX_MANIFEST[tex]||["✨"],made=0,large=(tex==="madera"||tex==="hojas"),blockers=fxBlockers();requested=Math.min(requested,burstCap);var imageQuota=tex==="burbujas"?Math.min(requested,Math.max(requested>=4?3:1,Math.ceil(requested*.62))):0;
     fxStats.bursts++; fxStats.lastBurst=Date.now();
     for(var i=0;i<requested;i++){
       while(fxLayer.children.length>=cap) removeFx(fxLayer.firstElementChild);
-      var el=document.createElement("button"),dur=Math.round(rr(5000,7600)),delay=Math.round(rr(0,420)),useImage=(tex==="burbujas"&&(requested>=12||Math.random()<.58)),plannedEdge=chaos?(i%2===0):((i+1)%4!==0),size=Math.round(useImage?(chaos?rr(70,124):(plannedEdge?rr(62,106):rr(52,78))):(large?rr(58,88):rr(46,70))),point=fxPlace(size,chaos,i,blockers);
-      el.type="button"; el.tabIndex=fxLayer.children.length<8?0:-1; el.className="cmAsmrFxItem"; el.dataset.tex=tex; el.dataset.kind=useImage?"image":"emoji";
+      var el=document.createElement("button"),dur=Math.round(rr(5000,7600)),delay=Math.round(rr(0,420)),useImage=(tex==="burbujas"&&i<imageQuota),plannedEdge=chaos?(i%2===0):((i+1)%4!==0),size=Math.round(useImage?(chaos?rr(70,124):(plannedEdge?rr(62,106):rr(52,78))):(large?rr(58,88):rr(46,70)));if(mobile)size=Math.min(size,useImage?72:58);var point=fxPlace(size+(mobile?18:0),chaos,i,blockers);
+      el.type="button"; el.tabIndex=fxLayer.children.length<(mobile?4:8)?0:-1; el.className="cmAsmrFxItem"; el.dataset.tex=tex; el.dataset.kind=useImage?"image":"emoji";
       el.dataset.zone=point.edge?"edge":"field";
       el.setAttribute("aria-label",useImage?tr("Explotar burbuja ASMR","Pop ASMR bubble"):tr("Explotar efecto ASMR de ","Pop ")+typeLabel(tex)+(english()?" ASMR effect":""));
       if(useImage){ var sprite=FX_IMAGES[fxImageCursor++%FX_IMAGES.length]; el.dataset.sprite=sprite; el.style.backgroundImage='url("'+sprite+'")'; } else { el.textContent=set[Math.floor(Math.random()*set.length)]; }
@@ -7770,15 +7836,18 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
       el.style.setProperty("--fx-size",size+"px");
       el.style.setProperty("--fx-dur",dur+"ms");
       el.style.setProperty("--fx-delay",delay+"ms");
-      el.style.setProperty("--fx-dx",Math.round(rr(-95,95))+"px");
-      el.style.setProperty("--fx-dy",Math.round(rr(-135,55))+"px");
-      el.style.setProperty("--fx-rot",Math.round(rr(-45,45))+"deg");
+      /* En móvil el hueco seguro es pequeño y los controles ocupan buena parte del viewport.
+         La posición inicial ya se valida contra ellos; mantener el centro fijo evita que la
+         trayectoria animada vuelva a cruzarlos. El efecto conserva aparición, escala, giro y pop. */
+      el.style.setProperty("--fx-dx",(mobile?0:Math.round(rr(-95,95)))+"px");
+      el.style.setProperty("--fx-dy",(mobile?0:Math.round(rr(-135,55)))+"px");
+      el.style.setProperty("--fx-rot",(mobile?0:Math.round(rr(-45,45)))+"deg");
       el.addEventListener("click",(function(node,kind){return function(ev){ev.preventDefault();ev.stopPropagation();popFx(node,kind,ev);};})(el,tex));
-      fxLayer.appendChild(el); made++;
+      fxLayer.appendChild(el);blockers.push({l:point.x-size/2-4,t:point.y-size/2-4,r:point.x+size/2+4,b:point.y+size/2+4}); made++;
       (function(node,ttl){ setTimeout(function(){removeFx(node);},ttl); })(el,dur+delay+420);
     }
     fxStats.spawned+=made; fxStats.peak=Math.max(fxStats.peak,fxLayer.children.length);
-    queueFxReflow(0);queueFxReflow(90);queueFxReflow(260);queueFxReflow(700);
+    queueFxReflow(0);queueFxReflow(90);queueFxReflow(260);queueFxReflow(700);queueFxReflow(1200);queueFxReflow(1900);
     return made;
   }
   function progressFx(rib,amount,x,y,forcedType,activityMode){
@@ -7797,7 +7866,7 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
   window.__cmAsmrFx={
     manifestations:Object.keys(FX_MANIFEST),
     coverage:TYPES.map(function(t){return t.k;}).filter(function(k){return !FX_MANIFEST[k];}),
-    max:CHAOS_CAP,maxNormal:NORMAL_CAP,maxChaos:CHAOS_CAP,images:FX_IMAGES.slice(),
+    max:CHAOS_CAP,maxNormal:NORMAL_CAP,maxChaos:CHAOS_CAP,maxMobileNormal:MOBILE_NORMAL_CAP,maxMobileChaos:MOBILE_CHAOS_CAP,images:FX_IMAGES.slice(),
     feed:function(tex,amount){ var rib=document.querySelector('.cmTex[data-tex="'+tex+'"]'); return progressFx(rib,amount==null?30:amount,innerWidth/2,innerHeight/2,tex); },
     unlock:function(tex){ var c=countOf(tex); c.score=Math.max(c.score,c.nextAt-1); return recordActivity(tex,1,"rub",true); },
     attack:attackBiome,
@@ -8096,8 +8165,9 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
     var reason=document.createElement("input");reason.type="text";reason.className="asmrVoteReason";reason.maxLength=180;reason.enterKeyHint="send";reason.dataset.placeholderEs="¿Por qué? · Enter para enviar";reason.dataset.placeholderEn="Why? · Press Enter to send";reason.dataset.labelEs="Por qué te gusta o no te gusta: "+c.n;reason.dataset.labelEn="Why you like or dislike: "+c.en;var reasonEn=document.documentElement.lang==="en";reason.placeholder=reasonEn?reason.dataset.placeholderEn:reason.dataset.placeholderEs;reason.value=reasonDrafts[c.k]||"";reason.setAttribute("aria-label",reasonEn?reason.dataset.labelEn:reason.dataset.labelEs);
     reason.addEventListener("input",function(){var value=reason.value.trim();if(value)reasonDrafts[c.k]=value;else delete reasonDrafts[c.k];saveReasonDrafts();});
     reason.addEventListener("keydown",function(e){if(e.key!=="Enter"||e.shiftKey)return;e.preventDefault();e.stopPropagation();sendVoteReason(c,a,reason);});
+    var reasonVoice=document.createElement("button");reasonVoice.type="button";reasonVoice.className="asmrVoteVoice";reasonVoice.textContent="🎙️";reasonVoice.setAttribute("aria-label","Dictar feedback sobre "+c.n);reasonVoice.setAttribute("data-en-label","Dictate feedback about "+c.en);reasonVoice.addEventListener("click",function(){if(typeof window.__cmOpenFeedback==="function")window.__cmOpenFeedback("🎧 Laboratorio ASMR",c.n,"opinion");else openMatch(c);});
     [["gusta","👍","Me gusta"],["no-gusta","👎","No me gusta"]].forEach(function(v){ var b=document.createElement("button"); b.type="button"; b.className="asmrVote"; b.dataset.vote=v[0]; b.textContent=v[1]; b.setAttribute("aria-label",v[2]+": "+c.n); b.setAttribute("aria-pressed","false"); b.addEventListener("click",function(){vote(c,v[0],a);if(votes[c.k])reason.focus();}); row.appendChild(b); });
-    row.appendChild(reason);
+    row.appendChild(reasonVoice);row.appendChild(reason);
     var matchLabel=document.createElement("span");matchLabel.className="asmrMatchLabel";matchLabel.textContent="Coincide:";matchLabel.setAttribute("data-en","Matches:");row.appendChild(matchLabel);
     [["si","Sí","Yes"],["no","No","No"]].forEach(function(v){var b=document.createElement("button");b.type="button";b.className="asmrQuickMatch";b.dataset.match=v[0];b.textContent=v[1];b.setAttribute("data-en",v[2]);b.setAttribute("aria-label",v[1]+" coincide: "+c.n);b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){quickMatch(c,v[0],a);});row.appendChild(b);});
     var match=document.createElement("button"); match.type="button"; match.className="asmrMatch"; match.textContent="✍️ Matizar dónde o por qué"; match.setAttribute("data-en","✍️ Add where or why");match.setAttribute("aria-label","Añadir matiz sobre si coincide: "+c.n); match.addEventListener("click",function(){openMatch(c);}); row.appendChild(match);
@@ -8107,7 +8177,7 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
     paintVote(a,c.k);paintMatch(a,c.k); return a;
   }
   LAB.forEach(function(c){ (c.kind==="recorded"?feat:more).appendChild(tile(c)); });
-  var reasonLang=document.getElementById("langEn");if(reasonLang)reasonLang.addEventListener("click",function(){setTimeout(function(){var en=reasonLang.getAttribute("aria-pressed")==="true";Array.prototype.forEach.call(document.querySelectorAll(".asmrVoteReason"),function(input){input.placeholder=en?input.dataset.placeholderEn:input.dataset.placeholderEs;input.setAttribute("aria-label",en?input.dataset.labelEn:input.dataset.labelEs);});},0);});
+  var reasonLang=document.getElementById("langEn");if(reasonLang)reasonLang.addEventListener("click",function(){setTimeout(function(){var en=reasonLang.getAttribute("aria-pressed")==="true";Array.prototype.forEach.call(document.querySelectorAll(".asmrVoteReason"),function(input){input.placeholder=en?input.dataset.placeholderEn:input.dataset.placeholderEs;input.setAttribute("aria-label",en?input.dataset.labelEn:input.dataset.labelEs);});Array.prototype.forEach.call(document.querySelectorAll(".asmrVoteVoice"),function(btn){btn.setAttribute("aria-label",en?btn.dataset.enLabel:btn.getAttribute("aria-label").replace(/^Dictate feedback about /,"Dictar feedback sobre "));});},0);});
   var judge67=document.getElementById("cm67Judge"); if(judge67) judge67.addEventListener("click",function(){try{if(window.__cmMlgSound)window.__cmMlgSound(67);}catch(e){} openMatch({k:"six-seven",n:"Sonido 6·7 actual"});});
   var focusObserver=null,labCard=document.getElementById("asmrLabCard");
   if(labCard&&"IntersectionObserver" in window){
@@ -8408,6 +8478,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
         active.appendChild(chip);
       });
     }catch(e){}
+    try{D.dispatchEvent(new CustomEvent("cm:controlschange",{detail:{source:"fabHubActive"}}));}catch(e){}
   }
   var open=false;
   function openMenu(){ open=true; menu.classList.add("on"); btn.classList.add("on"); active.classList.add("hidden"); refreshStates(); clearNudge(); try{localStorage.setItem("cm_hub_seen","1");}catch(e){} }
@@ -8453,7 +8524,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.76";
+  window.__cmVersion="v1.77";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
@@ -8628,12 +8699,12 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     /* v0.34: nota pública de 1 línea (el sep YA existe aquí, a diferencia de cuando corrió applyGate antes) */
     if(!document.getElementById("tonyPublicNote")){
       var n=document.createElement("div"); n.id="tonyPublicNote";
-      n.textContent="\u{1f512} Aquí abajo hay 2 tarjetas internas del creador (sus pasos y el archivo de decisiones). Si quieres ver qué decide MADRE, mira «MADRE te dice» más arriba — es la misma info, en versión pública. 🩻 Debilidad conocida y asumida (auditada 12-jul): este candado es de cortesía —la contraseña se ve en el código fuente— y estas tarjetas internas viajan en el HTML público. No hay nada sensible en ellas (auditado: cero datos personales, cero claves privadas), pero está en el plan sacar este código interno del fichero público. Aquí las debilidades no se esconden: se fechan.";
+      n.innerHTML='🔒 Las decisiones privadas no viven en esta página. <a href="https://panel-tony-online.vercel.app/" target="_blank" rel="noopener">Abrir Centro de mando Tony ↗</a>';
       sep.insertAdjacentElement("afterend", n);
     }
   }
-  // 2) los chips de Tony (decisiones / tu parte) solo se ven en modo Tony
-  function syncChips(){ var t=false; try{ t=localStorage.getItem('cuaderno_madre_tony')==='1'; }catch(e){} ['chipDecs','chipSteps'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display=t?'':'none'; }); }
+  // 2) las decisiones privadas no se activan desde el cliente público
+  function syncChips(){ ['chipDecs','chipSteps'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; }); }
   syncChips();
   try{ var gb=document.getElementById('gateBar'); if(gb) gb.addEventListener('click', function(){ setTimeout(syncChips, 80); }); }catch(e){}
   // 3) wow: la barra sube sola de 0 a su valor al cargar
@@ -10270,7 +10341,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     slime:'🏆 Slime. Se pega como un bug en producción.',
     burbujas:'🏆 Burbujas. Las promesas sin fecha también se revientan solas.',
     pana:'🏆 Pana. Suave. No todo en mí es un veredicto.',
-    cremallera:'🏆 Cremallera. Ábreme entera: mi código fuente también está a la vista.',
+    cremallera:'🏆 Cremallera. Ábreme entera: aquí cada clic tiene dientes.',
     muelle:'🏆 Muelle. Rebotar tras un ❌ es el 80% de mi trabajo.',
     papel:'🏆 Papel arrugado. Aquí escribo lo que puede dejarme mal. Luego no lo aliso.',
     hojas:'🏆 Hojas secas. El árbol suelta lo que no le sirve. Yo igual — delante de ti.'
@@ -10403,11 +10474,11 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
 </script>
 <script>
 /* v1.64 — FanRank del Cuaderno: reusa el backend y las políticas públicas de FanRank.
-   Lectura = ranking aprobado. Escrituras públicas = voto o sugerencia privada pendiente. Tony no
-   recibe un bypass desde el navegador: su 💜 deja una señal persistente para el ciclo de MADRE. */
+   Lectura = ranking aprobado. Escrituras públicas = voto o sugerencia privada pendiente. Las
+   favoritas verificadas de Tony solo llegan desde el backend o el Centro de mando autenticado. */
 (function(){try{
   var list=document.getElementById("cmFRList"),form=document.getElementById("cmFRForm"),status=document.getElementById("cmFRStatus"),nameEl=document.getElementById("cmFRName"),ideaEl=document.getElementById("cmFRIdea"),detailEl=document.getElementById("cmFRDetail"),rankBox=document.getElementById("cmFanRank"); if(!list||!form||!status)return;
-  var SECTION="cuaderno-madre",VOTE_KEY="cm_fanrank_votes_v1",TONY_KEY="cm_fanrank_tony_v1",VISITOR_KEY="cm_fanrank_visitor_v1",LAST_KEY="cm_fanrank_submit_at_v1",live=false,rows=[],loadAttempts=0;
+  var SECTION="cuaderno-madre",VOTE_KEY="cm_fanrank_votes_v1",VISITOR_KEY="cm_fanrank_visitor_v1",LAST_KEY="cm_fanrank_submit_at_v1",live=false,rows=[],loadAttempts=0;
   var FALLBACK=[
     {title_es:"Cada toque da una respuesta satisfactoria y útil",ai_score:98,web_votes:0,owner_pick:true},
     {title_es:"MADRE tiene una personalidad genuinamente divertida",ai_score:96,web_votes:0,owner_pick:true},
@@ -10419,20 +10490,17 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   function writeObj(key,o){try{localStorage.setItem(key,JSON.stringify(o));return true;}catch(e){return false;}}
   function titleOf(r){return String(r.title_es||r.title||"Idea sin título");}
   function visitor(){try{var v=localStorage.getItem(VISITOR_KEY);if(v)return v;v=(window.crypto&&window.crypto.randomUUID)?window.crypto.randomUUID():("cm-"+Date.now()+"-"+Math.random().toString(36).slice(2));localStorage.setItem(VISITOR_KEY,v);return v;}catch(e){return "cm-session-"+Math.random().toString(36).slice(2);}}
-  function isCreator(){try{return localStorage.getItem("cuaderno_madre_tony")==="1";}catch(e){return false;}}
-  function syncCreator(){document.body.classList.toggle("cmCreator",isCreator());}
+  function isCreator(){return false;}
+  function syncCreator(){document.body.classList.remove("cmCreator");}
   function setStatus(s){status.textContent=s||"";}
-  function ownerInfo(r){var saved=readObj(TONY_KEY),t=titleOf(r),canonical=!!r.owner_pick,has=Object.prototype.hasOwnProperty.call(saved,t),local=has?!!saved[t]:canonical;if(has&&local!==canonical)return {value:local,prefix:local?"💜 local pendiente · ":"↩ retirada pendiente · "};return {value:canonical,prefix:canonical?"💜 Tony · ":""};}
-  function ownerState(r){return ownerInfo(r).value;}
+  function ownerInfo(r){var canonical=!!r.owner_pick;return {value:canonical,prefix:canonical?"💜 Tony · ":""};}
   function render(source){rows=(source&&source.length?source:FALLBACK).slice().sort(function(a,b){return Number(b.owner_pick)-Number(a.owner_pick)||Number(b.ai_score||0)-Number(a.ai_score||0)||Number(b.web_votes||0)-Number(a.web_votes||0);}).slice(0,5);list.textContent="";var voted=readObj(VOTE_KEY);
     rows.forEach(function(r){var li=document.createElement("li");li.className="cmFRItem";li.dataset.idea=String(r.id||"");var tx=document.createElement("span");tx.className="cmFRTitle";tx.textContent=titleOf(r);var meta=document.createElement("span");meta.className="cmFRMeta";meta.textContent=ownerInfo(r).prefix+"IA "+Math.round(Number(r.ai_score||0))+" · "+Math.round(Number(r.web_votes||0))+" votos";tx.appendChild(meta);var acts=document.createElement("span");acts.className="cmFRActions";
       var vote=document.createElement("button");vote.type="button";vote.className="cmFRVote";var was=!!(r.id&&voted[r.id]);vote.setAttribute("aria-pressed",was?"true":"false");vote.textContent=(was?"♥ ":"♡ ")+Math.round(Number(r.web_votes||0));vote.disabled=!r.id;vote.setAttribute("aria-label","Votar por: "+titleOf(r));vote.addEventListener("click",function(){voteIdea(r,vote);});acts.appendChild(vote);
-      var own=document.createElement("button");own.type="button";own.className="cmFROwnerBtn";own.textContent="💜";own.setAttribute("aria-label","Tony: marcar o retirar favorita: "+titleOf(r));own.setAttribute("aria-pressed",ownerState(r)?"true":"false");own.addEventListener("click",function(){markTony(r,own,meta);});acts.appendChild(own);
       li.appendChild(tx);li.appendChild(acts);list.appendChild(li);
     }); syncCreator();
   }
   function voteIdea(r,btn){if(!window.__sb||!r.id)return;var voted=readObj(VOTE_KEY);if(voted[r.id]){setStatus("Ese voto ya vive en este dispositivo.");return;}btn.disabled=true;setStatus("Guardando tu voto…");window.__sb.from("fr_votes").insert({idea_id:Number(r.id),voter:visitor()}).then(function(res){if(res&&res.error)throw res.error;voted[r.id]=Date.now();writeObj(VOTE_KEY,voted);r.web_votes=Number(r.web_votes||0)+1;btn.disabled=false;btn.setAttribute("aria-pressed","true");btn.textContent="♥ "+Math.round(r.web_votes);setStatus("✓ Voto contado. El ranking ya tiene una señal más.");},function(){btn.disabled=false;setStatus("No pude contar el voto ahora. No lo fingí; prueba cuando vuelva la conexión.");});}
-  function markTony(r,btn,meta){var saved=readObj(TONY_KEY),t=titleOf(r),next=!ownerState(r);saved[t]=next;if(!writeObj(TONY_KEY,saved)){setStatus("Este navegador no dejó guardar la preferencia; FanRank no cambió.");return;}btn.setAttribute("aria-pressed",next?"true":"false");meta.textContent=ownerInfo(r).prefix+"IA "+Math.round(Number(r.ai_score||0))+" · "+Math.round(Number(r.web_votes||0))+" votos";setStatus(next?"💜 Guardada en este dispositivo. Enviando una señal privada para revisión…":"↩ Retirada en este dispositivo. Enviando la corrección para revisión…");if(!window.__fb){setStatus("Guardada solo aquí: sin conexión no envié nada y FanRank no cambió.");return;}btn.disabled=true;var payload={card:"🏁 FanRank del Cuaderno",section:"favoritos-tony",tipo:next?"fanrank-favorita-tony":"fanrank-favorita-tony-retirada",texto:"FANRANK-CUADERNO\nidea: "+t+"\nestado: "+(next?"favorita":"retirada")+"\norigen: cuaderno-publico"};Promise.resolve(window.__fb(payload)).then(function(result){btn.disabled=false;setStatus(result==="sent"?"✓ Preferencia guardada aquí y señal recibida para revisión; FanRank aún no cambió.":"Preferencia guardada aquí; la señal sigue pendiente y FanRank no cambió.");},function(){btn.disabled=false;setStatus("Preferencia guardada aquí, pero la señal no salió; FanRank no cambió.");});}
   function load(){render(FALLBACK);setStatus("Ranking offline visible; buscando la clasificación viva…");if(!window.__sb){loadAttempts++;if(loadAttempts<20)setTimeout(load,180);else setStatus("Sin conexión: ves las 5 favoritas sembradas, sin inventar votos.");return;}loadAttempts=0;window.__sb.from("fr_ranking").select("*").eq("section",SECTION).limit(20).then(function(res){if(res&&res.error)throw res.error;var data=(res&&res.data)||[];if(!data.length)throw new Error("empty");live=true;render(data);setStatus("✓ Clasificación viva sincronizada: "+rows.length+" direcciones.");},function(){live=false;render(FALLBACK);setStatus("Sin conexión: ves las 5 favoritas sembradas, sin inventar votos.");});}
   form.addEventListener("submit",function(e){e.preventDefault();var idea=(ideaEl.value||"").trim(),name=(nameEl.value||"").trim(),detail=(detailEl.value||"").trim();if(idea.length<3){setStatus("Escribe una idea concreta primero.");ideaEl.focus();return;}if(!name){setStatus("Pon el nombre bajo el que quieres sugerirla.");nameEl.focus();return;}var last=0;try{last=Number(localStorage.getItem(LAST_KEY)||0);}catch(_e){}if(Date.now()-last<30000){setStatus("Espera unos segundos antes de mandar otra; la primera ya está a salvo.");return;}if(!window.__sb){setStatus("No hay conexión: todavía no la envié. El texto sigue en el formulario.");return;}var send=form.querySelector("button[type=submit]");send.disabled=true;setStatus("Enviando a revisión…");window.__sb.from("fr_submissions").insert({section:SECTION,title:idea,details:detail||null,author:name,language:document.documentElement.lang==="en"?"en":"es"}).then(function(res){if(res&&res.error)throw res.error;try{localStorage.setItem(LAST_KEY,String(Date.now()));}catch(_e){}ideaEl.value="";detailEl.value="";send.disabled=false;setStatus("✓ Recibida bajo «"+name+"». La IA la ordenará tras revisión; no aparece instantáneamente.");},function(){send.disabled=false;setStatus("No se pudo enviar ahora; no borré tu texto.");});});
   try{if(nameEl&&window.__identity&&window.__identity.name)nameEl.value=window.__identity.name();}catch(e){}
@@ -10442,8 +10510,8 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
 </script>
 <script>
 /* v1.64 — Pregunta a MADRE. Reusa public.comments (pregunta/respuesta) y window.__fb
-   (pedir más simple/profundizar). El límite del navegador reduce spam accidental; no se vende
-   como seguridad fuerte y el modo creador sigue siendo el candado de cortesía ya declarado. */
+   (pedir más simple/profundizar). El límite del navegador reduce spam accidental; no autentica
+   identidad ni ofrece un bypass público para Tony. */
 (function(){try{
   var root=document.getElementById("cmAsk"),form=document.getElementById("cmQaForm"),nameEl=document.getElementById("cmQaName"),textEl=document.getElementById("cmQaText"),status=document.getElementById("cmQaStatus"),quotaEl=document.getElementById("cmQaQuota"),list=document.getElementById("cmQaList"),reloadBtn=document.getElementById("cmQaReload"),jump=document.getElementById("cmAskJump"),seedRow=document.getElementById("cmQaSeedRow"),nodesBox=document.getElementById("cmQaNodes"),sceneNote=document.getElementById("cmQaSceneNote"),demoAnswer=document.getElementById("cmQaDemoAnswer");
   if(!root||!form||!textEl||!status||!quotaEl||!list)return;
@@ -10458,7 +10526,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   ];
   function en(){return document.documentElement.lang==="en";}
   function el(tag,cls,txt){var x=document.createElement(tag);if(cls)x.className=cls;if(txt!=null)x.textContent=txt;return x;}
-  function isTony(){try{return localStorage.getItem("cuaderno_madre_tony")==="1";}catch(e){return false;}}
+  function isTony(){return false;}
   function readRate(){var a=[];try{a=JSON.parse(localStorage.getItem(RATE_KEY)||"[]");if(!Array.isArray(a))a=[];}catch(e){a=[];}var cut=Date.now()-DAY;return a.map(Number).filter(function(x){return isFinite(x)&&x>cut;}).sort(function(a,b){return a-b;});}
   function writeRate(a){try{localStorage.setItem(RATE_KEY,JSON.stringify(a));return true;}catch(e){return false;}}
   function quota(){var a=readRate(),last=a.length?a[a.length-1]:0;return {creator:isTony(),used:a.length,remaining:Math.max(0,MAX-a.length),wait:Math.max(0,WAIT-(Date.now()-last)),times:a};}
@@ -10609,7 +10677,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   function truthfulScarcity(){var copy=[kicker,title,body,disclosure,cta,terms].map(function(el){return el.textContent||"";}).join(" ");var safe=!FALSE_SCARCITY_RE.test(copy);if(safe){delete dialog.dataset.scarcityBlocked;}else{dialog.dataset.scarcityBlocked="true";console.error("referido-contextual bloqueado: escasez numérica sin fuente real de Claude");}return safe;}
   function readState(){try{var value=JSON.parse(localStorage.getItem(STATE_KEY)||"{}");return value&&typeof value==="object"?value:{};}catch(e){return {};}}
   function writeState(value){try{localStorage.setItem(STATE_KEY,JSON.stringify(value));return true;}catch(e){return false;}}
-  function isCreator(){try{return D.body.classList.contains("cmCreator")||localStorage.getItem("cuaderno_madre_tony")==="1";}catch(e){return D.body.classList.contains("cmCreator");}}
+  function isCreator(){return false;}
   function sessionShown(){try{return sessionStorage.getItem(SESSION_KEY)==="1";}catch(e){return false;}}
   function suppressReason(){var state=readState();if(isCreator())return "creator";if(state.clicked)return "clicked";if(Number(state.dismissedAt)>0&&Date.now()-Number(state.dismissedAt)<COOLDOWN_MS)return "cooldown";if(sessionShown())return "session";return "";}
   function activeInput(){var el=D.activeElement;return !!(el&&(/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)||el.isContentEditable));}

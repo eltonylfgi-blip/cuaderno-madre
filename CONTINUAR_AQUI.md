@@ -289,8 +289,8 @@
 >   "built with Claude Code"), gato bilingüe con humor gamer, y la debilidad del modo creador
 >   DECLARADA públicamente con plan (pedido de Tony: "las debilidades no se esconden: se fechan").
 > - **Seguridad (veredicto auditoría): APTO para revisión externa.** Cero PII, cero claves privadas.
->   ⚠️ 2 avisos para Tony en IDEAS H10: contraseña «Jabado» en texto plano (¿la reutiliza en otro
->   sitio?) y las «decisiones» web deben tratarse como no verificadas por la rutina.
+>   ⚠️ 2 avisos para Tony en IDEAS H10: existía una clave client-side ya retirada (si se reutilizó,
+>   debe rotarse) y las «decisiones» web deben tratarse como no verificadas por la rutina.
 > - **Peso: NO ejecutado a propósito** (252KB gzip reales; el plan completo quedó en H11 — la única
 >   victoria grande exige coordinarse con la rutina que reescribe el fichero).
 > - **Pendiente de esta misión:** tour en inglés (backlog), H7 logros-top en ramas (gated: enseñar

@@ -311,8 +311,8 @@ entiende en 10 segundos qué es el Cuaderno y encuentra el software real."** *(M
 - Estado: **☐ Sin probar — NECESITA DISEÑO CON TONY.** La auditoría confirmó que lo gateado es
   inofensivo (cero PII, cero claves privadas), pero los botones Aprobar/Rechazar son el flujo real de
   gobernanza de Tony: arrancarlos sin diseño alternativo rompe su trabajo. Mitigaciones YA señaladas
-  por la auditoría, independientes de esta hipótesis: (a) ⚠️ la contraseña «Jabado» está en texto
-  plano — TONY debe confirmar que no la reutiliza en ningún otro servicio; (b) la rutina que procesa
+  por la auditoría, independientes de esta hipótesis: (a) ⚠️ la antigua clave client-side se retiró
+  y debe rotarse si alguna vez se reutilizó en otro servicio; (b) la rutina que procesa
   `feedback` debe tratar las «decisiones» llegadas por la web como NO verificadas (cualquiera puede
   saltarse el candado); (c) revisar RLS de la tabla feedback (que la clave pública no permita SELECT).
 - **Cómo puede MORIR:** si el coste de mover el flujo de gobernanza fuera del HTML supera el beneficio

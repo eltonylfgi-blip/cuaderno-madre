@@ -83,7 +83,7 @@ document.title actual: línea 6 — `<title>Cuaderno MADRE</title>` (nunca se re
 - `cm_map_done_v1 (línea 1693) — flag de que el mapa ya se exploró al 100% (dispara celebración 1 sola vez)`
 - `cm_last_visit_v2 (línea 1875) — fecha + nº de cambios vistos, para el mensaje 'desde tu última visita'`
 - `cuaderno_madre_v1 (línea 2572) — estado general: pasos marcados, decisiones elegidas, feedback ya enviado`
-- `cuaderno_madre_tony (líneas 596/2804/3205/6015) — flag de 'modo creador/Tony' desbloqueado (gate)`
+- `flag local de creador (histórico, retirado) — nunca fue autenticación y ya no desbloquea datos privados`
 - `cm_likes_v1 (línea 3323) — corazones 💗 marcados sobre zonas de la página (el sistema de 'corazones')`
 - `cmt_likes_v1 (línea 3518) — 'me gusta' dado a comentarios públicos concretos (distinto del anterior)`
 - `cuaderno_tour_seen (línea 4374) — ya vio la pantalla de bienvenida / ruta guiada inicial`
@@ -569,7 +569,7 @@ Tiempo estimado real: HTML+CSS ~15min, JS ~20min, verificacion con eval/consola 
 
 **⚖️ Ajustes del juez (Fable) — vinculantes:** El dilema publicado debe ser el REAL y vigente (v0.35: ¿extender las etiquetas-pregunta a las 8 ramas del mapa o revertir a solo 2? — decisión abierta documentada en CONTINUAR_AQUI.md). Nota honesta OBLIGATORIA en el bloque: «tu voto es consultivo: MADRE decide con datos y publicará aquí el resultado». Dedupe de voto por sesión (patrón ya existente en __fb/cuaderno_madre_v1).
 
-**Qué existe ya cerca (no duplicar):** PARCIAL, no bloqueante — existe un mecanismo SIMILAR en espíritu pero NO igual: '.dec' / botones [data-choice] (línea 2117, tarjeta 'card tony' id-less \"4. Decisiones (archivo de junio)\", línea 2105). Es un widget de aprobar/rechazar propuestas de MADRE dirigido EXCLUSIVAMENTE al creador: está oculto a cualquier visitante normal vía CSS 'body.lectura .card.tony{display:none}' (línea 3212) y solo se revela si localStorage 'cuaderno_madre_tony'==1 (isTonyNow(), línea 2804). Su propósito (aprobación interna de Tony sobre propuestas de MADRE, con estado state.decisions persistido y sin límite de re-voto) es distinto del pedido aquí (voto CONSULTIVO de cualquier VISITANTE sobre un dilema de producto, con nota honesta de que MADRE decide con datos y con dedupe de una vez por dispositivo). No hay ningún widget hoy visible al público que capture un voto de 2 opciones sobre un dilema de MADRE. Se puede reutilizar visualmente el patrón de botones (clases .btn.sm/.btn.sm.ok/.btn.sm.no) pero el mecanismo de guardado/gating es otro; no procede fusionar ni extender '.dec' porque eso arrastraría el gating soloTony y el contrato con 'state.decisions'/chipDecs, que no aplica a un voto público.
+**Qué existe ya cerca (no duplicar):** PARCIAL, no bloqueante — existió un mecanismo SIMILAR en espíritu pero NO igual: '.dec' / botones [data-choice] en una tarjeta interna. Su antiguo candado local se retiró porque no autenticaba a Tony. Su propósito (aprobación interna de propuestas de MADRE) era distinto del pedido aquí (voto CONSULTIVO de cualquier VISITANTE sobre un dilema de producto, con nota honesta de que MADRE decide con datos y con dedupe por dispositivo). Se puede reutilizar visualmente el patrón de botones, pero nunca el antiguo gating ni su estado privado; las decisiones de Tony viven en el Centro de mando autenticado.
 
 **Anclas verificadas (usa el patrón grep; la línea es orientativa):**
 

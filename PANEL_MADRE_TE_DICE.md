@@ -28,7 +28,7 @@ El contrato ejecutable vive en:
 - `conocimiento`: conocimiento evaluado, no solo guardado.
 - `metrica`: estado resumido del aprendizaje.
 
-La interfaz pública no enseña el título ni el detalle de `aviso` o `decision`; solo un conteo. Como el navegador descarga las filas desde un REST anónimo, esto **no es privacidad criptográfica** y el contenido nunca puede incluir secretos. El modo creador usa `localStorage cuaderno_madre_tony === "1"`: es un candado de cortesía, **no autenticación**.
+La interfaz pública no enseña el título ni el detalle de `aviso` o `decision`; solo un conteo. Como el navegador descarga las filas desde un REST anónimo, esto **no es privacidad criptográfica** y el contenido nunca puede incluir secretos. El antiguo candado local del modo creador fue retirado: las decisiones privadas solo se muestran en el Centro de mando autenticado.
 
 ## Recibo de «Lo he visto»
 
