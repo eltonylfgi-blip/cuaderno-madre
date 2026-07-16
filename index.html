@@ -393,8 +393,8 @@
     <div class="ttbub" id="madreTip">🤱🏻 <b>MADRE</b> es un sistema que intenta <b>decidir mejor</b>, <b>aprender de la realidad</b> y <b>generar valor en el mundo real</b> — no es un bot de dinero ni un almacén de notas. (Mantén pulsado / pasa el ratón para esto.)</div>
   </div>
   <div id="a11yAnnounce" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
-  <!-- v1.75: una puerta única al buzón privado y un semáforo público-seguro para avisos humanos.
-       El Cuaderno enseña solo el conteo; el contenido y los adjuntos siguen detrás de Auth + RLS. -->
+  <!-- v1.75/v1.76: una puerta única al centro de mando privado (con el buzón dentro) y un
+       semáforo público-seguro. El Cuaderno enseña solo el conteo; el detalle sigue detrás de Auth + RLS. -->
   <style id="tonyInboxDockCss">
     #tonyInboxDock{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;margin:8px 0 10px;padding:10px 12px;border:1.5px solid var(--line);border-radius:14px;background:linear-gradient(135deg,var(--card),var(--accent-soft));box-shadow:var(--shadow)}
     .tid-copy{min-width:0}.tid-copy strong,.tid-copy span{display:block}.tid-copy strong{font:800 13px/1.25 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}.tid-copy span{margin-top:2px;color:var(--muted);font-size:11.5px;line-height:1.35}
@@ -405,11 +405,11 @@
     body.cmIdentityPreview #tonyInboxNotice{background:rgba(217,119,6,.16);color:#ffd79a}
     @media(max-width:520px){#tonyInboxDock{grid-template-columns:1fr}.tid-actions{justify-content:stretch}.tid-actions .tid-btn{flex:1 1 140px}}
   </style>
-  <section id="tonyInboxDock" data-urgent="false" aria-label="Acceso al buzón privado de Tony">
-    <div class="tid-copy"><strong id="tonyInboxHeadline">📥 Buzón privado de Tony</strong><span id="tonyInboxCopy">Texto, varios enlaces y hasta 4 imágenes en un envío.</span></div>
+  <section id="tonyInboxDock" data-urgent="false" aria-label="Acceso al centro de mando privado de Tony">
+    <div class="tid-copy"><strong id="tonyInboxHeadline">🧭 Centro de mando · qué tengo</strong><span id="tonyInboxCopy">Qué tienes, qué necesita de ti y qué hace MADRE sola. El buzón está dentro.</span></div>
     <div class="tid-actions">
       <button type="button" class="tid-btn" id="tonyInboxNotice" hidden></button>
-      <a class="tid-btn" id="tonyInboxLink" href="https://panel-tony-online.vercel.app/" target="_blank" rel="noopener noreferrer">🔒 Abrir buzón</a>
+      <a class="tid-btn" id="tonyInboxLink" href="https://panel-tony-online.vercel.app/" target="_blank" rel="noopener noreferrer">🔒 Abrir centro</a>
     </div>
   </section>
   <!-- ===== ONBOARDING: un solo bloque (v0.11) — funde sub/promesa/feedback en uno ===== -->
@@ -998,11 +998,11 @@
       function paintInboxDock(count){
         if(!inboxDock) return; inboxPending=Math.max(0,Number(count)||0); var en=english(), urgent=inboxPending>0;
         inboxDock.dataset.urgent=urgent?"true":"false";
-        inboxHeadline.textContent=urgent?(en?"🚨 MADRE needs you":"🚨 MADRE te necesita"):(en?"📥 Tony's private inbox":"📥 Buzón privado de Tony");
-        inboxCopy.textContent=urgent?(en?"Only the safe count is public; details stay in the private panel.":"Aquí solo se ve el conteo; los detalles siguen en el panel privado."):(en?"Text, several links and up to 4 images in one message.":"Texto, varios enlaces y hasta 4 imágenes en un envío.");
+        inboxHeadline.textContent=urgent?(en?"🚨 MADRE needs you":"🚨 MADRE te necesita"):(en?"🧭 Tony's command center · what I have":"🧭 Centro de mando · qué tengo");
+        inboxCopy.textContent=urgent?(en?"Only the safe count is public; details stay in the private panel.":"Aquí solo se ve el conteo; los detalles siguen en el panel privado."):(en?"What you have, what needs you and what MADRE runs alone. The inbox lives inside.":"Qué tienes, qué necesita de ti y qué hace MADRE sola. El buzón está dentro.");
         if(inboxNotice){ inboxNotice.hidden=!urgent; inboxNotice.textContent=urgent?(en?(inboxPending+" pending notice"+(inboxPending===1?"":"s")+" ↓"):(inboxPending+" aviso"+(inboxPending===1?"":"s")+" pendiente"+(inboxPending===1?"":"s")+" ↓")):""; }
-        if(inboxLink) inboxLink.textContent=en?"🔒 Open inbox":"🔒 Abrir buzón";
-        inboxDock.setAttribute("aria-label",en?"Access Tony's private inbox":"Acceso al buzón privado de Tony");
+        if(inboxLink) inboxLink.textContent=en?"🔒 Open command center":"🔒 Abrir centro";
+        inboxDock.setAttribute("aria-label",en?"Access Tony's private command center":"Acceso al centro de mando privado de Tony");
       }
       function fdate(s){ try{ return new Date(s+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"long"}); }catch(e){ return s; } }
       function impChip(imp){ return imp?('<span class="mh-chip imp-'+esc(imp)+'">impacto '+esc(imp)+'</span>'):""; }
@@ -4668,6 +4668,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-16',areas:['novedades','tour','accesibilidad','estabilidad','orientacion','buzon'],titulo:'🧭 v1.76 — La guía mantiene libre lo que te está enseñando',detalle:'El tercer paso del recorrido podía terminar bajo su propio panel si otras zonas de la página cambiaban de altura mientras hacía scroll. Ahora la guía vuelve a medir durante el asentamiento, reserva más aire y corrige esos cambios tardíos; el componente real permanece visible en móvil y escritorio. La misma puerta superior deja de llamarse por su implementación: ahora abre el Centro de mando, donde viven qué tienes, qué requiere tu criterio, qué hace MADRE sola y el buzón.'},
     {fecha:'2026-07-16',destacada:true,areas:['buzon','continuidad','identidad','urgencia','adjuntos','asmr','criterio','feedback','accesibilidad'],titulo:'📥 v1.75 — El buzón privado vive arriba y el ASMR aprende el porqué',detalle:'La cabecera abre el Panel Tony en un toque y explica el lote real: texto, varios enlaces y hasta cuatro imágenes. Si MADRE deja un aviso que necesita tu mano, la misma franja sube a estado urgente y enseña solo el número; el contenido sigue detrás del acceso privado. El nuevo sobre conserva el tema y la prioridad sin saltarse guardas. Además, cada sonido ASMR tiene una caja junto a 👍/👎: Enter envía el motivo unido al sonido, el voto y la procedencia exactos; si la entrega falla, conserva el borrador para reintentar.'},
     {fecha:'2026-07-16',destacada:true,areas:['claude','referido','distribucion','activacion','accesibilidad'],titulo:'💜 v1.74 — El pase de Claude aparece cuando ya conoces el Cuaderno',detalle:'Tras 60 segundos acumulados con la pestaña visible, el Cuaderno puede sugerir —una sola vez por sesión— que construyas algo parecido con Claude. El diálogo declara que el enlace es referido, explica los 7 días gratis de Claude Pro con Claude Code y Cowork, avisa del método de pago y la renovación, y permite cerrar con botón o Escape. Claude confirma la disponibilidad al abrir: no se inventan cupos, reclamaciones ni cuentas atrás, y un guard bloquea esa escasez numérica sin fuente real. No aparece en modo creador, durante escritura u otro diálogo; al descartarlo guarda 30 días de descanso y al usar cualquier enlace de referido deja de insistir. Impresión, cierre y clic quedan como señales separadas; solo una conversión o crédito externo contará como beneficio.'},
     {fecha:'2026-07-15',destacada:true,areas:['claridad','novedades','tour','asmr','sonido','feedback','accesibilidad'],titulo:'🎙️ v1.73 — Las novedades se ven y los sonidos dicen de dónde salen',detalle:'«Ver novedades guiadas» deja de pasear por párrafos del changelog: ahora enfoca tres componentes reales —las grabaciones ASMR, Voz y aspecto y el hub de proyectos— mientras una frase breve aparece por fragmentos; movimiento reducido la muestra al instante. El Laboratorio separa ocho grabaciones reales de Mixkit de sus 32 prototipos sintetizados, enseña la procedencia en cada ficha, limita la escucha a 6,7 segundos, envía ese origen con el feedback y conserva un fallback sintetizado explícito si la red falla.'},
@@ -4970,7 +4971,7 @@ window.__cmCorpus = {
       '</div>';
     document.body.appendChild(tourFloat);
     
-    var lastHl = null,copyTimer=0,scrollTimer=0;
+    var lastHl = null,copyTimer=0,scrollTimer=0,settleRuns=0;
     
     document.getElementById("tourNovExit").onclick = endTour;
     document.getElementById("tourNovNext").onclick = function(){
@@ -5011,9 +5012,16 @@ window.__cmCorpus = {
     function keepTourTargetClear(item){
         if(!tourActive||lastHl!==item)return;
         try{
-          var r=item.getBoundingClientRect(),p=tourFloat.getBoundingClientRect(),safeBottom=p.top-18;
+          var r=item.getBoundingClientRect(),p=tourFloat.getBoundingClientRect(),safeBottom=p.top-42;
           if(r.bottom>safeBottom+1)window.scrollTo(0,Math.max(0,window.scrollY+(r.bottom-safeBottom)));
         }catch(e){}
+    }
+
+    function settleTourTarget(item){
+        if(!tourActive||lastHl!==item)return;
+        keepTourTargetClear(item);
+        settleRuns++;
+        if(settleRuns<12)scrollTimer=setTimeout(function(){settleTourTarget(item);},80);
     }
     
     function showTourStep() {
@@ -5032,10 +5040,9 @@ window.__cmCorpus = {
         try{step.prepare(item);}catch(e){}
         if(step.focusSelector)item=document.querySelector(step.focusSelector)||item;
         lastHl=item;item.classList.add("cmNoveltySpotlight");window.__cmNoveltyState.currentTarget=step.focusSelector||step.selector;
-        var prefersReduced=document.body.classList.contains("cmMotionOff")||(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches&&!document.body.classList.contains("cmMotionOn"));
         item.scrollIntoView({behavior:"auto",block:step.block||"center"});
-        requestAnimationFrame(function(){keepTourTargetClear(item);});
-        scrollTimer=setTimeout(function(){keepTourTargetClear(item);},prefersReduced?0:560);
+        settleRuns=0;
+        requestAnimationFrame(function(){settleTourTarget(item);});
     }
     
     // Expone para que renderCambios pueda reactivar el UI si fuera necesario
@@ -8446,7 +8453,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.75";
+  window.__cmVersion="v1.76";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
