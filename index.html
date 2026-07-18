@@ -4733,6 +4733,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-18',destacada:true,areas:['asmr','interaccion','movil','accesibilidad'],titulo:'🫧 v1.79 — El ASMR deja de agotarse al primer toque',detalle:'Las burbujas y piezas táctiles conservan un antirrebote breve para no duplicar el sonido, pero vuelven a responder en 520 ms: ya no quedan apagadas durante 9–16 segundos sin avisar. Rozar una textura, repetir una síntesis y volver a escuchar una grabación mantienen su comportamiento; el cambio solo elimina la falsa sensación de control de un solo uso.'},
     {fecha:'2026-07-16',destacada:true,areas:['multimedia','sonido','feedback','myinstants','movil','accesibilidad'],titulo:'🔥 v1.78 — Los sonidos populares llegan con una prueba de realidad',detalle:'La mesa multimedia retira la etiqueta «toca» que invadía los nombres y añade a cada audio un botón claro «No coincide»: guarda el veredicto y abre el mismo cuadro donde puedes escribir o dictar el porqué. Codex trae seis sonidos de la lista popular actual de MyInstants —Vine Boom, Metal Pipe, Anime Wow, Meow, Among Us y ENRIQUE—, copia cada MP3 desde su página exacta, conserva ese origen visible y los presenta como candidatos por juzgar, no como favoritos inventados. Los impactos fuertes entran con volumen moderado y la galería los coloca primero para que el criterio real decida cuáles sobreviven.'},
     {fecha:'2026-07-16',destacada:true,areas:['asmr','movil','feedback','voz','capturas','caos','multimedia','comentarios','seguridad','accesibilidad'],titulo:'🎧 v1.77 — El ASMR respira en móvil y el feedback sabe dónde estás',detalle:'Las zonas ASMR invitan a subir el volumen, pero en móvil limitan y separan sus efectos para que nunca formen una montaña sobre el contenido; Caos multiplica la fiesta con un techo propio. Al desplazarte en Caos, las estelas siguen arriba o abajo el sentido real del scroll. Cualquier feedback puede dictarse y conserva automáticamente tarjeta, sección, URL y posición; «Pegar captura» usa el portapapeles cuando Chrome lo permite y abre Galería/Archivos cuando no. La mesa multimedia cabe como tablero horizontal en móvil, reproduce una ficha de audio al tocarla y dibuja cuerdas con doble contraste. El comentario real de Falange queda fijado y MADRE le responde con el ejemplo concreto que faltaba, sin desviar la conversación hacia el stack técnico. La web pública deja de fingir identidad con contraseñas locales: las decisiones privadas solo se abren en el Centro de mando.'},
     {fecha:'2026-07-16',areas:['novedades','tour','accesibilidad','estabilidad','orientacion','buzon'],titulo:'🧭 v1.76 — La guía mantiene libre lo que te está enseñando',detalle:'El tercer paso del recorrido podía terminar bajo su propio panel si otras zonas de la página cambiaban de altura mientras hacía scroll. Ahora la guía vuelve a medir durante el asentamiento, reserva más aire y corrige esos cambios tardíos; el componente real permanece visible en móvil y escritorio. La misma puerta superior deja de llamarse por su implementación: ahora abre el Centro de mando, donde viven qué tienes, qué requiere tu criterio, qué hace MADRE sola y el buzón.'},
@@ -7707,14 +7708,17 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
   function nextType(){ if(!queue.length){ queue=buildQueue(); } return queue.shift(); }
 
   var ribbons=[];
+  /* E5/v1.79: el control conserva un debounce visible corto, pero deja de parecer de un solo uso.
+     Antes burbujas y migas quedaban bloqueadas 9-16 s sin explicar el cooldown. */
+  var CONTROL_REARM_MS=520;
   function mkBubble(prof){ var b=document.createElement("button"); b.type="button"; b.tabIndex=0; b.className="cmBub"; b.setAttribute("aria-label",tr("burbuja para reventar","bubble to pop"));
     b.addEventListener("click",function(e){ e.stopPropagation(); if(b.classList.contains("popped")) return; var rib=b.closest(".cmTex"); markTouched(rib); b.classList.add("popped"); hit(prof); progressFx(rib,6,e.clientX,e.clientY);
-      setTimeout(function(){ try{ b.classList.remove("popped"); }catch(e){} }, 10000+Math.random()*6000); }); return b; }
+      setTimeout(function(){ try{ b.classList.remove("popped"); }catch(e){} }, CONTROL_REARM_MS); }); return b; }
   function mkBit(emoji, prof){ var c=document.createElement("button"); c.type="button"; c.tabIndex=0; c.className="cmCrumb"; c.textContent=emoji; c.setAttribute("aria-label",tr("tócame para sonar","touch me to hear a sound"));
     c.addEventListener("click",function(e){ e.stopPropagation(); if(c.dataset.busy) return; var rib=c.closest(".cmTex"); markTouched(rib); c.dataset.busy="1"; hit(prof); progressFx(rib,6,e.clientX,e.clientY);
       if(!reduce) try{ c.animate([{transform:"scale(1) rotate(0)"},{transform:"scale(1.3) rotate(-10deg)"},{transform:"scale(.25) rotate(14deg)",opacity:.15}],{duration:260}); }catch(_){}
       setTimeout(function(){ c.style.visibility="hidden"; },240);
-      setTimeout(function(){ try{ c.style.visibility=""; c.removeAttribute("data-busy"); }catch(e){} }, 9000+Math.random()*5000); }); return c; }
+      setTimeout(function(){ try{ c.style.visibility=""; c.removeAttribute("data-busy"); }catch(e){} }, CONTROL_REARM_MS); }); return c; }
   function mkLabel(txt){ var l=document.createElement("span"); l.className="cmTexLbl"; l.textContent=txt; return l; }
   function buildRibbons(){
     var cards=[].slice.call(document.querySelectorAll(".card"));
@@ -8525,7 +8529,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.78";
+  window.__cmVersion="v1.79";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada

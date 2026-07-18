@@ -1,3 +1,10 @@
+## v1.79 — 2026-07-18 · Controles ASMR reutilizables
+- **Causa real:** burbujas y migas conservaban `popped`/`data-busy` durante 9–16 segundos. El motor, los listeners y el `AudioContext` seguían vivos; el bloqueo invisible hacía que el control pareciera de un solo uso.
+- **Arreglo mínimo:** ambos controles mantienen el antirrebote y su animación, pero se rearman a los 520 ms. No cambia el roce, el progreso, los monstruos ni el Laboratorio.
+- **Sensor:** `node tests/test_asmr_rearm.mjs` ejecuta las funciones reales de `index.html`; exige que el doble toque inmediato no duplique eventos y que el mismo control vuelva a responder antes de un segundo.
+- **Selector:** en Chrome móvil, la misma burbuja pasa de audio/progreso `1→1` con el doble toque inmediato a `1→2` tras 640 ms; dos roces avanzan `5→9→13`; síntesis y grabación repiten (`mediaPlays 0→1→2`). Sin overflow ni errores a 375/1280 px.
+- **Revertir:** `git revert <commit de v1.79>`.
+
 ## v1.78 — 2026-07-16 · Populares con procedencia + «No coincide» en la mesa
 - **Feedback donde se escucha:** cada ficha de audio de la mesa incorpora un botón táctil «No coincide». El toque guarda el veredicto con origen `mesa-relaciones` y abre el mismo diálogo de matiz/dictado; no inicia ni duplica la reproducción.
 - **Nombre libre:** desaparece la insignia superpuesta «🔊 toca» que podía invadir el título. La reproducción sigue disponible al pulsar el resto de la ficha y los puertos A/B conservan su función.
