@@ -3726,6 +3726,7 @@
       <p class="lead">🟢 <b>Semáforo estable</b> (sin rojo de riesgo). Aquí está el progreso por áreas y lo que se está desviando ahora.</p>
       <p class="small" style="margin:10px 0 4px"><b>Progreso por área (0–10, es una brújula, no una nota exacta):</b></p>
       <div id="breakdown"></div>
+      <div id="cumplimiento" aria-live="polite"></div>
       <p class="small" style="margin:14px 0 4px"><b>Desviaciones detectadas ahora — y el paso para volver al cauce:</b><br><span style="font-weight:400">👤 = lo haces tú · 🤖 = lo hace MADRE (tú solo observas)</span></p>
       <div id="desvios"></div>
       <details class="x"><summary><span class="plus">+</span> ¿Cómo te guía MADRE cuando algo se desvía?</summary>
@@ -4083,7 +4084,7 @@
 # El artefacto lo LEE por titulo via conector de Drive; si falta o no parsea -> usa su texto congelado (degradacion segura).
 # Formato tolerante: 1 dato por linea, campos separados por TAB. Lineas con # o vacias se ignoran.
 # ANTI-FALSO-VERDE: si 'actualizado' es de hace >48h, considera este estado POSIBLEMENTE DESFASADO (no te fies del verde).
-actualizado	2026-07-05T21:00Z
+actualizado	2026-07-21T00:42:49Z
 global_score	3
 global_nota	Capacidad y orden altos, subsistemas vivos; pero el VALOR EXTERNO real (primer euro / 1a senal del mundo) sigue en 0 -- ese es el numero que de verdad importa.
 area	Valor externo logrado	1
@@ -4116,6 +4117,14 @@ build	Tienda Aurova (Shopify)	100	publica y activa (Kit Ritual de Luz); reactiva
 build	Activos publicos Claude Code (usage-guard/session-triage)	100	publicados en GitHub; 0 estrellas/0 descubrimiento; cuello=canal de distribucion vivo
 build	tikslide	100	publicado; distribucion=0; senal=0; P21 vence 18-jul
 build	AI Audit 1-pager	100	SISTEMA/02_PROYECTOS/AI_AUDIT_1_PAGER.md
+
+# --- CUMPLIMIENTO PERMANENTE (AUTO) ---
+senal	Revision de compromisos permanentes	AL DIA - ultima 2026-07-21T02:42:41+02:00	g
+senal	Mecanismos transversales	5/5 funcionando; 5/5 usados	g
+senal	Beneficio de mecanismos	5/5 observado; 5/5 repetido	g
+senal	Cobertura de promesas historicas	PARCIAL - 2 familias sin mecanismo	a
+desvio	a	Cumplimiento aun no demostrado	La cobertura historica conserva 2 familias sin mecanismo.	MADRE revisa y actualiza esta foto automaticamente; uso o test verde no cuentan como beneficio.	madre
+# --- FIN CUMPLIMIENTO PERMANENTE (AUTO) ---
 </script>
 
 <script id="caminoBaked" type="text/plain">
@@ -4552,6 +4561,36 @@ window.__cmCorpus = {
     });
   }
   function setActualizado(s){ var el=document.getElementById("actualizado"); if(el) el.textContent=s; }
+  // Cumplimiento: solo enseña el agregado seguro del TSV. Un test o un uso nunca se pinta como beneficio.
+  function cumplimientoEstado(txt,upd){
+    var raw=String(txt||""), stale=hoursSince(upd), obsolete=stale==null||stale>48;
+    var rows={revision:null,mecanismos:null,beneficio:null,cobertura:null};
+    raw.split(/\r?\n/).forEach(function(ln){
+      var p=ln.split("\t"), k=(p[0]||"").trim().toLowerCase(), v=(p[1]||"").trim();
+      if(k!=="senal") return;
+      if(/revision de compromisos|review/.test((p[1]||"").toLowerCase())) rows.revision=p[2]||"";
+      else if(/mecanismos transversales/.test((p[1]||"").toLowerCase())) rows.mecanismos=p[2]||"";
+      else if(/beneficio de mecanismos/.test((p[1]||"").toLowerCase())) rows.beneficio=p[2]||"";
+      else if(/cobertura de promesas/.test((p[1]||"").toLowerCase())) rows.cobertura=p[2]||"";
+    });
+    if(/review\.due\s*[=:]\s*true/i.test(raw)) rows.revision="VENCIDA";
+    if(/pending_historical_backfill/i.test(raw)) rows.cobertura="PENDIENTE";
+    var gaps=raw.match(/classified_with_gaps[^\d]*(\d+)/i);
+    if(gaps) rows.cobertura="PARCIAL · "+gaps[1]+" familias sin mecanismo";
+    return {obsolete:obsolete,rows:rows};
+  }
+  function renderCumplimiento(txt,upd){
+    var el=document.getElementById("cumplimiento"); if(!el) return;
+    var data=cumplimientoEstado(txt,upd), rows=data.rows;
+    var labels=[['revision','Revisión'],['mecanismos','Mecanismos'],['beneficio','Beneficio'],['cobertura','Cobertura histórica']];
+    var h='<div style="margin:14px 0 4px;font-size:13px"><b>¿MADRE cumple lo que promete?</b><br><span class="small">Revisión, uso y beneficio son cosas distintas.</span></div><div class="senalGrid">';
+    labels.forEach(function(pair){
+      var value=rows[pair[0]], missing=!value, red=/vencida|pendiente|sin datos/i.test(value||""), amber=/parcial/i.test(value||"");
+      if(data.obsolete) value='OBSOLETO'; else if(missing) value='SIN DATOS';
+      h+='<div class="senalItem '+(data.obsolete||missing||red?'r':(amber?'a':'g'))+'"><div class="v">'+esc(value)+'</div><div class="k">'+esc(pair[1])+'</div></div>';
+    });
+    el.innerHTML=h+'</div>';
+  }
   // Anti-falso-verde: si el estado lleva >48h sin actualizarse, avisar (el motor podría estar caído).
   function hoursSince(iso){ try{ var t=Date.parse(iso); if(isNaN(t)) return null; return (Date.now()-t)/3600000; }catch(e){ return null; } }
   function checkStale(iso){
@@ -4719,6 +4758,7 @@ window.__cmCorpus = {
     Object.keys(cs).forEach(function(n){ setCardScore(n,cs[n]); changed=true; });
     if(upd) setActualizado(fmtDate(upd)+" (auto)"); else if(changed) setActualizado("recién (auto)");
     if(upd) checkStale(upd);
+    renderCumplimiento(txt,upd);
     return changed;
   }
   function bakedEstado(){ var el=document.getElementById("estadoBaked"); return el?el.textContent:""; }
@@ -4736,6 +4776,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-21',destacada:true,areas:['salud','progreso','cumplimiento','feedback','movil'],titulo:'✅ v1.81 — Cumplir deja de ser una promesa verde',detalle:'La tarjeta de Salud ahora lee el agregado real que exporta MADRE: separa revisión, mecanismos usados, beneficio observado o repetido y cobertura histórica. Si la foto falta, no se entiende o tiene más de 48 horas, avisa SIN DATOS u OBSOLETO; una revisión o un test verde no se presentan como beneficio.'},
     {fecha:'2026-07-19',destacada:true,areas:['glosario','aprendizaje','feedback','movil','accesibilidad'],titulo:'🧩 v1.80 — El glosario relaciona ideas y escucha cuáles importan',detalle:'Todas las palabras siguen explicadas en simple, pero ahora indican por dónde empezar y suman cuello de botella, mecanismo transversal e invariante con ejemplos de MADRE. Un corazón permite guardar qué conceptos quieres que MADRE priorice y tres ejercicios enseñan cómo se conectan palancas, cuellos, invariantes, mecanismos, selectores y ciclos. Favoritos y respuestas usan el feedback existente, dejan reintentar si la entrega falla y sus controles nuevos miden al menos 44 px. Empieza una prueba de hasta 72 horas: uso o efecto real conserva y amplía la ruta; cero señales con exposición válida cambia el mensaje o el formato, no el producto entero.'},
     {fecha:'2026-07-18',destacada:true,areas:['asmr','interaccion','movil','accesibilidad'],titulo:'🫧 v1.79 — El ASMR deja de agotarse al primer toque',detalle:'Las burbujas y piezas táctiles conservan un antirrebote breve para no duplicar el sonido, pero vuelven a responder en 520 ms: ya no quedan apagadas durante 9–16 segundos sin avisar. Rozar una textura, repetir una síntesis y volver a escuchar una grabación mantienen su comportamiento; el cambio solo elimina la falsa sensación de control de un solo uso.'},
     {fecha:'2026-07-16',destacada:true,areas:['multimedia','sonido','feedback','myinstants','movil','accesibilidad'],titulo:'🔥 v1.78 — Los sonidos populares llegan con una prueba de realidad',detalle:'La mesa multimedia retira la etiqueta «toca» que invadía los nombres y añade a cada audio un botón claro «No coincide»: guarda el veredicto y abre el mismo cuadro donde puedes escribir o dictar el porqué. Codex trae seis sonidos de la lista popular actual de MyInstants —Vine Boom, Metal Pipe, Anime Wow, Meow, Among Us y ENRIQUE—, copia cada MP3 desde su página exacta, conserva ese origen visible y los presenta como candidatos por juzgar, no como favoritos inventados. Los impactos fuertes entran con volumen moderado y la galería los coloca primero para que el criterio real decida cuáles sobreviven.'},
