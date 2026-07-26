@@ -1,3 +1,11 @@
+## v1.82 — 2026-07-26 · Teclado real en la mesa + señales externas honestas
+- **Mesa operable:** cada audio usa un `<button>` nativo de al menos 44 px. Enter, Espacio y puntero reproducen o paran; la ficha exterior conserva por separado el arrastre, los puertos A/B y «No coincide».
+- **Señal sin identidad inventada:** una reproducción confirmada registra, como máximo una vez por audio, sesión y modalidad, `media-audio-mesa-operado`; el campo `section` es `mesa-relaciones`, el texto conserva `origen: archivo-multimedia`, teclado y puntero quedan separados y la identidad permanece `no-verificada`.
+- **Salud no se autocalifica:** revisión, mecanismos, beneficio y cobertura histórica siguen visibles en Cumplimiento, pero ya no entran también en «Señales externas». Ese bloque queda reservado a uso, mercado y resultado.
+- **Sensores:** `node tests/test_media_relation_keyboard.mjs` protege el contrato HTML/JS y compila el script inline; `node tests/test_cumplimiento_snapshot.mjs` ejecuta el clasificador real, exige las cuatro etiquetas internas y conserva seis contraejemplos externos —incluidas reviews de clientes—.
+- **Selector contextual:** el verificador de navegador recorre 375/1280 px y conduce la página real con audio controlado: exige reproducción y parada por Enter/Espacio/puntero, vuelta a reposo al terminar, dos señales deduplicadas, cero solape incluso con un título largo, ficha móvil sin desbordamiento y separación visible entre Cumplimiento y Señales externas.
+- **Revertir:** `git revert <commit de v1.82>`.
+
 ## v1.79 — 2026-07-18 · Controles ASMR reutilizables
 - **Causa real:** burbujas y migas conservaban `popped`/`data-busy` durante 9–16 segundos. El motor, los listeners y el `AudioContext` seguían vivos; el bloqueo invisible hacía que el control pareciera de un solo uso.
 - **Arreglo mínimo:** ambos controles mantienen el antirrebote y su animación, pero se rearman a los 520 ms. No cambia el roce, el progreso, los monstruos ni el Laboratorio.

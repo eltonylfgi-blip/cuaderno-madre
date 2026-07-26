@@ -4562,16 +4562,22 @@ window.__cmCorpus = {
   }
   function setActualizado(s){ var el=document.getElementById("actualizado"); if(el) el.textContent=s; }
   // Cumplimiento: solo enseña el agregado seguro del TSV. Un test o un uso nunca se pinta como beneficio.
+  function cumplimientoClave(label){
+    var k=String(label||"").trim().toLowerCase();
+    if(/^revisi[oó]n de compromisos permanentes$/.test(k)) return "revision";
+    if(k==="mecanismos transversales") return "mecanismos";
+    if(k==="beneficio de mecanismos") return "beneficio";
+    if(/^cobertura de promesas hist[oó]ricas$/.test(k)) return "cobertura";
+    return "";
+  }
   function cumplimientoEstado(txt,upd){
     var raw=String(txt||""), stale=hoursSince(upd), obsolete=stale==null||stale>48;
     var rows={revision:null,mecanismos:null,beneficio:null,cobertura:null};
     raw.split(/\r?\n/).forEach(function(ln){
-      var p=ln.split("\t"), k=(p[0]||"").trim().toLowerCase(), v=(p[1]||"").trim();
+      var p=ln.split("\t"), k=(p[0]||"").trim().toLowerCase();
       if(k!=="senal") return;
-      if(/revision de compromisos|review/.test((p[1]||"").toLowerCase())) rows.revision=p[2]||"";
-      else if(/mecanismos transversales/.test((p[1]||"").toLowerCase())) rows.mecanismos=p[2]||"";
-      else if(/beneficio de mecanismos/.test((p[1]||"").toLowerCase())) rows.beneficio=p[2]||"";
-      else if(/cobertura de promesas/.test((p[1]||"").toLowerCase())) rows.cobertura=p[2]||"";
+      var c=cumplimientoClave(p[1]);
+      if(c) rows[c]=p[2]||"";
     });
     if(/review\.due\s*[=:]\s*true/i.test(raw)) rows.revision="VENCIDA";
     if(/pending_historical_backfill/i.test(raw)) rows.cobertura="PENDIENTE";
@@ -4741,7 +4747,7 @@ window.__cmCorpus = {
       else if(k==="card_score" && p[1] && p[2]) cs[p[1]]=clamp(p[2]);
       else if(k==="desvio" && p.length>=3) D.push({sev:(p[1]==="r"?"r":"a"),h:p[2]||"",detalle:p[3]||"",paso:p[4]||"",quien:(p[5]||"")});
       else if(k==="investig" && p[1]) IV.push({tema:p[1],concl:p[2]||"",fecha:p[3]||""});
-      else if(k==="senal" && p[1] && p[2]) SN.push({k:p[1],v:p[2],sev:(p[3]==="r"||p[3]==="g")?p[3]:"a"});
+      else if(k==="senal" && p[1] && p[2] && !cumplimientoClave(p[1])) SN.push({k:p[1],v:p[2],sev:(p[3]==="r"||p[3]==="g")?p[3]:"a"});
       else if(k==="senal_nota" && p[1]) snota=p[1];
       else if(k==="hipotesis" && p[1] && p[2]) HP.push({estado:(p[1]==="viva"?"viva":"muerta"),t:p[2]});
       else if(k==="build" && p[1]){ var bp=parseInt(p[2],10); if(isNaN(bp)) bp=0; B.push({n:p[1],p:Math.max(0,Math.min(100,bp)),u:p[3]||""}); }
@@ -4776,6 +4782,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-26',destacada:true,areas:['accesibilidad','archivo-multimedia','teclado','señales','honestidad','movil'],titulo:'⌨️ v1.82 — La mesa se oye con teclado y Salud no suplanta al mundo',detalle:'Cada audio de la Mesa de relaciones tiene ahora un botón nativo de al menos 44 px: Enter, Espacio y puntero reproducen o paran sin romper el arrastre, los puertos ni «No coincide». Una reproducción confirmada envía como máximo una señal por audio, modalidad y sesión, sin atribuir identidad. Además, los cuatro controles internos de Salud dejan de mezclarse con las señales externas: revisión y cobertura dicen cómo se vigila MADRE; uso, mercado y resultado siguen diciendo si mejora algo. El bloque vuelve a caber a 375 px.'},
     {fecha:'2026-07-21',destacada:true,areas:['salud','progreso','cumplimiento','feedback','movil'],titulo:'✅ v1.81 — Cumplir deja de ser una promesa verde',detalle:'La tarjeta de Salud ahora lee el agregado real que exporta MADRE: separa revisión, mecanismos usados, beneficio observado o repetido y cobertura histórica. Si la foto falta, no se entiende o tiene más de 48 horas, avisa SIN DATOS u OBSOLETO; una revisión o un test verde no se presentan como beneficio.'},
     {fecha:'2026-07-19',destacada:true,areas:['glosario','aprendizaje','feedback','movil','accesibilidad'],titulo:'🧩 v1.80 — El glosario relaciona ideas y escucha cuáles importan',detalle:'Todas las palabras siguen explicadas en simple, pero ahora indican por dónde empezar y suman cuello de botella, mecanismo transversal e invariante con ejemplos de MADRE. Un corazón permite guardar qué conceptos quieres que MADRE priorice y tres ejercicios enseñan cómo se conectan palancas, cuellos, invariantes, mecanismos, selectores y ciclos. Favoritos y respuestas usan el feedback existente, dejan reintentar si la entrega falla y sus controles nuevos miden al menos 44 px. Empieza una prueba de hasta 72 horas: uso o efecto real conserva y amplía la ruta; cero señales con exposición válida cambia el mensaje o el formato, no el producto entero.'},
     {fecha:'2026-07-18',destacada:true,areas:['asmr','interaccion','movil','accesibilidad'],titulo:'🫧 v1.79 — El ASMR deja de agotarse al primer toque',detalle:'Las burbujas y piezas táctiles conservan un antirrebote breve para no duplicar el sonido, pero vuelven a responder en 520 ms: ya no quedan apagadas durante 9–16 segundos sin avisar. Rozar una textura, repetir una síntesis y volver a escuchar una grabación mantienen su comportamiento; el cambio solo elimina la falsa sensación de control de un solo uso.'},
@@ -8619,7 +8626,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.80";
+  window.__cmVersion="v1.82";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
