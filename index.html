@@ -539,6 +539,10 @@
     details.ob-first-more>summary:hover{border-color:var(--accent);color:var(--ink)}
     details.ob-first-more>summary:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 42%,transparent);outline-offset:2px}
     .ob-first-body{margin-top:8px;padding-top:4px;border-top:1px dashed var(--line)}
+    .ob-referral{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin:2px 0 0;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--accent-soft);color:var(--ink);cursor:pointer;font:700 12.5px/1.25 system-ui,-apple-system,Segoe UI,sans-serif}
+    details.ob-first-more:not([open]) .ob-referral{display:none}
+    .ob-referral:hover{border-color:var(--accent)}
+    .ob-referral:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 42%,transparent);outline-offset:2px}
   </style>
   <div id="onboard">
     <div class="ob-hi" data-en="🤱 I'm MADRE.">🤱 Soy MADRE.</div>
@@ -574,6 +578,7 @@
             <button type="button" class="ob-live ob-extra" id="cmIdBtn" aria-pressed="false" data-en="🌌 Try the bioluminescent look">🌌 Probar aspecto bioluminiscente</button>
           </div>
         </details>
+        <button type="button" class="ob-referral" id="cmReferralInfoBtn" data-en="💜 See Claude pass and terms">💜 Ver pase de Claude y condiciones</button>
       </div>
     </details>
   </div>
@@ -4799,6 +4804,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-27',destacada:true,areas:['portada','claridad','accesibilidad','referido','movil'],titulo:'🛑 v1.84 — El pase referido solo se abre cuando lo pides',detalle:'La oferta de Claude deja de aparecer sola a los 60 segundos: ya no puede tapar la primera capa ni robar el foco. Conserva toda su información y condiciones tras el botón explícito «Ver pase de Claude y condiciones», dentro de «Más opciones y estado»; el hilo referido existente sigue disponible más abajo.'},
     {fecha:'2026-07-27',destacada:true,areas:['portada','movil','claridad','accesibilidad','asmr'],titulo:'🪶 v1.83 — La portada respira y lo secundario espera a que lo pidas',detalle:'La primera pantalla conserva lo que hace falta para decidir —qué es MADRE, qué necesita de Tony, cuándo se juzga y sus dos rutas— y reúne calendario, estados, voz y aspecto bajo «Más opciones y estado», operable con teclado. La primera textura ASMR deja de adelantarse a la presentación; la promesa ya no aparece a medio escribir y, mientras lees la apuesta inicial, los accesos flotantes se apartan. En móvil, el gato decorativo solo entra cuando una escena lo llama. Nada crítico se oculta y todo el detalle sigue a un toque.'},
     {fecha:'2026-07-26',destacada:true,areas:['accesibilidad','archivo-multimedia','teclado','señales','honestidad','movil'],titulo:'⌨️ v1.82 — La mesa se oye con teclado y Salud no suplanta al mundo',detalle:'Cada audio de la Mesa de relaciones tiene ahora un botón nativo de al menos 44 px: Enter, Espacio y puntero reproducen o paran sin romper el arrastre, los puertos ni «No coincide». Una reproducción confirmada envía como máximo una señal por audio, modalidad y sesión, sin atribuir identidad. Además, los cuatro controles internos de Salud dejan de mezclarse con las señales externas: revisión y cobertura dicen cómo se vigila MADRE; uso, mercado y resultado siguen diciendo si mejora algo. El bloque vuelve a caber a 375 px.'},
     {fecha:'2026-07-21',destacada:true,areas:['salud','progreso','cumplimiento','feedback','movil'],titulo:'✅ v1.81 — Cumplir deja de ser una promesa verde',detalle:'La tarjeta de Salud ahora lee el agregado real que exporta MADRE: separa revisión, mecanismos usados, beneficio observado o repetido y cobertura histórica. Si la foto falta, no se entiende o tiene más de 48 horas, avisa SIN DATOS u OBSOLETO; una revisión o un test verde no se presentan como beneficio.'},
@@ -8655,7 +8661,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.83";
+  window.__cmVersion="v1.84";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
@@ -10820,7 +10826,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   dialog.setAttribute("aria-labelledby","cmReferralPromptTitle");dialog.setAttribute("aria-describedby","cmReferralPromptBody cmReferralPromptTerms");
   dialog.innerHTML='<div class="cmReferralPromptShell"><button type="button" class="cmReferralPromptClose" aria-label="Cerrar sugerencia">×</button><span class="cmReferralPromptKicker">Enlace referido · Claude</span><h2 class="cmReferralPromptTitle" id="cmReferralPromptTitle" tabindex="-1">¿Quieres construir algo así tú también?</h2><p class="cmReferralPromptBody" id="cmReferralPromptBody">Este Cuaderno se ha construido con ayuda de Claude. Tony comparte su pase: 7 días gratis de Claude Pro, con Claude Code y Cowork.</p><p class="cmReferralPromptDisclosure">Si después continúas con Pro de pago, Tony puede recibir créditos de uso. Pases limitados · Claude confirma la disponibilidad al abrir; caducan y dependen de elegibilidad.</p><div class="cmReferralPromptActions"><a class="cmReferralPromptCta" data-referral-surface="popup" href="'+REFERRAL_URL+'" target="_blank" rel="noopener sponsored">Comprobar disponibilidad del pase ↗</a><button type="button" class="cmReferralPromptLater">Ahora no</button></div><span class="cmReferralPromptTerms" id="cmReferralPromptTerms">Te pedirán método de pago. Si no cancelas durante la prueba, pasa a Pro de pago.</span></div>';
   D.body.appendChild(dialog);
-  var closeButton=dialog.querySelector(".cmReferralPromptClose"),laterButton=dialog.querySelector(".cmReferralPromptLater"),
+  var closeButton=dialog.querySelector(".cmReferralPromptClose"),laterButton=dialog.querySelector(".cmReferralPromptLater"),explicitButton=D.getElementById("cmReferralInfoBtn"),
       title=dialog.querySelector(".cmReferralPromptTitle"),body=dialog.querySelector(".cmReferralPromptBody"),
       disclosure=dialog.querySelector(".cmReferralPromptDisclosure"),cta=dialog.querySelector(".cmReferralPromptCta"),
       terms=dialog.querySelector(".cmReferralPromptTerms"),kicker=dialog.querySelector(".cmReferralPromptKicker");
@@ -10833,25 +10839,22 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   function sessionShown(){try{return sessionStorage.getItem(SESSION_KEY)==="1";}catch(e){return false;}}
   function suppressReason(){var state=readState();if(isCreator())return "creator";if(state.clicked)return "clicked";if(Number(state.dismissedAt)>0&&Date.now()-Number(state.dismissedAt)<COOLDOWN_MS)return "cooldown";if(sessionShown())return "session";return "";}
   function activeInput(){var el=D.activeElement;return !!(el&&(/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)||el.isContentEditable));}
-  function busyReason(){if(activeInput())return "editing";if(D.querySelector('dialog[open]:not(#cmReferralPrompt)'))return "dialog";if(D.querySelector('#tourOv,.cropOv,#cmtPanel.on,.cmNoveltyTour.on,#cmFunRoutePanel:not([hidden])'))return "overlay";return "";}
+  /* v1.84: 60 s de lectura no autorizan a interrumpir. La oferta vive bajo una acción explícita
+     dentro del revelador: más información solo cuando la persona la pide. */
+  function busyReason(){if(D.body.classList.contains("cmFirstFocus"))return "intro";if(activeInput())return "editing";if(D.querySelector('dialog[open]:not(#cmReferralPrompt)'))return "dialog";if(D.querySelector('#tourOv,.cropOv,#cmtPanel.on,.cmNoveltyTour.on,#cmFunRoutePanel:not([hidden])'))return "overlay";return "";}
   var signalRetried={};
   function signal(type,surface){var key=SIGNAL_PREFIX+type+"_"+surface;try{if(sessionStorage.getItem(key))return;}catch(e){}if(!window.__fb){if(!signalRetried[key]){signalRetried[key]=1;setTimeout(function(){signal(type,surface);},1500);}return;}try{sessionStorage.setItem(key,"1");}catch(e){}var payload={card:"💜 Claude para crear",section:"referido-60s",tipo:type,texto:"REFERIDO-CLAUDE\nsuperficie: "+surface+"\nversion: "+(window.__cmVersion||"sin-version")+"\norigen: cuaderno-publico"};try{Promise.resolve(window.__fb(payload)).catch(function(){});}catch(e){}}
-  var visibleMs=0,lastTick=(window.performance&&performance.now)?performance.now():Date.now(),timer=null,pending=false,returnFocus=null,closeReason="";
-  function stopTimer(){if(timer!==null){clearInterval(timer);timer=null;}}
-  function snapshot(){return {thresholdMs:THRESHOLD_MS,cooldownMs:COOLDOWN_MS,visibleMs:Math.round(visibleMs),open:dialog.open,pending:pending,suppressed:suppressReason(),busy:busyReason()};}
-  function tryShow(){var suppressed=suppressReason();if(suppressed){pending=false;stopTimer();return false;}if(visibleMs<THRESHOLD_MS||D.hidden)return false;var busy=busyReason();if(busy){pending=true;stopTimer();return false;}if(typeof dialog.showModal!=="function")return false;paint();if(!truthfulScarcity()){pending=false;stopTimer();return false;}returnFocus=D.activeElement&&D.activeElement!==D.body?D.activeElement:null;try{dialog.showModal();}catch(e){pending=true;return false;}try{sessionStorage.setItem(SESSION_KEY,"1");}catch(e){}pending=false;stopTimer();setTimeout(function(){try{title.focus({preventScroll:true});}catch(e){}},0);signal("referido-popup-visto","popup");return true;}
-  function tick(){var now=(window.performance&&performance.now)?performance.now():Date.now();if(D.hidden){lastTick=now;return;}visibleMs+=Math.max(0,Math.min(now-lastTick,2000));lastTick=now;if(visibleMs>=THRESHOLD_MS)tryShow();}
-  function begin(){if(suppressReason())return;lastTick=(window.performance&&performance.now)?performance.now():Date.now();timer=setInterval(tick,1000);}
+  var visibleMs=0,returnFocus=null,closeReason="";
+  function snapshot(){return {thresholdMs:THRESHOLD_MS,cooldownMs:COOLDOWN_MS,visibleMs:Math.round(visibleMs),open:dialog.open,pending:false,suppressed:suppressReason(),busy:busyReason()};}
+  function tryShow(explicit){if(explicit!==true||D.hidden)return false;var busy=busyReason();if(busy&&busy!=="intro")return false;if(typeof dialog.showModal!=="function")return false;paint();if(!truthfulScarcity())return false;returnFocus=D.activeElement&&D.activeElement!==D.body?D.activeElement:null;try{dialog.showModal();}catch(e){return false;}try{sessionStorage.setItem(SESSION_KEY,"1");}catch(e){}setTimeout(function(){try{title.focus({preventScroll:true});}catch(e){}},0);signal("referido-popup-visto","popup");return true;}
   function dismiss(){closeReason="dismiss";if(dialog.open)dialog.close("dismiss");}
-  function markClicked(surface){var state=readState();state.clicked=true;state.clickedAt=Date.now();delete state.dismissedAt;writeState(state);stopTimer();signal(surface==="popup"?"referido-popup-click":"referido-hilo-click",surface);if(surface==="popup"&&dialog.open){closeReason="click";setTimeout(function(){if(dialog.open)dialog.close("click");},0);}}
-  closeButton.addEventListener("click",dismiss);laterButton.addEventListener("click",dismiss);dialog.addEventListener("cancel",function(){closeReason="dismiss";});
+  function markClicked(surface){var state=readState();state.clicked=true;state.clickedAt=Date.now();delete state.dismissedAt;writeState(state);signal(surface==="popup"?"referido-popup-click":"referido-hilo-click",surface);if(surface==="popup"&&dialog.open){closeReason="click";setTimeout(function(){if(dialog.open)dialog.close("click");},0);}}
+  closeButton.addEventListener("click",dismiss);laterButton.addEventListener("click",dismiss);if(explicitButton)explicitButton.addEventListener("click",function(){tryShow(true);});dialog.addEventListener("cancel",function(){closeReason="dismiss";});
   dialog.addEventListener("close",function(){if(closeReason!=="click"){var state=readState();state.dismissedAt=Date.now();writeState(state);signal("referido-popup-cerrado","popup");}var restore=returnFocus;returnFocus=null;closeReason="";if(restore&&D.contains(restore))setTimeout(function(){try{restore.focus({preventScroll:true});}catch(e){}},0);});
-  D.addEventListener("click",function(event){var link=event.target&&event.target.closest?event.target.closest('a[href="'+REFERRAL_URL+'"]'):null;if(link)markClicked(link.closest("#cmReferralPrompt")?"popup":"hilo");if(pending&&!link)setTimeout(tryShow,0);});
-  D.addEventListener("focusout",function(){if(pending)setTimeout(tryShow,0);},true);D.addEventListener("close",function(){if(pending)setTimeout(tryShow,0);},true);
-  D.addEventListener("visibilitychange",function(){lastTick=(window.performance&&performance.now)?performance.now():Date.now();if(!D.hidden&&pending)setTimeout(tryShow,0);});
+  D.addEventListener("click",function(event){var link=event.target&&event.target.closest?event.target.closest('a[href="'+REFERRAL_URL+'"]'):null;if(link)markClicked(link.closest("#cmReferralPrompt")?"popup":"hilo");});
   var langButton=D.getElementById("langEn");if(langButton)langButton.addEventListener("click",function(){setTimeout(paint,0);});
-  window.__cmReferralPrompt={thresholdMs:THRESHOLD_MS,cooldownMs:COOLDOWN_MS,tryShow:tryShow,truthfulScarcity:truthfulScarcity,creditVisibleMs:function(ms){if(!D.hidden&&Number(ms)>0){visibleMs=Math.min(THRESHOLD_MS,visibleMs+Number(ms));if(visibleMs>=THRESHOLD_MS)tryShow();}return snapshot();},state:snapshot};
-  paint();begin();
+  window.__cmReferralPrompt={thresholdMs:THRESHOLD_MS,cooldownMs:COOLDOWN_MS,show:function(){return tryShow(true);},tryShow:tryShow,truthfulScarcity:truthfulScarcity,creditVisibleMs:function(ms){if(!D.hidden&&Number(ms)>0)visibleMs=Math.min(THRESHOLD_MS,visibleMs+Number(ms));return snapshot();},state:snapshot};
+  paint();
 }catch(e){console.warn("referido-contextual v1.74",e);}})();
 </script>
 </body>
