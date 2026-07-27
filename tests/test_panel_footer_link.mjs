@@ -40,6 +40,9 @@ check("la versión y el primer cambio son v1.85",
 check("el tour ya no promete cuatro proyectos públicos",
   !html.includes("Cuatro proyectos públicos, juntos y a un toque.") &&
   !html.includes("Four public projects, together and one tap away."));
+check("reducir movimiento anula elevación salvo opt-in",
+  html.includes("@media(prefers-reduced-motion:reduce){body:not(.cmMotionOn) .cmWebLink{transition:none}body:not(.cmMotionOn) .cmWebLink:hover{transform:none}}") &&
+  html.includes("body.cmMotionOff .cmWebLink{transition:none!important}body.cmMotionOff .cmWebLink:hover{transform:none!important}"));
 
 console.log(failures ? `\n${failures} comprobacion(es) FALLAN\n` : "\nTODO VERDE - el Panel está abajo con las demás webs\n");
 process.exit(failures ? 1 : 0);
