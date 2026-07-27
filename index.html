@@ -183,7 +183,7 @@
   .dot{display:inline-block;width:8px;height:8px;border-radius:99px;vertical-align:middle;margin-right:6px}
   .dot.g{background:var(--green)} .dot.a{background:var(--amber)}
   footer{color:var(--muted);font-size:12px;text-align:center;margin-top:18px;line-height:1.6}
-  /* v1.69 — una casa común para los activos públicos: cuatro destinos reales, sin menú nuevo
+  /* v1.85 — una casa común para los activos públicos y el Panel: cinco destinos reales, sin menú nuevo
      flotando ni URLs hipotéticas. El toque abre otra pestaña y deja una señal privada de uso para
      que MADRE pueda podar accesos que nadie usa. */
   .cmWebHub{margin:0 auto 18px;padding:16px;max-width:690px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,var(--card),var(--accent-soft));text-align:left}
@@ -4023,6 +4023,9 @@
         <a class="cmWebLink" href="https://github.com/eltonylfgi-blip?tab=repositories" target="_blank" rel="noopener" data-cm-project="github-tony">
           <span class="cmWebIcon" aria-hidden="true">🧰</span><span class="cmWebCopy"><strong data-en="More Tony projects">Más trabajo de Tony</strong><span data-en="All public projects on GitHub">Todos los proyectos públicos en GitHub</span></span>
         </a>
+        <a class="cmWebLink" href="https://panel-tony-online.vercel.app/" target="_blank" rel="noopener" data-cm-project="panel-tony">
+          <span class="cmWebIcon" aria-hidden="true">🔐</span><span class="cmWebCopy"><strong data-en="Tony's private Panel">Panel privado de Tony</strong><span data-en="Command center · Tony only">Centro de mando · solo Tony</span></span>
+        </a>
       </div>
       <p class="cmWebSignal" data-en="Each first click tries to send one use signal so MADRE can improve these shortcuts.">Cada primer toque intenta enviar una señal de uso para que MADRE mejore estos accesos.</p>
     </nav>
@@ -4804,6 +4807,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-27',destacada:true,areas:['acceso','panel','movil','teclado'],titulo:'🔐 v1.85 — El Panel ya está abajo, junto a las demás webs',detalle:'El bloque «Más webs y trabajo de Tony» añade una tarjeta directa al Panel privado: abre el centro de mando en otra pestaña, conserva la navegación con teclado y registra la misma señal de uso que el resto de accesos.'},
     {fecha:'2026-07-27',destacada:true,areas:['portada','claridad','accesibilidad','referido','movil'],titulo:'🛑 v1.84 — El pase referido solo se abre cuando lo pides',detalle:'La oferta de Claude deja de aparecer sola a los 60 segundos: ya no puede tapar la primera capa ni robar el foco. Conserva toda su información y condiciones tras el botón explícito «Ver pase de Claude y condiciones», dentro de «Más opciones y estado»; el hilo referido existente sigue disponible más abajo.'},
     {fecha:'2026-07-27',destacada:true,areas:['portada','movil','claridad','accesibilidad','asmr'],titulo:'🪶 v1.83 — La portada respira y lo secundario espera a que lo pidas',detalle:'La primera pantalla conserva lo que hace falta para decidir —qué es MADRE, qué necesita de Tony, cuándo se juzga y sus dos rutas— y reúne calendario, estados, voz y aspecto bajo «Más opciones y estado», operable con teclado. La primera textura ASMR deja de adelantarse a la presentación; la promesa ya no aparece a medio escribir y, mientras lees la apuesta inicial, los accesos flotantes se apartan. En móvil, el gato decorativo solo entra cuando una escena lo llama. Nada crítico se oculta y todo el detalle sigue a un toque.'},
     {fecha:'2026-07-26',destacada:true,areas:['accesibilidad','archivo-multimedia','teclado','señales','honestidad','movil'],titulo:'⌨️ v1.82 — La mesa se oye con teclado y Salud no suplanta al mundo',detalle:'Cada audio de la Mesa de relaciones tiene ahora un botón nativo de al menos 44 px: Enter, Espacio y puntero reproducen o paran sin romper el arrastre, los puertos ni «No coincide». Una reproducción confirmada envía como máximo una señal por audio, modalidad y sesión, sin atribuir identidad. Además, los cuatro controles internos de Salud dejan de mezclarse con las señales externas: revisión y cobertura dicen cómo se vigila MADRE; uso, mercado y resultado siguen diciendo si mejora algo. El bloque vuelve a caber a 375 px.'},
@@ -5045,7 +5049,7 @@ window.__cmCorpus = {
     var TOUR_DEMOS=[
       {id:"asmr-real",selector:"#asmrRealShelf",focusSelector:'#asmrLabFeatured .asmrCand[data-kind="recorded"]',title:"🎙️ Sonidos que puedes comprobar",titleEn:"🎙️ Sounds you can verify",detail:"Toca «Teclado escribiendo» o «Lluvia suave»: la ficha reproduce su grabación y debajo puedes decir si coincide.",detailEn:"Tap “Keyboard typing” or “Light rain”: the card plays its recording and lets you say whether it matches.",block:"center",prepare:function(target){var card=target.closest("#asmrLabCard"),det=card&&card.querySelector("details");if(card){card.classList.remove("pdHidden");card.dataset.tourReveal="1";}if(det)det.open=true;}},
       {id:"voice-look",selector:"#cmExperienceExtras",title:"✨ Voz y aspecto, sin cortar la entrada",titleEn:"✨ Voice and appearance, without blocking the intro",detail:"La opción secundaria vive aquí; la promesa principal queda limpia.",detailEn:"The secondary option lives here, keeping the main promise clean.",block:"center",prepare:function(target){var parent=target.parentElement&&target.parentElement.closest("details");if(parent)parent.open=true;if(target.tagName==="DETAILS")target.open=true;}},
-      {id:"project-hub",selector:"#cmWebHub",focusSelector:"#cmWebHub .cmWebHubGrid",title:"🌐 El Cuaderno ya abre el resto del mundo",titleEn:"🌐 The Notebook now opens the rest of the world",detail:"Cuatro proyectos públicos, juntos y a un toque.",detailEn:"Four public projects, together and one tap away.",block:"center",prepare:function(){}}
+      {id:"project-hub",selector:"#cmWebHub",focusSelector:"#cmWebHub .cmWebHubGrid",title:"🌐 El Cuaderno ya abre el resto del mundo",titleEn:"🌐 The Notebook now opens the rest of the world",detail:"Tus webs y el Panel, juntos y a un toque.",detailEn:"Your websites and the Panel, together and one tap away.",block:"center",prepare:function(){}}
     ].filter(function(step){return !!document.querySelector(step.selector);});
     function tourEnglish(){return document.documentElement.lang==="en"||(document.getElementById("langEn")&&document.getElementById("langEn").getAttribute("aria-pressed")==="true");}
     
@@ -8661,7 +8665,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.84";
+  window.__cmVersion="v1.85";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
