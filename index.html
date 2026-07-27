@@ -366,7 +366,7 @@
 #onboard .ob-lead{font-size:15px;line-height:1.5;color:var(--ink);margin:7px 0 0}
 #onboard .ob-lead b{color:var(--accent)}
 #onboard .ob-row{margin:9px 0 0;font-size:12px}
-#onboard .ob-time{font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 9px}
+#onboard .ob-time{font-weight:700;color:var(--ink);background:var(--accent-soft);border-radius:999px;padding:2px 9px}
 #onboard .ob-dim{color:var(--muted)}
 #topSecondary{margin:0 0 8px}
 #topSecondary #gateBar{background:transparent!important;border:none!important;padding:2px 0!important;margin:0!important;font-size:12px!important;justify-content:flex-start!important;gap:8px!important;color:var(--muted)}
@@ -531,6 +531,14 @@
     #tourBtn:active{transform:scale(.96)}
     .ob-ics{font-size:12.5px;margin:8px 0 0}
     .ob-ics a{color:var(--accent);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--accent)}
+    details.ob-first-more{margin:10px 0 0}
+    details.ob-first-more>summary{box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 12px;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);font:750 12.5px/1.25 system-ui,-apple-system,Segoe UI,sans-serif}
+    details.ob-first-more>summary::-webkit-details-marker{display:none}
+    details.ob-first-more>summary::after{content:"＋";color:var(--accent);font-weight:900}
+    details.ob-first-more[open]>summary::after{content:"−"}
+    details.ob-first-more>summary:hover{border-color:var(--accent);color:var(--ink)}
+    details.ob-first-more>summary:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 42%,transparent);outline-offset:2px}
+    .ob-first-body{margin-top:8px;padding-top:4px;border-top:1px dashed var(--line)}
   </style>
   <div id="onboard">
     <div class="ob-hi" data-en="🤱 I'm MADRE.">🤱 Soy MADRE.</div>
@@ -548,18 +556,24 @@
          todo); "8 ramas" sigue ahí como alternativa rápida, ya no compitiendo en igualdad de peso.
          Los widgets de estado (visitas/logros/presencia) bajan después de la acción -> no la tapan. -->
     <button type="button" id="tourBtn" data-en="🧭 Guide me — 90 seconds">🧭 Mejor guíame — 90 segundos</button>
-    <div class="ob-row"><button type="button" id="ctaMapa" class="ob-time" data-en="🌳 Explore my 8 branches — 2 min">🌳 Entra en mis 8 ramas — 2 min</button> <span class="ob-dim" data-en="· or explore on your own">· o explora a tu bola</span> <button type="button" id="langEn" aria-pressed="false">🌐 English</button></div>
-    <p class="ob-ics"><a href="veredictos.ics" download data-en="🔔 Remind me of the verdicts">🔔 Avísame de los veredictos</a> <span class="ob-dim" data-en="· download a reminder to your calendar · no signup">· descarga un recordatorio a tu calendario · sin registro</span> <span class="ob-dim" id="langFullWrap" hidden>· <a id="langFull" href="https://translate.google.com/translate?sl=es&amp;tl=en&amp;u=https%3A%2F%2Feltonylfgi-blip.github.io%2Fcuaderno-madre%2F" target="_blank" rel="noopener">try auto-translating the rest of the page (may not work on every network)</a></span></p>
-    <p class="ob-live" id="cmSeguirChip" hidden></p>
-    <p class="ob-live" id="obLive" hidden></p>
-    <p class="ob-live" id="cmPresence" hidden></p>
-    <button type="button" class="ob-live" id="cmAchieveBtn" hidden style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)"></button>
-    <p class="ob-hoy" id="hoyReal" hidden></p>
-    <details class="ob-more" id="cmExperienceExtras">
-      <summary data-en="✨ Voice &amp; appearance">✨ Voz y aspecto</summary>
-      <div class="xb">
-        <button type="button" class="ob-live ob-extra" id="cmVozBtn" hidden data-en="🔊 Hear MADRE">🔊 Oír a MADRE</button>
-        <button type="button" class="ob-live ob-extra" id="cmIdBtn" aria-pressed="false" data-en="🌌 Try the bioluminescent look">🌌 Probar aspecto bioluminiscente</button>
+    <button type="button" id="langEn" aria-pressed="false">🌐 English</button>
+    <div class="ob-row"><button type="button" id="ctaMapa" class="ob-time" data-en="🌳 Explore my 8 branches — 2 min">🌳 Entra en mis 8 ramas — 2 min</button> <span class="ob-dim" data-en="· or explore on your own">· o explora a tu bola</span></div>
+    <details class="ob-first-more" id="cmFirstMore">
+      <summary data-en="More options and status">Más opciones y estado</summary>
+      <div class="ob-first-body">
+        <p class="ob-ics"><a href="veredictos.ics" download data-en="🔔 Remind me of the verdicts">🔔 Avísame de los veredictos</a> <span class="ob-dim" data-en="· download a reminder to your calendar · no signup">· descarga un recordatorio a tu calendario · sin registro</span> <span class="ob-dim" id="langFullWrap" hidden>· <a id="langFull" href="https://translate.google.com/translate?sl=es&amp;tl=en&amp;u=https%3A%2F%2Feltonylfgi-blip.github.io%2Fcuaderno-madre%2F" target="_blank" rel="noopener">try auto-translating the rest of the page (may not work on every network)</a></span></p>
+        <p class="ob-live" id="cmSeguirChip" hidden></p>
+        <p class="ob-live" id="obLive" hidden></p>
+        <p class="ob-live" id="cmPresence" hidden></p>
+        <button type="button" class="ob-live" id="cmAchieveBtn" hidden style="border:none;background:var(--accent-soft);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink)"></button>
+        <p class="ob-hoy" id="hoyReal" hidden></p>
+        <details class="ob-more" id="cmExperienceExtras">
+          <summary data-en="✨ Voice &amp; appearance">✨ Voz y aspecto</summary>
+          <div class="xb">
+            <button type="button" class="ob-live ob-extra" id="cmVozBtn" hidden data-en="🔊 Hear MADRE">🔊 Oír a MADRE</button>
+            <button type="button" class="ob-live ob-extra" id="cmIdBtn" aria-pressed="false" data-en="🌌 Try the bioluminescent look">🌌 Probar aspecto bioluminiscente</button>
+          </div>
+        </details>
       </div>
     </details>
   </div>
@@ -2443,7 +2457,10 @@
        (M.ahora + el propio nodo) — nada nuevo que cargar. Vive en la CABECERA, antes de cualquier scroll. */
     try{ var live=document.getElementById("obLive"); if(live && M.ahora){ var nowNd=null; NODES.forEach(function(n){ if(n.emoji===M.ahora) nowNd=n; });
       if(nowNd){ live.innerHTML=""; var dot=document.createElement("span"); dot.className="dot"; dot.style.background=stOf(nowNd.st).c; live.appendChild(dot);
-        var tx2=document.createElement("span"); tx2.textContent="Ahora mismo: "+nowNd.emoji+" "+nowNd.t+" — "+stOf(nowNd.st).l; live.appendChild(tx2); live.hidden=false; } }
+        var tx2=document.createElement("span"), enTitles={"🧠":"The brain (loop)","📓":"The notebook","🎬":"Video pipeline","💶":"Real business","🧩":"Widget workshop","🔬":"Hypotheses and levers","🛡️":"Published assets","📚":"Memory / archive","💜":"Tony's favourites"}, enStates={atencion:"receiving attention now",vivo:"running on its own / alive",marcha:"in progress (with Tony)",conocimiento:"knowledge only / resting"};
+        function paintHeaderLive(){ var en=document.documentElement.lang==="en"; tx2.textContent=(en?"Right now: ":"Ahora mismo: ")+nowNd.emoji+" "+(en?(enTitles[nowNd.emoji]||nowNd.t):nowNd.t)+" — "+(en?(enStates[nowNd.st]||stOf(nowNd.st).l):stOf(nowNd.st).l); }
+        live.appendChild(tx2); paintHeaderLive(); live.hidden=false;
+        var liveLang=document.getElementById("langEn"); if(liveLang) liveLang.addEventListener("click",function(){ setTimeout(paintHeaderLive,0); }); } }
     }catch(e){}
   }catch(e){ console.warn("mapa", e); } })();
   </script>
@@ -4782,6 +4799,7 @@ window.__cmCorpus = {
     if(!done){ var bt=bakedEstado(); if(bt && bt.replace(/\s/g,"")) parseEstado(bt); }
   }
   var cambios=[
+    {fecha:'2026-07-27',destacada:true,areas:['portada','movil','claridad','accesibilidad','asmr'],titulo:'🪶 v1.83 — La portada respira y lo secundario espera a que lo pidas',detalle:'La primera pantalla conserva lo que hace falta para decidir —qué es MADRE, qué necesita de Tony, cuándo se juzga y sus dos rutas— y reúne calendario, estados, voz y aspecto bajo «Más opciones y estado», operable con teclado. La primera textura ASMR deja de adelantarse a la presentación; la promesa ya no aparece a medio escribir y, mientras lees la apuesta inicial, los accesos flotantes se apartan. En móvil, el gato decorativo solo entra cuando una escena lo llama. Nada crítico se oculta y todo el detalle sigue a un toque.'},
     {fecha:'2026-07-26',destacada:true,areas:['accesibilidad','archivo-multimedia','teclado','señales','honestidad','movil'],titulo:'⌨️ v1.82 — La mesa se oye con teclado y Salud no suplanta al mundo',detalle:'Cada audio de la Mesa de relaciones tiene ahora un botón nativo de al menos 44 px: Enter, Espacio y puntero reproducen o paran sin romper el arrastre, los puertos ni «No coincide». Una reproducción confirmada envía como máximo una señal por audio, modalidad y sesión, sin atribuir identidad. Además, los cuatro controles internos de Salud dejan de mezclarse con las señales externas: revisión y cobertura dicen cómo se vigila MADRE; uso, mercado y resultado siguen diciendo si mejora algo. El bloque vuelve a caber a 375 px.'},
     {fecha:'2026-07-21',destacada:true,areas:['salud','progreso','cumplimiento','feedback','movil'],titulo:'✅ v1.81 — Cumplir deja de ser una promesa verde',detalle:'La tarjeta de Salud ahora lee el agregado real que exporta MADRE: separa revisión, mecanismos usados, beneficio observado o repetido y cobertura histórica. Si la foto falta, no se entiende o tiene más de 48 horas, avisa SIN DATOS u OBSOLETO; una revisión o un test verde no se presentan como beneficio.'},
     {fecha:'2026-07-19',destacada:true,areas:['glosario','aprendizaje','feedback','movil','accesibilidad'],titulo:'🧩 v1.80 — El glosario relaciona ideas y escucha cuáles importan',detalle:'Todas las palabras siguen explicadas en simple, pero ahora indican por dónde empezar y suman cuello de botella, mecanismo transversal e invariante con ejemplos de MADRE. Un corazón permite guardar qué conceptos quieres que MADRE priorice y tres ejercicios enseñan cómo se conectan palancas, cuellos, invariantes, mecanismos, selectores y ciclos. Favoritos y respuestas usan el feedback existente, dejan reintentar si la entrega falla y sus controles nuevos miden al menos 44 px. Empieza una prueba de hasta 72 horas: uso o efecto real conserva y amplía la ruta; cero señales con exposición válida cambia el mensaje o el formato, no el producto entero.'},
@@ -5020,7 +5038,7 @@ window.__cmCorpus = {
     var currentVer = allList[0].titulo;
     var TOUR_DEMOS=[
       {id:"asmr-real",selector:"#asmrRealShelf",focusSelector:'#asmrLabFeatured .asmrCand[data-kind="recorded"]',title:"🎙️ Sonidos que puedes comprobar",titleEn:"🎙️ Sounds you can verify",detail:"Toca «Teclado escribiendo» o «Lluvia suave»: la ficha reproduce su grabación y debajo puedes decir si coincide.",detailEn:"Tap “Keyboard typing” or “Light rain”: the card plays its recording and lets you say whether it matches.",block:"center",prepare:function(target){var card=target.closest("#asmrLabCard"),det=card&&card.querySelector("details");if(card){card.classList.remove("pdHidden");card.dataset.tourReveal="1";}if(det)det.open=true;}},
-      {id:"voice-look",selector:"#cmExperienceExtras",title:"✨ Voz y aspecto, sin cortar la entrada",titleEn:"✨ Voice and appearance, without blocking the intro",detail:"La opción secundaria vive aquí; la promesa principal queda limpia.",detailEn:"The secondary option lives here, keeping the main promise clean.",block:"center",prepare:function(target){if(target.tagName==="DETAILS")target.open=true;}},
+      {id:"voice-look",selector:"#cmExperienceExtras",title:"✨ Voz y aspecto, sin cortar la entrada",titleEn:"✨ Voice and appearance, without blocking the intro",detail:"La opción secundaria vive aquí; la promesa principal queda limpia.",detailEn:"The secondary option lives here, keeping the main promise clean.",block:"center",prepare:function(target){var parent=target.parentElement&&target.parentElement.closest("details");if(parent)parent.open=true;if(target.tagName==="DETAILS")target.open=true;}},
       {id:"project-hub",selector:"#cmWebHub",focusSelector:"#cmWebHub .cmWebHubGrid",title:"🌐 El Cuaderno ya abre el resto del mundo",titleEn:"🌐 The Notebook now opens the rest of the world",detail:"Cuatro proyectos públicos, juntos y a un toque.",detailEn:"Four public projects, together and one tap away.",block:"center",prepare:function(){}}
     ].filter(function(step){return !!document.querySelector(step.selector);});
     function tourEnglish(){return document.documentElement.lang==="en"||(document.getElementById("langEn")&&document.getElementById("langEn").getAttribute("aria-pressed")==="true");}
@@ -6010,6 +6028,9 @@ sb.channel("comments-rt").on("postgres_changes",{ event:"*", schema:"public", ta
 @media (prefers-reduced-motion:reduce){
   .gxg-cat,.gxg-cat *{ animation:none !important; transition:opacity .2s !important; }
   .gxg-cat{ transition:transform .25s ease !important; }
+}
+@media (max-width:640px){
+  .gxg-cat:not(.gxg-visitor){display:none!important}
 }
 /* widget: tour */
 /* ===== v0.74: motor viejo (overlay propio con STEP_DEFS/backdrop/ring/card/welcome) retirado —
@@ -7774,6 +7795,7 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
   function mkLabel(txt){ var l=document.createElement("span"); l.className="cmTexLbl"; l.textContent=txt; return l; }
   function buildRibbons(){
     var cards=[].slice.call(document.querySelectorAll(".card"));
+    var firstLayerSlot=document.getElementById("apuestaActivaCard");
     for(var i=1;i<cards.length;i++){
       if(i%2===0) continue;                       // una textura sí, otra no -> "esparcidas"
       var card=cards[i]; if(!card||!card.parentNode) continue;
@@ -7784,7 +7806,14 @@ body.cmMotionOff #cmAsmrCounter,body.cmMotionOff #cmAsmrBiomeWash{display:none!i
       if(ty.bub){ var nb=MOBILE?5:9; for(var k=0;k<nb;k++) rib.appendChild(mkBubble(ty.hit)); }
       else{ var nbits=MOBILE?3:6; for(var j=0;j<nbits;j++) rib.appendChild(mkBit(ty.bits[j%ty.bits.length], ty.hit)); }
       var count=document.createElement("span"); count.className="cmTexCount"; count.textContent="0 / 67"; count.setAttribute("aria-hidden","true"); rib.appendChild(count);
-      try{ card.parentNode.insertBefore(rib, card); ribbons.push(rib); }catch(e){}
+      try{
+        /* v1.83: la primera textura se crea ya en su destino, al final de la apuesta inicial.
+           Evita el salto tardío que provocaba moverla en window.load y conserva el mismo primer
+           ribbon en el array/DOM para renovación, audio, votos y regresiones heredadas. */
+        if(!ribbons.length&&firstLayerSlot){ rib.dataset.firstLayer="1"; firstLayerSlot.appendChild(rib); }
+        else card.parentNode.insertBefore(rib, card);
+        ribbons.push(rib);
+      }catch(e){}
     }
   }
   buildRibbons();
@@ -8626,7 +8655,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   var C=window.__cmCorpus||{};
   // --- versión visible (para saber sobre qué versión van las ideas que apuntas) ---
   // v1.60: deriva el número del primer cambio, igual que la fecha. Evita otro pie público congelado.
-  window.__cmVersion="v1.82";
+  window.__cmVersion="v1.83";
   try{ var cv0=(window.__cmBakedCambios&&window.__cmBakedCambios[0])?window.__cmBakedCambios[0]:(window.__cmCambios&&window.__cmCambios[0]);
     var cvm=cv0&&cv0.titulo?cv0.titulo.match(/\bv\d+\.\d+\b/i):null; if(cvm) window.__cmVersion=cvm[0]; }catch(e){}
   /* v1.15 -- FIX: la fecha del pie estaba escrita a mano ("10 jul 2026") y se quedaba desfasada cada
@@ -9061,14 +9090,12 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
 </script>
 <script>
 /* v1.28 (Tony: "editar = quitar ruido que compite, NO personalidad" + "acercar" el conflicto) --
-   los widgets que miran al VISITANTE/META, y desde v1.72 también Voz/aspecto, no compiten en los
-   primeros 10s. NO se borran (guardarrail): se reubican tras la 1a tarjeta real (#vsCard), donde
-   siguen existiendo y siendo útiles para quien explora. Va DESPUÉS del resecuenciador (necesita el
-   orden final) -- mismo patrón insertAdjacentElement que ya usa v0.33. Todos tienen id -> inmunes
-   a cssPath()/💗 (línea ~3690). */
+   #visitLine sigue tras la 1a tarjeta real (#vsCard). En v1.83 logros, estado del día y Voz/aspecto
+   permanecen dentro de #cmFirstMore: moverlos aquí desharía el desplegable y volvería a ensuciar la
+   primera capa. Va DESPUÉS del resecuenciador (necesita el orden final). */
 (function(){ try{
   var vs=document.getElementById("vsCard"); if(!vs) return;
-  var ids=["cmAchieveBtn","hoyReal","visitLine","cmExperienceExtras"];
+  var ids=["visitLine"];
   var after=vs;
   ids.forEach(function(id){ var el=document.getElementById(id); if(el){ after.insertAdjacentElement("afterend", el); after=el; } });
 }catch(e){ console.warn("relocate v1.28", e); } })();
@@ -9302,6 +9329,8 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
 </style>
 <script>
 (function(){ try{
+  var simpleFirst=true; /* Tony 27-jul: la promesa principal debe leerse completa desde el primer frame */
+  if(simpleFirst) return; /* no escribe la marca antigua: un rollback conserva su primera visita real */
   var reduce=false; try{ reduce=matchMedia('(prefers-reduced-motion:reduce)').matches; }catch(e){}
   var already=false; try{ already=!!localStorage.getItem('cm_genesis_v1'); }catch(e){}
   try{ localStorage.setItem('cm_genesis_v1','1'); }catch(e){}
@@ -9535,6 +9564,10 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
    type=module con import remoto, que corre DESPUÉS de los scripts normales — hay que ESPERARLO. */
 (function(){ try{
   var el=document.getElementById('cmPresence'); if(!el) return;
+  var currentN=null;
+  function english(){ try{ return document.documentElement.lang==='en'; }catch(e){ return false; } }
+  function paint(){ if(currentN===null) return; el.textContent=english()?((currentN<=1)?'🟣 exploring now: you':'🟣 exploring now: you and '+(currentN-1)+' more'):((currentN<=1)?'🟣 explorando ahora: tú':'🟣 explorando ahora: tú y '+(currentN-1)+' más'); el.hidden=false; }
+  var presenceLang=document.getElementById('langEn'); if(presenceLang) presenceLang.addEventListener('click',function(){ setTimeout(paint,0); });
   var tries=0;
   (function poll(){
     if(window.__sb){ boot(); } else if(tries<25){ tries++; setTimeout(poll,200); }
@@ -9544,9 +9577,7 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
     var ch=window.__sb.channel('cuaderno-presence-rt',{config:{presence:{key:uid}}});
     function update(){
       try{
-        var state=ch.presenceState(); var n=Object.keys(state).length;
-        el.textContent=(n<=1)?'🟣 explorando ahora: tú':'🟣 explorando ahora: tú y '+(n-1)+' más';
-        el.hidden=false;
+        var state=ch.presenceState(); currentN=Object.keys(state).length; paint();
       }catch(e){}
     }
     ch.on('presence',{event:'sync'},update);
@@ -10423,11 +10454,17 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
    — documentado en ~4234). Reversible: borrar este <script>. */
 (function(){ try{
   var ribs=[].slice.call(document.querySelectorAll('aside.cmTex'));
+  var first=ribs.filter(function(r){return r.dataset.firstLayer==='1';})[0]||null;
+  var spread=ribs.filter(function(r){return r!==first;});
+  var firstHost=document.getElementById('apuestaActivaCard');
+  if(first&&firstHost&&first.parentElement!==firstHost) firstHost.appendChild(first);
   var cards=[].slice.call(document.querySelectorAll('.wrap > .card, .wrap > .hero, .wrap > section'))
-    .filter(function(c){ return c.offsetParent!==null; });
-  if(ribs.length && cards.length){
-    var step=Math.max(1, Math.floor(cards.length/ribs.length));
-    ribs.forEach(function(rib,i){
+    .filter(function(c){ return c.offsetParent!==null; })
+    /* v1.83: ninguna textura secundaria puede volver a colarse antes de la introducción. */
+    .filter(function(c){ return !firstHost||!!(firstHost.compareDocumentPosition(c)&Node.DOCUMENT_POSITION_FOLLOWING); });
+  if(spread.length && cards.length){
+    var step=Math.max(1, Math.floor(cards.length/spread.length));
+    spread.forEach(function(rib,i){
       var host=cards[Math.min(cards.length-1,(i+1)*step-1)];
       if(host && host.parentNode) host.insertAdjacentElement('afterend', rib);
     });
@@ -10680,10 +10717,23 @@ body.cmMotionOff .cm67.waving .cm67Char,body.cmMotionOff .cm67.waving::after{ani
   .cmTermHit{outline:4px solid rgba(250,204,21,.72);outline-offset:5px;border-radius:8px}
   body.cmFunRouteOpen #fabHubBtn,body.cmFunRouteOpen #fabHubActive,body.cmFunRouteOpen #fabHubMenu,body.cmFunRouteOpen #fabHubTip{display:none!important}
   body.cmLabFocus #cmLeftDock,body.cmFavFocus #cmLeftDock,body.cmAskFocus #cmLeftDock{display:none!important}
+  body.cmFirstFocus #cmLeftDock,body.cmFirstFocus #cmFunRoutePanel,body.cmFirstFocus #fabHubActive,body.cmFirstFocus #fabHubBtn,body.cmFirstFocus #fabHubMenu,body.cmFirstFocus #fabHubTip,body.cmFirstFocus #cmMapCue,body.cmFirstFocus #gxg-cat-root:not(.gxg-visitor){display:none!important}
   body:has(.mbOv:not([hidden])) #cmLeftDock,body:has(.mbOv:not([hidden])) #cmFunRoutePanel,body:has(.ov.on) #cmLeftDock,body:has(.ov.on) #cmFunRoutePanel{display:none!important}
   @media(max-width:640px){#cmFunRoutePanel{top:auto;bottom:76px;max-height:72vh}.cmFunRouteHead{padding-left:12px}#cmReturnBar{top:auto;bottom:82px}.cmTerm::after{display:none}}
   @media(prefers-reduced-motion:reduce){body:not(.cmMotionOn) .cmTerm::after{transition:none}}
 </style>
+<script>
+/* v1.83 — mientras la apuesta inicial está realmente en pantalla, los accesos globales ceden el
+   espacio. Regresan solos al salir de esa tarjeta: se resta competición, no funcionalidad. */
+(function(){try{
+  var intro=document.getElementById("onboard"),card=document.getElementById("apuestaActivaCard"); if(!intro||!card) return;
+  function sync(){var a=intro.getBoundingClientRect(),b=card.getBoundingClientRect(),top=Math.min(a.top,b.top),bottom=Math.max(a.bottom,b.bottom),vh=window.innerHeight||document.documentElement.clientHeight||0,shown=Math.max(0,Math.min(bottom,vh)-Math.max(top,0)),base=Math.max(1,Math.min(bottom-top,vh));document.body.classList.toggle("cmFirstFocus",shown/base>.08);}
+  sync();
+  if("IntersectionObserver" in window){var io=new IntersectionObserver(sync,{threshold:[0,.08,.3,1]});io.observe(intro);io.observe(card);}
+  else window.addEventListener("scroll",sync,{passive:true});
+  window.addEventListener("resize",sync,{passive:true});
+}catch(e){console.warn("simple-first v1.83",e);}})();
+</script>
 <script>
 /* v1.66 — una sola ruta para descubrir la parte juguetona, más enlaces en simple desde los
    tecnicismos al glosario real. Reutiliza motores existentes: no duplica tour, ASMR, caos o chat. */
